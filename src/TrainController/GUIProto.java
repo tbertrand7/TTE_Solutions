@@ -58,6 +58,7 @@ public class GUIProto extends JFrame {
 	 * Create the frame.
 	 */
 	public GUIProto() {
+		setTitle("Train Controller");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GUIProto.class.getResource("/TrainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 695, 517);
