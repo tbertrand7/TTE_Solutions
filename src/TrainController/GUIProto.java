@@ -58,7 +58,7 @@ public class GUIProto extends JFrame {
 	 * Create the frame.
 	 */
 	public GUIProto() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(GUIProto.class.getResource("/traincontrollergui/computer1.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GUIProto.class.getResource("/TrainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 695, 517);
 		contentPane = new JPanel();
@@ -118,7 +118,7 @@ public class GUIProto extends JFrame {
 		JButton imgLight = new JButton("");
 		imgLight.setBackground(UIManager.getColor("Button.disabledShadow"));
 		imgLight.setEnabled(false);
-		imgLight.setIcon(new ImageIcon(GUIProto.class.getResource("/traincontrollergui/LightOnTiny.png")));
+		imgLight.setIcon(new ImageIcon(GUIProto.class.getResource("/TrainController/LightOnTiny.png")));
 		imgLight.setBounds(119, 66, 43, 46);
 		contentPane.add(imgLight);
 		
@@ -276,5 +276,13 @@ public class GUIProto extends JFrame {
 				}
 			}
 		});
+		
+		//Initialize for default Automatic mode
+		tglbtnLights.setEnabled(false);
+		tglbtnDoors.setEnabled(false);
+		btnTempReq.setEnabled(false);
+		btnAnnCustReq.setEnabled(false);
+		btnAnnNextReq.setEnabled(false);
+		btnSpeedReq.setEnabled(false);
 	}
 }
