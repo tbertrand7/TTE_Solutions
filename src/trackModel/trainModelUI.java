@@ -8,10 +8,16 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import java.awt.Font;
+import java.awt.Toolkit;
 
 public class trainModelUI {
 
 	private JFrame frmTrackModelGui;
+	private JLabel textField_4;
+	private JLabel textField_5;
+	private JLabel textField_6;
+	private JLabel textField_7;
 
 	/**
 	 * Launch the application.
@@ -41,7 +47,9 @@ public class trainModelUI {
 	 */
 	private void initialize() {
 		frmTrackModelGui = new JFrame();
-		frmTrackModelGui.setResizable(false);
+		frmTrackModelGui.setIconImage(Toolkit.getDefaultToolkit().getImage(trainModelUI.class.getResource("/shared/TTE.png")));
+		frmTrackModelGui.setFont(new Font("Arial", Font.PLAIN, 14));
+		frmTrackModelGui.getContentPane().setFont(new Font("Arial", Font.PLAIN, 12));
 		frmTrackModelGui.setTitle("Track Model");
 		frmTrackModelGui.setBounds(100, 100, 500, 350);
 		frmTrackModelGui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,157 +57,164 @@ public class trainModelUI {
 
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setFont(new Font("Arial", Font.PLAIN, 11));
 		frmTrackModelGui.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
 		
 		JPanel overview = new JPanel();
 		overview.setBackground(UIManager.getColor("Button.background"));
 		tabbedPane.addTab("Overview", null, overview, null);
-		SpringLayout sl_overview = new SpringLayout();
-		overview.setLayout(sl_overview);
+		overview.setLayout(null);
 		
-		JLabel lblSelectLineTo = new JLabel("Select Line To Observe:");
-		sl_overview.putConstraint(SpringLayout.NORTH, lblSelectLineTo, 16, SpringLayout.NORTH, overview);
-		sl_overview.putConstraint(SpringLayout.WEST, lblSelectLineTo, 10, SpringLayout.WEST, overview);
+		JLabel lblSelectLineTo = new JLabel("Select Line To View:");
+		lblSelectLineTo.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblSelectLineTo.setBounds(10, 14, 118, 14);
 		overview.add(lblSelectLineTo);
 		
-		JComboBox  comboBox= new JComboBox();
-		sl_overview.putConstraint(SpringLayout.NORTH, comboBox, -3, SpringLayout.NORTH, lblSelectLineTo);
-		sl_overview.putConstraint(SpringLayout.WEST, comboBox, 16, SpringLayout.EAST, lblSelectLineTo);
-		comboBox.addItem("Red");
-		comboBox.addItem("Blue");
-		overview.add(comboBox);
+		JComboBox lineComboBoxView = new JComboBox();
+		lineComboBoxView.setFont(new Font("Arial", Font.PLAIN, 11));
+		lineComboBoxView.setBounds(138, 11, 55, 20);
+		overview.add(lineComboBoxView);
+		lineComboBoxView.addItem("Red");
+		lineComboBoxView.addItem("Blue");
+
 		
-		JLabel label_3 = new JLabel("Grade:");
-		sl_overview.putConstraint(SpringLayout.NORTH, label_3, 0, SpringLayout.NORTH, lblSelectLineTo);
-		sl_overview.putConstraint(SpringLayout.WEST, label_3, 20, SpringLayout.EAST, comboBox);
-		overview.add(label_3);
-		
-		JLabel label_5 = new JLabel("0.0");
-		sl_overview.putConstraint(SpringLayout.NORTH, label_5, 0, SpringLayout.NORTH, lblSelectLineTo);
+		JLabel label_5 = new JLabel("Grade:");
+		label_5.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_5.setBounds(203, 14, 48, 14);
 		overview.add(label_5);
 		
+		textField_4 = new JLabel("0.0");
+		textField_4.setFont(new Font("Arial", Font.PLAIN, 11));
+		textField_4.setBounds(261, 14, 65, 20);
+		overview.add(textField_4);
+		
 		JLabel label_6 = new JLabel("Direction:");
-		sl_overview.putConstraint(SpringLayout.NORTH, label_6, 0, SpringLayout.NORTH, lblSelectLineTo);
+		label_6.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_6.setBounds(317, 14, 65, 14);
 		overview.add(label_6);
 		
-		JLabel label_7 = new JLabel("0.0");
-		sl_overview.putConstraint(SpringLayout.WEST, label_5, 0, SpringLayout.WEST, label_7);
-		sl_overview.putConstraint(SpringLayout.NORTH, label_7, 46, SpringLayout.NORTH, overview);
-		sl_overview.putConstraint(SpringLayout.WEST, label_7, 453, SpringLayout.WEST, overview);
+		textField_5 = new JLabel("0.0");
+		textField_5.setFont(new Font("Arial", Font.PLAIN, 11));
+		textField_5.setBounds(404, 11, 65, 20);
+		overview.add(textField_5);
+		
+		textField_6 = new JLabel("0.0");
+		textField_6.setFont(new Font("Arial", Font.PLAIN, 11));
+		textField_6.setBounds(404, 44, 65, 20);
+		overview.add(textField_6);
+		
+		JLabel label_7 = new JLabel("Speed Limit:");
+		label_7.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_7.setBounds(317, 46, 77, 14);
 		overview.add(label_7);
 		
-		JLabel label_8 = new JLabel("0.0");
-		sl_overview.putConstraint(SpringLayout.NORTH, label_8, 0, SpringLayout.NORTH, label_7);
+		textField_7 = new JLabel("0.0");
+		textField_7.setFont(new Font("Arial", Font.PLAIN, 11));
+		textField_7.setBounds(261, 44, 65, 20);
+		overview.add(textField_7);
+		
+		JLabel label_8 = new JLabel("Elevation:");
+		label_8.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_8.setBounds(203, 47, 63, 14);
 		overview.add(label_8);
 		
-		JLabel label_9 = new JLabel("Speed Limit:");
-		sl_overview.putConstraint(SpringLayout.WEST, label_6, 0, SpringLayout.WEST, label_9);
-		sl_overview.putConstraint(SpringLayout.NORTH, label_9, 0, SpringLayout.NORTH, label_7);
-		sl_overview.putConstraint(SpringLayout.EAST, label_9, -35, SpringLayout.WEST, label_7);
-		overview.add(label_9);
-		
-		JLabel label_10 = new JLabel("0.0");
-		sl_overview.putConstraint(SpringLayout.WEST, label_8, 0, SpringLayout.WEST, label_10);
-		sl_overview.putConstraint(SpringLayout.NORTH, label_10, 0, SpringLayout.NORTH, lblSelectLineTo);
-		sl_overview.putConstraint(SpringLayout.EAST, label_10, -62, SpringLayout.WEST, label_6);
-		overview.add(label_10);
-		
-		JLabel label_11 = new JLabel("Elevation:");
-		sl_overview.putConstraint(SpringLayout.NORTH, label_11, 0, SpringLayout.NORTH, label_7);
-		sl_overview.putConstraint(SpringLayout.WEST, label_11, 0, SpringLayout.WEST, label_3);
-		overview.add(label_11);
-		
-		JComboBox comboBox_1 = new JComboBox();
-		sl_overview.putConstraint(SpringLayout.NORTH, comboBox_1, -3, SpringLayout.NORTH, label_7);
-		sl_overview.putConstraint(SpringLayout.WEST, comboBox_1, 0, SpringLayout.WEST, comboBox);
+		JComboBox blockComboBoxView = new JComboBox();
+		blockComboBoxView.setFont(new Font("Arial", Font.PLAIN, 11));
+		blockComboBoxView.setBounds(138, 42, 55, 20);
+		overview.add(blockComboBoxView);
 		 for(int i=1; i<200; i++){
-			 comboBox_1.addItem(i);
+			 blockComboBoxView.addItem(i);
         }
-		overview.add(comboBox_1);
 		
-		JLabel lblSelectBlockTo_1 = new JLabel("Select Block To Observe:");
-		sl_overview.putConstraint(SpringLayout.NORTH, lblSelectBlockTo_1, 0, SpringLayout.NORTH, label_7);
-		sl_overview.putConstraint(SpringLayout.WEST, lblSelectBlockTo_1, 0, SpringLayout.WEST, lblSelectLineTo);
+		JLabel lblSelectBlockTo_1 = new JLabel("Select Block To View:");
+		lblSelectBlockTo_1.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblSelectBlockTo_1.setBounds(10, 47, 118, 14);
 		overview.add(lblSelectBlockTo_1);
+		
+		JButton getData = new JButton("Get Data");
+		getData.setFont(new Font("Arial", Font.PLAIN, 11));
+		getData.setBounds(10, 246, 200, 23);
+		overview.add(getData);
+		
+		JButton btnRefreshData = new JButton("Refresh Data");
+		btnRefreshData.setFont(new Font("Arial", Font.PLAIN, 11));
+		btnRefreshData.setBounds(269, 246, 200, 23);
+		overview.add(btnRefreshData);
 		
 		JPanel config = new JPanel();
 		config.setBackground(new Color(240, 240, 240));
 		tabbedPane.addTab("Config Tool", null, config, null);
-		SpringLayout sl_config = new SpringLayout();
-		config.setLayout(sl_config);
+		config.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Select Line To Modify:");
-		sl_config.putConstraint(SpringLayout.NORTH, lblNewLabel, 10, SpringLayout.NORTH, config);
-		sl_config.putConstraint(SpringLayout.WEST, lblNewLabel, 10, SpringLayout.WEST, config);
-		sl_config.putConstraint(SpringLayout.EAST, lblNewLabel, 115, SpringLayout.WEST, config);
+		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblNewLabel.setBounds(10, 10, 129, 14);
 		config.add(lblNewLabel);
 		
 		JComboBox lineComboBox = new JComboBox();
-		sl_config.putConstraint(SpringLayout.NORTH, lineComboBox, 7, SpringLayout.NORTH, config);
+		lineComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
+		lineComboBox.setBounds(138, 7, 45, 20);
 		lineComboBox.addItem("Red");
 		lineComboBox.addItem("Blue");
 		config.add(lineComboBox);
 		
 		JLabel lblSelectBlockTo = new JLabel("Select Block To Modify:");
-		sl_config.putConstraint(SpringLayout.NORTH, lblSelectBlockTo, 19, SpringLayout.SOUTH, lblNewLabel);
+		lblSelectBlockTo.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblSelectBlockTo.setBounds(10, 43, 129, 14);
 		config.add(lblSelectBlockTo);
 		
 		JComboBox railComboBox = new JComboBox();
-		sl_config.putConstraint(SpringLayout.NORTH, railComboBox, 13, SpringLayout.SOUTH, lineComboBox);
-		sl_config.putConstraint(SpringLayout.WEST, railComboBox, 138, SpringLayout.WEST, config);
-		sl_config.putConstraint(SpringLayout.WEST, lblSelectBlockTo, -128, SpringLayout.WEST, railComboBox);
-		sl_config.putConstraint(SpringLayout.EAST, lblSelectBlockTo, -18, SpringLayout.WEST, railComboBox);
-		sl_config.putConstraint(SpringLayout.WEST, lineComboBox, 0, SpringLayout.WEST, railComboBox);
+		railComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
+		railComboBox.setBounds(138, 40, 45, 20);
 		 for(int i=1; i<100; i++){
 			 railComboBox.addItem(i);
         }
 		config.add(railComboBox);
 		
 		JLabel lblGrade = new JLabel("Grade:");
-		sl_config.putConstraint(SpringLayout.NORTH, lblGrade, 10, SpringLayout.NORTH, config);
-		sl_config.putConstraint(SpringLayout.WEST, lblGrade, 25, SpringLayout.EAST, lineComboBox);
+		lblGrade.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblGrade.setBounds(208, 10, 33, 14);
 		config.add(lblGrade);
 		
 		JLabel lblElevation = new JLabel("Elevation:");
-		sl_config.putConstraint(SpringLayout.NORTH, lblElevation, 19, SpringLayout.SOUTH, lblGrade);
-		sl_config.putConstraint(SpringLayout.WEST, lblElevation, 0, SpringLayout.WEST, lblGrade);
+		lblElevation.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblElevation.setBounds(208, 43, 48, 14);
 		config.add(lblElevation);
 		
 		JTextField lblNewLabel_1 = new JTextField("0.0");
-		sl_config.putConstraint(SpringLayout.NORTH, lblNewLabel_1, 10, SpringLayout.NORTH, config);
-		sl_config.putConstraint(SpringLayout.EAST, lblNewLabel_1, -163, SpringLayout.EAST, config);
+		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblNewLabel_1.setBounds(261, 10, 65, 20);
 		config.add(lblNewLabel_1);
 		
 		JTextField label = new JTextField("0.0");
-		sl_config.putConstraint(SpringLayout.NORTH, label, 19, SpringLayout.SOUTH, lblNewLabel_1);
-		sl_config.putConstraint(SpringLayout.WEST, label, 0, SpringLayout.WEST, lblNewLabel_1);
+		label.setFont(new Font("Arial", Font.PLAIN, 11));
+		label.setBounds(261, 40, 65, 20);
 		config.add(label);
 		
 		JTextField label_1 = new JTextField("0.0");
-		sl_config.putConstraint(SpringLayout.NORTH, label_1, 43, SpringLayout.NORTH, config);
-		sl_config.putConstraint(SpringLayout.EAST, label_1, -10, SpringLayout.EAST, config);
+		label_1.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_1.setBounds(404, 40, 65, 20);
 		config.add(label_1);
 		
 		JLabel lblSpeedLimit = new JLabel("Speed Limit:");
-		sl_config.putConstraint(SpringLayout.NORTH, lblSpeedLimit, 43, SpringLayout.NORTH, config);
-		sl_config.putConstraint(SpringLayout.EAST, lblSpeedLimit, -46, SpringLayout.EAST, config);
+		lblSpeedLimit.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblSpeedLimit.setBounds(336, 43, 58, 14);
 		config.add(lblSpeedLimit);
 		
 		JLabel lblDirection = new JLabel("Direction:");
-		sl_config.putConstraint(SpringLayout.WEST, lblDirection, 0, SpringLayout.WEST, lblSpeedLimit);
-		sl_config.putConstraint(SpringLayout.SOUTH, lblDirection, 0, SpringLayout.SOUTH, lblNewLabel);
+		lblDirection.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblDirection.setBounds(336, 10, 46, 14);
 		config.add(lblDirection);
 		
 		JTextField label_4 = new JTextField("0.0");
-		sl_config.putConstraint(SpringLayout.WEST, label_4, 0, SpringLayout.WEST, label_1);
-		sl_config.putConstraint(SpringLayout.SOUTH, label_4, 0, SpringLayout.SOUTH, lblNewLabel);
+		label_4.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_4.setBounds(404, 7, 65, 20);
 		config.add(label_4);
 		
 		JButton btnSave = new JButton("Save");
-		sl_config.putConstraint(SpringLayout.NORTH, btnSave, -52, SpringLayout.SOUTH, config);
-		sl_config.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, lblNewLabel);
-		sl_config.putConstraint(SpringLayout.SOUTH, btnSave, -10, SpringLayout.SOUTH, config);
-		sl_config.putConstraint(SpringLayout.EAST, btnSave, 0, SpringLayout.EAST, label_1);
+		btnSave.setFont(new Font("Arial", Font.PLAIN, 11));
+		btnSave.setBounds(10, 230, 459, 42);
 		config.add(btnSave);
 
 		JPanel failurePanel = new JPanel();
@@ -223,6 +238,7 @@ public class trainModelUI {
 		failurePanel.add(powerFailure);
 		
 		JButton circuitFailure = new JButton("Break Circuit");
+		circuitFailure.setFont(new Font("Arial", Font.PLAIN, 11));
 		circuitFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String breakCircuitConfirm = JOptionPane.showInputDialog(parent, "Are you sure you want to break the circuit? (y/n)", null);			
