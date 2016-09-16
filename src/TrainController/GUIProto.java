@@ -27,6 +27,9 @@ import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 import javax.swing.DropMode;
 import javax.swing.JScrollBar;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 
 public class GUIProto extends JFrame {
 
@@ -37,6 +40,9 @@ public class GUIProto extends JFrame {
 	private JTextField txtDoors;
 	private JTextField TempCurr;
 	private JTextField TempReq;
+	
+	public JComboBox<Integer> TrainSelect; //selects which train to get information from
+	private JTextField PowerCurr;
 
 	/**
 	 * Launch the application.
@@ -67,10 +73,23 @@ public class GUIProto extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JComboBox TrainSelect = new JComboBox();
+		JComboBox<Integer> TrainSelect = new JComboBox<Integer>();
 		TrainSelect.setMaximumRowCount(100);
 		TrainSelect.setBounds(10, 11, 162, 20);
 		contentPane.add(TrainSelect);
+		//Quick check of dynamic addItem()s to ComboBox, delete later*******************************
+		TrainSelect.addItem(new Integer(300000));
+		TrainSelect.addItem(new Integer(300100));
+		TrainSelect.addItem(new Integer(300300));
+		TrainSelect.addActionListener(new ActionListener() {
+			int i = 400000;
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Item select: " + TrainSelect.getSelectedItem());
+				TrainSelect.addItem(new Integer(i));
+				++i;
+			}
+		});
+		//*******************************************************************************************
 		
 		SpeedLimit = new JTextField();
 		SpeedLimit.setEditable(false);
@@ -215,6 +234,23 @@ public class GUIProto extends JFrame {
 		contentPane.add(btnAnnNextReq);
 		
 		JTextPane txtMessages = new JTextPane();
+		//Dynamic test of system messages, delete later*********************************************
+		txtMessages.addMouseListener(new MouseAdapter() {
+			int n = 1, i = 0;
+			public void mouseClicked(MouseEvent arg0) {
+				if (i <= 2) {
+					if (i != 1)
+						txtMessages.setText(txtMessages.getText() + "This is message #" + (n++) + ".\n");
+					else
+						txtMessages.setText(txtMessages.getText() + "THIS IS MESSAGE #" + (n++) + " AND IT IS CRITICAL!\n");
+					++i;
+				} else {
+					txtMessages.setText("");
+					i = 0;
+				}
+			}
+		});
+		//*******************************************************************************************
 		txtMessages.setEditable(false);
 		txtMessages.setBounds(227, 66, 225, 230);
 		contentPane.add(txtMessages);
@@ -278,12 +314,25 @@ public class GUIProto extends JFrame {
 			}
 		});
 		
-		//Initialize for default Automatic mode
+		//Initialize for default Automatic mode ************
 		tglbtnLights.setEnabled(false);
 		tglbtnDoors.setEnabled(false);
 		btnTempReq.setEnabled(false);
 		btnAnnCustReq.setEnabled(false);
 		btnAnnNextReq.setEnabled(false);
 		btnSpeedReq.setEnabled(false);
+		//**************************************************
+		
+		JLabel lblCurrentPower = new JLabel("Current Power");
+		lblCurrentPower.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCurrentPower.setBounds(528, 262, 86, 14);
+		contentPane.add(lblCurrentPower);
+		
+		PowerCurr = new JTextField();
+		PowerCurr.setHorizontalAlignment(SwingConstants.CENTER);
+		PowerCurr.setEditable(false);
+		PowerCurr.setColumns(10);
+		PowerCurr.setBounds(528, 279, 86, 20);
+		contentPane.add(PowerCurr);
 	}
 }
