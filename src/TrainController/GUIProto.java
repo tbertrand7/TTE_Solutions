@@ -30,6 +30,7 @@ import javax.swing.JScrollBar;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import javax.swing.Box;
 
 public class GUIProto extends JFrame {
 
@@ -37,12 +38,13 @@ public class GUIProto extends JFrame {
 	private JTextField SpeedLimit;
 	private JTextField SpeedCurr;
 	private JTextField SpeedReq;
-	private JTextField txtDoors;
+	private JTextField txtRightDoors;
 	private JTextField TempCurr;
 	private JTextField TempReq;
 	
 	public JComboBox<Integer> TrainSelect; //selects which train to get information from
 	private JTextField PowerCurr;
+	private JTextField txtLeftDoors;
 
 	/**
 	 * Launch the application.
@@ -139,7 +141,7 @@ public class GUIProto extends JFrame {
 		imgLight.setBackground(UIManager.getColor("Button.disabledShadow"));
 		imgLight.setEnabled(false);
 		imgLight.setIcon(new ImageIcon(GUIProto.class.getResource("/TrainController/LightOnTiny.png")));
-		imgLight.setBounds(119, 66, 43, 46);
+		imgLight.setBounds(143, 66, 43, 46);
 		contentPane.add(imgLight);
 		
 		JToggleButton tglbtnLights = new JToggleButton("Lights");
@@ -152,29 +154,51 @@ public class GUIProto extends JFrame {
 				}
 			}
 		});
-		tglbtnLights.setBounds(10, 66, 86, 46);
+		tglbtnLights.setBounds(10, 66, 107, 46);
 		contentPane.add(tglbtnLights);
 		
-		txtDoors = new JTextField();
-		txtDoors.setHorizontalAlignment(SwingConstants.CENTER);
-		txtDoors.setEditable(false);
-		txtDoors.setText("Closed");
-		txtDoors.setBounds(103, 150, 75, 20);
-		contentPane.add(txtDoors);
-		txtDoors.setColumns(10);
+		txtRightDoors = new JTextField();
+		txtRightDoors.setHorizontalAlignment(SwingConstants.CENTER);
+		txtRightDoors.setEditable(false);
+		txtRightDoors.setText("Closed");
+		txtRightDoors.setBounds(127, 137, 75, 20);
+		contentPane.add(txtRightDoors);
+		txtRightDoors.setColumns(10);
 		
-		JToggleButton tglbtnDoors = new JToggleButton("Doors");
-		tglbtnDoors.addActionListener(new ActionListener() {
+		JToggleButton tglbtnRightDoors = new JToggleButton("Right Doors");
+		tglbtnRightDoors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (tglbtnDoors.isSelected()) {
-					txtDoors.setText("Open");
+				if (tglbtnRightDoors.isSelected()) {
+					txtRightDoors.setText("Open");
 				} else {
-					txtDoors.setText("Closed");
+					txtRightDoors.setText("Closed");
 				}
 			}
 		});
-		tglbtnDoors.setBounds(10, 137, 86, 46);
-		contentPane.add(tglbtnDoors);
+		tglbtnRightDoors.setBounds(10, 137, 107, 20);
+		contentPane.add(tglbtnRightDoors);
+		
+		txtLeftDoors = new JTextField();
+		txtLeftDoors.setText("Closed");
+		txtLeftDoors.setHorizontalAlignment(SwingConstants.CENTER);
+		txtLeftDoors.setEditable(false);
+		txtLeftDoors.setColumns(10);
+		txtLeftDoors.setBounds(127, 169, 75, 20);
+		contentPane.add(txtLeftDoors);
+		
+		JToggleButton tglbtnLeftDoors = new JToggleButton("Left Doors");
+		tglbtnLeftDoors.setEnabled(false);
+		tglbtnLeftDoors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (tglbtnLeftDoors.isSelected()) {
+					txtLeftDoors.setText("Open");
+				} else {
+					txtLeftDoors.setText("Closed");
+				}
+			}
+		});
+		tglbtnLeftDoors.setBounds(10, 169, 107, 20);
+		contentPane.add(tglbtnLeftDoors);
 		
 		TempCurr = new JTextField();
 		TempCurr.setHorizontalAlignment(SwingConstants.CENTER);
@@ -206,7 +230,7 @@ public class GUIProto extends JFrame {
 		JTextArea AnnCurr = new JTextArea();
 		AnnCurr.setEditable(false);
 		AnnCurr.setLineWrap(true);
-		AnnCurr.setBounds(227, 338, 225, 33);
+		AnnCurr.setBounds(143, 338, 383, 33);
 		contentPane.add(AnnCurr);
 		
 		JLabel lblCurrentAnnouncement = new JLabel("Current Announcement");
@@ -222,11 +246,11 @@ public class GUIProto extends JFrame {
 		JTextArea AnnCust = new JTextArea();
 		AnnCust.setToolTipText("");
 		AnnCust.setLineWrap(true);
-		AnnCust.setBounds(227, 401, 225, 33);
+		AnnCust.setBounds(143, 401, 383, 33);
 		contentPane.add(AnnCust);
 		
 		JButton btnAnnCustReq = new JButton("Go");
-		btnAnnCustReq.setBounds(462, 401, 64, 33);
+		btnAnnCustReq.setBounds(550, 401, 64, 33);
 		contentPane.add(btnAnnCustReq);
 		
 		JButton btnAnnNextReq = new JButton("Make \"Next Stop\" Announcement");
@@ -275,16 +299,17 @@ public class GUIProto extends JFrame {
 				if (tglbtnAutomatic.isSelected()) { //deselects Manual button, disables Manual buttons
 					tglbtnManual.setSelected(false);
 					tglbtnLights.setEnabled(false);
-					tglbtnDoors.setEnabled(false);
+					tglbtnRightDoors.setEnabled(false);
+					tglbtnLeftDoors.setEnabled(false);
 					btnTempReq.setEnabled(false);
 					btnAnnCustReq.setEnabled(false);
 					btnAnnNextReq.setEnabled(false);
 					btnSpeedReq.setEnabled(false);
-					//btnEmergencyBrake.setEnabled(false); //need this? or should we always be able to emergency brake?
 				} else { //selects Manual button, enables Manual buttons
 					tglbtnManual.setSelected(true);
 					tglbtnLights.setEnabled(true);
-					tglbtnDoors.setEnabled(true);
+					tglbtnRightDoors.setEnabled(true);
+					tglbtnLeftDoors.setEnabled(true);
 					btnTempReq.setEnabled(true);
 					btnAnnCustReq.setEnabled(true);
 					btnAnnNextReq.setEnabled(true);
@@ -297,7 +322,8 @@ public class GUIProto extends JFrame {
 				if (tglbtnManual.isSelected()) { //deselects Automatic button, enables Manual buttons
 					tglbtnAutomatic.setSelected(false);
 					tglbtnLights.setEnabled(true);
-					tglbtnDoors.setEnabled(true);
+					tglbtnRightDoors.setEnabled(true);
+					tglbtnLeftDoors.setEnabled(true);
 					btnTempReq.setEnabled(true);
 					btnAnnCustReq.setEnabled(true);
 					btnAnnNextReq.setEnabled(true);
@@ -305,7 +331,8 @@ public class GUIProto extends JFrame {
 				} else { //selects Automatic button, disables Manual buttons
 					tglbtnAutomatic.setSelected(true);
 					tglbtnLights.setEnabled(false);
-					tglbtnDoors.setEnabled(false);
+					tglbtnRightDoors.setEnabled(false);
+					tglbtnLeftDoors.setEnabled(false);
 					btnTempReq.setEnabled(false);
 					btnAnnCustReq.setEnabled(false);
 					btnAnnNextReq.setEnabled(false);
@@ -316,7 +343,8 @@ public class GUIProto extends JFrame {
 		
 		//Initialize for default Automatic mode ************
 		tglbtnLights.setEnabled(false);
-		tglbtnDoors.setEnabled(false);
+		tglbtnRightDoors.setEnabled(false);
+		tglbtnLeftDoors.setEnabled(false);
 		btnTempReq.setEnabled(false);
 		btnAnnCustReq.setEnabled(false);
 		btnAnnNextReq.setEnabled(false);
@@ -334,5 +362,10 @@ public class GUIProto extends JFrame {
 		PowerCurr.setColumns(10);
 		PowerCurr.setBounds(528, 279, 86, 20);
 		contentPane.add(PowerCurr);
+		
+		JLabel TTEIcon = new JLabel("");
+		TTEIcon.setIcon(new ImageIcon(GUIProto.class.getResource("/shared/TTESmall.png")));
+		TTEIcon.setBounds(10, 402, 64, 65);
+		contentPane.add(TTEIcon);
 	}
 }
