@@ -122,7 +122,7 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonG8 = new JToggleButton("");
 		toggleButtonG8.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG8.setBounds(556, 63, 15, 15);
+		toggleButtonG8.setBounds(557, 68, 15, 15);
 		trackDisplayPanel.add(toggleButtonG8);
 		
 		JToggleButton toggleButtonG9 = new JToggleButton("");
@@ -172,12 +172,12 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonG18 = new JToggleButton("");
 		toggleButtonG18.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG18.setBounds(167, 28, 15, 15);
+		toggleButtonG18.setBounds(167, 34, 15, 15);
 		trackDisplayPanel.add(toggleButtonG18);
 		
 		JToggleButton toggleButtonG19 = new JToggleButton("");
 		toggleButtonG19.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG19.setBounds(149, 43, 15, 15);
+		toggleButtonG19.setBounds(150, 47, 15, 15);
 		trackDisplayPanel.add(toggleButtonG19);
 		
 		JToggleButton toggleButtonG20 = new JToggleButton("");
@@ -392,12 +392,12 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonG62 = new JToggleButton("");
 		toggleButtonG62.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG62.setBounds(661, 363, 15, 15);
+		toggleButtonG62.setBounds(656, 356, 15, 15);
 		trackDisplayPanel.add(toggleButtonG62);
 		
 		JToggleButton toggleButtonG63 = new JToggleButton("");
 		toggleButtonG63.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG63.setBounds(675, 413, 15, 15);
+		toggleButtonG63.setBounds(676, 413, 15, 15);
 		trackDisplayPanel.add(toggleButtonG63);
 		
 		JToggleButton toggleButtonG64 = new JToggleButton("");
@@ -407,32 +407,32 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonG65 = new JToggleButton("");
 		toggleButtonG65.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG65.setBounds(672, 454, 20, 20);
+		toggleButtonG65.setBounds(673, 454, 20, 20);
 		trackDisplayPanel.add(toggleButtonG65);
 		
 		JToggleButton toggleButtonG66 = new JToggleButton("");
 		toggleButtonG66.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG66.setBounds(676, 481, 15, 15);
+		toggleButtonG66.setBounds(675, 483, 15, 15);
 		trackDisplayPanel.add(toggleButtonG66);
 		
 		JToggleButton toggleButtonG67 = new JToggleButton("");
 		toggleButtonG67.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG67.setBounds(676, 510, 15, 15);
+		toggleButtonG67.setBounds(675, 513, 15, 15);
 		trackDisplayPanel.add(toggleButtonG67);
 		
 		JToggleButton toggleButtonG68 = new JToggleButton("");
 		toggleButtonG68.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG68.setBounds(675, 547, 15, 15);
+		toggleButtonG68.setBounds(676, 549, 15, 15);
 		trackDisplayPanel.add(toggleButtonG68);
 		
 		JToggleButton toggleButtonG69 = new JToggleButton("");
 		toggleButtonG69.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG69.setBounds(673, 618, 15, 15);
+		toggleButtonG69.setBounds(671, 623, 15, 15);
 		trackDisplayPanel.add(toggleButtonG69);
 		
 		JToggleButton toggleButtonG70 = new JToggleButton("");
 		toggleButtonG70.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG70.setBounds(665, 645, 15, 15);
+		toggleButtonG70.setBounds(660, 651, 15, 15);
 		trackDisplayPanel.add(toggleButtonG70);
 		
 		JToggleButton toggleButtonG71 = new JToggleButton("");
@@ -582,7 +582,7 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonG100 = new JToggleButton("");
 		toggleButtonG100.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG100.setBounds(178, 692, 15, 15);
+		toggleButtonG100.setBounds(175, 694, 15, 15);
 		trackDisplayPanel.add(toggleButtonG100);
 		
 		JToggleButton toggleButtonG101 = new JToggleButton("");
@@ -622,67 +622,67 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonG108 = new JToggleButton("");
 		toggleButtonG108.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG108.setBounds(608, 612, 15, 15);
+		toggleButtonG108.setBounds(605, 617, 15, 15);
 		trackDisplayPanel.add(toggleButtonG108);
 		
 		JToggleButton toggleButtonG109 = new JToggleButton("");
 		toggleButtonG109.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG109.setBounds(625, 577, 15, 15);
+		toggleButtonG109.setBounds(625, 584, 15, 15);
 		trackDisplayPanel.add(toggleButtonG109);
 		
 		JToggleButton toggleButtonG110 = new JToggleButton("");
 		toggleButtonG110.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG110.setBounds(627, 543, 15, 15);
+		toggleButtonG110.setBounds(631, 543, 15, 15);
 		trackDisplayPanel.add(toggleButtonG110);
 		
 		JToggleButton toggleButtonG111 = new JToggleButton("");
 		toggleButtonG111.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG111.setBounds(628, 529, 15, 15);
+		toggleButtonG111.setBounds(632, 529, 15, 15);
 		trackDisplayPanel.add(toggleButtonG111);
 		
 		JToggleButton toggleButtonG112 = new JToggleButton("");
 		toggleButtonG112.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG112.setBounds(628, 513, 15, 15);
+		toggleButtonG112.setBounds(631, 513, 15, 15);
 		trackDisplayPanel.add(toggleButtonG112);
 		
 		JToggleButton toggleButtonG113 = new JToggleButton("");
 		toggleButtonG113.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG113.setBounds(627, 499, 15, 15);
+		toggleButtonG113.setBounds(631, 499, 15, 15);
 		trackDisplayPanel.add(toggleButtonG113);
 		
 		JToggleButton toggleButtonG114 = new JToggleButton("");
 		toggleButtonG114.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG114.setBounds(627, 482, 20, 20);
+		toggleButtonG114.setBounds(631, 482, 20, 20);
 		trackDisplayPanel.add(toggleButtonG114);
 		
 		JToggleButton toggleButtonG115 = new JToggleButton("");
 		toggleButtonG115.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG115.setBounds(628, 468, 15, 15);
+		toggleButtonG115.setBounds(631, 468, 15, 15);
 		trackDisplayPanel.add(toggleButtonG115);
 		
 		JToggleButton toggleButtonG116 = new JToggleButton("");
 		toggleButtonG116.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG116.setBounds(628, 454, 15, 15);
+		toggleButtonG116.setBounds(631, 454, 15, 15);
 		trackDisplayPanel.add(toggleButtonG116);
 		
 		JToggleButton toggleButtonG117 = new JToggleButton("");
 		toggleButtonG117.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG117.setBounds(626, 421, 15, 15);
+		toggleButtonG117.setBounds(628, 420, 15, 15);
 		trackDisplayPanel.add(toggleButtonG117);
 		
 		JToggleButton toggleButtonG118 = new JToggleButton("");
 		toggleButtonG118.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG118.setBounds(615, 400, 15, 15);
+		toggleButtonG118.setBounds(618, 400, 15, 15);
 		trackDisplayPanel.add(toggleButtonG118);
 		
 		JToggleButton toggleButtonG119 = new JToggleButton("");
 		toggleButtonG119.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG119.setBounds(594, 377, 15, 15);
+		toggleButtonG119.setBounds(601, 381, 15, 15);
 		trackDisplayPanel.add(toggleButtonG119);
 		
 		JToggleButton toggleButtonG120 = new JToggleButton("");
 		toggleButtonG120.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG120.setBounds(564, 362, 15, 15);
+		toggleButtonG120.setBounds(576, 362, 15, 15);
 		trackDisplayPanel.add(toggleButtonG120);
 		
 		JToggleButton toggleButtonG121 = new JToggleButton("");
@@ -837,12 +837,12 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonG151 = new JToggleButton("");
 		toggleButtonG151.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG151.setBounds(606, 291, 15, 15);
+		toggleButtonG151.setBounds(604, 292, 15, 15);
 		trackDisplayPanel.add(toggleButtonG151);
 		
 		JToggleButton toggleButtonG152 = new JToggleButton("");
 		toggleButtonG152.setBackground(Color.LIGHT_GRAY);
-		toggleButtonG152.setBounds(673, 302, 15, 15);
+		toggleButtonG152.setBounds(672, 323, 15, 15);
 		trackDisplayPanel.add(toggleButtonG152);
 		
 		JToggleButton toggleButton_1 = new JToggleButton("");
@@ -1182,17 +1182,17 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButton_68 = new JToggleButton("");
 		toggleButton_68.setBackground(Color.LIGHT_GRAY);
-		toggleButton_68.setBounds(282, 446, 15, 15);
+		toggleButton_68.setBounds(285, 446, 15, 15);
 		trackDisplayPanel.add(toggleButton_68);
 		
 		JToggleButton toggleButton_69 = new JToggleButton("");
 		toggleButton_69.setBackground(Color.LIGHT_GRAY);
-		toggleButton_69.setBounds(282, 430, 15, 15);
+		toggleButton_69.setBounds(285, 430, 15, 15);
 		trackDisplayPanel.add(toggleButton_69);
 		
 		JToggleButton toggleButton_70 = new JToggleButton("");
 		toggleButton_70.setBackground(Color.LIGHT_GRAY);
-		toggleButton_70.setBounds(282, 415, 15, 15);
+		toggleButton_70.setBounds(285, 415, 15, 15);
 		trackDisplayPanel.add(toggleButton_70);
 		
 		JToggleButton toggleButton_71 = new JToggleButton("");
@@ -1227,7 +1227,7 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButton_77 = new JToggleButton("");
 		toggleButton_77.setBackground(Color.LIGHT_GRAY);
-		toggleButton_77.setBounds(691, 202, 15, 15);
+		toggleButton_77.setBounds(692, 196, 15, 15);
 		trackDisplayPanel.add(toggleButton_77);
 		
 		JLabel lblLegend = new JLabel("");
@@ -1514,6 +1514,7 @@ public class OfficeUI extends JFrame {
 		schedulePanel.add(scrollPane);
 		
 		table = new JTable();
+		table.setEnabled(false);
 		table.setCellSelectionEnabled(true);
 		table.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		table.setShowVerticalLines(true);
