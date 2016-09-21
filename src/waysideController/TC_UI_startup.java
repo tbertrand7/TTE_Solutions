@@ -32,6 +32,7 @@ public class TC_UI_startup extends JDialog {
 	 * Create the dialog.
 	 */
 	public TC_UI_startup() {
+		setTitle("PLC Startup");
 		setBounds(100, 100, 363, 119);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
