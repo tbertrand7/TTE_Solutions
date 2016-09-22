@@ -1,8 +1,5 @@
 package trainModel;
-<<<<<<< HEAD
-=======
 
->>>>>>> branch 'master' of https://github.com/tbertrand7/TTE_Solutions.git
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -46,7 +43,7 @@ public class TrainModel {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 		frame.setBounds(100, 100, 681, 586);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel doorControl = new JPanel();

@@ -51,7 +51,7 @@ public class TC_UI_main extends JFrame {
 	 */
 	public TC_UI_main() {
 		setTitle("Wayside Controller");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 581, 302);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
