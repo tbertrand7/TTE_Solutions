@@ -97,7 +97,7 @@ public class trainControllerUI extends JFrame {
 		SpeedLimit = new JTextField();
 		SpeedLimit.setHorizontalAlignment(SwingConstants.CENTER);
 		SpeedLimit.setEditable(false);
-		SpeedLimit.setBounds(518, 146, 86, 20);
+		SpeedLimit.setBounds(518, 146, 86, 28);
 		contentPane.add(SpeedLimit);
 		SpeedLimit.setColumns(10);
 		SpeedLimit.setText("40 mph"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
@@ -110,7 +110,7 @@ public class trainControllerUI extends JFrame {
 		SpeedCurr = new JTextField();
 		SpeedCurr.setHorizontalAlignment(SwingConstants.CENTER);
 		SpeedCurr.setEditable(false);
-		SpeedCurr.setBounds(518, 194, 86, 20);
+		SpeedCurr.setBounds(518, 194, 86, 28);
 		contentPane.add(SpeedCurr);
 		SpeedCurr.setColumns(10);
 		SpeedCurr.setText("35 mph"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
@@ -122,7 +122,7 @@ public class trainControllerUI extends JFrame {
 		
 		SpeedReq = new JTextField();
 		SpeedReq.setHorizontalAlignment(SwingConstants.CENTER);
-		SpeedReq.setBounds(518, 249, 86, 20);
+		SpeedReq.setBounds(518, 249, 86, 28);
 		contentPane.add(SpeedReq);
 		SpeedReq.setColumns(10);
 		
@@ -132,13 +132,13 @@ public class trainControllerUI extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JButton btnSpeedReq = new JButton("Go");
-		btnSpeedReq.setBounds(614, 249, 55, 20);
+		btnSpeedReq.setBounds(614, 249, 55, 28);
 		contentPane.add(btnSpeedReq);
 		
 		JButton btnEmergencyBrake = new JButton("Emergency Brake");
 		btnEmergencyBrake.setBackground(UIManager.getColor("Button.background"));
 		btnEmergencyBrake.setForeground(Color.RED);
-		btnEmergencyBrake.setBounds(503, 280, 122, 23);
+		btnEmergencyBrake.setBounds(497, 280, 134, 23);
 		contentPane.add(btnEmergencyBrake);
 		
 		JButton imgLight = new JButton("");
@@ -165,7 +165,7 @@ public class trainControllerUI extends JFrame {
 		txtRightDoors.setHorizontalAlignment(SwingConstants.CENTER);
 		txtRightDoors.setEditable(false);
 		txtRightDoors.setText("Closed");
-		txtRightDoors.setBounds(127, 200, 75, 20);
+		txtRightDoors.setBounds(127, 200, 75, 28);
 		contentPane.add(txtRightDoors);
 		txtRightDoors.setColumns(10);
 		
@@ -179,7 +179,7 @@ public class trainControllerUI extends JFrame {
 				}
 			}
 		});
-		tglbtnRightDoors.setBounds(10, 200, 107, 20);
+		tglbtnRightDoors.setBounds(10, 200, 107, 28);
 		contentPane.add(tglbtnRightDoors);
 		
 		txtLeftDoors = new JTextField();
@@ -187,7 +187,7 @@ public class trainControllerUI extends JFrame {
 		txtLeftDoors.setHorizontalAlignment(SwingConstants.CENTER);
 		txtLeftDoors.setEditable(false);
 		txtLeftDoors.setColumns(10);
-		txtLeftDoors.setBounds(127, 232, 75, 20);
+		txtLeftDoors.setBounds(127, 232, 75, 28);
 		contentPane.add(txtLeftDoors);
 		
 		JToggleButton tglbtnLeftDoors = new JToggleButton("Left Doors");
@@ -201,14 +201,14 @@ public class trainControllerUI extends JFrame {
 				}
 			}
 		});
-		tglbtnLeftDoors.setBounds(10, 232, 107, 20);
+		tglbtnLeftDoors.setBounds(10, 232, 107, 28);
 		contentPane.add(tglbtnLeftDoors);
 		
 		TempCurr = new JTextField();
 		TempCurr.setHorizontalAlignment(SwingConstants.CENTER);
 		TempCurr.setEditable(false);
 		TempCurr.setColumns(10);
-		TempCurr.setBounds(10, 294, 86, 20);
+		TempCurr.setBounds(10, 294, 86, 28);
 		contentPane.add(TempCurr);
 		TempCurr.setText("68 \u2109"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
 		
@@ -220,7 +220,7 @@ public class trainControllerUI extends JFrame {
 		TempReq = new JTextField();
 		TempReq.setHorizontalAlignment(SwingConstants.CENTER);
 		TempReq.setColumns(10);
-		TempReq.setBounds(10, 340, 86, 20);
+		TempReq.setBounds(10, 340, 86, 28);
 		contentPane.add(TempReq);
 		
 		JLabel lblRequestTemp = new JLabel("Request Temp");
@@ -229,7 +229,7 @@ public class trainControllerUI extends JFrame {
 		contentPane.add(lblRequestTemp);
 		
 		JButton btnTempReq = new JButton("Go");
-		btnTempReq.setBounds(106, 339, 55, 23);
+		btnTempReq.setBounds(106, 339, 55, 28);
 		contentPane.add(btnTempReq);
 		
 		JTextArea AnnCurr = new JTextArea();
@@ -365,7 +365,7 @@ public class trainControllerUI extends JFrame {
 		PowerCurr.setHorizontalAlignment(SwingConstants.CENTER);
 		PowerCurr.setEditable(false);
 		PowerCurr.setColumns(10);
-		PowerCurr.setBounds(518, 342, 86, 20);
+		PowerCurr.setBounds(518, 342, 86, 28);
 		contentPane.add(PowerCurr);
 		PowerCurr.setText("10 W"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER (disclaimer: I know nothing about power)
 		
