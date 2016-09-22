@@ -86,7 +86,7 @@ public class trackModelUI {
 		label_5.setBounds(203, 14, 48, 14);
 		overview.add(label_5);
 		
-		textField_4 = new JLabel("0.0");
+		textField_4 = new JLabel("0.0 deg");
 		textField_4.setFont(new Font("Arial", Font.PLAIN, 11));
 		textField_4.setBounds(261, 14, 65, 20);
 		overview.add(textField_4);
@@ -96,12 +96,12 @@ public class trackModelUI {
 		label_6.setBounds(317, 14, 65, 14);
 		overview.add(label_6);
 		
-		textField_5 = new JLabel("0.0");
+		textField_5 = new JLabel("0.0 mph");
 		textField_5.setFont(new Font("Arial", Font.PLAIN, 11));
 		textField_5.setBounds(404, 11, 65, 20);
 		overview.add(textField_5);
 		
-		textField_6 = new JLabel("0.0");
+		textField_6 = new JLabel("0.0 mph");
 		textField_6.setFont(new Font("Arial", Font.PLAIN, 11));
 		textField_6.setBounds(404, 44, 65, 20);
 		overview.add(textField_6);
@@ -111,7 +111,7 @@ public class trackModelUI {
 		label_7.setBounds(317, 46, 77, 14);
 		overview.add(label_7);
 		
-		textField_7 = new JLabel("0.0");
+		textField_7 = new JLabel("0.0 ft");
 		textField_7.setFont(new Font("Arial", Font.PLAIN, 11));
 		textField_7.setBounds(261, 44, 65, 20);
 		overview.add(textField_7);
@@ -149,7 +149,7 @@ public class trackModelUI {
 		lblBlockSize.setBounds(10, 86, 90, 14);
 		overview.add(lblBlockSize);
 		
-		JLabel lblNewLabel_2 = new JLabel("0.0");
+		JLabel lblNewLabel_2 = new JLabel("0.0 ft");
 		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 11));
 		lblNewLabel_2.setBounds(138, 86, 55, 14);
 		overview.add(lblNewLabel_2);
@@ -322,7 +322,8 @@ public class trackModelUI {
 		JButton btnAddNew = new JButton("Add New Block");
 		btnAddNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				//launch new gui 
+				newBlockGUI.main(null);
 			}
 		});
 		btnAddNew.setFont(new Font("Arial", Font.PLAIN, 11));
