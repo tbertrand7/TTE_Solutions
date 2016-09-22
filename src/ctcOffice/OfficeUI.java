@@ -37,6 +37,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+import javax.swing.UIManager.*;
+import java.util.*;
 
 public class OfficeUI extends JFrame {
 
@@ -65,6 +68,17 @@ public class OfficeUI extends JFrame {
 	 * Create the frame.
 	 */
 	public OfficeUI() {
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(OfficeUI.class.getResource("/shared/TTE.png")));
 		setBackground(new Color(240, 240, 240));
 		setTitle("CTC Office Control Panel");
@@ -81,8 +95,6 @@ public class OfficeUI extends JFrame {
 		trackDisplayPanel.setBounds(181, 64, 737, 733);
 		contentPane.add(trackDisplayPanel);
 		trackDisplayPanel.setLayout(null);
-		
-		ButtonGroup sectionBtns = new ButtonGroup();
 		
 		JToggleButton toggleButtonG1 = new JToggleButton("");
 		toggleButtonG1.setSelected(true);
