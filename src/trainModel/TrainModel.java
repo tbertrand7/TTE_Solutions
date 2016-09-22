@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package trainModel;
 
 import java.awt.EventQueue;
