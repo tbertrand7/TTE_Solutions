@@ -390,6 +390,11 @@ public class trainControllerUI extends JFrame {
 		lblSimulationSpeed.setBounds(469, 42, 200, 14);
 		contentPane.add(lblSimulationSpeed);
 		
+		//Only unnecessary if we find out we need separate simulation speeds on our UIs
+		sliderSimSpeed.setVisible(false);
+		lblSimulationSpeed.setVisible(false);
+		//******************************************************************************
+		
 		JLabel lblTrainId = new JLabel("Train ID");
 		lblTrainId.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTrainId.setBounds(10, 11, 162, 14);

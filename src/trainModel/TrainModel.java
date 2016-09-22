@@ -1,4 +1,8 @@
 package trainModel;
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'master' of https://github.com/tbertrand7/TTE_Solutions.git
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -132,7 +136,7 @@ public class TrainModel {
 		lblCrewCount.setBounds(261, 372, 150, 14);
 		frame.getContentPane().add(lblCrewCount);
 		
-		JLabel lblTemperaturef = new JLabel("Temperature (*F)");
+		JLabel lblTemperaturef = new JLabel("Temperature (\u2109)");
 		lblTemperaturef.setLabelFor(temperature);
 		lblTemperaturef.setBounds(261, 470, 150, 14);
 		frame.getContentPane().add(lblTemperaturef);
