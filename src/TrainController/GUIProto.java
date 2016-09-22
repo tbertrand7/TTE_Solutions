@@ -91,50 +91,54 @@ public class GUIProto extends JFrame {
 				++i;
 			}
 		});
+		TrainSelect.setSelectedIndex(0);
 		//*******************************************************************************************
 		
 		SpeedLimit = new JTextField();
+		SpeedLimit.setHorizontalAlignment(SwingConstants.CENTER);
 		SpeedLimit.setEditable(false);
-		SpeedLimit.setBounds(528, 146, 86, 20);
+		SpeedLimit.setBounds(518, 146, 86, 20);
 		contentPane.add(SpeedLimit);
 		SpeedLimit.setColumns(10);
+		SpeedLimit.setText("40 mph"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
 		
 		JLabel lblSpeedLimit = new JLabel("SPEED LIMIT");
 		lblSpeedLimit.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSpeedLimit.setBounds(528, 129, 86, 14);
+		lblSpeedLimit.setBounds(518, 129, 86, 14);
 		contentPane.add(lblSpeedLimit);
 		
 		SpeedCurr = new JTextField();
 		SpeedCurr.setHorizontalAlignment(SwingConstants.CENTER);
 		SpeedCurr.setEditable(false);
-		SpeedCurr.setBounds(528, 194, 86, 20);
+		SpeedCurr.setBounds(518, 194, 86, 20);
 		contentPane.add(SpeedCurr);
 		SpeedCurr.setColumns(10);
+		SpeedCurr.setText("35 mph"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
 		
 		JLabel lblCurrentSpeed = new JLabel("Current Speed");
 		lblCurrentSpeed.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCurrentSpeed.setBounds(528, 177, 86, 14);
+		lblCurrentSpeed.setBounds(518, 177, 86, 14);
 		contentPane.add(lblCurrentSpeed);
 		
 		SpeedReq = new JTextField();
 		SpeedReq.setHorizontalAlignment(SwingConstants.CENTER);
-		SpeedReq.setBounds(528, 249, 86, 20);
+		SpeedReq.setBounds(518, 249, 86, 20);
 		contentPane.add(SpeedReq);
 		SpeedReq.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Request Speed");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(528, 232, 86, 14);
+		lblNewLabel.setBounds(518, 232, 86, 14);
 		contentPane.add(lblNewLabel);
 		
 		JButton btnSpeedReq = new JButton("Go");
-		btnSpeedReq.setBounds(624, 185, 55, 23);
+		btnSpeedReq.setBounds(614, 249, 55, 20);
 		contentPane.add(btnSpeedReq);
 		
 		JButton btnEmergencyBrake = new JButton("Emergency Brake");
 		btnEmergencyBrake.setBackground(UIManager.getColor("Button.background"));
 		btnEmergencyBrake.setForeground(Color.RED);
-		btnEmergencyBrake.setBounds(513, 280, 122, 23);
+		btnEmergencyBrake.setBounds(503, 280, 122, 23);
 		contentPane.add(btnEmergencyBrake);
 		
 		JButton imgLight = new JButton("");
@@ -206,6 +210,7 @@ public class GUIProto extends JFrame {
 		TempCurr.setColumns(10);
 		TempCurr.setBounds(10, 294, 86, 20);
 		contentPane.add(TempCurr);
+		TempCurr.setText("68 \u2109"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
 		
 		JLabel lblCurrentTemp = new JLabel("Current Temp");
 		lblCurrentTemp.setHorizontalAlignment(SwingConstants.CENTER);
@@ -353,15 +358,16 @@ public class GUIProto extends JFrame {
 		
 		JLabel lblCurrentPower = new JLabel("Current Power");
 		lblCurrentPower.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCurrentPower.setBounds(528, 325, 86, 14);
+		lblCurrentPower.setBounds(518, 325, 86, 14);
 		contentPane.add(lblCurrentPower);
 		
 		PowerCurr = new JTextField();
 		PowerCurr.setHorizontalAlignment(SwingConstants.CENTER);
 		PowerCurr.setEditable(false);
 		PowerCurr.setColumns(10);
-		PowerCurr.setBounds(528, 342, 86, 20);
+		PowerCurr.setBounds(518, 342, 86, 20);
 		contentPane.add(PowerCurr);
+		PowerCurr.setText("10 W"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER (disclaimer: I know nothing about power)
 		
 		JLabel TTEIcon = new JLabel("");
 		TTEIcon.setIcon(new ImageIcon(GUIProto.class.getResource("/shared/TTESmall.png")));
