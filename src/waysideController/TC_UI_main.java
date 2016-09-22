@@ -106,17 +106,17 @@ public class TC_UI_main extends JFrame {
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblGreenLine_2)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(10)
-							.addComponent(table_2, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE))
-						.addComponent(lblGreenLine_2))
-					.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+							.addComponent(table_2, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addComponent(label_12, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(10)
-							.addComponent(table_3, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)))
-					.addGap(105))
+							.addComponent(table_3, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)))
+					.addGap(52))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -130,7 +130,8 @@ public class TC_UI_main extends JFrame {
 						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(label_12)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(table_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(table_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
 		);
 		panel.setLayout(gl_panel);
 		
@@ -406,7 +407,14 @@ public class TC_UI_main extends JFrame {
 			new String[] {
 				"Lights", "Status"
 			}
-		));
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
 		
 		JLabel lblRedLine_1 = new JLabel("Red Line");
 		
@@ -421,7 +429,14 @@ public class TC_UI_main extends JFrame {
 			new String[] {
 				"New column", "New column"
 			}
-		));
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
 		table_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		
 		JLabel lblBrokenRailsNone = new JLabel("Broken Rails: None");
@@ -440,14 +455,11 @@ public class TC_UI_main extends JFrame {
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
 								.addComponent(lblBlockCrossing, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(lblBlock, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_2.createSequentialGroup()
-									.addGap(10)
-									.addComponent(table, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
-								.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(table_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)))
-							.addGap(37)
+							.addGap(10)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(table, 0, 0, Short.MAX_VALUE)
+								.addComponent(table_1, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblBrokenRailsNone_1)
 								.addComponent(lblBrokenRailsNone))))
@@ -471,7 +483,7 @@ public class TC_UI_main extends JFrame {
 							.addComponent(table_1, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 							.addComponent(lblBrokenRailsNone_1))
 						.addComponent(lblBlockCrossing))
-					.addContainerGap(90, Short.MAX_VALUE))
+					.addContainerGap(92, Short.MAX_VALUE))
 		);
 		panel_2.setLayout(gl_panel_2);
 	}
