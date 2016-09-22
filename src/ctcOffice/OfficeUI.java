@@ -1365,12 +1365,12 @@ public class OfficeUI extends JFrame {
 		statusPanel.add(lblStatusInfo);
 		lblStatusInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel lblElevationInfo = new JLabel("0.5 m");
+		JLabel lblElevationInfo = new JLabel("0.5 ft");
 		lblElevationInfo.setBounds(81, 181, 90, 15);
 		statusPanel.add(lblElevationInfo);
 		lblElevationInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel lblSpeedLimitInfo = new JLabel("40 km/h");
+		JLabel lblSpeedLimitInfo = new JLabel("20 mph");
 		lblSpeedLimitInfo.setBounds(81, 156, 90, 15);
 		statusPanel.add(lblSpeedLimitInfo);
 		lblSpeedLimitInfo.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -1380,7 +1380,7 @@ public class OfficeUI extends JFrame {
 		statusPanel.add(lblGradeInfo);
 		lblGradeInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel lblLengthInfo = new JLabel("50 m");
+		JLabel lblLengthInfo = new JLabel("150 ft");
 		lblLengthInfo.setBounds(81, 106, 90, 15);
 		statusPanel.add(lblLengthInfo);
 		lblLengthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -1442,7 +1442,7 @@ public class OfficeUI extends JFrame {
 		speedPanel.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblKmh = new JLabel("km/h");
+		JLabel lblKmh = new JLabel("mph");
 		speedPanel.add(lblKmh);
 		
 		JButton btnSetSpeed = new JButton("Set Speed");
