@@ -1,4 +1,4 @@
-package TrainController;
+package trainController;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -33,7 +33,7 @@ import java.awt.event.MouseAdapter;
 import javax.swing.Box;
 import javax.swing.JSlider;
 
-public class GUIProto extends JFrame {
+public class trainControllerUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField SpeedLimit;
@@ -54,7 +54,7 @@ public class GUIProto extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUIProto frame = new GUIProto();
+					trainControllerUI frame = new trainControllerUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,9 +66,9 @@ public class GUIProto extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GUIProto() {
+	public trainControllerUI() {
 		setTitle("Train Controller");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(GUIProto.class.getResource("/TrainController/computer1.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(trainControllerUI.class.getResource("/TrainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 695, 580);
 		contentPane = new JPanel();
@@ -144,7 +144,7 @@ public class GUIProto extends JFrame {
 		JButton imgLight = new JButton("");
 		imgLight.setBackground(UIManager.getColor("Button.disabledShadow"));
 		imgLight.setEnabled(false);
-		imgLight.setIcon(new ImageIcon(GUIProto.class.getResource("/TrainController/LightOnTiny.png")));
+		imgLight.setIcon(new ImageIcon(trainControllerUI.class.getResource("/TrainController/LightOnTiny.png")));
 		imgLight.setBounds(143, 129, 43, 46);
 		contentPane.add(imgLight);
 		
@@ -370,7 +370,7 @@ public class GUIProto extends JFrame {
 		PowerCurr.setText("10 W"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER (disclaimer: I know nothing about power)
 		
 		JLabel TTEIcon = new JLabel("");
-		TTEIcon.setIcon(new ImageIcon(GUIProto.class.getResource("/shared/TTESmall.png")));
+		TTEIcon.setIcon(new ImageIcon(trainControllerUI.class.getResource("/shared/TTESmall.png")));
 		TTEIcon.setBounds(10, 465, 64, 65);
 		contentPane.add(TTEIcon);
 		
