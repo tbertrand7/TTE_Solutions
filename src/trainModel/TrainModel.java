@@ -1,5 +1,8 @@
 package trainModel;
+<<<<<<< HEAD
+=======
 
+>>>>>>> branch 'master' of https://github.com/tbertrand7/TTE_Solutions.git
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
