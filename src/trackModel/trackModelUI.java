@@ -51,7 +51,7 @@ public class trackModelUI {
 		frmTrackModelGui = new JFrame();
 		frmTrackModelGui.setIconImage(Toolkit.getDefaultToolkit().getImage(trackModelUI.class.getResource("/shared/TTE.png")));
 		frmTrackModelGui.setFont(new Font("Arial", Font.PLAIN, 14));
-		frmTrackModelGui.getContentPane().setFont(new Font("Arial", Font.PLAIN, 12));
+		frmTrackModelGui.getContentPane().setFont(new Font("Arial", Font.PLAIN, 11));
 		frmTrackModelGui.setTitle("Track Model");
 		frmTrackModelGui.setBounds(100, 100, 500, 350);
 		frmTrackModelGui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -205,44 +205,64 @@ public class trackModelUI {
 		overview.add(comboBox_1);
 		
 		JLabel lblHeaterStatus = new JLabel("Heater Status:");
-		lblHeaterStatus.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblHeaterStatus.setBounds(247, 111, 126, 23);
+		lblHeaterStatus.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblHeaterStatus.setBounds(268, 86, 126, 23);
 		overview.add(lblHeaterStatus);
 		
 		JLabel lblOn = new JLabel("OFF");
-		lblOn.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblOn.setBounds(383, 114, 65, 14);
+		lblOn.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblOn.setBounds(404, 89, 65, 14);
 		overview.add(lblOn);
 		
 		JLabel lblCurrentTemp = new JLabel("Current Temp:");
-		lblCurrentTemp.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblCurrentTemp.setBounds(247, 136, 126, 23);
+		lblCurrentTemp.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblCurrentTemp.setBounds(268, 111, 126, 23);
 		overview.add(lblCurrentTemp);
 		
 		JLabel lblF = new JLabel("70 F");
-		lblF.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblF.setBounds(383, 139, 65, 14);
+		lblF.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblF.setBounds(404, 114, 65, 14);
 		overview.add(lblF);
 		
 		JLabel lblArrowDirection = new JLabel("Arrow Direction:");
-		lblArrowDirection.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblArrowDirection.setBounds(247, 161, 126, 23);
+		lblArrowDirection.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblArrowDirection.setBounds(268, 136, 126, 23);
 		overview.add(lblArrowDirection);
 		
 		JLabel lblHead = new JLabel("HEAD");
-		lblHead.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblHead.setBounds(383, 164, 65, 14);
+		lblHead.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblHead.setBounds(404, 139, 65, 14);
 		overview.add(lblHead);
 		
 		JLabel lblA = new JLabel("A");
-		lblA.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblA.setBounds(383, 189, 65, 14);
+		lblA.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblA.setBounds(404, 164, 65, 14);
 		overview.add(lblA);
 		
 		JLabel lblTrackSection = new JLabel("Track Section:");
-		lblTrackSection.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblTrackSection.setBounds(247, 186, 126, 23);
+		lblTrackSection.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblTrackSection.setBounds(268, 161, 126, 23);
 		overview.add(lblTrackSection);
+		
+		JLabel lblNumberOfPassengers = new JLabel("Number of Passengers:");
+		lblNumberOfPassengers.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblNumberOfPassengers.setBounds(268, 186, 126, 23);
+		overview.add(lblNumberOfPassengers);
+		
+		JLabel lblSwitchPosition = new JLabel("Switch Position:");
+		lblSwitchPosition.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblSwitchPosition.setBounds(268, 211, 126, 23);
+		overview.add(lblSwitchPosition);
+		
+		JLabel lblNotAtSwitch = new JLabel("N/A");
+		lblNotAtSwitch.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblNotAtSwitch.setBounds(404, 214, 65, 14);
+		overview.add(lblNotAtSwitch);
+		
+		JLabel label_30 = new JLabel("50");
+		label_30.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_30.setBounds(404, 189, 65, 14);
+		overview.add(label_30);
 		
 		JPanel config = new JPanel();
 		config.setBackground(new Color(240, 240, 240));
@@ -256,7 +276,7 @@ public class trackModelUI {
 		
 		JComboBox lineComboBox = new JComboBox();
 		lineComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
-		lineComboBox.setBounds(138, 7, 45, 20);
+		lineComboBox.setBounds(138, 7, 55, 20);
 		lineComboBox.addItem("Red");
 		lineComboBox.addItem("Blue");
 		config.add(lineComboBox);
@@ -268,7 +288,7 @@ public class trackModelUI {
 		
 		JComboBox railComboBox = new JComboBox();
 		railComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
-		railComboBox.setBounds(138, 40, 45, 20);
+		railComboBox.setBounds(138, 40, 55, 20);
 		 for(int i=1; i<100; i++){
 			 railComboBox.addItem(i);
         }
@@ -374,7 +394,7 @@ public class trackModelUI {
 		
 		JTextField label_16 = new JTextField("False");
 		label_16.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_16.setBounds(138, 143, 55, 14);
+		label_16.setBounds(138, 137, 55, 26);
 		config.add(label_16);
 		
 		JTextField label_17 = new JTextField("False");
@@ -389,63 +409,84 @@ public class trackModelUI {
 		
 		JTextField label_19 = new JTextField("0.0");
 		label_19.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_19.setBounds(138, 92, 55, 16);
+		label_19.setBounds(138, 90, 55, 20);
 		config.add(label_19);
 		
 		JLabel label_11 = new JLabel("Heater Status:");
-		label_11.setFont(new Font("Arial", Font.PLAIN, 14));
-		label_11.setBounds(249, 93, 126, 23);
+		label_11.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_11.setBounds(271, 71, 126, 23);
 		config.add(label_11);
 		
 		JLabel label_20 = new JLabel("Current Temp:");
-		label_20.setFont(new Font("Arial", Font.PLAIN, 14));
-		label_20.setBounds(249, 118, 126, 23);
+		label_20.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_20.setBounds(271, 96, 126, 23);
 		config.add(label_20);
 		
 		JLabel label_21 = new JLabel("Arrow Direction:");
-		label_21.setFont(new Font("Arial", Font.PLAIN, 14));
-		label_21.setBounds(249, 143, 126, 23);
+		label_21.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_21.setBounds(271, 121, 126, 23);
 		config.add(label_21);
 		
 		JLabel label_22 = new JLabel("Track Section:");
-		label_22.setFont(new Font("Arial", Font.PLAIN, 14));
-		label_22.setBounds(249, 168, 126, 23);
+		label_22.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_22.setBounds(271, 146, 126, 23);
 		config.add(label_22);
 		
 		JTextField label_23 = new JTextField("A");
-		label_23.setFont(new Font("Arial", Font.PLAIN, 14));
-		label_23.setBounds(385, 168, 65, 23);
+		label_23.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_23.setBounds(407, 146, 65, 23);
 		config.add(label_23);
 		
 		JTextField label_24 = new JTextField("HEAD");
-		label_24.setFont(new Font("Arial", Font.PLAIN, 14));
-		label_24.setBounds(385, 143, 65, 23);
+		label_24.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_24.setBounds(407, 121, 65, 23);
 		config.add(label_24);
 		
 		JSpinner label_25 = new JSpinner();
-		label_25.setFont(new Font("Arial", Font.PLAIN, 14));
-		label_25.setBounds(385, 118, 65, 23);
+		label_25.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_25.setBounds(407, 96, 65, 23);
 		config.add(label_25);
 		
 		JComboBox label_26 = new JComboBox();
-		label_26.setFont(new Font("Arial", Font.PLAIN, 14));
-		label_26.setBounds(385, 96, 65, 20);
+		label_26.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_26.setBounds(407, 74, 65, 20);
 		config.add(label_26);
 		
 		textField = new JTextField("False");
 		textField.setFont(new Font("Arial", Font.PLAIN, 11));
-		textField.setBounds(138, 115, 55, 14);
+		textField.setBounds(138, 112, 55, 23);
 		config.add(textField);
 		
 		textField_1 = new JTextField("0.0");
 		textField_1.setFont(new Font("Arial", Font.PLAIN, 11));
-		textField_1.setBounds(138, 68, 55, 16);
+		textField_1.setBounds(138, 64, 55, 20);
 		config.add(textField_1);
+		
+		JComboBox label_27 = new JComboBox();
+		label_27.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_27.setBounds(407, 194, 65, 26);
+		config.add(label_27);
+		
+		JLabel label_28 = new JLabel("Number of Passengers:");
+		label_28.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_28.setBounds(271, 171, 126, 23);
+		config.add(label_28);
+		
+		JSpinner label_29 = new JSpinner();
+		label_29.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_29.setBounds(407, 171, 65, 22);
+		config.add(label_29);
+		
+		JLabel label_31 = new JLabel("Switch Position:");
+		label_31.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_31.setBounds(271, 196, 126, 23);
+		config.add(label_31);
 
 		JPanel failurePanel = new JPanel();
 		tabbedPane.addTab("Murphy's Failures", null, failurePanel, null);
 		
 		JButton breakRail = new JButton("Break Rail");
+		breakRail.setFont(new Font("Arial", Font.PLAIN, 11));
 		breakRail.setBounds(1, 0, 159, 283);
 		breakRail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -456,6 +497,7 @@ public class trackModelUI {
 		failurePanel.add(breakRail);
 		
 		JButton powerFailure = new JButton("Cut Power");
+		powerFailure.setFont(new Font("Arial", Font.PLAIN, 11));
 		powerFailure.setBounds(160, 0, 159, 283);
 		powerFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

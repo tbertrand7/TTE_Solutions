@@ -18,6 +18,7 @@ import waysideController.TC_UI_startup;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class TTEHomeGUI {
 
@@ -61,6 +62,7 @@ public class TTEHomeGUI {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
 		frmTteTrainHome = new JFrame();
+		frmTteTrainHome.setIconImage(Toolkit.getDefaultToolkit().getImage(TTEHomeGUI.class.getResource("/shared/TTE.png")));
 		frmTteTrainHome.setTitle("TTE Train Home");
 		frmTteTrainHome.setBounds(100, 100, 450, 300);
 		frmTteTrainHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
