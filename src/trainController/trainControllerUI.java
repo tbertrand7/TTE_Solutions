@@ -424,6 +424,13 @@ public class trainControllerUI extends JFrame {
 		btnTempReq.setEnabled(false);
 		btnSpeedReq.setEnabled(false);
 		btnServiceBrake.setEnabled(false);
+		
+		JButton btnPassengerEmergencyBrake = new JButton("Passenger Emergency Brake");
+		btnPassengerEmergencyBrake.setForeground(Color.RED);
+		btnPassengerEmergencyBrake.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
+		btnPassengerEmergencyBrake.setBackground(SystemColor.menu);
+		btnPassengerEmergencyBrake.setBounds(10, 420, 267, 29);
+		contentPane.add(btnPassengerEmergencyBrake);
 		//**************************************************
 	}
 }
