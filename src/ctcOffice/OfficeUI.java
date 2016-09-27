@@ -1338,7 +1338,7 @@ public class OfficeUI extends JFrame {
 		JTabbedPane mainMenuTabPane = new JTabbedPane(JTabbedPane.TOP);
 		mainMenuTabPane.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		mainMenuTabPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		mainMenuTabPane.setBounds(0, 64, 420, 500);
+		mainMenuTabPane.setBounds(0, 297, 420, 500);
 		contentPane.add(mainMenuTabPane);
 		
 		JPanel statusPanel = new JPanel();
@@ -1662,6 +1662,10 @@ public class OfficeUI extends JFrame {
 				{null, null, null, null},
 				{null, null, null, null},
 				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
 			},
 			new String[] {
 				"Line", "Train", "Destination", "Time"
@@ -1685,12 +1689,13 @@ public class OfficeUI extends JFrame {
 		scrollPane.setViewportView(table);
 		
 		JPanel notificationPanel = new JPanel();
-		notificationPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		notificationPanel.setBounds(0, 563, 420, 234);
+		notificationPanel.setBounds(0, 64, 420, 234);
 		contentPane.add(notificationPanel);
+		notificationPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		notificationPanel.setLayout(null);
 		
 		JTextArea notificationArea = new JTextArea();
+		notificationArea.setEditable(false);
 		notificationArea.setBounds(6, 31, 408, 197);
 		notificationPanel.add(notificationArea);
 		
