@@ -40,6 +40,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UIManager.*;
 import java.util.*;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
 
 public class OfficeUI extends JFrame {
 
@@ -68,6 +72,7 @@ public class OfficeUI extends JFrame {
 	 * Create the frame.
 	 */
 	public OfficeUI() {
+		setFont(new Font("SansSerif", Font.PLAIN, 16));
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 		        if ("Nimbus".equals(info.getName())) {
@@ -83,7 +88,35 @@ public class OfficeUI extends JFrame {
 		setBackground(new Color(240, 240, 240));
 		setTitle("CTC Office Control Panel");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 934, 835);
+		setBounds(100, 100, 1172, 862);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		setJMenuBar(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		mnFile.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		menuBar.add(mnFile);
+		
+		JMenuItem mntmLogout = new JMenuItem("Logout");
+		mntmLogout.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mnFile.add(mntmLogout);
+		
+		JMenu mnSchedule = new JMenu("Schedule");
+		mnSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		menuBar.add(mnSchedule);
+		
+		JMenuItem mntmLoadSchedule = new JMenuItem("Load Schedule");
+		mntmLoadSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mnSchedule.add(mntmLoadSchedule);
+		
+		JMenuItem mntmEditSchedule = new JMenuItem("Edit Schedule");
+		mntmEditSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mnSchedule.add(mntmEditSchedule);
+		
+		JMenuItem mntmScheduleByTrain = new JMenuItem("Schedule By Train");
+		mntmScheduleByTrain.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mnSchedule.add(mntmScheduleByTrain);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -92,7 +125,7 @@ public class OfficeUI extends JFrame {
 		JPanel trackDisplayPanel = new JPanel();
 		trackDisplayPanel.setBackground(new Color(255, 255, 255));
 		trackDisplayPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		trackDisplayPanel.setBounds(181, 64, 737, 733);
+		trackDisplayPanel.setBounds(419, 64, 737, 733);
 		contentPane.add(trackDisplayPanel);
 		trackDisplayPanel.setLayout(null);
 		
@@ -1242,11 +1275,6 @@ public class OfficeUI extends JFrame {
 		toggleButtonR77.setBounds(692, 196, 15, 15);
 		trackDisplayPanel.add(toggleButtonR77);
 		
-		JLabel lblLegend = new JLabel("");
-		lblLegend.setIcon(new ImageIcon(OfficeUI.class.getResource("/ctcOffice/legend.png")));
-		lblLegend.setBounds(14, 46, 105, 110);
-		trackDisplayPanel.add(lblLegend);
-		
 		JLabel lblTrackPicture = new JLabel("");
 		lblTrackPicture.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTrackPicture.setIcon(new ImageIcon(OfficeUI.class.getResource("/ctcOffice/track.png")));
@@ -1257,11 +1285,12 @@ public class OfficeUI extends JFrame {
 		
 		JPanel topButtonPanel = new JPanel();
 		topButtonPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		topButtonPanel.setBounds(0, 0, 918, 66);
+		topButtonPanel.setBounds(0, 0, 1156, 66);
 		contentPane.add(topButtonPanel);
 		topButtonPanel.setLayout(null);
 		
 		JSlider slider = new JSlider();
+		slider.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		slider.setToolTipText("Set speed of auto simulation");
 		slider.setMajorTickSpacing(3);
 		slider.setSnapToTicks(true);
@@ -1270,31 +1299,34 @@ public class OfficeUI extends JFrame {
 		slider.setMinimum(1);
 		slider.setMinorTickSpacing(1);
 		slider.setMaximum(10);
-		slider.setBounds(710, 20, 175, 42);
+		slider.setBounds(971, 20, 175, 42);
 		topButtonPanel.add(slider);
 		
 		JRadioButton rdbtnManual = new JRadioButton("Manual");
+		rdbtnManual.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		rdbtnManual.setToolTipText("Enable manual mode");
 		rdbtnManual.setSelected(true);
-		rdbtnManual.setBounds(635, 12, 69, 23);
+		rdbtnManual.setBounds(885, 12, 80, 23);
 		topButtonPanel.add(rdbtnManual);
 		
 		JRadioButton rdbtnAuto = new JRadioButton("Auto");
+		rdbtnAuto.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		rdbtnAuto.setToolTipText("Enable automatic simulation");
-		rdbtnAuto.setBounds(635, 32, 69, 23);
+		rdbtnAuto.setBounds(885, 32, 80, 23);
 		topButtonPanel.add(rdbtnAuto);
 		execMode.add(rdbtnAuto);
 		execMode.add(rdbtnManual);
 		
 		JLabel lblSimulationSpeed = new JLabel("Simulation Speed");
+		lblSimulationSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSimulationSpeed.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSimulationSpeed.setBounds(752, 5, 103, 18);
+		lblSimulationSpeed.setBounds(971, 2, 175, 18);
 		topButtonPanel.add(lblSimulationSpeed);
 		
 		JLabel lblCtcOfficeControl = new JLabel("CTC Office Control Panel");
 		lblCtcOfficeControl.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCtcOfficeControl.setFont(new Font("Times New Roman", Font.BOLD, 24));
-		lblCtcOfficeControl.setBounds(182, 0, 432, 64);
+		lblCtcOfficeControl.setFont(new Font("Times New Roman", Font.BOLD, 28));
+		lblCtcOfficeControl.setBounds(182, 0, 691, 64);
 		topButtonPanel.add(lblCtcOfficeControl);
 		
 		JLabel lblLogo = new JLabel("");
@@ -1304,8 +1336,9 @@ public class OfficeUI extends JFrame {
 		topButtonPanel.add(lblLogo);
 		
 		JTabbedPane mainMenuTabPane = new JTabbedPane(JTabbedPane.TOP);
+		mainMenuTabPane.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		mainMenuTabPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		mainMenuTabPane.setBounds(0, 64, 184, 733);
+		mainMenuTabPane.setBounds(0, 64, 420, 500);
 		contentPane.add(mainMenuTabPane);
 		
 		JPanel statusPanel = new JPanel();
@@ -1314,121 +1347,148 @@ public class OfficeUI extends JFrame {
 		statusPanel.setLayout(null);
 		
 		JLabel lblTrackInfo = new JLabel("Track Info");
-		lblTrackInfo.setBounds(6, 6, 165, 14);
+		lblTrackInfo.setBounds(5, 6, 165, 14);
 		statusPanel.add(lblTrackInfo);
-		lblTrackInfo.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTrackInfo.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblTrackInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel lblLine = new JLabel("Line:");
-		lblLine.setBounds(6, 31, 75, 15);
+		lblLine.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblLine.setBounds(5, 31, 75, 15);
 		statusPanel.add(lblLine);
 		
 		JLabel lblLineInfo = new JLabel("Green");
-		lblLineInfo.setBounds(81, 31, 90, 15);
+		lblLineInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblLineInfo.setBounds(80, 31, 90, 15);
 		statusPanel.add(lblLineInfo);
 		lblLineInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblSection = new JLabel("Section:");
-		lblSection.setBounds(6, 56, 75, 15);
+		lblSection.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSection.setBounds(5, 56, 75, 15);
 		statusPanel.add(lblSection);
 		
 		JLabel lblBlock = new JLabel("Block:");
-		lblBlock.setBounds(6, 81, 58, 15);
+		lblBlock.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblBlock.setBounds(5, 81, 58, 15);
 		statusPanel.add(lblBlock);
 		
 		JLabel lblLength = new JLabel("Length:");
-		lblLength.setBounds(6, 106, 75, 15);
+		lblLength.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblLength.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblLength.setBounds(5, 106, 75, 19);
 		statusPanel.add(lblLength);
 		
 		JLabel lblGrade = new JLabel("Grade:");
-		lblGrade.setBounds(6, 131, 75, 15);
+		lblGrade.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblGrade.setBounds(5, 131, 75, 15);
 		statusPanel.add(lblGrade);
 		
 		JLabel lblSpeedLimit = new JLabel("Speed Limit:");
-		lblSpeedLimit.setBounds(6, 156, 75, 15);
+		lblSpeedLimit.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblSpeedLimit.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSpeedLimit.setBounds(5, 156, 90, 19);
 		statusPanel.add(lblSpeedLimit);
 		
 		JLabel lblElevation = new JLabel("Elevation:");
-		lblElevation.setBounds(6, 181, 75, 15);
+		lblElevation.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblElevation.setBounds(5, 181, 75, 15);
 		statusPanel.add(lblElevation);
 		
 		JLabel lblStatus = new JLabel("Status:");
-		lblStatus.setBounds(6, 206, 75, 15);
+		lblStatus.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblStatus.setBounds(5, 206, 75, 15);
 		statusPanel.add(lblStatus);
 		
 		JButton btnCloseTrack = new JButton("Close Track");
-		btnCloseTrack.setBounds(44, 231, 94, 23);
+		btnCloseTrack.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnCloseTrack.setBounds(29, 231, 112, 30);
 		statusPanel.add(btnCloseTrack);
 		
 		JLabel lblStatusInfo = new JLabel("Open");
-		lblStatusInfo.setBounds(81, 206, 90, 15);
+		lblStatusInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblStatusInfo.setBounds(80, 206, 90, 19);
 		statusPanel.add(lblStatusInfo);
 		lblStatusInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblElevationInfo = new JLabel("0.5 ft");
-		lblElevationInfo.setBounds(81, 181, 90, 15);
+		lblElevationInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblElevationInfo.setBounds(80, 181, 90, 15);
 		statusPanel.add(lblElevationInfo);
 		lblElevationInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblSpeedLimitInfo = new JLabel("20 mph");
-		lblSpeedLimitInfo.setBounds(81, 156, 90, 15);
+		lblSpeedLimitInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSpeedLimitInfo.setBounds(80, 156, 90, 15);
 		statusPanel.add(lblSpeedLimitInfo);
 		lblSpeedLimitInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblGradeInfo = new JLabel("0.5%");
-		lblGradeInfo.setBounds(81, 131, 90, 15);
+		lblGradeInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblGradeInfo.setBounds(80, 131, 90, 15);
 		statusPanel.add(lblGradeInfo);
 		lblGradeInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblLengthInfo = new JLabel("150 ft");
-		lblLengthInfo.setBounds(81, 106, 90, 15);
+		lblLengthInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblLengthInfo.setBounds(80, 106, 90, 15);
 		statusPanel.add(lblLengthInfo);
 		lblLengthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblBlockInfo = new JLabel("1");
-		lblBlockInfo.setBounds(81, 80, 90, 15);
+		lblBlockInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblBlockInfo.setBounds(80, 80, 90, 15);
 		statusPanel.add(lblBlockInfo);
 		lblBlockInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblSectionInfo = new JLabel("A");
-		lblSectionInfo.setBounds(81, 56, 90, 15);
+		lblSectionInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSectionInfo.setBounds(80, 56, 90, 15);
 		statusPanel.add(lblSectionInfo);
 		lblSectionInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		JLabel lblSwitch = new JLabel("Switch:");
-		lblSwitch.setBounds(6, 321, 75, 15);
+		lblSwitch.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSwitch.setBounds(226, 81, 75, 15);
 		statusPanel.add(lblSwitch);
 		
 		JLabel lblStation = new JLabel("Station:");
-		lblStation.setBounds(6, 296, 75, 15);
+		lblStation.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblStation.setBounds(226, 31, 75, 15);
 		statusPanel.add(lblStation);
 		
 		JLabel lblInfrastracture = new JLabel("Infrastructure");
-		lblInfrastracture.setBounds(6, 271, 165, 14);
+		lblInfrastracture.setBounds(238, 6, 165, 14);
 		statusPanel.add(lblInfrastracture);
 		lblInfrastracture.setHorizontalAlignment(SwingConstants.CENTER);
-		lblInfrastracture.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblInfrastracture.setFont(new Font("Tahoma", Font.BOLD, 18));
 		
 		JLabel lblAuthority = new JLabel("Authority:");
-		lblAuthority.setBounds(6, 523, 58, 14);
+		lblAuthority.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblAuthority.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblAuthority.setBounds(118, 355, 75, 18);
 		statusPanel.add(lblAuthority);
 		
 		JLabel lblDestination = new JLabel("Destination:");
-		lblDestination.setBounds(6, 498, 75, 14);
+		lblDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblDestination.setBounds(118, 330, 90, 14);
 		statusPanel.add(lblDestination);
 		
 		JLabel lblSpeed = new JLabel("Speed:");
-		lblSpeed.setBounds(6, 473, 46, 14);
+		lblSpeed.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSpeed.setBounds(118, 305, 75, 19);
 		statusPanel.add(lblSpeed);
 		
 		JLabel lblTrainInfo = new JLabel("Train Info");
-		lblTrainInfo.setBounds(44, 448, 81, 14);
+		lblTrainInfo.setBounds(118, 280, 165, 14);
 		statusPanel.add(lblTrainInfo);
-		lblTrainInfo.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTrainInfo.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblTrainInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(3, 552, 176, 145);
+		tabbedPane.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		tabbedPane.setBounds(2, 380, 415, 80);
 		statusPanel.add(tabbedPane);
 		tabbedPane.setToolTipText("");
 		
@@ -1436,86 +1496,134 @@ public class OfficeUI extends JFrame {
 		tabbedPane.addTab("Speed", null, speedPanel, null);
 		
 		JLabel lblSetNewSpeed = new JLabel("Enter new speed:");
+		lblSetNewSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		speedPanel.add(lblSetNewSpeed);
 		
 		textField = new JTextField();
+		textField.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		speedPanel.add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblKmh = new JLabel("mph");
+		lblKmh.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		speedPanel.add(lblKmh);
 		
 		JButton btnSetSpeed = new JButton("Set Speed");
+		btnSetSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		speedPanel.add(btnSetSpeed);
 		
 		JPanel authorityPanel = new JPanel();
 		tabbedPane.addTab("Authority", null, authorityPanel, null);
 		
 		JLabel lblEnterNewAuthority = new JLabel("Enter new authority:");
+		lblEnterNewAuthority.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		authorityPanel.add(lblEnterNewAuthority);
 		
 		textField_1 = new JTextField();
+		textField_1.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		authorityPanel.add(textField_1);
 		textField_1.setColumns(10);
 		
+		JLabel lblMi = new JLabel("mi");
+		lblMi.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		authorityPanel.add(lblMi);
+		
 		JButton btnSetAuthority = new JButton("Set Authority");
+		btnSetAuthority.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		authorityPanel.add(btnSetAuthority);
 		
 		JPanel destPanel = new JPanel();
 		tabbedPane.addTab("Destination", null, destPanel, null);
 		
 		JLabel lblSelectNewDestination = new JLabel("Select new destination:");
+		lblSelectNewDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		destPanel.add(lblSelectNewDestination);
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Station Name"}));
 		destPanel.add(comboBox);
 		
 		JButton btnSetDestination = new JButton("Set Destination");
+		btnSetDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		destPanel.add(btnSetDestination);
 		
 		JLabel lblUnder = new JLabel("Underground:");
-		lblUnder.setBounds(6, 346, 80, 15);
+		lblUnder.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblUnder.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblUnder.setBounds(226, 133, 103, 19);
 		statusPanel.add(lblUnder);
 		
 		JLabel lblStationInfo = new JLabel("N/A");
+		lblStationInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblStationInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblStationInfo.setBounds(81, 296, 90, 15);
+		lblStationInfo.setBounds(313, 31, 90, 15);
 		statusPanel.add(lblStationInfo);
 		
 		JLabel lblSwitchInfo = new JLabel("1");
+		lblSwitchInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSwitchInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblSwitchInfo.setBounds(81, 321, 90, 15);
+		lblSwitchInfo.setBounds(313, 81, 90, 15);
 		statusPanel.add(lblSwitchInfo);
 		
 		JLabel lblUnderInfo = new JLabel("No");
+		lblUnderInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblUnderInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblUnderInfo.setBounds(91, 346, 80, 15);
+		lblUnderInfo.setBounds(323, 133, 80, 15);
 		statusPanel.add(lblUnderInfo);
 		
 		JLabel lblSpeedInfo = new JLabel("N/A");
+		lblSpeedInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSpeedInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblSpeedInfo.setBounds(81, 473, 90, 15);
+		lblSpeedInfo.setBounds(193, 305, 90, 15);
 		statusPanel.add(lblSpeedInfo);
 		
 		JLabel lblDestInfo = new JLabel("N/A");
+		lblDestInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblDestInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDestInfo.setBounds(81, 498, 90, 15);
+		lblDestInfo.setBounds(193, 330, 90, 15);
 		statusPanel.add(lblDestInfo);
 		
 		JLabel lblAuthInfo = new JLabel("N/A");
+		lblAuthInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblAuthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblAuthInfo.setBounds(81, 523, 90, 15);
+		lblAuthInfo.setBounds(193, 355, 90, 15);
 		statusPanel.add(lblAuthInfo);
 		
 		JLabel lblCrossing = new JLabel("Railway Crossing:");
-		lblCrossing.setBounds(6, 371, 100, 15);
+		lblCrossing.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblCrossing.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblCrossing.setBounds(226, 158, 125, 19);
 		statusPanel.add(lblCrossing);
 		
 		JLabel lblCrossingInfo = new JLabel("No");
+		lblCrossingInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblCrossingInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCrossingInfo.setBounds(130, 371, 41, 15);
+		lblCrossingInfo.setBounds(362, 158, 41, 15);
 		statusPanel.add(lblCrossingInfo);
+		
+		JLabel lblThroughput = new JLabel("Throughput:");
+		lblThroughput.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblThroughput.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblThroughput.setBounds(226, 56, 90, 19);
+		statusPanel.add(lblThroughput);
+		
+		JLabel lblThroughputInfo = new JLabel("2 trains/hr");
+		lblThroughputInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblThroughputInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblThroughputInfo.setBounds(313, 56, 90, 15);
+		statusPanel.add(lblThroughputInfo);
+		
+		JLabel lblSwitchPos = new JLabel("Switch Position:");
+		lblSwitchPos.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSwitchPos.setBounds(226, 106, 125, 15);
+		statusPanel.add(lblSwitchPos);
+		
+		JLabel lblSwPosInfo = new JLabel("1");
+		lblSwPosInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblSwPosInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSwPosInfo.setBounds(313, 106, 90, 15);
+		statusPanel.add(lblSwPosInfo);
 		
 		JPanel schedulePanel = new JPanel();
 		schedulePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -1523,60 +1631,73 @@ public class OfficeUI extends JFrame {
 		schedulePanel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 6, 170, 650);
+		scrollPane.setBounds(6, 6, 406, 451);
 		schedulePanel.add(scrollPane);
 		
 		table = new JTable();
 		table.setEnabled(false);
 		table.setCellSelectionEnabled(true);
-		table.setFont(new Font("SansSerif", Font.PLAIN, 10));
+		table.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Green", "Pioneer", new Float(2.3f)},
-				{"Green", "Edgebrook", new Float(2.3f)},
-				{"Green", "IngleWood", new Float(2.9f)},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
+				{"Green", new Integer(1), "Pioneer", new Float(2.3f)},
+				{"Green", new Integer(2), "Edgebrook", new Float(2.3f)},
+				{"Green", new Integer(3), "IngleWood", new Float(2.9f)},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
 			},
 			new String[] {
-				"Line", "Destination", "Time"
+				"Line", "Train", "Destination", "Time"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				String.class, String.class, Float.class
+				String.class, Integer.class, String.class, Float.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
-			boolean[] columnEditables = new boolean[] {
-				false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
 		});
 		table.getColumnModel().getColumn(0).setResizable(false);
-		table.getColumnModel().getColumn(0).setPreferredWidth(50);
+		table.getColumnModel().getColumn(0).setPreferredWidth(55);
 		table.getColumnModel().getColumn(1).setResizable(false);
-		table.getColumnModel().getColumn(1).setPreferredWidth(90);
+		table.getColumnModel().getColumn(1).setPreferredWidth(40);
 		table.getColumnModel().getColumn(2).setResizable(false);
-		table.getColumnModel().getColumn(2).setPreferredWidth(50);
+		table.getColumnModel().getColumn(2).setPreferredWidth(90);
+		table.getColumnModel().getColumn(3).setResizable(false);
+		table.getColumnModel().getColumn(3).setPreferredWidth(45);
 		scrollPane.setViewportView(table);
 		
-		JButton btnEditSchedule = new JButton("Edit Schedule");
-		btnEditSchedule.setBounds(38, 664, 104, 28);
-		schedulePanel.add(btnEditSchedule);
+		JPanel notificationPanel = new JPanel();
+		notificationPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		notificationPanel.setBounds(0, 563, 420, 234);
+		contentPane.add(notificationPanel);
+		notificationPanel.setLayout(null);
+		
+		JTextArea notificationArea = new JTextArea();
+		notificationArea.setBounds(6, 31, 408, 197);
+		notificationPanel.add(notificationArea);
+		
+		JLabel lblNotifications = new JLabel("Notifications");
+		lblNotifications.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNotifications.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblNotifications.setBounds(122, 6, 165, 22);
+		notificationPanel.add(lblNotifications);
 	}
 }
