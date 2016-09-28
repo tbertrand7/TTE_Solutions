@@ -80,6 +80,7 @@ public class trainControllerUI extends JFrame {
 	 * Create the frame.
 	 */
 	public trainControllerUI() {
+		setResizable(false);
 		setTitle("Train Controller");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(trainControllerUI.class.getResource("/TrainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -115,7 +116,7 @@ public class trainControllerUI extends JFrame {
 		SpeedLimit.setBounds(589, 129, 134, 28);
 		contentPane.add(SpeedLimit);
 		SpeedLimit.setColumns(10);
-		SpeedLimit.setText("40 mph"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
+		SpeedLimit.setText("40 MPH"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
 		
 		JLabel lblSpeedLimit = new JLabel("SPEED LIMIT");
 		lblSpeedLimit.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -130,7 +131,7 @@ public class trainControllerUI extends JFrame {
 		SpeedCurr.setBounds(589, 197, 134, 28);
 		contentPane.add(SpeedCurr);
 		SpeedCurr.setColumns(10);
-		SpeedCurr.setText("35 mph"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
+		SpeedCurr.setText("35 MPH"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
 		
 		JLabel lblCurrentSpeed = new JLabel("Current Speed");
 		lblCurrentSpeed.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
