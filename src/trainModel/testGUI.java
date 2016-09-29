@@ -12,7 +12,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextArea;
 
 public class testGUI {
 
@@ -71,17 +70,14 @@ public class testGUI {
 		lblTrainModel.setBounds(209, 31, 280, 40);
 		frame.getContentPane().add(lblTrainModel);
 		
-		JRadioButton testModeRadioButton = new JRadioButton("Test");
+		JRadioButton testModeRadioButton = new JRadioButton("Test Mode");
+		testModeRadioButton.setSelected(true);
 		testModeRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		testModeRadioButton.setBackground(Color.LIGHT_GRAY);
-		testModeRadioButton.setBounds(6, 7, 109, 23);
+		testModeRadioButton.setBounds(6, 43, 109, 23);
 		frame.getContentPane().add(testModeRadioButton);
 		
-		JRadioButton runModeRadioButton = new JRadioButton("Run");
-		runModeRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		runModeRadioButton.setBackground(Color.LIGHT_GRAY);
-		runModeRadioButton.setBounds(6, 31, 109, 23);
-		frame.getContentPane().add(runModeRadioButton);
+		
 		
 		JToggleButton leftDoorControl = new JToggleButton("Left Doors");
 		leftDoorControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
