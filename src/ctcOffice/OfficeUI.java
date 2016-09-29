@@ -1338,7 +1338,7 @@ public class OfficeUI extends JFrame {
 		JTabbedPane mainMenuTabPane = new JTabbedPane(JTabbedPane.TOP);
 		mainMenuTabPane.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		mainMenuTabPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		mainMenuTabPane.setBounds(0, 64, 420, 500);
+		mainMenuTabPane.setBounds(0, 297, 420, 500);
 		contentPane.add(mainMenuTabPane);
 		
 		JPanel statusPanel = new JPanel();
@@ -1481,7 +1481,7 @@ public class OfficeUI extends JFrame {
 		statusPanel.add(lblSpeed);
 		
 		JLabel lblTrainInfo = new JLabel("Train Info");
-		lblTrainInfo.setBounds(118, 280, 165, 14);
+		lblTrainInfo.setBounds(140, 255, 143, 14);
 		statusPanel.add(lblTrainInfo);
 		lblTrainInfo.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblTrainInfo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1536,16 +1536,16 @@ public class OfficeUI extends JFrame {
 		tabbedPane.addTab("Destination", null, destPanel, null);
 		
 		JLabel lblSelectNewDestination = new JLabel("Select new destination:");
-		lblSelectNewDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblSelectNewDestination.setFont(new Font("SansSerif", Font.PLAIN, 15));
 		destPanel.add(lblSelectNewDestination);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		comboBox.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Station Name"}));
 		destPanel.add(comboBox);
 		
 		JButton btnSetDestination = new JButton("Set Destination");
-		btnSetDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnSetDestination.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		destPanel.add(btnSetDestination);
 		
 		JLabel lblUnder = new JLabel("Underground:");
@@ -1625,6 +1625,23 @@ public class OfficeUI extends JFrame {
 		lblSwPosInfo.setBounds(313, 106, 90, 15);
 		statusPanel.add(lblSwPosInfo);
 		
+		JButton btnToggleSwitch = new JButton("Toggle Switch Position");
+		btnToggleSwitch.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnToggleSwitch.setBounds(216, 182, 187, 30);
+		statusPanel.add(btnToggleSwitch);
+		
+		JLabel lblTrainNum = new JLabel("Train Number:");
+		lblTrainNum.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblTrainNum.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblTrainNum.setBounds(118, 280, 103, 19);
+		statusPanel.add(lblTrainNum);
+		
+		JLabel lblTrainNumInfo = new JLabel("N/A");
+		lblTrainNumInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTrainNumInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblTrainNumInfo.setBounds(193, 280, 90, 15);
+		statusPanel.add(lblTrainNumInfo);
+		
 		JPanel schedulePanel = new JPanel();
 		schedulePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		mainMenuTabPane.addTab("Schedule", null, schedulePanel, null);
@@ -1645,6 +1662,10 @@ public class OfficeUI extends JFrame {
 				{"Green", new Integer(1), "Pioneer", new Float(2.3f)},
 				{"Green", new Integer(2), "Edgebrook", new Float(2.3f)},
 				{"Green", new Integer(3), "IngleWood", new Float(2.9f)},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
+				{null, null, null, null},
 				{null, null, null, null},
 				{null, null, null, null},
 				{null, null, null, null},
@@ -1685,12 +1706,13 @@ public class OfficeUI extends JFrame {
 		scrollPane.setViewportView(table);
 		
 		JPanel notificationPanel = new JPanel();
-		notificationPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		notificationPanel.setBounds(0, 563, 420, 234);
+		notificationPanel.setBounds(0, 64, 420, 234);
 		contentPane.add(notificationPanel);
+		notificationPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		notificationPanel.setLayout(null);
 		
 		JTextArea notificationArea = new JTextArea();
+		notificationArea.setEditable(false);
 		notificationArea.setBounds(6, 31, 408, 197);
 		notificationPanel.add(notificationArea);
 		
