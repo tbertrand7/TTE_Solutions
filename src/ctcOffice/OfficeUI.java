@@ -1,49 +1,10 @@
 package ctcOffice;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JFormattedTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JToggleButton;
-import javax.swing.JSlider;
-import javax.swing.JRadioButton;
-import java.awt.Color;
-import javax.swing.border.LineBorder;
-import javax.swing.JInternalFrame;
-import java.awt.Toolkit;
-import javax.swing.JTextPane;
-import javax.swing.JProgressBar;
-import javax.swing.ImageIcon;
-import javax.swing.ButtonGroup;
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.UIManager.*;
-import java.util.*;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JTextArea;
+import javax.swing.border.*;
+import javax.swing.table.*;
 
 public class OfficeUI extends JFrame {
 
