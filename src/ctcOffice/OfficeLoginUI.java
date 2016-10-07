@@ -7,8 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import trackModel.trackModelUI;
-
 import javax.swing.UIManager.LookAndFeelInfo;
 
 public class OfficeLoginUI extends JFrame {
@@ -73,7 +71,7 @@ public class OfficeLoginUI extends JFrame {
 		mntmCreateNewUser.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mntmCreateNewUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewUser.main(null);
+				NewUserUI.main(null);
 			}
 		});
 		mnSettings.add(mntmCreateNewUser);
