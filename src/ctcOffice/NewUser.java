@@ -1,34 +1,23 @@
 package ctcOffice;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.Toolkit;
-import javax.swing.JButton;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import java.awt.Color;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.UIManager.*;
 
 public class NewUser extends JFrame {
 
+	private static final String BAD_PASSWORD = "Error: Passwords do not match";
+	private static final String USERNAME_ALREADY_EXISTS = "Error: Username already exists";
+	private static final String FILL_OUT_FIELDS = "Error: Fill out all fields";
+	
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField txtFieldUsername;
 	private JPasswordField passwordField;
-	private JPasswordField passwordField_1;
+	private JPasswordField passwordFieldConfirm;
+	private JLabel lblErrorMsg;
 
 	/**
 	 * Launch the application.
@@ -58,7 +47,7 @@ public class NewUser extends JFrame {
 		setTitle("Create New User");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NewUser.class.getResource("/shared/TTE.png")));
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 350, 200);
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -76,20 +65,6 @@ public class NewUser extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnConfirm = new JButton("Confirm");
-		btnConfirm.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnConfirm.setBounds(50, 122, 84, 33);
-		btnConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		contentPane.add(btnConfirm);
-		
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(204, 122, 84, 33);
-		btnCancel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		contentPane.add(btnCancel);
-		
 		JLabel lblUsername = new JLabel("Username:");
 		lblUsername.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblUsername.setBounds(37, 29, 148, 16);
@@ -105,27 +80,79 @@ public class NewUser extends JFrame {
 		lblConfirmPassword.setBounds(37, 85, 148, 16);
 		contentPane.add(lblConfirmPassword);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		textField.setBounds(192, 25, 122, 28);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		txtFieldUsername = new JTextField();
+		txtFieldUsername.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		txtFieldUsername.setBounds(192, 25, 122, 28);
+		contentPane.add(txtFieldUsername);
+		txtFieldUsername.setColumns(10);
 		
 		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		passwordField.setBounds(192, 53, 122, 28);
 		contentPane.add(passwordField);
 		
-		passwordField_1 = new JPasswordField();
-		passwordField_1.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		passwordField_1.setBounds(192, 81, 122, 28);
-		contentPane.add(passwordField_1);
+		passwordFieldConfirm = new JPasswordField();
+		passwordFieldConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		passwordFieldConfirm.setBounds(192, 81, 122, 28);
+		contentPane.add(passwordFieldConfirm);
 		
-		JLabel lblErrorMsg = new JLabel("Error: Bad Password");
+		lblErrorMsg = new JLabel("");
 		lblErrorMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		lblErrorMsg.setForeground(Color.RED);
 		lblErrorMsg.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		lblErrorMsg.setBounds(6, 4, 332, 16);
+		lblErrorMsg.setVisible(false);
 		contentPane.add(lblErrorMsg);
+		
+		JButton btnConfirm = new JButton("Confirm");
+		btnConfirm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnConfirm_Click();
+			}
+		});
+		btnConfirm.setBounds(50, 122, 84, 33);
+		btnConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		contentPane.add(btnConfirm);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(204, 122, 84, 33);
+		btnCancel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		contentPane.add(btnCancel);
+	}
+	
+	private void btnConfirm_Click()
+	{
+		if (txtFieldUsername.getText().equals("") || passwordField.getText().equals("") || passwordFieldConfirm.getText().equals(""))
+		{
+			lblErrorMsg.setText(FILL_OUT_FIELDS);
+			lblErrorMsg.setVisible(true);
+		}
+		else
+		{
+			if (!OfficeLogin.checkNewUsername(txtFieldUsername.getText()))
+			{
+				lblErrorMsg.setText(USERNAME_ALREADY_EXISTS);
+				lblErrorMsg.setVisible(true);
+			}
+			else
+			{
+				if (!OfficeLogin.checkNewPassword(passwordField.getText(), passwordFieldConfirm.getText()))
+				{
+					lblErrorMsg.setText(BAD_PASSWORD);
+					lblErrorMsg.setVisible(true);
+				}
+				else
+				{
+					//OfficeLogin.createUser();
+					JOptionPane.showMessageDialog(null, "User " + txtFieldUsername.getText() + " created successfully.", "User Created", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+				}
+			}
+		}
 	}
 }

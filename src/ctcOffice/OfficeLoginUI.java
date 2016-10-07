@@ -1,30 +1,17 @@
 package ctcOffice;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.Toolkit;
-import java.awt.Font;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.ImageIcon;
-import java.awt.Color;
-import javax.swing.SwingConstants;
 
-public class OfficeLogin extends JFrame {
+import trackModel.trackModelUI;
+
+import javax.swing.UIManager.LookAndFeelInfo;
+
+public class OfficeLoginUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtFieldUsername;
@@ -42,7 +29,7 @@ public class OfficeLogin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					OfficeLogin frame = new OfficeLogin();
+					OfficeLoginUI frame = new OfficeLoginUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,12 +41,12 @@ public class OfficeLogin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public OfficeLogin() {
+	public OfficeLoginUI() {
 		setResizable(false);
 		setTitle("CTC Office Login");
 		setFont(new Font("SansSerif", Font.PLAIN, 16));
-		setIconImage(Toolkit.getDefaultToolkit().getImage(OfficeLogin.class.getResource("/shared/TTE.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(OfficeLoginUI.class.getResource("/shared/TTE.png")));
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 200);
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -72,6 +59,8 @@ public class OfficeLogin extends JFrame {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
 		
+		/* MENU */
+		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		setJMenuBar(menuBar);
@@ -82,7 +71,15 @@ public class OfficeLogin extends JFrame {
 		
 		JMenuItem mntmCreateNewUser = new JMenuItem("Create New User");
 		mntmCreateNewUser.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mntmCreateNewUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NewUser.main(null);
+			}
+		});
 		mnSettings.add(mntmCreateNewUser);
+		
+		/* Contents */
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -105,26 +102,41 @@ public class OfficeLogin extends JFrame {
 		lblPassword.setBounds(169, 77, 81, 21);
 		lblPassword.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		
-		JButton btnLogin = new JButton("Login");
-		btnLogin.setBounds(332, 108, 77, 33);
-		btnLogin.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		contentPane.setLayout(null);
-		
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setBounds(11, 11, 140, 120);
-		lblLogo.setIcon(new ImageIcon(OfficeLogin.class.getResource("/ctcOffice/loginLogo.png")));
+		lblLogo.setIcon(new ImageIcon(OfficeLoginUI.class.getResource("/ctcOffice/loginLogo.png")));
 		contentPane.add(lblLogo);
 		contentPane.add(lblUserName);
 		contentPane.add(lblPassword);
 		contentPane.add(passwordField);
 		contentPane.add(txtFieldUsername);
-		contentPane.add(btnLogin);
 		
-		JLabel lblErrorLoginFailed = new JLabel("Error: Login Failed");
-		lblErrorLoginFailed.setHorizontalAlignment(SwingConstants.CENTER);
-		lblErrorLoginFailed.setForeground(Color.RED);
-		lblErrorLoginFailed.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		lblErrorLoginFailed.setBounds(256, 4, 228, 22);
-		contentPane.add(lblErrorLoginFailed);
+		
+		JLabel lblError = new JLabel("Error: Login Failed");
+		lblError.setHorizontalAlignment(SwingConstants.CENTER);
+		lblError.setForeground(Color.RED);
+		lblError.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		lblError.setBounds(256, 4, 228, 22);
+		lblError.setVisible(false);
+		contentPane.add(lblError);
+		contentPane.setLayout(null);
+		
+		JButton btnLogin = new JButton("Login");
+		btnLogin.setBounds(332, 108, 77, 33);
+		btnLogin.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(OfficeLogin.checkLogin(txtFieldUsername.getText(), passwordField.getText()))
+				{
+					OfficeUI.main(null);
+					dispose();
+				}
+				else
+				{
+					lblError.setVisible(true);
+				}
+			}
+		});
+		contentPane.add(btnLogin);
 	}
 }
