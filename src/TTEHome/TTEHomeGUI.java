@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import ctcOffice.OfficeUI;
+import ctcOffice.*;
 import trackModel.trackModelUI;
 import trainController.trainControllerUI;
 import trainModel.testGUI;
@@ -71,7 +71,7 @@ public class TTEHomeGUI {
 		JButton btnNewButton = new JButton("The Office");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				OfficeUI.main(null);
+				OfficeLoginUI.main(null);
 			}
 		});
 		btnNewButton.setBounds(10, 11, 135, 109);
