@@ -1,17 +1,29 @@
 package ctcOffice;
 
 import java.awt.*;
+import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
+
+import ctcOffice.CTCOffice.Mode;
+
+import java.text.*;
+import java.util.*;
 
 public class OfficeUI extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
 	private JTextField textField_1;
+	private JTextArea notificationArea;
 	private JTable table;
+	private JSlider simulationSpeed;
+	private CTCOffice ctcOffice;
+	private JTextField txtFieldSpeed;
 
 	/**
 	 * Launch the application.
@@ -33,6 +45,8 @@ public class OfficeUI extends JFrame {
 	 * Create the frame.
 	 */
 	public OfficeUI() {
+		ctcOffice = new CTCOffice();	
+		
 		setFont(new Font("SansSerif", Font.PLAIN, 16));
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -1208,7 +1222,7 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonR72 = new JToggleButton("");
 		toggleButtonR72.setBackground(Color.LIGHT_GRAY);
-		toggleButtonR72.setBounds(307, 329, 15, 15);
+		toggleButtonR72.setBounds(303, 325, 15, 15);
 		trackDisplayPanel.add(toggleButtonR72);
 		
 		JToggleButton toggleButtonR73 = new JToggleButton("");
@@ -1228,7 +1242,7 @@ public class OfficeUI extends JFrame {
 		
 		JToggleButton toggleButtonR76 = new JToggleButton("");
 		toggleButtonR76.setBackground(Color.BLACK);
-		toggleButtonR76.setBounds(308, 270, 15, 15);
+		toggleButtonR76.setBounds(303, 268, 15, 15);
 		trackDisplayPanel.add(toggleButtonR76);
 		
 		JToggleButton toggleButtonR77 = new JToggleButton("");
@@ -1242,39 +1256,54 @@ public class OfficeUI extends JFrame {
 		lblTrackPicture.setBounds(2, 2, 730, 729);
 		trackDisplayPanel.add(lblTrackPicture);
 		
-		ButtonGroup execMode = new ButtonGroup();
-		
 		JPanel topButtonPanel = new JPanel();
 		topButtonPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		topButtonPanel.setBounds(0, 0, 1156, 66);
 		contentPane.add(topButtonPanel);
 		topButtonPanel.setLayout(null);
 		
-		JSlider slider = new JSlider();
-		slider.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		slider.setToolTipText("Set speed of auto simulation");
-		slider.setMajorTickSpacing(3);
-		slider.setSnapToTicks(true);
-		slider.setPaintLabels(true);
-		slider.setPaintTicks(true);
-		slider.setMinimum(1);
-		slider.setMinorTickSpacing(1);
-		slider.setMaximum(10);
-		slider.setBounds(971, 20, 175, 42);
-		topButtonPanel.add(slider);
+		simulationSpeed = new JSlider();
+		simulationSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		simulationSpeed.setToolTipText("Set speed of auto simulation");
+		simulationSpeed.setMajorTickSpacing(3);
+		simulationSpeed.setSnapToTicks(true);
+		simulationSpeed.setPaintLabels(true);
+		simulationSpeed.setPaintTicks(true);
+		simulationSpeed.setMinimum(1);
+		simulationSpeed.setMinorTickSpacing(1);
+		simulationSpeed.setMaximum(10);
+		simulationSpeed.setBounds(971, 20, 175, 42);
+		simulationSpeed.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				simulationSpeedChanged();
+			}
+		});
+		topButtonPanel.add(simulationSpeed);
 		
 		JRadioButton rdbtnManual = new JRadioButton("Manual");
 		rdbtnManual.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		rdbtnManual.setToolTipText("Enable manual mode");
 		rdbtnManual.setSelected(true);
 		rdbtnManual.setBounds(885, 12, 80, 23);
+		rdbtnManual.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rdbtnManual_Click();
+			}
+		});
 		topButtonPanel.add(rdbtnManual);
 		
 		JRadioButton rdbtnAuto = new JRadioButton("Auto");
 		rdbtnAuto.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		rdbtnAuto.setToolTipText("Enable automatic simulation");
 		rdbtnAuto.setBounds(885, 32, 80, 23);
-		topButtonPanel.add(rdbtnAuto);
+		rdbtnAuto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rdbtnAuto_Click();
+			}
+		});
+		topButtonPanel.add(rdbtnAuto);		
+		
+		ButtonGroup execMode = new ButtonGroup();
 		execMode.add(rdbtnAuto);
 		execMode.add(rdbtnManual);
 		
@@ -1346,7 +1375,6 @@ public class OfficeUI extends JFrame {
 		statusPanel.add(lblGrade);
 		
 		JLabel lblSpeedLimit = new JLabel("Speed Limit:");
-		lblSpeedLimit.setVerticalAlignment(SwingConstants.BOTTOM);
 		lblSpeedLimit.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSpeedLimit.setBounds(5, 156, 90, 19);
 		statusPanel.add(lblSpeedLimit);
@@ -1460,17 +1488,21 @@ public class OfficeUI extends JFrame {
 		lblSetNewSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		speedPanel.add(lblSetNewSpeed);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		speedPanel.add(textField);
-		textField.setColumns(10);
+		txtFieldSpeed = new JTextField();
+		speedPanel.add(txtFieldSpeed);
+		txtFieldSpeed.setColumns(10);
 		
-		JLabel lblKmh = new JLabel("mph");
-		lblKmh.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		speedPanel.add(lblKmh);
+		JLabel lblMph = new JLabel("mph");
+		lblMph.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		speedPanel.add(lblMph);
 		
 		JButton btnSetSpeed = new JButton("Set Speed");
 		btnSetSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnSetSpeed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnSetSpeed_Click();
+			}
+		});
 		speedPanel.add(btnSetSpeed);
 		
 		JPanel authorityPanel = new JPanel();
@@ -1672,15 +1704,71 @@ public class OfficeUI extends JFrame {
 		notificationPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		notificationPanel.setLayout(null);
 		
-		JTextArea notificationArea = new JTextArea();
-		notificationArea.setEditable(false);
-		notificationArea.setBounds(6, 31, 408, 197);
-		notificationPanel.add(notificationArea);
-		
 		JLabel lblNotifications = new JLabel("Notifications");
 		lblNotifications.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNotifications.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNotifications.setBounds(122, 6, 165, 22);
-		notificationPanel.add(lblNotifications);
+		notificationPanel.add(lblNotifications);		
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(6, 27, 408, 201);
+		notificationPanel.add(scrollPane_1);
+		
+		notificationArea = new JTextArea();
+		notificationArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		scrollPane_1.setViewportView(notificationArea);
+		notificationArea.setEditable(false);
+	}
+	
+	/** Set Manual Mode */
+	private void rdbtnManual_Click()
+	{
+		ctcOffice.setMode(Mode.MAUNAL);
+		logNotification("Manual Mode Set");
+	}
+	
+	/** Set Automatic Mode */
+	private void rdbtnAuto_Click()
+	{
+		ctcOffice.setMode(Mode.AUTOMATIC);
+		logNotification("Auto Mode Set");
+	}
+	
+	/** Change simulation speed */
+	private void simulationSpeedChanged()
+	{
+		if (!simulationSpeed.getValueIsAdjusting() && simulationSpeed.getValue() != ctcOffice.getSimulationSpeed())
+		{
+			ctcOffice.setSimulationSpeed(simulationSpeed.getValue());
+			logNotification("New Simulation Speed is " + simulationSpeed.getValue() +"X wall clock speed");
+		}
+	}
+	
+	private void btnSetSpeed_Click()
+	{
+		try 
+		{
+			int newTrainSpeed = Integer.parseInt(txtFieldSpeed.getText());
+			
+			if (newTrainSpeed < 1 || newTrainSpeed > 1000)
+				throw new NumberFormatException();
+			else
+			{
+				ctcOffice.suggestSpeed(newTrainSpeed);
+				logNotification("Speed of " + newTrainSpeed + " mph suggested");
+				txtFieldSpeed.setText("");
+			}
+		}
+		catch(NumberFormatException nfe)
+		{
+			logNotification("ERROR: '" + txtFieldSpeed.getText() + "' is not a valid speed");
+			txtFieldSpeed.setText("");
+		}
+	}
+	
+	private void logNotification(String msg)
+	{
+		String timeStamp = new SimpleDateFormat("hh:mm:ss aa").format(Calendar.getInstance().getTime());
+		notificationArea.append(timeStamp + ": " + msg + "\n");
 	}
 }

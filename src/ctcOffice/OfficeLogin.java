@@ -2,7 +2,7 @@ package ctcOffice;
 
 public class OfficeLogin
 {
-	/* Checks for valid username and password */
+	/** Checks for valid username and password */
 	public static boolean checkLogin(String username, String password)
 	{
 		String tempUser = "admin";
@@ -14,6 +14,7 @@ public class OfficeLogin
 		return false;
 	}
 	
+	/** Checks if new username already exists */
 	public static boolean checkNewUsername(String username)
 	{
 		String tempUser = "admin";
@@ -24,6 +25,7 @@ public class OfficeLogin
 		return true;
 	}
 	
+	/** Checks if both password fields match */
 	public static boolean checkNewPassword(String password, String confirmPassword)
 	{
 		if (password.equals(confirmPassword))
