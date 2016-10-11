@@ -24,6 +24,8 @@ public class OfficeUI extends JFrame {
 	private JSlider simulationSpeed;
 	private CTCOffice ctcOffice;
 	private JTextField txtFieldSpeed;
+	private JToggleButton[] greenLine = new JToggleButton[152];
+	private JToggleButton[] redLine = new JToggleButton[77];
 
 	/**
 	 * Launch the application.
@@ -109,191 +111,229 @@ public class OfficeUI extends JFrame {
 		toggleButtonG1.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG1.setBounds(354, 24, 15, 15);
 		trackDisplayPanel.add(toggleButtonG1);
+		greenLine[0] = toggleButtonG1;
 		
 		JToggleButton toggleButtonG2 = new JToggleButton("");
 		toggleButtonG2.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG2.setBounds(373, 44, 20, 20);
 		trackDisplayPanel.add(toggleButtonG2);
+		greenLine[1] = toggleButtonG2;
 		
 		JToggleButton toggleButtonG3 = new JToggleButton("");
 		toggleButtonG3.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG3.setBounds(387, 61, 15, 15);
 		trackDisplayPanel.add(toggleButtonG3);
+		greenLine[2] = toggleButtonG3;
 		
 		JToggleButton toggleButtonG4 = new JToggleButton("");
 		toggleButtonG4.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG4.setBounds(404, 76, 15, 15);
 		trackDisplayPanel.add(toggleButtonG4);
+		greenLine[3] = toggleButtonG4;
 		
 		JToggleButton toggleButtonG5 = new JToggleButton("");
 		toggleButtonG5.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG5.setBounds(427, 91, 15, 15);
 		trackDisplayPanel.add(toggleButtonG5);
+		greenLine[4] = toggleButtonG5;
 		
 		JToggleButton toggleButtonG6 = new JToggleButton("");
 		toggleButtonG6.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG6.setBounds(455, 97, 15, 15);
 		trackDisplayPanel.add(toggleButtonG6);
+		greenLine[5] = toggleButtonG6;
 		
 		JToggleButton toggleButtonG7 = new JToggleButton("");
 		toggleButtonG7.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG7.setBounds(502, 91, 15, 15);
 		trackDisplayPanel.add(toggleButtonG7);
+		greenLine[6] = toggleButtonG7;
 		
 		JToggleButton toggleButtonG8 = new JToggleButton("");
 		toggleButtonG8.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG8.setBounds(557, 68, 15, 15);
 		trackDisplayPanel.add(toggleButtonG8);
+		greenLine[7] = toggleButtonG8;
 		
 		JToggleButton toggleButtonG9 = new JToggleButton("");
 		toggleButtonG9.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG9.setBounds(491, 32, 20, 20);
 		trackDisplayPanel.add(toggleButtonG9);
+		greenLine[8] = toggleButtonG9;
 		
 		JToggleButton toggleButtonG10 = new JToggleButton("");
 		toggleButtonG10.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG10.setBounds(466, 25, 15, 15);
 		trackDisplayPanel.add(toggleButtonG10);
+		greenLine[9] = toggleButtonG10;
 		
 		JToggleButton toggleButtonG11 = new JToggleButton("");
 		toggleButtonG11.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG11.setBounds(427, 20, 15, 15);
 		trackDisplayPanel.add(toggleButtonG11);
+		greenLine[10] = toggleButtonG11;
 		
 		JToggleButton toggleButtonG12 = new JToggleButton("");
 		toggleButtonG12.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG12.setBounds(354, 11, 15, 15);
 		trackDisplayPanel.add(toggleButtonG12);
+		greenLine[11] = toggleButtonG12;
 		
 		JToggleButton toggleButtonG13 = new JToggleButton("");
 		toggleButtonG13.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG13.setBounds(302, 14, 15, 15);
 		trackDisplayPanel.add(toggleButtonG13);
+		greenLine[12] = toggleButtonG13;
 		
 		JToggleButton toggleButtonG14 = new JToggleButton("");
 		toggleButtonG14.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG14.setBounds(280, 14, 15, 15);
 		trackDisplayPanel.add(toggleButtonG14);
+		greenLine[13] = toggleButtonG14;
 		
 		JToggleButton toggleButtonG15 = new JToggleButton("");
 		toggleButtonG15.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG15.setBounds(255, 15, 15, 15);
 		trackDisplayPanel.add(toggleButtonG15);
+		greenLine[14] = toggleButtonG15;
 		
 		JToggleButton toggleButtonG16 = new JToggleButton("");
 		toggleButtonG16.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG16.setBounds(235, 14, 20, 20);
 		trackDisplayPanel.add(toggleButtonG16);
+		greenLine[15] = toggleButtonG16;
 		
 		JToggleButton toggleButtonG17 = new JToggleButton("");
 		toggleButtonG17.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG17.setBounds(188, 22, 15, 15);
 		trackDisplayPanel.add(toggleButtonG17);
+		greenLine[16] = toggleButtonG17;
 		
 		JToggleButton toggleButtonG18 = new JToggleButton("");
 		toggleButtonG18.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG18.setBounds(167, 34, 15, 15);
 		trackDisplayPanel.add(toggleButtonG18);
+		greenLine[17] = toggleButtonG18;
 		
 		JToggleButton toggleButtonG19 = new JToggleButton("");
 		toggleButtonG19.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG19.setBounds(150, 47, 15, 15);
 		trackDisplayPanel.add(toggleButtonG19);
+		greenLine[18] = toggleButtonG19;
 		
 		JToggleButton toggleButtonG20 = new JToggleButton("");
 		toggleButtonG20.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG20.setBounds(138, 61, 15, 15);
 		trackDisplayPanel.add(toggleButtonG20);
+		greenLine[19] = toggleButtonG20;
 		
 		JToggleButton toggleButtonG21 = new JToggleButton("");
 		toggleButtonG21.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG21.setBounds(134, 93, 15, 15);
 		trackDisplayPanel.add(toggleButtonG21);
+		greenLine[20] = toggleButtonG21;
 		
 		JToggleButton toggleButtonG22 = new JToggleButton("");
 		toggleButtonG22.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG22.setBounds(132, 105, 20, 20);
 		trackDisplayPanel.add(toggleButtonG22);
+		greenLine[21] = toggleButtonG22;
 		
 		JToggleButton toggleButtonG23 = new JToggleButton("");
 		toggleButtonG23.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG23.setBounds(135, 122, 15, 15);
 		trackDisplayPanel.add(toggleButtonG23);
+		greenLine[22] = toggleButtonG23;
 		
 		JToggleButton toggleButtonG24 = new JToggleButton("");
 		toggleButtonG24.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG24.setBounds(135, 134, 15, 15);
 		trackDisplayPanel.add(toggleButtonG24);
+		greenLine[23] = toggleButtonG24;
 		
 		JToggleButton toggleButtonG25 = new JToggleButton("");
 		toggleButtonG25.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG25.setBounds(135, 146, 15, 15);
 		trackDisplayPanel.add(toggleButtonG25);
+		greenLine[24] = toggleButtonG25;
 		
 		JToggleButton toggleButtonG26 = new JToggleButton("");
 		toggleButtonG26.setBackground(Color.YELLOW);
 		toggleButtonG26.setBounds(135, 158, 15, 15);
 		trackDisplayPanel.add(toggleButtonG26);
+		greenLine[25] = toggleButtonG26;
 		
 		JToggleButton toggleButtonG27 = new JToggleButton("");
 		toggleButtonG27.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG27.setBounds(135, 170, 15, 15);
 		trackDisplayPanel.add(toggleButtonG27);
+		greenLine[26] = toggleButtonG27;
 		
 		JToggleButton toggleButtonG28 = new JToggleButton("");
 		toggleButtonG28.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG28.setBounds(135, 182, 15, 15);
 		trackDisplayPanel.add(toggleButtonG28);
+		greenLine[27] = toggleButtonG28;
 		
 		JToggleButton toggleButtonG29 = new JToggleButton("");
 		toggleButtonG29.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG29.setBounds(134, 199, 15, 15);
 		trackDisplayPanel.add(toggleButtonG29);
+		greenLine[28] = toggleButtonG29;
 		
 		JToggleButton toggleButtonG30 = new JToggleButton("");
 		toggleButtonG30.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG30.setBounds(134, 211, 15, 15);
 		trackDisplayPanel.add(toggleButtonG30);
+		greenLine[29] = toggleButtonG30;
 		
 		JToggleButton toggleButtonG31 = new JToggleButton("");
 		toggleButtonG31.setBackground(Color.BLUE);
 		toggleButtonG31.setBounds(132, 223, 20, 20);
 		trackDisplayPanel.add(toggleButtonG31);
+		greenLine[30] = toggleButtonG31;
 		
 		JToggleButton toggleButtonG32 = new JToggleButton("");
 		toggleButtonG32.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG32.setBounds(135, 240, 15, 15);
 		trackDisplayPanel.add(toggleButtonG32);
+		greenLine[31] = toggleButtonG32;
 		
 		JToggleButton toggleButtonG33 = new JToggleButton("");
 		toggleButtonG33.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG33.setBounds(136, 262, 15, 15);
 		trackDisplayPanel.add(toggleButtonG33);
+		greenLine[32] = toggleButtonG33;
 		
 		JToggleButton toggleButtonG34 = new JToggleButton("");
 		toggleButtonG34.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG34.setBounds(147, 281, 15, 15);
 		trackDisplayPanel.add(toggleButtonG34);
+		greenLine[33] = toggleButtonG34;
 		
 		JToggleButton toggleButtonG35 = new JToggleButton("");
 		toggleButtonG35.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG35.setBounds(177, 299, 15, 15);
 		trackDisplayPanel.add(toggleButtonG35);
+		greenLine[34] = toggleButtonG35;
 		
 		JToggleButton toggleButtonG36 = new JToggleButton("");
 		toggleButtonG36.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG36.setBounds(205, 303, 15, 15);
 		trackDisplayPanel.add(toggleButtonG36);
+		greenLine[35] = toggleButtonG36;
 		
 		JToggleButton toggleButtonG37 = new JToggleButton("");
 		toggleButtonG37.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG37.setBounds(218, 304, 15, 15);
 		trackDisplayPanel.add(toggleButtonG37);
+		greenLine[36] = toggleButtonG37;
 		
 		JToggleButton toggleButtonG38 = new JToggleButton("");
 		toggleButtonG38.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG38.setBounds(230, 304, 15, 15);
 		trackDisplayPanel.add(toggleButtonG38);
+		greenLine[37] = toggleButtonG38;
 		
 		JToggleButton toggleButtonG39 = new JToggleButton("");
 		toggleButtonG39.setBackground(Color.LIGHT_GRAY);
