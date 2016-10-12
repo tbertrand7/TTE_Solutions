@@ -62,6 +62,8 @@ public class trainControllerUI extends JFrame {
 	
 	private final int instanceID;
 	private final TrainControllerInstances parent;
+	
+	
 
 	/**
 	 * Launch the application.

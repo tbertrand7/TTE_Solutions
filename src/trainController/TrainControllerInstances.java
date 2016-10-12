@@ -6,11 +6,13 @@ import java.util.HashMap;
 public class TrainControllerInstances {
 	
 	private HashMap<Integer, trainControllerUI> UIList;	//maps instance IDs to trainControllerUI classes
+	private HashMap<Integer, PowerCalculator> powerList; //maps instance IDs to PowerThread classes <-- this should be train IDs, not instance IDs
 	private int nextID; //this is NOT the train ID, it's the instance ID!!!!!
 	
 	public TrainControllerInstances() {
 		nextID = 0;
 		UIList = new HashMap<Integer, trainControllerUI>();
+		powerList = new HashMap<Integer, PowerCalculator>();
 	}
 	
 	private synchronized void printKeySet() {
@@ -20,14 +22,39 @@ public class TrainControllerInstances {
 		System.out.println();
 	}
 	
+	public synchronized void newTestPanel() {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TestPanel frame = new TestPanel();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	private synchronized void createNew(trainControllerUI tcui) {
+		//Put into list
+		UIList.put(nextID, tcui);
+		
+		//Create new power calculator
+		PowerCalculator pc = new PowerCalculator(tcui);
+		
+		powerList.put(nextID, pc);
+		
+		nextID++;
+	}
+	
 	public synchronized void newUI() {
-		TrainControllerInstances tci = this;
+		TrainControllerInstances instance = this;
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIList.put(nextID, new trainControllerUI(nextID, tci));
-					nextID++;
+					trainControllerUI tcui = new trainControllerUI(nextID, instance);
+					instance.createNew(tcui);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -37,6 +64,7 @@ public class TrainControllerInstances {
 	
 	public synchronized void removeUI(int id) {
 		UIList.remove(id);
+		powerList.remove(id);
 	}
 
 }
