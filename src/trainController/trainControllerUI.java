@@ -59,6 +59,9 @@ public class trainControllerUI extends JFrame {
 	public JComboBox<Integer> TrainSelect; //selects which train to get information from
 	private JTextField PowerCurr;
 	private JTextField txtLeftDoors;
+	
+	private final int instanceID;
+	private final TrainControllerInstances parent;
 
 	/**
 	 * Launch the application.
@@ -67,7 +70,7 @@ public class trainControllerUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					trainControllerUI frame = new trainControllerUI();
+					trainControllerUI frame = new trainControllerUI(0, new TrainControllerInstances());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -75,11 +78,24 @@ public class trainControllerUI extends JFrame {
 			}
 		});
 	}
+	
+	/**
+	 * Override the Window class dispose() function to remove
+	 * this instance from the list of instances.
+	 */
+	@Override
+	public void dispose() {
+	    parent.removeUI(instanceID);
+	    super.dispose();
+	}
 
 	/**
 	 * Create the frame.
 	 */
-	public trainControllerUI() {
+	public trainControllerUI(int id, TrainControllerInstances tci) {
+		instanceID = id;
+		parent = tci;
+		
 		setResizable(false);
 		setTitle("Train Controller");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(trainControllerUI.class.getResource("/TrainController/computer1.jpg")));
@@ -433,5 +449,7 @@ public class trainControllerUI extends JFrame {
 		btnPassengerEmergencyBrake.setBounds(10, 420, 267, 29);
 		contentPane.add(btnPassengerEmergencyBrake);
 		//**************************************************
+		
+		this.setVisible(true);
 	}
 }

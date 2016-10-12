@@ -11,6 +11,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import ctcOffice.*;
 import trackModel.trackModelUI;
 import trainController.trainControllerUI;
+import trainController.TrainControllerInstances;//******************
 import trainModel.testGUI;
 import waysideController.TC_UI_main;
 import waysideController.TC_UI_startup;
@@ -111,8 +112,12 @@ public class TTEHomeGUI {
 		
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {
+			TrainControllerInstances tci = new TrainControllerInstances();
+			
 			public void actionPerformed(ActionEvent e) {
-				trainControllerUI.main(null);
+				//trainControllerUI.main(null);
+				
+				tci.newUI();
 			}
 		});
 		btnTrainController.setBounds(289, 11, 135, 109);
