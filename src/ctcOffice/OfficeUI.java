@@ -2102,6 +2102,7 @@ public class OfficeUI extends JFrame {
 				lblSpeedInfo.setText("20 mph");
 				lblDestInfo.setText("Block 15");
 				lblAuthInfo.setText("14 Blocks");
+				lblStationInfo.setText("N/A");
 				setHasTrain(true);
 			}
 			else
@@ -2111,6 +2112,7 @@ public class OfficeUI extends JFrame {
 				lblDestInfo.setText("N/A");
 				lblAuthInfo.setText("N/A");
 				lblStatusInfo.setText("Open");
+				lblStationInfo.setText("Pioneer");
 				setHasTrain(false);
 			}
         }
