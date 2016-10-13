@@ -84,6 +84,12 @@ public class OfficeUI extends JFrame {
 
 		JMenuItem mntmLogout = new JMenuItem("Logout");
 		mntmLogout.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mntmLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OfficeLoginUI.main(null);
+				dispose();
+			}
+		});
 		mnFile.add(mntmLogout);
 
 		JMenu mnSchedule = new JMenu("Schedule");
