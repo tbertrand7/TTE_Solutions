@@ -20,6 +20,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JToggleButton;
 
 public class TestPanel extends JFrame {
 
@@ -38,6 +39,7 @@ public class TestPanel extends JFrame {
 	private final int id;
 	private boolean keySetInitialized;
 	TestSpeed ts;
+	private JTextField txtTemperature;
 
 	/**
 	 * Launch the application.
@@ -96,7 +98,8 @@ public class TestPanel extends JFrame {
 	}
 	
 	private void sendSpeedLimit() {
-		limit = Double.parseDouble(txtSpeedLimit.getText());
+		double americanlimit = Double.parseDouble(txtSpeedLimit.getText());
+		limit = americanlimit * 1609.34 / 3600;
 		parent.setSpeedLimit((int)TrainSelect.getSelectedItem(), limit);
 	}
 	
@@ -105,12 +108,14 @@ public class TestPanel extends JFrame {
 	}
 	
 	private void sendSpeedCommand() {
-		command = Double.parseDouble(txtSpeedCommand.getText());
+		double americancommand = Double.parseDouble(txtSpeedCommand.getText());
+		command = americancommand * 1609.34 / 3600;
 		parent.setSpeedCommand((int)TrainSelect.getSelectedItem(), command);
 	}
 	
 	private void sendCurrentSpeed() {
-		current = Double.parseDouble(txtCurrentSpeed.getText());
+		double americancurrent = Double.parseDouble(txtCurrentSpeed.getText());
+		current = americancurrent * 1609.34 / 3600;
 		parent.setSpeedCurrent((int)TrainSelect.getSelectedItem(), current);
 	}
 	
@@ -139,7 +144,7 @@ public class TestPanel extends JFrame {
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TestPanel.class.getResource("/trainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 518);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -221,5 +226,56 @@ public class TestPanel extends JFrame {
 		btnSendCurrentSpeed.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
 		btnSendCurrentSpeed.setBounds(283, 186, 69, 31);
 		contentPane.add(btnSendCurrentSpeed);
+		
+		JToggleButton btnOpenRightDoors = new JToggleButton("Open Right Doors");
+		btnOpenRightDoors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				parent.setRightDoors((int)TrainSelect.getSelectedItem(), btnOpenRightDoors.isSelected());
+			}
+		});
+		btnOpenRightDoors.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
+		btnOpenRightDoors.setBounds(20, 372, 253, 31);
+		contentPane.add(btnOpenRightDoors);
+		
+		JToggleButton btnOpenLeftDoors = new JToggleButton("Open Left Doors");
+		btnOpenLeftDoors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				parent.setLeftDoors((int)TrainSelect.getSelectedItem(), btnOpenLeftDoors.isSelected());
+			}
+		});
+		btnOpenLeftDoors.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
+		btnOpenLeftDoors.setBounds(20, 404, 253, 31);
+		contentPane.add(btnOpenLeftDoors);
+		
+		JToggleButton tglbtnInTunnel = new JToggleButton("In Tunnel");
+		tglbtnInTunnel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				parent.setInTunnel((int)TrainSelect.getSelectedItem(), tglbtnInTunnel.isSelected());
+			}
+		});
+		tglbtnInTunnel.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
+		tglbtnInTunnel.setBounds(20, 324, 253, 31);
+		contentPane.add(tglbtnInTunnel);
+		
+		JLabel lblTemperature = new JLabel("Temperature");
+		lblTemperature.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTemperature.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
+		lblTemperature.setBounds(10, 252, 154, 31);
+		contentPane.add(lblTemperature);
+		
+		txtTemperature = new JTextField();
+		txtTemperature.setColumns(10);
+		txtTemperature.setBounds(187, 252, 86, 31);
+		contentPane.add(txtTemperature);
+		
+		JButton btnSendTemp = new JButton("Send");
+		btnSendTemp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				parent.setTemp((int)TrainSelect.getSelectedItem(), Integer.parseInt(txtTemperature.getText()));
+			}
+		});
+		btnSendTemp.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
+		btnSendTemp.setBounds(283, 252, 69, 31);
+		contentPane.add(btnSendTemp);
 	}
 }

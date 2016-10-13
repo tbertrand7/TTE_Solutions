@@ -34,9 +34,14 @@ public class waysideControl_vital {
 		System.out.println("\nLOADING PLC PROGRAM...");
 		plc = new plc_program();
 		load_plc(path);
-		System.out.println("CONDITION1: "+plc.getConditions().get(0));
-		System.out.println("CONDITION2: "+plc.getConditions().get(1));
-		System.out.println("CONDITION3: "+plc.getConditions().get(2));
+		
+		int con = 1;
+		for(ArrayList<String> s: plc.getConditions())
+		{
+			System.out.println("CONDITION"+con+": "+s);
+			con++;
+		}
+		
 		System.out.println("\n\nPress enter to continue...");
 		keyboard.nextLine();
 		System.out.println("\nRUNNING PLC PROGRAM...");
@@ -78,6 +83,7 @@ public class waysideControl_vital {
 				ArrayList<String> conditions = new ArrayList<String>();
 				for(int i = 0; i < condition.length; i++)
 				{
+					//System.out.println(condition[i]);
 					switch(condition[i])
 					{
 						case "IF":
@@ -115,6 +121,14 @@ public class waysideControl_vital {
 				else if(line[1].toLowerCase().contains("green"))
 				{
 					plc.addResult("g");
+				}
+				else if(line[1].toLowerCase().contains("!throw"))
+				{
+					plc.addResult("!t");
+				}
+				else if(line[1].toLowerCase().contains("throw"))
+				{
+					plc.addResult("t");
 				}
 			}
 			
@@ -169,7 +183,7 @@ public class waysideControl_vital {
 					if(j % 3 == 2)
 					{
 						arg2 = temp;
-						System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
+						//System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
 						switch(operator)
 						{
 							case "AND":
@@ -195,7 +209,7 @@ public class waysideControl_vital {
 					if(j % 2 == 0)
 					{
 						arg2 = temp;
-						System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
+						//System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
 						switch(operator)
 						{
 							case "AND":
@@ -231,6 +245,14 @@ public class waysideControl_vital {
 					case "g":
 						lights = "green";
 						System.out.println("RESULT: turn lights GREEN");
+						break;
+					case "!t":
+						switch_position = false;
+						System.out.println("RESULT: switch is not thrown");
+						break;
+					case "t":
+						switch_position = true;
+						System.out.println("RESULT: switch is thrown");
 						break;
 				}
 			}

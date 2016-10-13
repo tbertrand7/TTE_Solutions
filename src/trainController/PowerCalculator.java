@@ -15,6 +15,8 @@ public class PowerCalculator extends Thread {
 	
 	private final double Pmax; //max power, calculated from info provided by train model
 	
+	private int annCounter; //counter for announcement changes
+	
 	private boolean proceed;
 	
 	public PowerCalculator(trainControllerUI tcui) {
@@ -44,9 +46,16 @@ public class PowerCalculator extends Thread {
 	 */
 	public void run() {
 		proceed = true;
+		annCounter = 0;
 		
 		while (proceed) {
 			long timestart = System.currentTimeMillis();
+			
+			annCounter++;
+			if (annCounter == 5) { //change announcement every 5 secs
+				ui.changeAnnouncement();
+				annCounter = 0;
+			}
 			
 			double Vreq, Vcur;
 			
@@ -57,7 +66,7 @@ public class PowerCalculator extends Thread {
 				if (Uk == 0) Uk = (T/2)*(Ek + Ek1);
 				else Uk = 0;
 				
-				if (Ek > 0) Pcmd = Pmax;
+				if (Ek > 0 || Vreq != 0) Pcmd = Pmax;
 				else Pcmd = 0;
 			} else {
 				//Calc Ek
@@ -74,17 +83,19 @@ public class PowerCalculator extends Thread {
 				
 				//Calc Pcmd
 				Pcmd = Kp*Ek + Ki*Uk;
-				if (Pcmd < 0) Pcmd = 0;
-				if (Pcmd > Pmax) Pcmd = Pmax;
+				if (Pcmd < 0 || Vreq == 0) Pcmd = 0;
+				else if (Pcmd > Pmax) Pcmd = Pmax;
 			}
+			
+			if (ui.getSpeedLimit() <= Vcur) Pcmd = 0; //must obey speed limit!
 			
 			ui.setPower();
 			
-			System.out.println("POWER---");
+			/*System.out.println("POWER---");
 			System.out.println("Vcmd = " + Vreq + "\t\tVcur = "+Vcur);
 			System.out.println("Ek = " + Ek + "\t\tEk1 = "+Ek1);
 			System.out.println("Uk = " + Uk + "\t\tUk1 = "+Uk1);
-			System.out.println("Power out = " + Pcmd + "\n");
+			System.out.println("Power out = " + Pcmd + "\n");*/
 			
 			//Sleep for one second (not perfect - there's a bit of drift)
 			try {
