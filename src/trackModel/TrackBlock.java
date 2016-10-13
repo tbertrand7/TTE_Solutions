@@ -12,6 +12,7 @@ public class TrackBlock {
 	public double elevation;
 	public double cumalativeElevation;
 	public String switchBlock;
+	public int switchPosition;
 	public String arrowDirection;
 	public int numPass;
 	public int temp;
@@ -30,6 +31,7 @@ public class TrackBlock {
 		elevation = 0;
 		cumalativeElevation = 0;;
 		switchBlock = "";
+		switchPosition = 0;
 		arrowDirection = "";
 		numPass = 0;
 		temp = 0;

@@ -12,10 +12,14 @@ import java.awt.Toolkit;
 import javax.swing.JComboBox;
 
 import java.awt.Font;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TestPanel extends JFrame {
 
@@ -23,6 +27,17 @@ public class TestPanel extends JFrame {
 	private JTextField txtSpeedLimit;
 	private JTextField txtSpeedCommand;
 	private JTextField txtCurrentSpeed;
+	
+	private double limit;
+	private double command;
+	private double current;
+	
+	private JComboBox<Integer> TrainSelect;
+	
+	private final TrainControllerInstances parent;
+	private final int id;
+	private boolean keySetInitialized;
+	TestSpeed ts;
 
 	/**
 	 * Launch the application.
@@ -31,7 +46,7 @@ public class TestPanel extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TestPanel frame = new TestPanel();
+					TestPanel frame = new TestPanel(0, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,11 +54,87 @@ public class TestPanel extends JFrame {
 			}
 		});
 	}
+	
+	@Override
+	public void dispose() {
+	    ts.stopRun();
+	    super.dispose();
+	}
+	
+	public void initialize() {
+		updateTrainInstances();
+		parent.setSpeedCommand((int)TrainSelect.getSelectedItem(), 30);
+		
+		ts = new TestSpeed(this);
+		ts.start();
+	}
+	
+	public void checkBrakes() {
+		if (parent.getSBrakeEngaged((int)TrainSelect.getSelectedItem()))
+			ts.engageServiceBrake();
+		else if (parent.getEBrakeEngaged((int)TrainSelect.getSelectedItem()))
+			ts.engageEmergencyBrake();
+		else
+			ts.disengageBrakes();
+	}
+	
+	public void updateTrainInstances() {
+		if (!keySetInitialized) {
+			TrainSelect.removeAllItems();
+			keySetInitialized = true;
+		}
+		
+		while(parent.getKeySet().isEmpty());
+		for (int key : parent.getKeySet()) {
+			boolean add = true;
+			for (int i = 0; i < TrainSelect.getItemCount(); ++i)
+				if (TrainSelect.getItemAt(i).equals(key)) { add = false; break;}
+			if (add) TrainSelect.addItem(new Integer(key));
+		}
+		
+		TrainSelect.setSelectedIndex(0);
+	}
+	
+	private void sendSpeedLimit() {
+		limit = Double.parseDouble(txtSpeedLimit.getText());
+		parent.setSpeedLimit((int)TrainSelect.getSelectedItem(), limit);
+	}
+	
+	public double getSpeedLimit() {
+		return limit;
+	}
+	
+	private void sendSpeedCommand() {
+		command = Double.parseDouble(txtSpeedCommand.getText());
+		parent.setSpeedCommand((int)TrainSelect.getSelectedItem(), command);
+	}
+	
+	private void sendCurrentSpeed() {
+		current = Double.parseDouble(txtCurrentSpeed.getText());
+		parent.setSpeedCurrent((int)TrainSelect.getSelectedItem(), current);
+	}
+	
+	public void setCurrentSpeed(double speed) {
+		current = speed;
+		parent.setSpeedCurrent((int)TrainSelect.getSelectedItem(), current);
+	}
+	
+	public double getCurrentSpeed() {
+		return current;
+	}
+	
+	public double getPower() {
+		return parent.getPower((int)TrainSelect.getSelectedItem());
+	}
 
 	/**
 	 * Create the frame.
 	 */
-	public TestPanel() {
+	public TestPanel(int i, TrainControllerInstances tci) {
+		id = i;
+		parent = tci;
+		keySetInitialized = false;
+		
 		setTitle("Train Controller Test Panel");
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TestPanel.class.getResource("/trainController/computer1.jpg")));
@@ -54,17 +145,15 @@ public class TestPanel extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JComboBox<Integer> TrainSelect = new JComboBox<Integer>();
+		TrainSelect = new JComboBox<Integer>();
+		TrainSelect.addItem(123);
 		TrainSelect.setSelectedIndex(0);
 		TrainSelect.setMaximumRowCount(100);
 		TrainSelect.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		TrainSelect.setBounds(10, 47, 154, 31);
-		TrainSelect.addItem(new Integer(300000));
-		TrainSelect.addItem(new Integer(300100));
-		TrainSelect.addItem(new Integer(300300));
 		contentPane.add(TrainSelect);
 		
-		JLabel lblTrainId = new JLabel("Train ID");
+		JLabel lblTrainId = new JLabel("Instance ID");
 		lblTrainId.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		lblTrainId.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTrainId.setBounds(10, 11, 154, 25);
@@ -82,6 +171,11 @@ public class TestPanel extends JFrame {
 		txtSpeedLimit.setColumns(10);
 		
 		JButton btnSendSpeedLimit = new JButton("Send");
+		btnSendSpeedLimit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				sendSpeedLimit();
+			}
+		});
 		btnSendSpeedLimit.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
 		btnSendSpeedLimit.setBounds(283, 102, 69, 31);
 		contentPane.add(btnSendSpeedLimit);
@@ -98,6 +192,11 @@ public class TestPanel extends JFrame {
 		contentPane.add(txtSpeedCommand);
 		
 		JButton btnSendSpeedCommand = new JButton("Send");
+		btnSendSpeedCommand.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				sendSpeedCommand();
+			}
+		});
 		btnSendSpeedCommand.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
 		btnSendSpeedCommand.setBounds(283, 144, 69, 31);
 		contentPane.add(btnSendSpeedCommand);
@@ -114,6 +213,11 @@ public class TestPanel extends JFrame {
 		contentPane.add(txtCurrentSpeed);
 		
 		JButton btnSendCurrentSpeed = new JButton("Send");
+		btnSendCurrentSpeed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				sendCurrentSpeed();
+			}
+		});
 		btnSendCurrentSpeed.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
 		btnSendCurrentSpeed.setBounds(283, 186, 69, 31);
 		contentPane.add(btnSendCurrentSpeed);
