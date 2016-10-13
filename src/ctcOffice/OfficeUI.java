@@ -29,6 +29,8 @@ public class OfficeUI extends JFrame {
     private TrackButton selectedBlockBtn;
     private JComboBox cmbDestinations;
     private JLabel lblSpeedInfo;
+    private JLabel lblDestInfo;
+    private JLabel lblAuthInfo;
 
 	/**
 	 * Launch the application.
@@ -89,10 +91,6 @@ public class OfficeUI extends JFrame {
 		JMenuItem mntmLoadSchedule = new JMenuItem("Load Schedule");
 		mntmLoadSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mnSchedule.add(mntmLoadSchedule);
-		
-		JMenuItem mntmEditSchedule = new JMenuItem("Edit Schedule");
-		mntmEditSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		mnSchedule.add(mntmEditSchedule);
 		
 		JMenuItem mntmScheduleByTrain = new JMenuItem("Schedule By Train");
 		mntmScheduleByTrain.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -1800,13 +1798,13 @@ public class OfficeUI extends JFrame {
 		lblSpeedInfo.setBounds(193, 305, 90, 15);
 		statusPanel.add(lblSpeedInfo);
 		
-		JLabel lblDestInfo = new JLabel("Block 15");
+		lblDestInfo = new JLabel("Block 15");
 		lblDestInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblDestInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDestInfo.setBounds(193, 330, 90, 15);
 		statusPanel.add(lblDestInfo);
 		
-		JLabel lblAuthInfo = new JLabel("14 Blocks");
+		lblAuthInfo = new JLabel("14 Blocks");
 		lblAuthInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblAuthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAuthInfo.setBounds(193, 355, 90, 15);
@@ -1916,7 +1914,7 @@ public class OfficeUI extends JFrame {
 		schedulePanel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 6, 406, 451);
+		scrollPane.setBounds(6, 6, 406, 412);
 		schedulePanel.add(scrollPane);
 		
 		table = new JTable();
@@ -1972,6 +1970,23 @@ public class OfficeUI extends JFrame {
 		table.getColumnModel().getColumn(3).setResizable(false);
 		table.getColumnModel().getColumn(3).setPreferredWidth(45);
 		scrollPane.setViewportView(table);
+		
+		JButton btnEditSchedule = new JButton("Edit Schedule");
+		btnEditSchedule.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnEditSchedule.setBounds(134, 423, 126, 30);
+		schedulePanel.add(btnEditSchedule);
+		
+		JButton btnSchConfirm = new JButton("Confirm");
+		btnSchConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnSchConfirm.setBounds(75, 424, 90, 30);
+		btnSchConfirm.setVisible(false);
+		schedulePanel.add(btnSchConfirm);
+		
+		JButton btnSchCancel = new JButton("Cancel");
+		btnSchCancel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnSchCancel.setBounds(230, 424, 90, 30);
+		btnSchCancel.setVisible(false);
+		schedulePanel.add(btnSchCancel);
 		
 		JPanel notificationPanel = new JPanel();
 		notificationPanel.setBounds(0, 64, 420, 234);
@@ -2045,7 +2060,16 @@ public class OfficeUI extends JFrame {
 	private void btnSetDestination_Click()
 	{
 		String newDest = cmbDestinations.getSelectedItem().toString();
-		//logNotificaiton("Train " + selctedtrainNumber + "")
+		logNotification("Train " + selectedBlockBtn.train + " dispatched to " + newDest);
+		lblDestInfo.setText(newDest);
+		
+		int newAuthority;
+		if (newDest.equals("Block 5"))
+			newAuthority = 4;
+		else
+			newAuthority = 9;
+		logNotification("New authority calculated to be " + newAuthority);
+		lblAuthInfo.setText(newAuthority + " Blocks");
 	}
 
 	private void selectedBlockChanged(ActionEvent e)
