@@ -137,30 +137,6 @@ public class trackModelUI {
 		lblSelectBlockTo_1.setBounds(10, 47, 118, 14);
 		overview.add(lblSelectBlockTo_1);
 		
-		JButton getData = new JButton("Get Data");
-		getData.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				DBInteraction db = null;
-				try {
-					db = new DBInteraction();
-				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					block = db.getSection(lineComboBoxView.getSelectedItem().toString(),(Integer)blockComboBoxView.getSelectedItem());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				
-			}
-		});
-		getData.setFont(new Font("Arial", Font.PLAIN, 11));
-		getData.setBounds(10, 246, 200, 23);
-		overview.add(getData);
-		
 		JButton btnRefreshData = new JButton("Refresh Data");
 		btnRefreshData.setFont(new Font("Arial", Font.PLAIN, 11));
 		btnRefreshData.setBounds(269, 246, 200, 23);
@@ -173,17 +149,17 @@ public class trackModelUI {
 		
 		JLabel lblNewLabel_2 = new JLabel("0.0 ft");
 		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblNewLabel_2.setBounds(138, 86, 55, 14);
+		lblNewLabel_2.setBounds(138, 86, 113, 14);
 		overview.add(lblNewLabel_2);
 		
-		JLabel lblBlockOccupied = new JLabel("Block Occupied:");
+		JLabel lblBlockOccupied = new JLabel("Block Status:");
 		lblBlockOccupied.setFont(new Font("Arial", Font.PLAIN, 11));
 		lblBlockOccupied.setBounds(10, 111, 90, 14);
 		overview.add(lblBlockOccupied);
 		
 		JLabel lblFalse = new JLabel("False");
 		lblFalse.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblFalse.setBounds(138, 111, 55, 14);
+		lblFalse.setBounds(138, 111, 113, 14);
 		overview.add(lblFalse);
 		
 		JLabel lblRailCrossing = new JLabel("Rail Crossing:");
@@ -193,7 +169,7 @@ public class trackModelUI {
 		
 		JLabel label_3 = new JLabel("False");
 		label_3.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_3.setBounds(138, 136, 55, 14);
+		label_3.setBounds(138, 136, 113, 14);
 		overview.add(label_3);
 		
 		JLabel lblStationBlock = new JLabel("Station Block:");
@@ -203,7 +179,7 @@ public class trackModelUI {
 		
 		JLabel label_9 = new JLabel("False");
 		label_9.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_9.setBounds(138, 161, 55, 14);
+		label_9.setBounds(138, 161, 113, 14);
 		overview.add(label_9);
 		
 		JLabel lblCurrentSignal = new JLabel("Current Signal:");
@@ -215,16 +191,6 @@ public class trackModelUI {
 		lblSwitchBlock.setFont(new Font("Arial", Font.PLAIN, 11));
 		lblSwitchBlock.setBounds(10, 211, 90, 14);
 		overview.add(lblSwitchBlock);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("Arial", Font.PLAIN, 11));
-		comboBox.setBounds(138, 183, 55, 20);
-		overview.add(comboBox);
-		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setFont(new Font("Arial", Font.PLAIN, 11));
-		comboBox_1.setBounds(138, 208, 55, 20);
-		overview.add(comboBox_1);
 		
 		JLabel lblHeaterStatus = new JLabel("Heater Status:");
 		lblHeaterStatus.setFont(new Font("Arial", Font.PLAIN, 11));
@@ -526,6 +492,74 @@ public class trackModelUI {
 			}
 		});
 		failurePanel.add(circuitFailure);
+		
+		JLabel label_33 = new JLabel("False");
+		label_33.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_33.setBounds(138, 186, 113, 14);
+		overview.add(label_33);
+		
+		JLabel label_32 = new JLabel("False");
+		label_32.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_32.setBounds(138, 211, 113, 14);
+		overview.add(label_32);
+		
+		
+		JButton getData = new JButton("Get Data");
+		getData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DBInteraction db = null;
+				try {
+					db = new DBInteraction();
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					block = db.getSection(lineComboBoxView.getSelectedItem().toString(),(Integer)blockComboBoxView.getSelectedItem());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				lblNewLabel_2.setText(String.valueOf(block.blockLength)+" ft");
+				if(block.infrastructure.contains("STATION"))
+					label_9.setText(block.infrastructure.substring(9));
+				else
+					label_9.setText("FALSE");
+				
+				if(block.infrastructure.contains("RAILWAY CROSSING"))
+					label_3.setText("TRUE");
+				else
+					label_3.setText("FALSE");
+				
+				if(block.infrastructure.contains("SWITCH"))
+				{
+					label_10.setText("TRUE");
+					label_32.setText(block.switchBlock);
+					lblNotAtSwitch.setText(block.switchBlock.substring(7, 8));
+				}
+				else
+				{
+					label_10.setText("FALSE");
+					label_32.setText("null");
+					lblNotAtSwitch.setText("null");
+				}
+				if(!block.status.equals(""))
+					lblFalse.setText(block.status);
+				else
+					lblFalse.setText("null");
+				
+				if(block.occupiedBy.equals(""))
+					label_33.setText("GREEN");
+				else
+					label_33.setText("RED");
 
+				
+			}
+		});
+		getData.setFont(new Font("Arial", Font.PLAIN, 11));
+		getData.setBounds(10, 246, 200, 23);
+		overview.add(getData);
+		
 	}
 }
