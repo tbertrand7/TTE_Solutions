@@ -56,14 +56,64 @@ public class trainControllerUI extends JFrame {
 	private JTextField TempCurr;
 	private JTextField TempReq;
 	
-	public JComboBox<Integer> TrainSelect; //selects which train to get information from
+	JToggleButton tglbtnAutomatic;
+	JToggleButton tglbtnManual;
+	
+	private JComboBox<Integer> TrainSelect; //selects which train to get information from
 	private JTextField PowerCurr;
 	private JTextField txtLeftDoors;
 	
-	private final int instanceID;
+	private boolean sBrakesOn;
+	private boolean eBrakesOn;
+	
+	//Storing speed (SI Units)
+	private double command;
+	private double limit;
+	private double current;
+	private double request;
+	
+	private final int id;
 	private final TrainControllerInstances parent;
 	
+	public void setSpeedCommand(double speed) {
+		command = speed;
+	}
 	
+	public void setSpeedLimit(double speed) {
+		limit = speed;
+		int americanlimit = (int) ((limit / 1609.34) * 3600); //m/s * (1 mi / 1609.34 m) * (3600 s / 1 h)
+		SpeedLimit.setText(americanlimit + " MPH");
+	}
+	
+	public void setSpeedCurrent(double speed) {
+		current = speed;
+		int americancurrent = (int) ((current / 1609.34) * 3600);
+		SpeedCurr.setText(americancurrent + " MPH");
+	}
+	
+	public double getSpeedCurrent() {
+		return current;
+	}
+	
+	public double getSpeedRequest() {
+		if (tglbtnAutomatic.isSelected())
+			return command;
+		else
+			return request;
+	}
+	
+	public void setPower() {
+		double power = parent.getPower(id);
+		PowerCurr.setText((int)power + " W"); //Watts OK for power
+	}
+	
+	public boolean sBrakeEngaged() {
+		return sBrakesOn;
+	}
+	
+	public boolean eBrakeEngaged() {
+		return eBrakesOn;
+	}
 
 	/**
 	 * Launch the application.
@@ -87,19 +137,27 @@ public class trainControllerUI extends JFrame {
 	 */
 	@Override
 	public void dispose() {
-	    parent.removeUI(instanceID);
+	    parent.removeUI(id);
 	    super.dispose();
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public trainControllerUI(int id, TrainControllerInstances tci) {
-		instanceID = id;
+	public trainControllerUI(int instid, TrainControllerInstances tci) {
+		id = instid;
 		parent = tci;
 		
+		command = 0;
+		limit = 0;
+		current = 0;
+		request = 0;
+		
+		sBrakesOn = false;
+		eBrakesOn = false;
+		
 		setResizable(false);
-		setTitle("Train Controller");
+		setTitle("Train Controller (Instance " + id + ")");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(trainControllerUI.class.getResource("/TrainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 828, 688);
@@ -117,13 +175,6 @@ public class trainControllerUI extends JFrame {
 		TrainSelect.addItem(new Integer(300000));
 		TrainSelect.addItem(new Integer(300100));
 		TrainSelect.addItem(new Integer(300300));
-		TrainSelect.addActionListener(new ActionListener() {
-			int i = 400000;
-			public void actionPerformed(ActionEvent e) {
-				TrainSelect.addItem(new Integer(i));
-				++i;
-			}
-		});
 		TrainSelect.setSelectedIndex(0);
 		//*******************************************************************************************
 		
@@ -131,10 +182,10 @@ public class trainControllerUI extends JFrame {
 		SpeedLimit.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		SpeedLimit.setHorizontalAlignment(SwingConstants.CENTER);
 		SpeedLimit.setEditable(false);
-		SpeedLimit.setBounds(589, 129, 134, 28);
+		SpeedLimit.setBounds(589, 129, 134, 33);
 		contentPane.add(SpeedLimit);
 		SpeedLimit.setColumns(10);
-		SpeedLimit.setText("40 MPH"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
+		SpeedLimit.setText("0 MPH");
 		
 		JLabel lblSpeedLimit = new JLabel("SPEED LIMIT");
 		lblSpeedLimit.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -146,10 +197,10 @@ public class trainControllerUI extends JFrame {
 		SpeedCurr.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		SpeedCurr.setHorizontalAlignment(SwingConstants.CENTER);
 		SpeedCurr.setEditable(false);
-		SpeedCurr.setBounds(589, 197, 134, 28);
+		SpeedCurr.setBounds(589, 197, 134, 33);
 		contentPane.add(SpeedCurr);
 		SpeedCurr.setColumns(10);
-		SpeedCurr.setText("35 MPH"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
+		SpeedCurr.setText("0 MPH");
 		
 		JLabel lblCurrentSpeed = new JLabel("Current Speed");
 		lblCurrentSpeed.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -171,16 +222,18 @@ public class trainControllerUI extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JButton btnSpeedReq = new JButton("Go");
+		btnSpeedReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				double americanrequest = Double.parseDouble(SpeedReq.getText());
+				request = americanrequest * 1609.34 / 3600;
+			}
+		});
 		btnSpeedReq.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		btnSpeedReq.setBounds(731, 266, 71, 28);
 		contentPane.add(btnSpeedReq);
 		
-		JButton btnEmergencyBrake = new JButton("Emergency Brake");
+		JToggleButton btnEmergencyBrake = new JToggleButton("Emergency Brake");
 		btnEmergencyBrake.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
-		btnEmergencyBrake.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
 		btnEmergencyBrake.setBackground(UIManager.getColor("Button.background"));
 		btnEmergencyBrake.setForeground(Color.RED);
 		btnEmergencyBrake.setBounds(562, 343, 189, 29);
@@ -318,7 +371,7 @@ public class trainControllerUI extends JFrame {
 		JTextPane txtMessages = new JTextPane();
 		txtMessages.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		//Dynamic test of system messages, delete later*********************************************
-		txtMessages.addMouseListener(new MouseAdapter() {
+		/*txtMessages.addMouseListener(new MouseAdapter() {
 			int n = 1, i = 0;
 			public void mouseClicked(MouseEvent arg0) {
 				if (i <= 2) {
@@ -332,7 +385,7 @@ public class trainControllerUI extends JFrame {
 					i = 0;
 				}
 			}
-		});
+		});*/
 		//*******************************************************************************************
 		txtMessages.setEditable(false);
 		txtMessages.setBounds(300, 119, 225, 330);
@@ -344,23 +397,19 @@ public class trainControllerUI extends JFrame {
 		lblSystemMessages.setBounds(301, 86, 225, 29);
 		contentPane.add(lblSystemMessages);
 		
-		JToggleButton tglbtnAutomatic = new JToggleButton("Automatic");
+		tglbtnAutomatic = new JToggleButton("Automatic");
 		tglbtnAutomatic.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		tglbtnAutomatic.setSelected(true);
 		
 		tglbtnAutomatic.setBounds(544, 41, 130, 28);
 		contentPane.add(tglbtnAutomatic);
 		
-		JToggleButton tglbtnManual = new JToggleButton("Manual");
+		tglbtnManual = new JToggleButton("Manual");
 		tglbtnManual.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		tglbtnManual.setBounds(672, 41, 130, 28);
 		contentPane.add(tglbtnManual);
 		
-		JButton btnServiceBrake = new JButton("Service Brake");
-		btnServiceBrake.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		JToggleButton btnServiceBrake = new JToggleButton("Service Brake");
 		btnServiceBrake.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		btnServiceBrake.setForeground(Color.BLACK);
 		btnServiceBrake.setBackground(SystemColor.menu);
@@ -421,9 +470,9 @@ public class trainControllerUI extends JFrame {
 		PowerCurr.setHorizontalAlignment(SwingConstants.CENTER);
 		PowerCurr.setEditable(false);
 		PowerCurr.setColumns(10);
-		PowerCurr.setBounds(589, 421, 134, 28);
+		PowerCurr.setBounds(589, 421, 134, 33);
 		contentPane.add(PowerCurr);
-		PowerCurr.setText("10 W"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER (disclaimer: I know nothing about power)
+		PowerCurr.setText("0 W");
 		
 		JLabel TTEIcon = new JLabel("");
 		TTEIcon.setIcon(new ImageIcon(trainControllerUI.class.getResource("/shared/TTESmall.png")));
@@ -436,20 +485,57 @@ public class trainControllerUI extends JFrame {
 		lblTrainId.setBounds(10, 11, 162, 21);
 		contentPane.add(lblTrainId);
 		
-		//Initialize for default Automatic mode ************
+		JToggleButton btnPassengerEmergencyBrake = new JToggleButton("Passenger Emergency Brake");
+		btnPassengerEmergencyBrake.setForeground(Color.RED);
+		btnPassengerEmergencyBrake.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
+		btnPassengerEmergencyBrake.setBackground(SystemColor.menu);
+		btnPassengerEmergencyBrake.setBounds(10, 420, 267, 29);
+		contentPane.add(btnPassengerEmergencyBrake);
+		
+		btnEmergencyBrake.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if (btnEmergencyBrake.isSelected()) {
+					btnServiceBrake.setSelected(false);
+					btnPassengerEmergencyBrake.setSelected(false);
+					sBrakesOn = false;
+					eBrakesOn = true;
+				} else {
+					eBrakesOn = false;
+				}
+			}
+		});
+		btnPassengerEmergencyBrake.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if (btnPassengerEmergencyBrake.isSelected()) {
+					btnServiceBrake.setSelected(false);
+					btnEmergencyBrake.setSelected(false);
+					sBrakesOn = false;
+					eBrakesOn = true;
+				} else {
+					eBrakesOn = false;
+				}
+			}
+		});
+		btnServiceBrake.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if (btnServiceBrake.isSelected()) {
+					btnEmergencyBrake.setSelected(false);
+					btnPassengerEmergencyBrake.setSelected(false);
+					sBrakesOn = true;
+					eBrakesOn = false;
+				} else {
+					sBrakesOn = false;
+				}
+			}
+		});
+		
+		//Initialization for default Automatic mode ************
 		tglbtnLights.setEnabled(false);
 		tglbtnRightDoors.setEnabled(false);
 		tglbtnLeftDoors.setEnabled(false);
 		btnTempReq.setEnabled(false);
 		btnSpeedReq.setEnabled(false);
 		btnServiceBrake.setEnabled(false);
-		
-		JButton btnPassengerEmergencyBrake = new JButton("Passenger Emergency Brake");
-		btnPassengerEmergencyBrake.setForeground(Color.RED);
-		btnPassengerEmergencyBrake.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
-		btnPassengerEmergencyBrake.setBackground(SystemColor.menu);
-		btnPassengerEmergencyBrake.setBounds(10, 420, 267, 29);
-		contentPane.add(btnPassengerEmergencyBrake);
 		//**************************************************
 		
 		this.setVisible(true);
