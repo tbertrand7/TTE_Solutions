@@ -1,6 +1,6 @@
 package trackModel;
-import java.awt.EventQueue;
 
+import java.awt.EventQueue;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class trackModelUI {
 
@@ -20,7 +23,7 @@ public class trackModelUI {
 	private JLabel textField_7;
 	private JTextField textField;
 	private JTextField textField_1;
-
+	private TrackBlock block = new TrackBlock();
 	/**
 	 * Launch the application.
 	 */
@@ -78,7 +81,7 @@ public class trackModelUI {
 		lineComboBoxView.setBounds(138, 11, 55, 20);
 		overview.add(lineComboBoxView);
 		lineComboBoxView.addItem("Red");
-		lineComboBoxView.addItem("Blue");
+		lineComboBoxView.addItem("Green");
 
 		
 		JLabel label_5 = new JLabel("Grade:");
@@ -125,7 +128,7 @@ public class trackModelUI {
 		blockComboBoxView.setFont(new Font("Arial", Font.PLAIN, 11));
 		blockComboBoxView.setBounds(138, 42, 55, 20);
 		overview.add(blockComboBoxView);
-		 for(int i=1; i<200; i++){
+		 for(int i=1; i<300; i++){
 			 blockComboBoxView.addItem(i);
         }
 		
@@ -135,6 +138,25 @@ public class trackModelUI {
 		overview.add(lblSelectBlockTo_1);
 		
 		JButton getData = new JButton("Get Data");
+		getData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DBInteraction db = null;
+				try {
+					db = new DBInteraction();
+				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					block = db.getSection(lineComboBoxView.getSelectedItem().toString(),(Integer)blockComboBoxView.getSelectedItem());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			}
+		});
 		getData.setFont(new Font("Arial", Font.PLAIN, 11));
 		getData.setBounds(10, 246, 200, 23);
 		overview.add(getData);
@@ -338,17 +360,6 @@ public class trackModelUI {
 		btnSave.setFont(new Font("Arial", Font.PLAIN, 11));
 		btnSave.setBounds(10, 230, 231, 42);
 		config.add(btnSave);
-		
-		JButton btnAddNew = new JButton("Add New Block");
-		btnAddNew.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//launch new gui 
-				newBlockGUI.main(null);
-			}
-		});
-		btnAddNew.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnAddNew.setBounds(238, 230, 231, 42);
-		config.add(btnAddNew);
 		
 		JLabel label_2 = new JLabel("Block Size:");
 		label_2.setFont(new Font("Arial", Font.PLAIN, 11));
