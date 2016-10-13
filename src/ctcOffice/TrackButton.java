@@ -11,9 +11,9 @@ public class TrackButton extends JToggleButton
     public char section;
     public int block;
     public int length;
-    public int grade;
+    public double grade;
     public int speed;
-    public int elevation;
+    public double elevation;
     public int status;
     public int train;
 
@@ -21,13 +21,13 @@ public class TrackButton extends JToggleButton
     {
         super(s);
         line = "Green";
-        section = ' ';
+        section = 'A';
         block = 1;
-        length = 150;
-        grade = 0;
-        speed = 0;
-        elevation = 0;
-        status = 0;
+        length = 100;
+        grade = 0.5;
+        speed = 20;
+        elevation = 0.5;
+        status = 2;
         train = 1;
     }
 
