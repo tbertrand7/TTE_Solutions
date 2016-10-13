@@ -49,20 +49,38 @@ import java.awt.Font;
 public class trainControllerUI extends JFrame {
 
 	private JPanel contentPane;
+	
+	//Speed/Power
 	private JTextField SpeedLimit;
 	private JTextField SpeedCurr;
 	private JTextField SpeedReq;
-	private JTextField txtRightDoors;
+	private JTextField PowerCurr;
+	
+	//Temperature
 	private JTextField TempCurr;
 	private JTextField TempReq;
 	
-	JToggleButton tglbtnAutomatic;
-	JToggleButton tglbtnManual;
+	//Automatic/Manual mode
+	private JToggleButton tglbtnAutomatic;
+	private JToggleButton tglbtnManual;
 	
-	private JComboBox<Integer> TrainSelect; //selects which train to get information from
-	private JTextField PowerCurr;
+	//Lights
+	private JToggleButton tglbtnLights;
+	private JButton imgLight;
+	
+	//Doors
+	JToggleButton tglbtnRightDoors;
+	private JTextField txtRightDoors;
+	JToggleButton tglbtnLeftDoors;
 	private JTextField txtLeftDoors;
 	
+	//Train Select
+	private JComboBox<Integer> TrainSelect; //selects which train to get information from
+	
+	//System Messages
+	JTextPane txtMessages;
+	
+	//Brakes
 	private boolean sBrakesOn;
 	private boolean eBrakesOn;
 	
@@ -83,6 +101,10 @@ public class trainControllerUI extends JFrame {
 		limit = speed;
 		int americanlimit = (int) ((limit / 1609.34) * 3600); //m/s * (1 mi / 1609.34 m) * (3600 s / 1 h)
 		SpeedLimit.setText(americanlimit + " MPH");
+	}
+	
+	public double getSpeedLimit() {
+		return limit;
 	}
 	
 	public void setSpeedCurrent(double speed) {
@@ -113,6 +135,50 @@ public class trainControllerUI extends JFrame {
 	
 	public boolean eBrakeEngaged() {
 		return eBrakesOn;
+	}
+	
+	public void inTunnel() {
+		if (tglbtnAutomatic.isSelected()) {
+			tglbtnLights.setSelected(true);
+			imgLight.setEnabled(true);
+		}
+	}
+	
+	public void leftTunnel() {
+		if (tglbtnAutomatic.isSelected()) {
+			tglbtnLights.setSelected(false);
+			imgLight.setEnabled(false);
+		}
+	}
+	
+	public void setRightDoors(boolean open) {
+		if (tglbtnAutomatic.isSelected() && current == 0) {
+			if (open) {
+				tglbtnRightDoors.setSelected(true);
+				txtRightDoors.setText("Open");
+			} else {
+				tglbtnRightDoors.setSelected(false);
+				txtRightDoors.setText("Closed");
+			}
+		}
+	}
+	
+	public void setLeftDoors(boolean open) {
+		if (tglbtnAutomatic.isSelected() && current == 0) {
+			if (open) {
+				tglbtnLeftDoors.setSelected(true);
+				txtLeftDoors.setText("Open");
+			} else {
+				tglbtnLeftDoors.setSelected(false);
+				txtLeftDoors.setText("Closed");
+			}
+		}
+	}
+	
+	public void setTemp(int temp) {
+		if (tglbtnAutomatic.isSelected()) {
+			TempCurr.setText(temp + " \u2109");
+		}
 	}
 
 	/**
@@ -239,14 +305,14 @@ public class trainControllerUI extends JFrame {
 		btnEmergencyBrake.setBounds(562, 343, 189, 29);
 		contentPane.add(btnEmergencyBrake);
 		
-		JButton imgLight = new JButton("");
+		imgLight = new JButton("");
 		imgLight.setBackground(UIManager.getColor("Button.disabledShadow"));
 		imgLight.setEnabled(false);
 		imgLight.setIcon(new ImageIcon(trainControllerUI.class.getResource("/TrainController/LightOnTiny.png")));
 		imgLight.setBounds(184, 86, 43, 46);
 		contentPane.add(imgLight);
 		
-		JToggleButton tglbtnLights = new JToggleButton("Lights");
+		tglbtnLights = new JToggleButton("Lights");
 		tglbtnLights.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		tglbtnLights.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -269,11 +335,11 @@ public class trainControllerUI extends JFrame {
 		contentPane.add(txtRightDoors);
 		txtRightDoors.setColumns(10);
 		
-		JToggleButton tglbtnRightDoors = new JToggleButton("Right Doors");
+		tglbtnRightDoors = new JToggleButton("Right Doors");
 		tglbtnRightDoors.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		tglbtnRightDoors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (tglbtnRightDoors.isSelected()) {
+				if (tglbtnRightDoors.isSelected() || current == 0) { //must be stopped to open doors!
 					txtRightDoors.setText("Open");
 				} else {
 					txtRightDoors.setText("Closed");
@@ -292,12 +358,12 @@ public class trainControllerUI extends JFrame {
 		txtLeftDoors.setBounds(168, 189, 75, 28);
 		contentPane.add(txtLeftDoors);
 		
-		JToggleButton tglbtnLeftDoors = new JToggleButton("Left Doors");
+		tglbtnLeftDoors = new JToggleButton("Left Doors");
 		tglbtnLeftDoors.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		tglbtnLeftDoors.setEnabled(false);
 		tglbtnLeftDoors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (tglbtnLeftDoors.isSelected()) {
+				if (tglbtnLeftDoors.isSelected() || current == 0) { //must be stopped to open doors!
 					txtLeftDoors.setText("Open");
 				} else {
 					txtLeftDoors.setText("Closed");
@@ -314,7 +380,7 @@ public class trainControllerUI extends JFrame {
 		TempCurr.setColumns(10);
 		TempCurr.setBounds(10, 266, 148, 28);
 		contentPane.add(TempCurr);
-		TempCurr.setText("68 \u2109"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
+		TempCurr.setText("68 \u2109"); //initialization
 		
 		JLabel lblCurrentTemp = new JLabel("Current Temp");
 		lblCurrentTemp.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -336,6 +402,11 @@ public class trainControllerUI extends JFrame {
 		contentPane.add(lblRequestTemp);
 		
 		JButton btnTempReq = new JButton("Go");
+		btnTempReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TempCurr.setText(Integer.parseInt(TempReq.getText()) + " \u2109");
+			}
+		});
 		btnTempReq.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		btnTempReq.setBounds(106, 339, 66, 29);
 		contentPane.add(btnTempReq);
@@ -368,7 +439,7 @@ public class trainControllerUI extends JFrame {
 		btnAnnCustReq.setBounds(300, 610, 225, 33);
 		contentPane.add(btnAnnCustReq);
 		
-		JTextPane txtMessages = new JTextPane();
+		txtMessages = new JTextPane();
 		txtMessages.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		//Dynamic test of system messages, delete later*********************************************
 		/*txtMessages.addMouseListener(new MouseAdapter() {
