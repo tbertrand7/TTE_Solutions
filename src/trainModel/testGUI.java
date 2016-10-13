@@ -264,7 +264,7 @@ public class testGUI {
 		/*
 		 * Horsepower Label
 		 */
-		JLabel powerLabel = new JLabel("hp");
+		JLabel powerLabel = new JLabel("W");
 		powerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		powerLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		powerLabel.setBounds(160, 100, 30, 20);

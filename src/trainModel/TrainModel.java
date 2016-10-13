@@ -90,7 +90,7 @@ public class TrainModel {
 					
 					*/
 					
-					velocity = .555 * power;
+					velocity = .556 * power;
 					
 					return velocity;
 				}
