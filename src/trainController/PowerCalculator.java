@@ -15,6 +15,8 @@ public class PowerCalculator extends Thread {
 	
 	private final double Pmax; //max power, calculated from info provided by train model
 	
+	private int annCounter; //counter for announcement changes
+	
 	private boolean proceed;
 	
 	public PowerCalculator(trainControllerUI tcui) {
@@ -44,9 +46,16 @@ public class PowerCalculator extends Thread {
 	 */
 	public void run() {
 		proceed = true;
+		annCounter = 0;
 		
 		while (proceed) {
 			long timestart = System.currentTimeMillis();
+			
+			annCounter++;
+			if (annCounter == 5) { //change announcement every 5 secs
+				ui.changeAnnouncement();
+				annCounter = 0;
+			}
 			
 			double Vreq, Vcur;
 			

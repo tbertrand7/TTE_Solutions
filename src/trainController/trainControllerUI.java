@@ -29,6 +29,7 @@ import javax.swing.event.ChangeEvent;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 
 import javax.swing.UIManager;
 import javax.swing.JTextPane;
@@ -79,6 +80,37 @@ public class trainControllerUI extends JFrame {
 	
 	//System Messages
 	JTextPane txtMessages;
+	
+	//Announcements list
+	JTextArea AnnCurr;
+	ArrayList<String> annList;
+	int currentAnnIndex;
+	
+	public void setAnnouncements(char[] text) {
+		annList.clear();
+		StringBuilder sb = new StringBuilder();
+		
+		for (char c : text) {
+			if (c == '\n') { //add current string to the list, clear string builder
+				if (sb.length() != 0) { //if string builder is not empty
+					annList.add(sb.toString());
+					sb = new StringBuilder();
+				}
+			} else { //add char to string builder
+				sb.append(c);
+			}
+		}
+	}
+	
+	public void changeAnnouncement() {
+		if (!annList.isEmpty()) {
+			if (annList.size() <= currentAnnIndex) { //we don't want any NullPointerExceptions...
+				currentAnnIndex = 0;
+			}
+			AnnCurr.setText(annList.get(currentAnnIndex));
+			currentAnnIndex++;
+		}
+	}
 	
 	//Brakes
 	private boolean sBrakesOn;
@@ -221,6 +253,9 @@ public class trainControllerUI extends JFrame {
 		
 		sBrakesOn = false;
 		eBrakesOn = false;
+		
+		annList = new ArrayList<String>();
+		currentAnnIndex = 0;
 		
 		setResizable(false);
 		setTitle("Train Controller (Instance " + id + ")");
@@ -411,7 +446,7 @@ public class trainControllerUI extends JFrame {
 		btnTempReq.setBounds(106, 339, 66, 29);
 		contentPane.add(btnTempReq);
 		
-		JTextArea AnnCurr = new JTextArea();
+		AnnCurr = new JTextArea();
 		AnnCurr.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		AnnCurr.setEditable(false);
 		AnnCurr.setLineWrap(true);
@@ -425,10 +460,11 @@ public class trainControllerUI extends JFrame {
 		contentPane.add(lblCurrentAnnouncement);
 		
 		JButton btnAnnCustReq = new JButton("Edit Announcements");
+		trainControllerUI instance = this;
 		btnAnnCustReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					editAnnouncementsUI frame2 = new editAnnouncementsUI();
+					editAnnouncementsUI frame2 = new editAnnouncementsUI(instance, annList);
 					frame2.setVisible(true);
 				} catch (Exception exc) {
 					exc.printStackTrace();

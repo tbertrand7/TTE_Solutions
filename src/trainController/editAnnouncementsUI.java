@@ -6,16 +6,22 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.Toolkit;
+
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class editAnnouncementsUI extends JFrame {
 
 	private JPanel contentPane;
+	
+	private trainControllerUI tcui;
 
 	/**
 	 * Launch the application.
@@ -24,7 +30,7 @@ public class editAnnouncementsUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					editAnnouncementsUI frame = new editAnnouncementsUI();
+					editAnnouncementsUI frame = new editAnnouncementsUI(null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,7 +42,9 @@ public class editAnnouncementsUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public editAnnouncementsUI() {
+	public editAnnouncementsUI(trainControllerUI ui, ArrayList<String> list) {
+		tcui = ui;
+		
 		setTitle("Edit Announcements");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(editAnnouncementsUI.class.getResource("/trainController/computer1.jpg")));
 		setAlwaysOnTop(true);
@@ -52,11 +60,18 @@ public class editAnnouncementsUI extends JFrame {
 		txtArea.setWrapStyleWord(true);
 		txtArea.setLineWrap(true);
 		txtArea.setBounds(10, 11, 649, 356);
+		StringBuilder sb = new StringBuilder();
+		for (String s : list) {
+			sb.append(s);
+			sb.append("\n");
+		}
+		txtArea.setText(sb.toString());
 		contentPane.add(txtArea);
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				tcui.setAnnouncements(txtArea.getText().toCharArray());
 			}
 		});
 		btnSave.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
