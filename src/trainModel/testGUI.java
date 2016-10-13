@@ -330,7 +330,7 @@ public class testGUI {
 		String trainSpeedString = dc.format(trainSpeed);
 		currentSpeed.setText(trainSpeedString);
 		currentSpeed.setFont(new Font("Tahoma", Font.BOLD, 18));
-		currentSpeed.setBounds(603, 89, 66, 40);
+		currentSpeed.setBounds(603, 89, 75, 40);
 		frame.getContentPane().add(currentSpeed);
 		currentSpeed.setColumns(10);
 		
@@ -363,7 +363,7 @@ public class testGUI {
 			speedLimit.setText("60");  //Must Read in Speed Limit from Track!!!!!
 		speedLimit.setHorizontalAlignment(SwingConstants.CENTER);
 		speedLimit.setFont(new Font("Tahoma", Font.BOLD, 18));
-		speedLimit.setBounds(603, 165, 66, 40);
+		speedLimit.setBounds(603, 165, 70, 40);
 		frame.getContentPane().add(speedLimit);
 		speedLimit.setColumns(10);
 		
@@ -424,7 +424,7 @@ public class testGUI {
 			}
 		serviceBrakeStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
 		serviceBrakeStatus.setHorizontalAlignment(SwingConstants.CENTER);
-		serviceBrakeStatus.setBounds(170, 183, 115, 30);
+		serviceBrakeStatus.setBounds(170, 183, 125, 35);
 		frame.getContentPane().add(serviceBrakeStatus);
 		serviceBrakeStatus.setColumns(10);
 		
@@ -443,7 +443,7 @@ public class testGUI {
 			}
 		emergencyBrakeStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		emergencyBrakeStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
-		emergencyBrakeStatus.setBounds(170, 224, 115, 30);
+		emergencyBrakeStatus.setBounds(170, 224, 125, 35);
 		frame.getContentPane().add(emergencyBrakeStatus);
 		emergencyBrakeStatus.setColumns(10);
 		
@@ -504,7 +504,7 @@ public class testGUI {
 			//Temperature Display Here!!
 			temperature.setText("72"); 
 		temperature.setFont(new Font("Tahoma", Font.BOLD, 18));
-		temperature.setBounds(603, 333, 66, 40);
+		temperature.setBounds(603, 333, 70, 40);
 		frame.getContentPane().add(temperature);
 		temperature.setColumns(10);
 		
@@ -531,7 +531,7 @@ public class testGUI {
 			elevation.setText("255");
 		elevation.setFont(new Font("Tahoma", Font.BOLD, 18));
 		elevation.setHorizontalAlignment(SwingConstants.CENTER);
-		elevation.setBounds(603, 419, 66, 40);
+		elevation.setBounds(603, 419, 70, 40);
 		frame.getContentPane().add(elevation);
 		elevation.setColumns(10);
 		
