@@ -374,7 +374,7 @@ public class trainControllerUI extends JFrame {
 		tglbtnRightDoors.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		tglbtnRightDoors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (tglbtnRightDoors.isSelected() || current == 0) { //must be stopped to open doors!
+				if (tglbtnRightDoors.isSelected() && current == 0) { //must be stopped to open doors!
 					txtRightDoors.setText("Open");
 				} else {
 					txtRightDoors.setText("Closed");
@@ -398,7 +398,7 @@ public class trainControllerUI extends JFrame {
 		tglbtnLeftDoors.setEnabled(false);
 		tglbtnLeftDoors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (tglbtnLeftDoors.isSelected() || current == 0) { //must be stopped to open doors!
+				if (tglbtnLeftDoors.isSelected() && current == 0) { //must be stopped to open doors!
 					txtLeftDoors.setText("Open");
 				} else {
 					txtLeftDoors.setText("Closed");
