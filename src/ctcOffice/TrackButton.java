@@ -7,7 +7,7 @@ import javax.swing.*;
  */
 public class TrackButton extends JToggleButton
 {
-    public int line;
+    public String line;
     public char section;
     public int block;
     public int length;
@@ -15,22 +15,24 @@ public class TrackButton extends JToggleButton
     public int speed;
     public int elevation;
     public int status;
+    public int train;
 
     public TrackButton(String s)
     {
         super(s);
-        line = -1;
+        line = "Green";
         section = ' ';
-        block = -1;
-        length = -1;
+        block = 1;
+        length = 150;
         grade = 0;
         speed = 0;
         elevation = 0;
         status = 0;
+        train = 1;
     }
 
     public String toString()
     {
-        return "Line " + line + " Block " + block;
+        return line + " Line: Block " + block;
     }
 }

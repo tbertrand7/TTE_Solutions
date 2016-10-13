@@ -14,11 +14,11 @@ import ctcOffice.CTCOffice.Mode;
 
 import java.text.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class OfficeUI extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField_1;
 	private JTextArea notificationArea;
 	private JTable table;
 	private JSlider simulationSpeed;
@@ -27,6 +27,10 @@ public class OfficeUI extends JFrame {
 	private TrackButton[] greenLine = new TrackButton[152];
 	private TrackButton[] redLine = new TrackButton[77];
     private TrackButton selectedBlockBtn;
+    private JComboBox cmbDestinations;
+    private JLabel lblSpeedInfo;
+    private JLabel lblDestInfo;
+    private JLabel lblAuthInfo;
 
 	/**
 	 * Launch the application.
@@ -87,10 +91,6 @@ public class OfficeUI extends JFrame {
 		JMenuItem mntmLoadSchedule = new JMenuItem("Load Schedule");
 		mntmLoadSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mnSchedule.add(mntmLoadSchedule);
-		
-		JMenuItem mntmEditSchedule = new JMenuItem("Edit Schedule");
-		mntmEditSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		mnSchedule.add(mntmEditSchedule);
 		
 		JMenuItem mntmScheduleByTrain = new JMenuItem("Schedule By Train");
 		mntmScheduleByTrain.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -260,7 +260,7 @@ public class OfficeUI extends JFrame {
 		greenLine[24] = toggleButtonG25;
 		
 		TrackButton toggleButtonG26 = new TrackButton("");
-		toggleButtonG26.setBackground(Color.YELLOW);
+		toggleButtonG26.setBackground(Color.BLUE);
 		toggleButtonG26.setBounds(135, 158, 15, 15);
 		trackDisplayPanel.add(toggleButtonG26);
 		greenLine[25] = toggleButtonG26;
@@ -1768,72 +1768,6 @@ public class OfficeUI extends JFrame {
 		lblTrainInfo.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblTrainInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		tabbedPane.setBounds(2, 380, 415, 80);
-		statusPanel.add(tabbedPane);
-		tabbedPane.setToolTipText("");
-		
-		JPanel speedPanel = new JPanel();
-		tabbedPane.addTab("Speed", null, speedPanel, null);
-		
-		JLabel lblSetNewSpeed = new JLabel("Enter new speed:");
-		lblSetNewSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		speedPanel.add(lblSetNewSpeed);
-		
-		txtFieldSpeed = new JTextField();
-		speedPanel.add(txtFieldSpeed);
-		txtFieldSpeed.setColumns(10);
-		
-		JLabel lblMph = new JLabel("mph");
-		lblMph.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		speedPanel.add(lblMph);
-		
-		JButton btnSetSpeed = new JButton("Set Speed");
-		btnSetSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		btnSetSpeed.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnSetSpeed_Click();
-			}
-		});
-		speedPanel.add(btnSetSpeed);
-		
-		JPanel authorityPanel = new JPanel();
-		tabbedPane.addTab("Authority", null, authorityPanel, null);
-		
-		JLabel lblEnterNewAuthority = new JLabel("Enter new authority:");
-		lblEnterNewAuthority.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		authorityPanel.add(lblEnterNewAuthority);
-		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		authorityPanel.add(textField_1);
-		textField_1.setColumns(10);
-		
-		JLabel lblMi = new JLabel("mi");
-		lblMi.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		authorityPanel.add(lblMi);
-		
-		JButton btnSetAuthority = new JButton("Set Authority");
-		btnSetAuthority.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		authorityPanel.add(btnSetAuthority);
-		
-		JPanel destPanel = new JPanel();
-		tabbedPane.addTab("Destination", null, destPanel, null);
-		
-		JLabel lblSelectNewDestination = new JLabel("Select new destination:");
-		lblSelectNewDestination.setFont(new Font("SansSerif", Font.PLAIN, 15));
-		destPanel.add(lblSelectNewDestination);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Station Name"}));
-		destPanel.add(comboBox);
-		
-		JButton btnSetDestination = new JButton("Set Destination");
-		btnSetDestination.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		destPanel.add(btnSetDestination);
-		
 		JLabel lblUnder = new JLabel("Underground:");
 		lblUnder.setVerticalAlignment(SwingConstants.BOTTOM);
 		lblUnder.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -1858,19 +1792,19 @@ public class OfficeUI extends JFrame {
 		lblUnderInfo.setBounds(323, 133, 80, 15);
 		statusPanel.add(lblUnderInfo);
 		
-		JLabel lblSpeedInfo = new JLabel("N/A");
+		lblSpeedInfo = new JLabel("20 mph");
 		lblSpeedInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSpeedInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblSpeedInfo.setBounds(193, 305, 90, 15);
 		statusPanel.add(lblSpeedInfo);
 		
-		JLabel lblDestInfo = new JLabel("N/A");
+		lblDestInfo = new JLabel("Block 15");
 		lblDestInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblDestInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDestInfo.setBounds(193, 330, 90, 15);
 		statusPanel.add(lblDestInfo);
 		
-		JLabel lblAuthInfo = new JLabel("N/A");
+		lblAuthInfo = new JLabel("14 Blocks");
 		lblAuthInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblAuthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAuthInfo.setBounds(193, 355, 90, 15);
@@ -1922,11 +1856,57 @@ public class OfficeUI extends JFrame {
 		lblTrainNum.setBounds(118, 280, 103, 19);
 		statusPanel.add(lblTrainNum);
 		
-		JLabel lblTrainNumInfo = new JLabel("N/A");
+		JLabel lblTrainNumInfo = new JLabel("1");
 		lblTrainNumInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblTrainNumInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblTrainNumInfo.setBounds(193, 280, 90, 15);
 		statusPanel.add(lblTrainNumInfo);
+		
+		JButton btnSetSpeed = new JButton("Set Speed");
+		btnSetSpeed.setBounds(300, 389, 103, 33);
+		statusPanel.add(btnSetSpeed);
+		btnSetSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		
+		txtFieldSpeed = new JTextField();
+		txtFieldSpeed.setBounds(138, 391, 122, 28);
+		statusPanel.add(txtFieldSpeed);
+		txtFieldSpeed.setColumns(10);
+		
+		JLabel lblMph = new JLabel("mph");
+		lblMph.setBounds(265, 395, 30, 21);
+		statusPanel.add(lblMph);
+		lblMph.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		
+		JLabel lblSetNewSpeed = new JLabel("Enter new speed:");
+		lblSetNewSpeed.setBounds(12, 395, 121, 21);
+		statusPanel.add(lblSetNewSpeed);
+		lblSetNewSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		
+		JButton btnSetDestination = new JButton("Set Destination");
+		btnSetDestination.setBounds(275, 425, 135, 31);
+		statusPanel.add(btnSetDestination);
+		btnSetDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnSetDestination.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnSetDestination_Click();
+			}
+		});
+		
+		cmbDestinations = new JComboBox();
+		cmbDestinations.setBounds(168, 426, 104, 29);
+		statusPanel.add(cmbDestinations);
+		cmbDestinations.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		cmbDestinations.setModel(new DefaultComboBoxModel(new String[] {"Block 5", "Block 10"}));
+		
+		JLabel lblSelectNewDestination = new JLabel("Select new destination:");
+		lblSelectNewDestination.setBounds(6, 430, 160, 20);
+		statusPanel.add(lblSelectNewDestination);
+		lblSelectNewDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnSetSpeed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnSetSpeed_Click();
+			}
+		});
 		
 		JPanel schedulePanel = new JPanel();
 		schedulePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -1934,7 +1914,7 @@ public class OfficeUI extends JFrame {
 		schedulePanel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 6, 406, 451);
+		scrollPane.setBounds(6, 6, 406, 412);
 		schedulePanel.add(scrollPane);
 		
 		table = new JTable();
@@ -1990,6 +1970,23 @@ public class OfficeUI extends JFrame {
 		table.getColumnModel().getColumn(3).setResizable(false);
 		table.getColumnModel().getColumn(3).setPreferredWidth(45);
 		scrollPane.setViewportView(table);
+		
+		JButton btnEditSchedule = new JButton("Edit Schedule");
+		btnEditSchedule.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnEditSchedule.setBounds(134, 423, 126, 30);
+		schedulePanel.add(btnEditSchedule);
+		
+		JButton btnSchConfirm = new JButton("Confirm");
+		btnSchConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnSchConfirm.setBounds(75, 424, 90, 30);
+		btnSchConfirm.setVisible(false);
+		schedulePanel.add(btnSchConfirm);
+		
+		JButton btnSchCancel = new JButton("Cancel");
+		btnSchCancel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnSchCancel.setBounds(230, 424, 90, 30);
+		btnSchCancel.setVisible(false);
+		schedulePanel.add(btnSchCancel);
 		
 		JPanel notificationPanel = new JPanel();
 		notificationPanel.setBounds(0, 64, 420, 234);
@@ -2050,6 +2047,7 @@ public class OfficeUI extends JFrame {
 				ctcOffice.suggestSpeed(newTrainSpeed);
 				logNotification("Speed of " + newTrainSpeed + " mph suggested");
 				txtFieldSpeed.setText("");
+				lblSpeedInfo.setText(newTrainSpeed + " mph");
 			}
 		}
 		catch(NumberFormatException nfe)
@@ -2057,6 +2055,21 @@ public class OfficeUI extends JFrame {
 			logNotification("ERROR: '" + txtFieldSpeed.getText() + "' is not a valid speed");
 			txtFieldSpeed.setText("");
 		}
+	}
+	
+	private void btnSetDestination_Click()
+	{
+		String newDest = cmbDestinations.getSelectedItem().toString();
+		logNotification("Train " + selectedBlockBtn.train + " dispatched to " + newDest);
+		lblDestInfo.setText(newDest);
+		
+		int newAuthority;
+		if (newDest.equals("Block 5"))
+			newAuthority = 4;
+		else
+			newAuthority = 9;
+		logNotification("New authority calculated to be " + newAuthority);
+		lblAuthInfo.setText(newAuthority + " Blocks");
 	}
 
 	private void selectedBlockChanged(ActionEvent e)
