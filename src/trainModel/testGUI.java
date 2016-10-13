@@ -264,7 +264,7 @@ public class testGUI {
 		/*
 		 * Horsepower Label
 		 */
-		JLabel powerLabel = new JLabel("hp");
+		JLabel powerLabel = new JLabel("W");
 		powerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		powerLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		powerLabel.setBounds(160, 100, 30, 20);
@@ -563,7 +563,7 @@ public class testGUI {
 			trackCircuitInfo.setText("Unoccupied");
 		trackCircuitInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		trackCircuitInfo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		trackCircuitInfo.setBounds(587, 509, 100, 40);
+		trackCircuitInfo.setBounds(587, 509, 115, 40);
 		frame.getContentPane().add(trackCircuitInfo);
 		trackCircuitInfo.setColumns(10);
 		
