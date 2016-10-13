@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JRadioButton;
@@ -30,6 +31,8 @@ public class testGUI {
 	private JTextField temperature;
 	private JTextField elevation;
 	private JTextField trackCircuitInfo;
+	final JFrame parent = new JFrame();
+	private JTextField trainID;
 
 	/**
 	 * Launch the application.
@@ -71,7 +74,7 @@ public class testGUI {
 		frame.getContentPane().add(lblTrainModel);
 		
 		JRadioButton testModeRadioButton = new JRadioButton("Test Mode");
-		testModeRadioButton.setSelected(true);
+		testModeRadioButton.setSelected(false);
 		testModeRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		testModeRadioButton.setBackground(Color.LIGHT_GRAY);
 		testModeRadioButton.setBounds(6, 43, 109, 23);
@@ -182,6 +185,7 @@ public class testGUI {
 		frame.getContentPane().add(lblPassengerCount);
 		
 		crewCount = new JTextField();
+		crewCount.setEditable(false);//editable status
 		crewCount.setText("12");
 		crewCount.setHorizontalAlignment(SwingConstants.CENTER);
 		crewCount.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -196,6 +200,7 @@ public class testGUI {
 		frame.getContentPane().add(lblCrewCount);
 		
 		currentSpeed = new JTextField();
+		currentSpeed.setEditable(false); //editable status
 		currentSpeed.setHorizontalAlignment(SwingConstants.CENTER);
 		currentSpeed.setText("55");
 		currentSpeed.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -215,6 +220,7 @@ public class testGUI {
 		frame.getContentPane().add(lblMph);
 		
 		speedLimit = new JTextField();
+		speedLimit.setEditable(false); //editable status
 		speedLimit.setText("60");
 		speedLimit.setHorizontalAlignment(SwingConstants.CENTER);
 		speedLimit.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -240,6 +246,7 @@ public class testGUI {
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		setpointSpeed = new JTextField();
+		setpointSpeed.setEditable(false); //editable status
 		setpointSpeed.setText("55");
 		setpointSpeed.setHorizontalAlignment(SwingConstants.CENTER);
 		setpointSpeed.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -252,41 +259,9 @@ public class testGUI {
 		lblMph_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMph_2.setBounds(688, 258, 35, 20);
 		frame.getContentPane().add(lblMph_2);
-
-		JButton serviceBrake = new JButton("Service Brake");
-		serviceBrake.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(serviceBrakeStatus.getText().contentEquals("Engaged")){
-					serviceBrakeStatus.setText("Disengaged");
-				}
-				else{
-					serviceBrakeStatus.setText("Engaged");
-				}
-			}
-		});
-
-		serviceBrake.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		serviceBrake.setBounds(6, 183, 155, 30);
-		frame.getContentPane().add(serviceBrake);
-		
-
-		JButton emergencyBrake = new JButton("Emergency Brake");
-		emergencyBrake.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(emergencyBrakeStatus.getText().contentEquals("Engaged")){
-					emergencyBrakeStatus.setText("Disengaged");
-				}
-				else{
-					emergencyBrakeStatus.setText("Engaged");
-				}				
-			}
-		});
-		emergencyBrake.setForeground(Color.RED);
-		emergencyBrake.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		emergencyBrake.setBounds(6, 224, 155, 30);
-		frame.getContentPane().add(emergencyBrake);
 		
 		serviceBrakeStatus = new JTextField();
+		serviceBrakeStatus.setEditable(false);
 		serviceBrakeStatus.setText("Disengaged");
 		serviceBrakeStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
 		serviceBrakeStatus.setHorizontalAlignment(SwingConstants.CENTER);
@@ -295,6 +270,7 @@ public class testGUI {
 		serviceBrakeStatus.setColumns(10);
 		
 		emergencyBrakeStatus = new JTextField();
+		emergencyBrakeStatus.setEditable(false);
 		emergencyBrakeStatus.setText("Disengaged");
 		emergencyBrakeStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		emergencyBrakeStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -302,7 +278,40 @@ public class testGUI {
 		frame.getContentPane().add(emergencyBrakeStatus);
 		emergencyBrakeStatus.setColumns(10);
 		
+		JToggleButton emergencyBrakeControl = new JToggleButton("Emergency Brake");
+		emergencyBrakeControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(emergencyBrakeStatus.getText().contentEquals("Disengaged")){
+					emergencyBrakeStatus.setText("Engaged");
+				}
+				else{
+					emergencyBrakeStatus.setText("Disengaged");
+				}
+			}
+		});
+		emergencyBrakeControl.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		emergencyBrakeControl.setForeground(Color.RED);
+		emergencyBrakeControl.setBounds(10, 224, 146, 30);
+		frame.getContentPane().add(emergencyBrakeControl);
+		
+		JToggleButton serviceBrakeControl = new JToggleButton("Service Brake");
+		serviceBrakeControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(serviceBrakeStatus.getText().contentEquals("Disengaged")){
+
+					serviceBrakeStatus.setText("Engaged");
+				}
+				else{
+					serviceBrakeStatus.setText("Disengaged");
+				}
+			}
+		});
+		serviceBrakeControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		serviceBrakeControl.setBounds(10, 183, 146, 30);
+		frame.getContentPane().add(serviceBrakeControl);
+		
 		temperature = new JTextField();
+		temperature.setEditable(false);
 		temperature.setHorizontalAlignment(SwingConstants.CENTER);
 		temperature.setText("72");
 		temperature.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -323,6 +332,7 @@ public class testGUI {
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		elevation = new JTextField();
+		elevation.setEditable(false);
 		elevation.setText("255");
 		elevation.setFont(new Font("Tahoma", Font.BOLD, 18));
 		elevation.setHorizontalAlignment(SwingConstants.CENTER);
@@ -348,6 +358,7 @@ public class testGUI {
 		frame.getContentPane().add(lblTrackCircuitInfo);
 		
 		trackCircuitInfo = new JTextField();
+		trackCircuitInfo.setEditable(false);
 		trackCircuitInfo.setText("Unoccupied");
 		trackCircuitInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		trackCircuitInfo.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -356,21 +367,54 @@ public class testGUI {
 		trackCircuitInfo.setColumns(10);
 		
 		JButton engineFailureButton = new JButton("Engine Failure");
+		engineFailureButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(parent, "Danger!! Engine Failure!!");	
+			}
+		});
 		engineFailureButton.setForeground(Color.RED);
 		engineFailureButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		engineFailureButton.setBounds(336, 413, 160, 30);
 		frame.getContentPane().add(engineFailureButton);
 		
 		JButton brakeFailureButton = new JButton("Brake Failure");
+		brakeFailureButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
+			}
+		});
 		brakeFailureButton.setForeground(Color.RED);
 		brakeFailureButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		brakeFailureButton.setBounds(336, 466, 160, 30);
 		frame.getContentPane().add(brakeFailureButton);
 		
 		JButton signalPickupFailure = new JButton("Signal Pickup Failure");
+		signalPickupFailure.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(parent, "Danger!! Signal Pickup Failure!!");
+			}
+		});
 		signalPickupFailure.setForeground(Color.RED);
 		signalPickupFailure.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		signalPickupFailure.setBounds(336, 519, 160, 30);
 		frame.getContentPane().add(signalPickupFailure);
+		
+		trainID = new JTextField();
+		trainID.setHorizontalAlignment(SwingConstants.CENTER);
+		trainID.setFont(new Font("Tahoma", Font.BOLD, 20));
+		trainID.setText("12345");
+		trainID.setBounds(336, 89, 115, 40);
+		frame.getContentPane().add(trainID);
+		trainID.setColumns(10);
+		
+		JLabel lblTrainId = new JLabel("TRAIN ID:");
+		lblTrainId.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTrainId.setBounds(216, 102, 90, 20);
+		frame.getContentPane().add(lblTrainId);
+		
+
 	}
 }
