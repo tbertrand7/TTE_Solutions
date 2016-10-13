@@ -80,11 +80,31 @@ public class testGUI {
 		
 		
 		JToggleButton leftDoorControl = new JToggleButton("Left Doors");
+		leftDoorControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(leftDoorStatus.getText().contentEquals("Open")){
+					leftDoorStatus.setText("Closed");
+				}
+				else{
+					leftDoorStatus.setText("Open");
+				}				
+			}
+		});
 		leftDoorControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		leftDoorControl.setBounds(6, 509, 150, 40);
 		frame.getContentPane().add(leftDoorControl);
 		
 		JToggleButton rightDoorsControl = new JToggleButton("Right Doors");
+		rightDoorsControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(rightDoorStatus.getText().contentEquals("Open")){
+					rightDoorStatus.setText("Closed");
+				}
+				else{
+					rightDoorStatus.setText("Open");
+				}				
+			}
+		});
 		rightDoorsControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		rightDoorsControl.setBounds(6, 458, 150, 40);
 		frame.getContentPane().add(rightDoorsControl);
@@ -106,6 +126,16 @@ public class testGUI {
 		rightDoorStatus.setColumns(10);
 		
 		JToggleButton lightsControl = new JToggleButton("Lights");
+		lightsControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(lightsStatus.getText().contentEquals("Off")){
+					lightsStatus.setText("On");
+				}
+				else{
+					lightsStatus.setText("Off");
+				}				
+			}
+		});
 		lightsControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lightsControl.setBounds(6, 407, 150, 40);
 		frame.getContentPane().add(lightsControl);
@@ -126,10 +156,10 @@ public class testGUI {
 		frame.getContentPane().add(powerInput);
 		powerInput.setColumns(10);
 		
-		JButton inputPower = new JButton("Input Power");
-		inputPower.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		inputPower.setBounds(6, 131, 150, 23);
-		frame.getContentPane().add(inputPower);
+		JButton powerInput_button = new JButton("Input Power");
+		powerInput_button.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		powerInput_button.setBounds(6, 131, 150, 23);
+		frame.getContentPane().add(powerInput_button);
 		
 		JLabel powerLabel = new JLabel("W");
 		powerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -222,27 +252,33 @@ public class testGUI {
 		lblMph_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMph_2.setBounds(688, 258, 35, 20);
 		frame.getContentPane().add(lblMph_2);
-		
-		/*
-		 *click action for "Service Brake" button 
-		 */
+
 		JButton serviceBrake = new JButton("Service Brake");
 		serviceBrake.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				serviceBrakeStatus.setText("Engaged");
+				if(serviceBrakeStatus.getText().contentEquals("Engaged")){
+					serviceBrakeStatus.setText("Disengaged");
+				}
+				else{
+					serviceBrakeStatus.setText("Engaged");
+				}
 			}
 		});
+
 		serviceBrake.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		serviceBrake.setBounds(6, 183, 155, 30);
 		frame.getContentPane().add(serviceBrake);
 		
-		/*
-		 * click action for "Emergency Brake"
-		 */
+
 		JButton emergencyBrake = new JButton("Emergency Brake");
 		emergencyBrake.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if(emergencyBrakeStatus.getText().contentEquals("Engaged")){
+					emergencyBrakeStatus.setText("Disengaged");
+				}
+				else{
+					emergencyBrakeStatus.setText("Engaged");
+				}				
 			}
 		});
 		emergencyBrake.setForeground(Color.RED);
