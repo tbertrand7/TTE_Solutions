@@ -833,20 +833,20 @@ public class trackModelUI {
 		adminControls.setLayout(null);
 		
 		JLabel lblUserName = new JLabel("User Name:");
-		lblUserName.setBounds(10, 70, 66, 14);
+		lblUserName.setBounds(10, 70, 90, 28);
 		adminControls.add(lblUserName);
 
 		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(10, 96, 80, 14);
+		lblPassword.setBounds(10, 117, 90, 29);
 		adminControls.add(lblPassword);
 
 		textField = new JTextField();
-		textField.setBounds(84, 67, 140, 20);
+		textField.setBounds(110, 66, 140, 36);
 		adminControls.add(textField);
 		textField.setColumns(10);
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(84, 93, 140, 20);
+		passwordField.setBounds(110, 113, 140, 36);
 		adminControls.add(passwordField);
 
 		JButton resetDB = new JButton("Reset Database");
