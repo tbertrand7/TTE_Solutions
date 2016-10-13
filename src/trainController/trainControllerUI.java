@@ -160,8 +160,7 @@ public class trainControllerUI extends JFrame {
 				tglbtnRightDoors.setSelected(false);
 				txtRightDoors.setText("Closed");
 			}
-		} else
-			txtMessages.setText(txtMessages.getText() + "Cannot open doors. (Current speed = " + current + " m/s)\n");
+		}
 	}
 	
 	public void setLeftDoors(boolean open) {
@@ -173,8 +172,13 @@ public class trainControllerUI extends JFrame {
 				tglbtnLeftDoors.setSelected(false);
 				txtLeftDoors.setText("Closed");
 			}
-		} else
-			txtMessages.setText(txtMessages.getText() + "Cannot open doors. (Current speed = " + current + " m/s)\n");
+		}
+	}
+	
+	public void setTemp(int temp) {
+		if (tglbtnAutomatic.isSelected()) {
+			TempCurr.setText(temp + " \u2109");
+		}
 	}
 
 	/**
@@ -376,7 +380,7 @@ public class trainControllerUI extends JFrame {
 		TempCurr.setColumns(10);
 		TempCurr.setBounds(10, 266, 148, 28);
 		contentPane.add(TempCurr);
-		TempCurr.setText("68 \u2109"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
+		TempCurr.setText("68 \u2109"); //initialization
 		
 		JLabel lblCurrentTemp = new JLabel("Current Temp");
 		lblCurrentTemp.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -398,6 +402,11 @@ public class trainControllerUI extends JFrame {
 		contentPane.add(lblRequestTemp);
 		
 		JButton btnTempReq = new JButton("Go");
+		btnTempReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TempCurr.setText(Integer.parseInt(TempReq.getText()) + " \u2109");
+			}
+		});
 		btnTempReq.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		btnTempReq.setBounds(106, 339, 66, 29);
 		contentPane.add(btnTempReq);

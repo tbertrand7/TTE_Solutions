@@ -81,6 +81,12 @@ public class TrainControllerInstances {
 		}
 	}
 	
+	public synchronized void setTemp(int id, int temp) {
+		if (UIList.containsKey(id)) {
+			UIList.get(id).setTemp(temp);
+		}
+	}
+	
 	public synchronized Set<Integer> getKeySet() {
 		return UIList.keySet();
 	}
