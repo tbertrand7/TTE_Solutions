@@ -108,9 +108,9 @@ public class OfficeUI extends JFrame {
 		trackDisplayPanel.setLayout(null);
 		
 		TrackButton toggleButtonG1 = new TrackButton("");
-		toggleButtonG1.setSelected(true);
+		//toggleButtonG1.setSelected(true);
         selectedBlockBtn = toggleButtonG1;
-		toggleButtonG1.setBackground(Color.LIGHT_GRAY);
+		toggleButtonG1.setBackground(Color.BLUE);
 		toggleButtonG1.setBounds(354, 24, 15, 15);
 		trackDisplayPanel.add(toggleButtonG1);
 		greenLine[0] = toggleButtonG1;
@@ -1482,6 +1482,49 @@ public class OfficeUI extends JFrame {
 		toggleButtonR77.setBounds(692, 196, 15, 15);
 		trackDisplayPanel.add(toggleButtonR77);
         redLine[76] = toggleButtonR77;
+		
+		JPanel legendPanel = new JPanel();
+		legendPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		legendPanel.setBackground(Color.WHITE);
+		legendPanel.setBounds(6, 44, 109, 109);
+		trackDisplayPanel.add(legendPanel);
+		legendPanel.setLayout(null);
+		
+		JToggleButton toggleButton = new JToggleButton("");
+		toggleButton.setBounds(8, 28, 20, 20);
+		legendPanel.add(toggleButton);
+		
+		JLabel lblOpen = new JLabel("Open");
+		lblOpen.setBounds(35, 26, 38, 21);
+		lblOpen.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		legendPanel.add(lblOpen);
+		
+		JToggleButton tglbtnNewToggleButton = new JToggleButton("");
+		tglbtnNewToggleButton.setForeground(Color.BLUE);
+		tglbtnNewToggleButton.setBackground(Color.BLUE);
+		tglbtnNewToggleButton.setBounds(8, 55, 20, 20);
+		legendPanel.add(tglbtnNewToggleButton);
+		
+		JLabel lblOccupied = new JLabel("Occupied");
+		lblOccupied.setBounds(35, 53, 67, 21);
+		lblOccupied.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		legendPanel.add(lblOccupied);
+		
+		JToggleButton toggleButton_1 = new JToggleButton("");
+		toggleButton_1.setBackground(Color.BLACK);
+		toggleButton_1.setBounds(8, 82, 20, 20);
+		legendPanel.add(toggleButton_1);
+		
+		JLabel lblClosed = new JLabel("Closed");
+		lblClosed.setBounds(35, 80, 50, 21);
+		lblClosed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		legendPanel.add(lblClosed);
+		
+		JLabel lblLegend = new JLabel("Legend");
+		lblLegend.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLegend.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblLegend.setBounds(8, 5, 94, 20);
+		legendPanel.add(lblLegend);
 		
 		JLabel lblTrackPicture = new JLabel("");
 		lblTrackPicture.setHorizontalAlignment(SwingConstants.CENTER);
