@@ -5,7 +5,7 @@ public class TrainModel {
 	/*Static variables for Train specific stats*/
 	static int maxPassengers = 222; 	
 		static int maxCrew = 20; //don't know where to find this, "20" is dummy data for now
-	static double trainMass = 40900; //in kg         //56.7T or 40.9T (metric)
+	static double trainMass = 40900.0; //in kg         //56.7T or 40.9T (metric)
 	static double maxPower = 397629.8; //in J/s (N*m/s)
 	static double maxAcc = 0.5; //in m/s^2
 	
@@ -70,7 +70,7 @@ public class TrainModel {
 			return false;
 		}
 		else{ //velocity calculations here or in getVelocity() method???
-			velocity = calculateVelocity(power);
+			velocity = calculateVelocity(powerSetPoint);
 			return true;
 		}
 	}
@@ -84,8 +84,13 @@ public class TrainModel {
 				 */
 				private double calculateVelocity (double power){
 					
-					/*REVISIT!!!!!     physics equations for velocity-power calculations*/
-					velocity = power / (trainMass * maxAcc); 
+					/*REVISIT!!!!!     physics equations for velocity-power calculations
+					 * 
+					velocity = power / (trainMass * maxAcc); ??????????
+					
+					*/
+					
+					velocity = .555 * power;
 					
 					return velocity;
 				}
@@ -121,6 +126,15 @@ public class TrainModel {
 	
 	
 	/**
+	 * Gets the number of crew members on the train
+	 * @return crew count
+	 */
+	int getCrewCount(){
+		return crewCount;
+	}
+	
+	
+	/**
 	 * Changes the status of the lights (off -> on OR on -> off)
 	 */
 	void changeLightsStatus(){
@@ -132,6 +146,7 @@ public class TrainModel {
 			lightsOn = true;
 		}	
 	}
+	
 	
 	/**
 	 * Gets the status of the lights
@@ -147,13 +162,14 @@ public class TrainModel {
 	 */
 	void changeRightDoors(){
 		
-		if(rightDoorsOpen == true){
+		if(rightDoorsOpen){
 			rightDoorsOpen = false;
 		}
 		else{
 			rightDoorsOpen = true;
 		}
 	}
+	
 	
 	/**
 	 * Gets the status of the right doors
@@ -169,13 +185,14 @@ public class TrainModel {
 	 */
 	void changeLeftDoors(){
 		
-		if(leftDoorsOpen == true){
+		if(leftDoorsOpen){
 			leftDoorsOpen = false;
 		}
 		else{
 			leftDoorsOpen = true;
 		}
 	}
+	
 	
 	/**
 	 * Gets the status of the left doors
@@ -185,10 +202,48 @@ public class TrainModel {
 		return leftDoorsOpen;
 	}
 	
-	//service brake
+	
+	/**
+	 * Changes status of Service Brakes (on -> off OR off -> on)
+	 */
+	void serviceBrake(){
+		if(serviceBrakeOn){
+			serviceBrakeOn = false;
+		}
+		else{
+			serviceBrakeOn = true;
+		}
+	}
 	
 	
-	//emergency brake
+	/**
+	 * Get the status of the Service Brakes
+	 * @return true if service brakes are on
+	 */
+	boolean getServiceBrakeStatus(){
+		return serviceBrakeOn;
+	}
+	
+	
+	/**
+	 * Changes status of Emergency Brakes (on -> off OR off -> on)
+	 */
+	void emergencyBrake(){
+		if(emergencyBrakeOn){
+			emergencyBrakeOn = false;
+		}
+		else{
+			emergencyBrakeOn = true;
+		}
+	}
+	
+	/**
+	 * Get the status of the Emergency Brakes
+	 * @return true if the emergency brakse are on
+	 */
+	boolean getEmergencyBrakeStatus(){
+		return emergencyBrakeOn;
+	}
 	
 	
 	/**
