@@ -24,7 +24,7 @@ public class OfficeUI extends JFrame {
 	private JSlider simulationSpeed;
 	private CTCOffice ctcOffice;
 	private JTextField txtFieldSpeed;
-	private JButton btnSetSpeed, btnSetDestination;
+	private JButton btnSetSpeed, btnSetDestination, btnToggleSwitch;
 	private TrackButton[] greenLine = new TrackButton[152];
 	private TrackButton[] redLine = new TrackButton[77];
     private TrackButton selectedBlockBtn;
@@ -72,7 +72,7 @@ public class OfficeUI extends JFrame {
 		setBackground(new Color(240, 240, 240));
 		setTitle("CTC Office Control Panel");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1172, 862);
+		setBounds(0, 0, 1172, 862);
 
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -1856,7 +1856,7 @@ public class OfficeUI extends JFrame {
 		lblSwPosInfo.setBounds(313, 106, 90, 15);
 		statusPanel.add(lblSwPosInfo);
 		
-		JButton btnToggleSwitch = new JButton("Toggle Switch Position");
+		btnToggleSwitch = new JButton("Toggle Switch Position");
 		btnToggleSwitch.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnToggleSwitch.setBounds(216, 182, 187, 30);
 		statusPanel.add(btnToggleSwitch);
@@ -2103,6 +2103,7 @@ public class OfficeUI extends JFrame {
 				lblDestInfo.setText("Block 15");
 				lblAuthInfo.setText("14 Blocks");
 				lblStationInfo.setText("N/A");
+				btnToggleSwitch.setEnabled(false);
 				setHasTrain(true);
 			}
 			else
@@ -2113,6 +2114,7 @@ public class OfficeUI extends JFrame {
 				lblAuthInfo.setText("N/A");
 				lblStatusInfo.setText("Open");
 				lblStationInfo.setText("Pioneer");
+				btnToggleSwitch.setEnabled(false);
 				setHasTrain(false);
 			}
         }
