@@ -53,6 +53,8 @@ public class TestSpeed extends Thread {
 		while (proceed) {
 			long timestart = System.currentTimeMillis();
 			
+			double oldv = v;
+			
 			parent.checkBrakes();
 			if (sBraking) { //service brake engaged
 				v = v - sBrakeRate*T;
@@ -73,7 +75,10 @@ public class TestSpeed extends Thread {
 			}
 			
 			if (v < 0) v = 0;
-			parent.setCurrentSpeed(v);
+			
+			//The below statement is for synchronization if the test panel wants to manually set the current speed
+			if (parent.getCurrentSpeed() != oldv) v = parent.getCurrentSpeed();
+			else parent.setCurrentSpeed(v);
 			
 			//System.out.println("---SPEED---");
 			//System.out.println("New v = "+v);

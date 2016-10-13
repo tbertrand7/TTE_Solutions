@@ -20,23 +20,32 @@ public class TrainControllerInstances {
 	}
 	
 	public synchronized double getPower(int id) {
-		return powerList.get(id).getPower();
+		if (powerList.containsKey(id))
+			return powerList.get(id).getPower();
+		else
+			return -1;
 	}
 	
 	public synchronized void setSpeedLimit(int id, double limit) {
-		UIList.get(id).setSpeedLimit(limit);
+		if (UIList.containsKey(id))
+			UIList.get(id).setSpeedLimit(limit);
 	}
 	
 	public synchronized void setSpeedCommand(int id, double command) {
-		UIList.get(id).setSpeedCommand(command);
+		if (UIList.containsKey(id))
+			UIList.get(id).setSpeedCommand(command);
 	}
 	
 	public synchronized void setSpeedCurrent(int id, double speed) {
-		UIList.get(id).setSpeedCurrent(speed);
+		if (UIList.containsKey(id))
+			UIList.get(id).setSpeedCurrent(speed);
 	}
 	
 	public synchronized double getSpeedCurrent(int id) {
-		return UIList.get(id).getSpeedCurrent();
+		if (UIList.containsKey(id))
+			return UIList.get(id).getSpeedCurrent();
+		else
+			return -1;
 	}
 	
 	public synchronized boolean getSBrakeEngaged(int id) {
@@ -51,6 +60,25 @@ public class TrainControllerInstances {
 			return UIList.get(id).eBrakeEngaged();
 		else
 			return false;
+	}
+	
+	public synchronized void setInTunnel(int id, boolean dark) {
+		if (UIList.containsKey(id)) {
+			if (dark) UIList.get(id).inTunnel();
+			else UIList.get(id).leftTunnel();
+		}
+	}
+	
+	public synchronized void setRightDoors(int id, boolean open) {
+		if (UIList.containsKey(id)) {
+			UIList.get(id).setRightDoors(open);
+		}
+	}
+	
+	public synchronized void setLeftDoors(int id, boolean open) {
+		if (UIList.containsKey(id)) {
+			UIList.get(id).setLeftDoors(open);
+		}
 	}
 	
 	public synchronized Set<Integer> getKeySet() {
