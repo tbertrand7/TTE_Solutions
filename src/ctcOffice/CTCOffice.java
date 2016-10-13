@@ -1,11 +1,16 @@
 package ctcOffice;
 
+import trackModel.*;
+import waysideController.*;
+
 public class CTCOffice
 {
+	//private DBInteraction dataBase = new DBInteraction();
+	
 	public enum Mode {MAUNAL, AUTOMATIC};
 	
 	private int simulationSpeed;
-	private Mode mode = Mode.MAUNAL; //1=manual 2=auto	
+	private Mode mode = Mode.MAUNAL; //1=manual 2=auto
 	
 	public void setMode(Mode newMode)
 	{
