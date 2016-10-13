@@ -59,6 +59,11 @@ public class trainControllerUI extends JFrame {
 	public JComboBox<Integer> TrainSelect; //selects which train to get information from
 	private JTextField PowerCurr;
 	private JTextField txtLeftDoors;
+	
+	private final int instanceID;
+	private final TrainControllerInstances parent;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -67,7 +72,7 @@ public class trainControllerUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					trainControllerUI frame = new trainControllerUI();
+					trainControllerUI frame = new trainControllerUI(0, new TrainControllerInstances());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -75,11 +80,25 @@ public class trainControllerUI extends JFrame {
 			}
 		});
 	}
+	
+	/**
+	 * Override the Window class dispose() function to remove
+	 * this instance from the list of instances.
+	 */
+	@Override
+	public void dispose() {
+	    parent.removeUI(instanceID);
+	    super.dispose();
+	}
 
 	/**
 	 * Create the frame.
 	 */
-	public trainControllerUI() {
+	public trainControllerUI(int id, TrainControllerInstances tci) {
+		instanceID = id;
+		parent = tci;
+		
+		setResizable(false);
 		setTitle("Train Controller");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(trainControllerUI.class.getResource("/TrainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -115,7 +134,7 @@ public class trainControllerUI extends JFrame {
 		SpeedLimit.setBounds(589, 129, 134, 28);
 		contentPane.add(SpeedLimit);
 		SpeedLimit.setColumns(10);
-		SpeedLimit.setText("40 mph"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
+		SpeedLimit.setText("40 MPH"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
 		
 		JLabel lblSpeedLimit = new JLabel("SPEED LIMIT");
 		lblSpeedLimit.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -130,7 +149,7 @@ public class trainControllerUI extends JFrame {
 		SpeedCurr.setBounds(589, 197, 134, 28);
 		contentPane.add(SpeedCurr);
 		SpeedCurr.setColumns(10);
-		SpeedCurr.setText("35 mph"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
+		SpeedCurr.setText("35 MPH"); //FOR SHOWING OFF PURPOSES ONLY, DELETE LATER
 		
 		JLabel lblCurrentSpeed = new JLabel("Current Speed");
 		lblCurrentSpeed.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -432,5 +451,7 @@ public class trainControllerUI extends JFrame {
 		btnPassengerEmergencyBrake.setBounds(10, 420, 267, 29);
 		contentPane.add(btnPassengerEmergencyBrake);
 		//**************************************************
+		
+		this.setVisible(true);
 	}
 }

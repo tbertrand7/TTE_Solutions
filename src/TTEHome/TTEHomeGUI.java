@@ -8,10 +8,11 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import ctcOffice.OfficeUI;
+import ctcOffice.*;
 import trackModel.trackModelUI;
 import trainController.trainControllerUI;
-import trainModel.TrainModel;
+import trainController.TrainControllerInstances;//******************
+import trainModel.testGUI;
 import waysideController.TC_UI_main;
 import waysideController.TC_UI_startup;
 
@@ -71,7 +72,7 @@ public class TTEHomeGUI {
 		JButton btnNewButton = new JButton("The Office");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				OfficeUI.main(null);
+				OfficeLoginUI.main(null);
 			}
 		});
 		btnNewButton.setBounds(10, 11, 135, 109);
@@ -94,7 +95,7 @@ public class TTEHomeGUI {
 		JButton btnTrainModel = new JButton("Train Model");
 		btnTrainModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TrainModel.main(null);
+				testGUI.main(null);
 			}
 		});
 		btnTrainModel.setBounds(289, 141, 135, 109);
@@ -111,8 +112,12 @@ public class TTEHomeGUI {
 		
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {
+			TrainControllerInstances tci = new TrainControllerInstances();
+			
 			public void actionPerformed(ActionEvent e) {
-				trainControllerUI.main(null);
+				//trainControllerUI.main(null);
+				
+				tci.newUI();
 			}
 		});
 		btnTrainController.setBounds(289, 11, 135, 109);

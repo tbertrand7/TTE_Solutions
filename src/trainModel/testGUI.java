@@ -60,34 +60,51 @@ public class testGUI {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
-		frame.setBounds(100, 100, 599, 598);
+		frame.setBounds(100, 100, 749, 632);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblTrainModel = new JLabel("Train Model");
-		lblTrainModel.setFont(new Font("Dialog", Font.PLAIN, 20));
+		lblTrainModel.setFont(new Font("Tahoma", Font.BOLD, 26));
 		lblTrainModel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTrainModel.setBounds(209, 31, 124, 40);
+		lblTrainModel.setBounds(209, 31, 280, 40);
 		frame.getContentPane().add(lblTrainModel);
 		
-		JRadioButton testModeRadioButton = new JRadioButton("Test");
+		JRadioButton testModeRadioButton = new JRadioButton("Test Mode");
+		testModeRadioButton.setSelected(true);
 		testModeRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		testModeRadioButton.setBackground(Color.LIGHT_GRAY);
-		testModeRadioButton.setBounds(6, 7, 109, 23);
+		testModeRadioButton.setBounds(6, 43, 109, 23);
 		frame.getContentPane().add(testModeRadioButton);
 		
-		JRadioButton runModeRadioButton = new JRadioButton("Run");
-		runModeRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		runModeRadioButton.setBackground(Color.LIGHT_GRAY);
-		runModeRadioButton.setBounds(6, 31, 109, 23);
-		frame.getContentPane().add(runModeRadioButton);
+		
 		
 		JToggleButton leftDoorControl = new JToggleButton("Left Doors");
+		leftDoorControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(leftDoorStatus.getText().contentEquals("Open")){
+					leftDoorStatus.setText("Closed");
+				}
+				else{
+					leftDoorStatus.setText("Open");
+				}				
+			}
+		});
 		leftDoorControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		leftDoorControl.setBounds(6, 509, 150, 40);
 		frame.getContentPane().add(leftDoorControl);
 		
 		JToggleButton rightDoorsControl = new JToggleButton("Right Doors");
+		rightDoorsControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(rightDoorStatus.getText().contentEquals("Open")){
+					rightDoorStatus.setText("Closed");
+				}
+				else{
+					rightDoorStatus.setText("Open");
+				}				
+			}
+		});
 		rightDoorsControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		rightDoorsControl.setBounds(6, 458, 150, 40);
 		frame.getContentPane().add(rightDoorsControl);
@@ -109,6 +126,16 @@ public class testGUI {
 		rightDoorStatus.setColumns(10);
 		
 		JToggleButton lightsControl = new JToggleButton("Lights");
+		lightsControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(lightsStatus.getText().contentEquals("Off")){
+					lightsStatus.setText("On");
+				}
+				else{
+					lightsStatus.setText("Off");
+				}				
+			}
+		});
 		lightsControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lightsControl.setBounds(6, 407, 150, 40);
 		frame.getContentPane().add(lightsControl);
@@ -129,10 +156,10 @@ public class testGUI {
 		frame.getContentPane().add(powerInput);
 		powerInput.setColumns(10);
 		
-		JButton inputPower = new JButton("Input Power");
-		inputPower.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		inputPower.setBounds(6, 131, 150, 23);
-		frame.getContentPane().add(inputPower);
+		JButton powerInput_button = new JButton("Input Power");
+		powerInput_button.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		powerInput_button.setBounds(6, 131, 150, 23);
+		frame.getContentPane().add(powerInput_button);
 		
 		JLabel powerLabel = new JLabel("W");
 		powerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -172,80 +199,86 @@ public class testGUI {
 		currentSpeed.setHorizontalAlignment(SwingConstants.CENTER);
 		currentSpeed.setText("55");
 		currentSpeed.setFont(new Font("Tahoma", Font.BOLD, 18));
-		currentSpeed.setBounds(430, 80, 66, 40);
+		currentSpeed.setBounds(603, 89, 66, 40);
 		frame.getContentPane().add(currentSpeed);
 		currentSpeed.setColumns(10);
 		
 		JLabel lblCurrentSpeed = new JLabel("Current Speed");
 		lblCurrentSpeed.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCurrentSpeed.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblCurrentSpeed.setBounds(404, 57, 110, 20);
+		lblCurrentSpeed.setBounds(577, 66, 110, 20);
 		frame.getContentPane().add(lblCurrentSpeed);
 		
 		JLabel lblMph = new JLabel("mph");
 		lblMph.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMph.setBounds(515, 100, 35, 20);
+		lblMph.setBounds(688, 109, 35, 20);
 		frame.getContentPane().add(lblMph);
 		
 		speedLimit = new JTextField();
 		speedLimit.setText("60");
 		speedLimit.setHorizontalAlignment(SwingConstants.CENTER);
 		speedLimit.setFont(new Font("Tahoma", Font.BOLD, 18));
-		speedLimit.setBounds(430, 156, 66, 40);
+		speedLimit.setBounds(603, 165, 66, 40);
 		frame.getContentPane().add(speedLimit);
 		speedLimit.setColumns(10);
 		
 		JLabel lblMph_1 = new JLabel("mph");
 		lblMph_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMph_1.setBounds(515, 167, 35, 20);
+		lblMph_1.setBounds(688, 176, 35, 20);
 		frame.getContentPane().add(lblMph_1);
 		
 		JLabel lblSpeedLimit = new JLabel("Speed Limit");
 		lblSpeedLimit.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSpeedLimit.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblSpeedLimit.setBounds(404, 132, 110, 20);
+		lblSpeedLimit.setBounds(577, 141, 110, 20);
 		frame.getContentPane().add(lblSpeedLimit);
 		
 		JLabel lblNewLabel_1 = new JLabel("Setpoint Speed");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1.setBounds(404, 207, 110, 20);
+		lblNewLabel_1.setBounds(577, 216, 110, 20);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		setpointSpeed = new JTextField();
 		setpointSpeed.setText("55");
 		setpointSpeed.setHorizontalAlignment(SwingConstants.CENTER);
 		setpointSpeed.setFont(new Font("Tahoma", Font.BOLD, 18));
-		setpointSpeed.setBounds(430, 238, 66, 40);
+		setpointSpeed.setBounds(603, 247, 66, 40);
 		frame.getContentPane().add(setpointSpeed);
 		setpointSpeed.setColumns(10);
 		
 		JLabel lblMph_2 = new JLabel("mph");
 		lblMph_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblMph_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMph_2.setBounds(515, 249, 35, 20);
+		lblMph_2.setBounds(688, 258, 35, 20);
 		frame.getContentPane().add(lblMph_2);
-		
-		/*
-		 *click action for "Service Brake" button 
-		 */
+
 		JButton serviceBrake = new JButton("Service Brake");
 		serviceBrake.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				serviceBrakeStatus.setText("Engaged");
+				if(serviceBrakeStatus.getText().contentEquals("Engaged")){
+					serviceBrakeStatus.setText("Disengaged");
+				}
+				else{
+					serviceBrakeStatus.setText("Engaged");
+				}
 			}
 		});
+
 		serviceBrake.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		serviceBrake.setBounds(6, 183, 155, 30);
 		frame.getContentPane().add(serviceBrake);
 		
-		/*
-		 * click action for "Emergency Brake"
-		 */
+
 		JButton emergencyBrake = new JButton("Emergency Brake");
 		emergencyBrake.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if(emergencyBrakeStatus.getText().contentEquals("Engaged")){
+					emergencyBrakeStatus.setText("Disengaged");
+				}
+				else{
+					emergencyBrakeStatus.setText("Engaged");
+				}				
 			}
 		});
 		emergencyBrake.setForeground(Color.RED);
@@ -255,17 +288,17 @@ public class testGUI {
 		
 		serviceBrakeStatus = new JTextField();
 		serviceBrakeStatus.setText("Disengaged");
-		serviceBrakeStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		serviceBrakeStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
 		serviceBrakeStatus.setHorizontalAlignment(SwingConstants.CENTER);
-		serviceBrakeStatus.setBounds(170, 183, 100, 30);
+		serviceBrakeStatus.setBounds(170, 183, 115, 30);
 		frame.getContentPane().add(serviceBrakeStatus);
 		serviceBrakeStatus.setColumns(10);
 		
 		emergencyBrakeStatus = new JTextField();
 		emergencyBrakeStatus.setText("Disengaged");
 		emergencyBrakeStatus.setHorizontalAlignment(SwingConstants.CENTER);
-		emergencyBrakeStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		emergencyBrakeStatus.setBounds(170, 224, 100, 30);
+		emergencyBrakeStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
+		emergencyBrakeStatus.setBounds(170, 224, 115, 30);
 		frame.getContentPane().add(emergencyBrakeStatus);
 		emergencyBrakeStatus.setColumns(10);
 		
@@ -273,52 +306,71 @@ public class testGUI {
 		temperature.setHorizontalAlignment(SwingConstants.CENTER);
 		temperature.setText("72");
 		temperature.setFont(new Font("Tahoma", Font.BOLD, 18));
-		temperature.setBounds(430, 324, 66, 40);
+		temperature.setBounds(603, 333, 66, 40);
 		frame.getContentPane().add(temperature);
 		temperature.setColumns(10);
 		
 		JLabel lblTemperature = new JLabel("Temperature");
 		lblTemperature.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTemperature.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTemperature.setBounds(404, 296, 110, 20);
+		lblTemperature.setBounds(577, 305, 110, 20);
 		frame.getContentPane().add(lblTemperature);
 		
-		JLabel lblNewLabel_2 = new JLabel("* F");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_2.setBounds(515, 335, 35, 20);
+		JLabel lblNewLabel_2 = new JLabel("\u2109");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_2.setFont(new Font("Arial Unicode MS", Font.PLAIN, 17));
+		lblNewLabel_2.setBounds(688, 344, 35, 20);
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		elevation = new JTextField();
 		elevation.setText("255");
 		elevation.setFont(new Font("Tahoma", Font.BOLD, 18));
 		elevation.setHorizontalAlignment(SwingConstants.CENTER);
-		elevation.setBounds(430, 410, 66, 40);
+		elevation.setBounds(603, 419, 66, 40);
 		frame.getContentPane().add(elevation);
 		elevation.setColumns(10);
 		
 		JLabel lblElevation = new JLabel("Elevation");
 		lblElevation.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblElevation.setHorizontalAlignment(SwingConstants.CENTER);
-		lblElevation.setBounds(404, 376, 110, 20);
+		lblElevation.setBounds(577, 385, 110, 20);
 		frame.getContentPane().add(lblElevation);
 		
 		JLabel lblFt = new JLabel("ft.");
 		lblFt.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblFt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFt.setBounds(506, 427, 35, 20);
+		lblFt.setBounds(679, 436, 35, 20);
 		frame.getContentPane().add(lblFt);
 		
 		JLabel lblTrackCircuitInfo = new JLabel("Track Circuit Info");
 		lblTrackCircuitInfo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTrackCircuitInfo.setBounds(404, 469, 130, 20);
+		lblTrackCircuitInfo.setBounds(577, 478, 130, 20);
 		frame.getContentPane().add(lblTrackCircuitInfo);
 		
 		trackCircuitInfo = new JTextField();
 		trackCircuitInfo.setText("Unoccupied");
 		trackCircuitInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		trackCircuitInfo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		trackCircuitInfo.setBounds(414, 500, 100, 40);
+		trackCircuitInfo.setBounds(587, 509, 100, 40);
 		frame.getContentPane().add(trackCircuitInfo);
 		trackCircuitInfo.setColumns(10);
+		
+		JButton engineFailureButton = new JButton("Engine Failure");
+		engineFailureButton.setForeground(Color.RED);
+		engineFailureButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		engineFailureButton.setBounds(336, 413, 160, 30);
+		frame.getContentPane().add(engineFailureButton);
+		
+		JButton brakeFailureButton = new JButton("Brake Failure");
+		brakeFailureButton.setForeground(Color.RED);
+		brakeFailureButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		brakeFailureButton.setBounds(336, 466, 160, 30);
+		frame.getContentPane().add(brakeFailureButton);
+		
+		JButton signalPickupFailure = new JButton("Signal Pickup Failure");
+		signalPickupFailure.setForeground(Color.RED);
+		signalPickupFailure.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		signalPickupFailure.setBounds(336, 519, 160, 30);
+		frame.getContentPane().add(signalPickupFailure);
 	}
 }
