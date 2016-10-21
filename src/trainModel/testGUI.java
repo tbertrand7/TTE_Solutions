@@ -16,6 +16,9 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.JTextArea;
 
 public class testGUI {
 
@@ -24,22 +27,35 @@ public class testGUI {
 	private JTextField rightDoorStatus;
 	private JTextField lightsStatus;
 	private JTextField powerInput;
-	private JTextField passengerCount;
-	private JTextField crewCount;
 	private JTextField currentSpeed;
-	private JTextField speedLimit;
-	private JTextField setpointSpeed;
 	private JTextField serviceBrakeStatus;
 	private JTextField emergencyBrakeStatus;
-	private JTextField temperature;
-	private JTextField elevation;
-	private JTextField trackCircuitInfo;
 	final JFrame parent = new JFrame();
 	private JTextField trainID;
 	
 	private TrainModel train = new TrainModel(); 
 	
 	DecimalFormat dc = new DecimalFormat("#0.00");
+	private JTable table;
+	private JTextField CrewDisp;
+	private JTextField speedLimitDisp;
+	private JTextField PassengerDisp;
+	private JTextField TempDisp;
+	private JTextField NextBlockDisp;
+	private JTextField NextBlockStatusDisp;
+	private JTextField txtSpeedLimit;
+	private JTextField txtCrewCount;
+	private JTextField txtPassengers;
+	private JTextField txtTemperature;
+	private JTextField txtCurrentSpeed;
+	private JTextField ElevationDisp;
+	private JTextField CurrBlockDisp;
+	private JTextField txtTrackInfo;
+	private JTextField txtCurrentBlock;
+	private JTextField txtNextBlock;
+	private JTextField txtNextBlockStatus;
+	private JTextField txtElevation;
+	private JTextField txtTrainInfo;
 	
 
 	/**
@@ -88,12 +104,16 @@ public class testGUI {
 		/*
 		 * Test Mode Radio Button
 		 */
-		JRadioButton testModeRadioButton = new JRadioButton("Test Mode");
-		testModeRadioButton.setSelected(false);
-		testModeRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		testModeRadioButton.setBackground(Color.LIGHT_GRAY);
-		testModeRadioButton.setBounds(6, 43, 109, 23);
-		frame.getContentPane().add(testModeRadioButton);
+		JRadioButton testModeButton = new JRadioButton("Test Mode");
+		testModeButton.setSelected(true);
+		testModeButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		testModeButton.setBackground(Color.LIGHT_GRAY);
+		testModeButton.setBounds(577, 31, 109, 23);
+		frame.getContentPane().add(testModeButton);
+		
+		if(!testModeButton.isSelected()){
+			powerInput.setEditable(false);
+		}
 		
 		
 		/*
@@ -103,18 +123,25 @@ public class testGUI {
 		leftDoorControl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean leftDoorTrain = train.getLeftDoorStatus();
-				if(leftDoorTrain){
-					train.changeLeftDoors();
-					leftDoorStatus.setText("Closed");
+				
+				//If in Test Mode
+				if(testModeButton.isSelected()){
+					
+					
+					if(leftDoorTrain){
+						train.changeLeftDoors();
+						leftDoorStatus.setText("Closed");
+					}
+					else{
+						train.changeLeftDoors();
+						leftDoorStatus.setText("Open");
+					}	
+					
 				}
-				else{
-					train.changeLeftDoors();
-					leftDoorStatus.setText("Open");
-				}				
 			}
 		});
 		leftDoorControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		leftDoorControl.setBounds(6, 509, 150, 40);
+		leftDoorControl.setBounds(10, 416, 146, 40);
 		frame.getContentPane().add(leftDoorControl);
 		
 		
@@ -124,19 +151,23 @@ public class testGUI {
 		JToggleButton rightDoorsControl = new JToggleButton("Right Doors");
 		rightDoorsControl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean rightDoorTrain = train.getRightDoorStatus();
-				if(rightDoorTrain){
-					train.changeRightDoors();
-					rightDoorStatus.setText("Closed");
-				}
-				else{
-					train.changeRightDoors();
-					rightDoorStatus.setText("Open");
-				}				
+				
+				//If in Test Mode
+				if(testModeButton.isSelected()){
+					boolean rightDoorTrain = train.getRightDoorStatus();
+					if(rightDoorTrain){
+						train.changeRightDoors();
+						rightDoorStatus.setText("Closed");
+					}
+					else{
+						train.changeRightDoors();
+						rightDoorStatus.setText("Open");
+					}	
+				}	
 			}
 		});
 		rightDoorsControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		rightDoorsControl.setBounds(6, 458, 150, 40);
+		rightDoorsControl.setBounds(10, 365, 146, 40);
 		frame.getContentPane().add(rightDoorsControl);
 		
 		
@@ -144,6 +175,7 @@ public class testGUI {
 		 * Left Door Status Window
 		 */
 		leftDoorStatus = new JTextField();
+		leftDoorStatus.setEditable(false);
 		boolean leftDoors = train.getLeftDoorStatus();
 			if(leftDoors){
 				leftDoorStatus.setText("Open");
@@ -153,7 +185,7 @@ public class testGUI {
 			}
 		leftDoorStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		leftDoorStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
-		leftDoorStatus.setBounds(166, 509, 80, 40);
+		leftDoorStatus.setBounds(166, 416, 80, 40);
 		frame.getContentPane().add(leftDoorStatus);
 		leftDoorStatus.setColumns(10);
 		
@@ -162,6 +194,7 @@ public class testGUI {
 		 * Right door Status Window
 		 */
 		rightDoorStatus = new JTextField();
+		rightDoorStatus.setEditable(false);
 		boolean rightDoors = train.getRightDoorStatus();
 			if(rightDoors){
 				rightDoorStatus.setText("Open");
@@ -171,7 +204,7 @@ public class testGUI {
 			}
 		rightDoorStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		rightDoorStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
-		rightDoorStatus.setBounds(166, 458, 80, 40);
+		rightDoorStatus.setBounds(166, 365, 80, 40);
 		frame.getContentPane().add(rightDoorStatus);
 		rightDoorStatus.setColumns(10);
 		
@@ -182,19 +215,25 @@ public class testGUI {
 		JToggleButton lightsControl = new JToggleButton("Lights");
 		lightsControl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean lightsTrain = train.getLightStatus();
-				if(lightsTrain){
-					train.changeLightsStatus();
-					lightsStatus.setText("Off");
-				}
-				else{
-					train.changeLightsStatus();
-					lightsStatus.setText("On");
-				}				
+				
+				//If in Test Mode
+				if(testModeButton.isSelected()){
+					
+					boolean lightsTrain = train.getLightStatus();
+					if(lightsTrain){
+						train.changeLightsStatus();
+						lightsStatus.setText("Off");
+					}
+					else{
+						train.changeLightsStatus();
+						lightsStatus.setText("On");
+					}
+				}	
+				
 			}
 		});
 		lightsControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lightsControl.setBounds(6, 407, 150, 40);
+		lightsControl.setBounds(10, 314, 146, 40);
 		frame.getContentPane().add(lightsControl);
 		
 		
@@ -202,6 +241,7 @@ public class testGUI {
 		 * Lights Status Box
 		 */
 		lightsStatus = new JTextField();
+		lightsStatus.setEditable(false);
 		lightsStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
 		boolean lights = train.getLightStatus();
 			if(lights){
@@ -211,7 +251,7 @@ public class testGUI {
 				lightsStatus.setText("Off");				
 			}
 		lightsStatus.setHorizontalAlignment(SwingConstants.CENTER);
-		lightsStatus.setBounds(166, 407, 80, 40);
+		lightsStatus.setBounds(166, 314, 80, 40);
 		frame.getContentPane().add(lightsStatus);
 		lightsStatus.setColumns(10);
 		
@@ -221,18 +261,12 @@ public class testGUI {
 		 */
 		powerInput = new JTextField();
 		
-		
-		
-		
 		double trainPower = train.power;
 		powerInput.setText(Double.toString(trainPower));
 		
-		
-		
-		
 		powerInput.setHorizontalAlignment(SwingConstants.CENTER);
-		powerInput.setFont(new Font("Tahoma", Font.BOLD, 18));
-		powerInput.setBounds(10, 80, 150, 40);
+		powerInput.setFont(new Font("Tahoma", Font.BOLD, 20));
+		powerInput.setBounds(10, 80, 175, 40);
 		frame.getContentPane().add(powerInput);
 		powerInput.setColumns(10);
 		
@@ -243,21 +277,27 @@ public class testGUI {
 		JButton powerInput_button = new JButton("Input Power");
 		powerInput_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				//If in Test Mode
+				if(testModeButton.isSelected()){
 			
-				//display velocity in velocity display box
-				String powerInputString = powerInput.getText();
-				double trainPowerInput = Double.parseDouble(powerInputString);
-				double trainVelocity;
+					//display velocity in velocity display box
+					String powerInputString = powerInput.getText();
+					double trainPowerInput = Double.parseDouble(powerInputString);
+					double trainVelocity;
+					
+					train.setPower(trainPowerInput);				
+					trainVelocity = train.getVelocity();
+					
+					String trainSpeedString1 = dc.format(trainVelocity);
+					currentSpeed.setText(trainSpeedString1);
+			
+				}
 				
-				train.setPower(trainPowerInput);				
-				trainVelocity = train.getVelocity();
-				
-				String trainSpeedString1 = dc.format(trainVelocity);
-				currentSpeed.setText(trainSpeedString1);
 			}
 		});
 		powerInput_button.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		powerInput_button.setBounds(6, 131, 150, 23);
+		powerInput_button.setBounds(10, 131, 175, 40);
 		frame.getContentPane().add(powerInput_button);
 		
 		
@@ -267,56 +307,10 @@ public class testGUI {
 		JLabel powerLabel = new JLabel("W");
 		powerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		powerLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		powerLabel.setBounds(160, 100, 30, 20);
+		powerLabel.setBounds(195, 100, 30, 20);
 		frame.getContentPane().add(powerLabel);
-		
-		
-		/*
-		 * Passenger Count Display Box
-		 */
-		passengerCount = new JTextField();
-		passengerCount.setEditable(false);//editable status
 		int trainPassengers = train.getPassengerCount();
-		passengerCount.setText(Integer.toString(trainPassengers));
-		passengerCount.setHorizontalAlignment(SwingConstants.CENTER);
-		passengerCount.setFont(new Font("Tahoma", Font.BOLD, 18));
-		passengerCount.setBounds(6, 356, 150, 40);
-		frame.getContentPane().add(passengerCount);
-		passengerCount.setColumns(10);
-		
-		
-		/*
-		 * Passenger Count Label
-		 */
-		JLabel lblPassengerCount = new JLabel("Passenger Count");
-		lblPassengerCount.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPassengerCount.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblPassengerCount.setBounds(6, 335, 150, 20);
-		frame.getContentPane().add(lblPassengerCount);
-		
-		
-		/*
-		 * Crew Count Display Box
-		 */
-		crewCount = new JTextField();
-		crewCount.setEditable(false);//editable status
 		int trainCrew = train.getCrewCount();
-		crewCount.setText(Integer.toString(trainCrew));
-		crewCount.setHorizontalAlignment(SwingConstants.CENTER);
-		crewCount.setFont(new Font("Tahoma", Font.BOLD, 18));
-		crewCount.setBounds(6, 285, 150, 40);
-		frame.getContentPane().add(crewCount);
-		crewCount.setColumns(10);
-		
-		
-		/*
-		 * Crew Count Label
-		 */
-		JLabel lblCrewCount = new JLabel("Crew Count");
-		lblCrewCount.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCrewCount.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblCrewCount.setBounds(6, 265, 150, 20);
-		frame.getContentPane().add(lblCrewCount);
 		
 		
 		/*
@@ -325,89 +319,14 @@ public class testGUI {
 		currentSpeed = new JTextField();
 		currentSpeed.setEditable(false); //editable status
 		currentSpeed.setHorizontalAlignment(SwingConstants.CENTER);
-		double trainSpeed = 12.127;
-		
+		double trainSpeed;
+		trainSpeed = train.getVelocity();
 		String trainSpeedString = dc.format(trainSpeed);
 		currentSpeed.setText(trainSpeedString);
-		currentSpeed.setFont(new Font("Tahoma", Font.BOLD, 18));
-		currentSpeed.setBounds(603, 89, 75, 40);
+		currentSpeed.setFont(new Font("Tahoma", Font.BOLD, 20));
+		currentSpeed.setBounds(600, 149, 110, 40);
 		frame.getContentPane().add(currentSpeed);
 		currentSpeed.setColumns(10);
-		
-		
-		/*
-		 * Current Speed Label
-		 */
-		JLabel lblCurrentSpeed = new JLabel("Current Speed");
-		lblCurrentSpeed.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCurrentSpeed.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblCurrentSpeed.setBounds(577, 66, 110, 20);
-		frame.getContentPane().add(lblCurrentSpeed);
-		
-		
-		/*
-		 * MPH label
-		 */
-		JLabel lblMph = new JLabel("mph");
-		lblMph.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMph.setBounds(688, 109, 35, 20);
-		frame.getContentPane().add(lblMph);
-		
-		
-		/*
-		 * Speed Limit Display
-		 */
-		speedLimit = new JTextField();
-		speedLimit.setEditable(false); //editable status
-		
-			speedLimit.setText("60");  //Must Read in Speed Limit from Track!!!!!
-		speedLimit.setHorizontalAlignment(SwingConstants.CENTER);
-		speedLimit.setFont(new Font("Tahoma", Font.BOLD, 18));
-		speedLimit.setBounds(603, 165, 70, 40);
-		frame.getContentPane().add(speedLimit);
-		speedLimit.setColumns(10);
-		
-		
-		JLabel lblMph_1 = new JLabel("mph");
-		lblMph_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMph_1.setBounds(688, 176, 35, 20);
-		frame.getContentPane().add(lblMph_1);
-		
-		
-		/*
-		 * Speed Limit Label
-		 */
-		JLabel lblSpeedLimit = new JLabel("Speed Limit");
-		lblSpeedLimit.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSpeedLimit.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblSpeedLimit.setBounds(577, 141, 110, 20);
-		frame.getContentPane().add(lblSpeedLimit);
-		
-		JLabel lblNewLabel_1 = new JLabel("Setpoint Speed");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1.setBounds(577, 216, 110, 20);
-		frame.getContentPane().add(lblNewLabel_1);
-		
-		
-		/*
-		 * Setpoint speed display
-		 */
-		setpointSpeed = new JTextField();
-		setpointSpeed.setEditable(false); //editable status
-		
-			setpointSpeed.setText("55");  //Must Read in Setpoint Speed from Train Controller!!!!!
-		setpointSpeed.setHorizontalAlignment(SwingConstants.CENTER);
-		setpointSpeed.setFont(new Font("Tahoma", Font.BOLD, 18));
-		setpointSpeed.setBounds(603, 247, 66, 40);
-		frame.getContentPane().add(setpointSpeed);
-		setpointSpeed.setColumns(10);
-		
-		JLabel lblMph_2 = new JLabel("mph");
-		lblMph_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMph_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMph_2.setBounds(688, 258, 35, 20);
-		frame.getContentPane().add(lblMph_2);
 		
 		
 		/*
@@ -424,7 +343,7 @@ public class testGUI {
 			}
 		serviceBrakeStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
 		serviceBrakeStatus.setHorizontalAlignment(SwingConstants.CENTER);
-		serviceBrakeStatus.setBounds(170, 183, 125, 35);
+		serviceBrakeStatus.setBounds(166, 187, 125, 52);
 		frame.getContentPane().add(serviceBrakeStatus);
 		serviceBrakeStatus.setColumns(10);
 		
@@ -443,7 +362,7 @@ public class testGUI {
 			}
 		emergencyBrakeStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		emergencyBrakeStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
-		emergencyBrakeStatus.setBounds(170, 224, 125, 35);
+		emergencyBrakeStatus.setBounds(166, 250, 125, 52);
 		frame.getContentPane().add(emergencyBrakeStatus);
 		emergencyBrakeStatus.setColumns(10);
 		
@@ -454,20 +373,24 @@ public class testGUI {
 		JToggleButton emergencyBrakeControl = new JToggleButton("Emergency Brake");
 		emergencyBrakeControl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean eBrakeStatus = train.getEmergencyBrakeStatus();
-					if(eBrakeStatus){
-						train.emergencyBrake();
-						emergencyBrakeStatus.setText("Disengaged");
-					}
-					else{
-						train.emergencyBrake();
-						emergencyBrakeStatus.setText("Engaged");
-					}
+				
+				//only if in test mode
+				if(testModeButton.isSelected()){
+					boolean eBrakeStatus = train.getEmergencyBrakeStatus();
+						if(eBrakeStatus){
+							train.emergencyBrake();
+							emergencyBrakeStatus.setText("Disengaged");
+						}
+						else{
+							train.emergencyBrake();
+							emergencyBrakeStatus.setText("Engaged");
+						}
+				}
 			}
 		});
 		emergencyBrakeControl.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		emergencyBrakeControl.setForeground(Color.RED);
-		emergencyBrakeControl.setBounds(10, 224, 146, 30);
+		emergencyBrakeControl.setBounds(10, 251, 146, 52);
 		frame.getContentPane().add(emergencyBrakeControl);
 		
 		
@@ -478,94 +401,24 @@ public class testGUI {
 		JToggleButton serviceBrakeControl = new JToggleButton("Service Brake");
 		serviceBrakeControl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean trainBrakeStatus = train.getServiceBrakeStatus();
-					if(trainBrakeStatus){
+				
+				//Only if in test mode
+				if(testModeButton.isSelected()){
+					boolean trainBrakeStatus = train.getServiceBrakeStatus();
+						if(trainBrakeStatus){
 						train.serviceBrake();
 						serviceBrakeStatus.setText("Disengaged");
 					}
 					else{
-						train.serviceBrake();
+							train.serviceBrake();
 						serviceBrakeStatus.setText("Engaged");
 					}
+				}
 			}
 		});
 		serviceBrakeControl.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		serviceBrakeControl.setBounds(10, 183, 146, 30);
+		serviceBrakeControl.setBounds(10, 187, 146, 52);
 		frame.getContentPane().add(serviceBrakeControl);
-		
-		
-		/*
-		 * Temperature Display box
-		 */
-		temperature = new JTextField();
-		temperature.setEditable(false);
-		temperature.setHorizontalAlignment(SwingConstants.CENTER);
-		
-			//Temperature Display Here!!
-			temperature.setText("72"); 
-		temperature.setFont(new Font("Tahoma", Font.BOLD, 18));
-		temperature.setBounds(603, 333, 70, 40);
-		frame.getContentPane().add(temperature);
-		temperature.setColumns(10);
-		
-		JLabel lblTemperature = new JLabel("Temperature");
-		lblTemperature.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTemperature.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTemperature.setBounds(577, 305, 110, 20);
-		frame.getContentPane().add(lblTemperature);
-		
-		JLabel lblNewLabel_2 = new JLabel("\u2109");
-		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2.setFont(new Font("Arial Unicode MS", Font.PLAIN, 17));
-		lblNewLabel_2.setBounds(688, 344, 35, 20);
-		frame.getContentPane().add(lblNewLabel_2);
-		
-		
-		/*
-		 * Elevation Display Box
-		 */
-		elevation = new JTextField();
-		elevation.setEditable(false);
-		
-			//Elevation Display Here!!
-			elevation.setText("255");
-		elevation.setFont(new Font("Tahoma", Font.BOLD, 18));
-		elevation.setHorizontalAlignment(SwingConstants.CENTER);
-		elevation.setBounds(603, 419, 70, 40);
-		frame.getContentPane().add(elevation);
-		elevation.setColumns(10);
-		
-		JLabel lblElevation = new JLabel("Elevation");
-		lblElevation.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblElevation.setHorizontalAlignment(SwingConstants.CENTER);
-		lblElevation.setBounds(577, 385, 110, 20);
-		frame.getContentPane().add(lblElevation);
-		
-		JLabel lblFt = new JLabel("ft.");
-		lblFt.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblFt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFt.setBounds(679, 436, 35, 20);
-		frame.getContentPane().add(lblFt);
-		
-		JLabel lblTrackCircuitInfo = new JLabel("Track Circuit Info");
-		lblTrackCircuitInfo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTrackCircuitInfo.setBounds(577, 478, 130, 20);
-		frame.getContentPane().add(lblTrackCircuitInfo);
-		
-		
-		/*
-		 * Track Circuit Info Display Box
-		 */
-		trackCircuitInfo = new JTextField();
-		trackCircuitInfo.setEditable(false);
-		
-			//Track Circuit Info Here!!
-			trackCircuitInfo.setText("Unoccupied");
-		trackCircuitInfo.setHorizontalAlignment(SwingConstants.CENTER);
-		trackCircuitInfo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		trackCircuitInfo.setBounds(587, 509, 115, 40);
-		frame.getContentPane().add(trackCircuitInfo);
-		trackCircuitInfo.setColumns(10);
 		
 		
 		/*
@@ -575,12 +428,18 @@ public class testGUI {
 		engineFailureButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				JOptionPane.showMessageDialog(parent, "Danger!! Engine Failure!!");	
+				//If in Test Mode
+				if(testModeButton.isSelected()){
+					
+					
+					JOptionPane.showMessageDialog(parent, "Danger!! Engine Failure!!");	
+			
+				}
 			}
 		});
 		engineFailureButton.setForeground(Color.RED);
 		engineFailureButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		engineFailureButton.setBounds(336, 413, 160, 30);
+		engineFailureButton.setBounds(10, 471, 160, 30);
 		frame.getContentPane().add(engineFailureButton);
 		
 		
@@ -591,12 +450,19 @@ public class testGUI {
 		brakeFailureButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				//If int Test Mode
+				if(testModeButton.isSelected()){
+				
+					
 				JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
+			
+				
+				}
 			}
 		});
 		brakeFailureButton.setForeground(Color.RED);
 		brakeFailureButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		brakeFailureButton.setBounds(336, 466, 160, 30);
+		brakeFailureButton.setBounds(10, 512, 160, 30);
 		frame.getContentPane().add(brakeFailureButton);
 		
 		
@@ -607,12 +473,19 @@ public class testGUI {
 		signalPickupFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				JOptionPane.showMessageDialog(parent, "Danger!! Signal Pickup Failure!!");
+				//If in Test Mode
+				if(testModeButton.isSelected()){	 
+					
+					
+					JOptionPane.showMessageDialog(parent, "Danger!! Signal Pickup Failure!!");
+					
+					
+				}
 			}
 		});
 		signalPickupFailure.setForeground(Color.RED);
 		signalPickupFailure.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		signalPickupFailure.setBounds(336, 519, 160, 30);
+		signalPickupFailure.setBounds(10, 553, 160, 30);
 		frame.getContentPane().add(signalPickupFailure);
 		
 		
@@ -624,14 +497,198 @@ public class testGUI {
 		trainID.setHorizontalAlignment(SwingConstants.CENTER);
 		trainID.setFont(new Font("Tahoma", Font.BOLD, 20));
 		trainID.setText("12345");
-		trainID.setBounds(336, 89, 115, 40);
+		trainID.setBounds(103, 25, 115, 40);
 		frame.getContentPane().add(trainID);
 		trainID.setColumns(10);
 		
 		JLabel trainIDLabel = new JLabel("TRAIN ID:");
+		trainIDLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		trainIDLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		trainIDLabel.setBounds(236, 100, 90, 20);
+		trainIDLabel.setBounds(0, 45, 90, 20);
 		frame.getContentPane().add(trainIDLabel);
+		
+		table = new JTable();
+		table.setFillsViewportHeight(true);
+		table.setColumnSelectionAllowed(true);
+		table.setCellSelectionEnabled(true);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.setBackground(Color.WHITE);
+		table.setBounds(502, 291, -131, -124);
+		frame.getContentPane().add(table);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setBounds(511, 233, -213, 120);
+		frame.getContentPane().add(textPane);
+		
+		CrewDisp = new JTextField();
+		CrewDisp.setHorizontalAlignment(SwingConstants.CENTER);
+		CrewDisp.setFont(new Font("Tahoma", Font.BOLD, 20));
+		CrewDisp.setEditable(false);
+		int crewCount;
+		crewCount = train.getCrewCount();
+		CrewDisp.setText(Integer.toString(crewCount));
+		CrewDisp.setBounds(600, 229, 110, 40);
+		frame.getContentPane().add(CrewDisp);
+		CrewDisp.setColumns(10);
+		
+		speedLimitDisp = new JTextField();
+		speedLimitDisp.setFont(new Font("Tahoma", Font.BOLD, 20));
+		speedLimitDisp.setHorizontalAlignment(SwingConstants.CENTER);
+		speedLimitDisp.setEditable(false);
+		speedLimitDisp.setBounds(600, 189, 110, 40);
+		frame.getContentPane().add(speedLimitDisp);
+		speedLimitDisp.setColumns(10);
+		
+		PassengerDisp = new JTextField();
+		PassengerDisp.setFont(new Font("Tahoma", Font.BOLD, 20));
+		PassengerDisp.setHorizontalAlignment(SwingConstants.CENTER);
+		PassengerDisp.setEditable(false);
+		int passCount;
+		passCount = train.getPassengerCount();
+		PassengerDisp.setText(Integer.toString(passCount));
+		PassengerDisp.setBounds(600, 269, 110, 40);
+		frame.getContentPane().add(PassengerDisp);
+		PassengerDisp.setColumns(10);
+		
+		TempDisp = new JTextField();
+		TempDisp.setFont(new Font("Tahoma", Font.BOLD, 20));
+		TempDisp.setHorizontalAlignment(SwingConstants.CENTER);
+		TempDisp.setEditable(false);
+		int temperature;
+		temperature = train.getTemperature();
+		TempDisp.setText(Integer.toString(temperature));
+		TempDisp.setBounds(600, 309, 110, 40);
+		frame.getContentPane().add(TempDisp);
+		TempDisp.setColumns(10);
+		
+		NextBlockDisp = new JTextField();
+		NextBlockDisp.setFont(new Font("Tahoma", Font.BOLD, 20));
+		NextBlockDisp.setEditable(false);
+		NextBlockDisp.setBounds(577, 442, 133, 40);
+		frame.getContentPane().add(NextBlockDisp);
+		NextBlockDisp.setColumns(10);
+		
+		NextBlockStatusDisp = new JTextField();
+		NextBlockStatusDisp.setFont(new Font("Tahoma", Font.BOLD, 18));
+		NextBlockStatusDisp.setHorizontalAlignment(SwingConstants.CENTER);
+		NextBlockStatusDisp.setEditable(false);
+		NextBlockStatusDisp.setBounds(577, 482, 133, 40);
+		frame.getContentPane().add(NextBlockStatusDisp);
+		NextBlockStatusDisp.setColumns(10);
+		
+		txtSpeedLimit = new JTextField();
+		txtSpeedLimit.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtSpeedLimit.setText("Speed Limit:");
+		txtSpeedLimit.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtSpeedLimit.setEditable(false);
+		txtSpeedLimit.setBounds(420, 189, 180, 40);
+		frame.getContentPane().add(txtSpeedLimit);
+		txtSpeedLimit.setColumns(10);
+		
+		txtCrewCount = new JTextField();
+		txtCrewCount.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtCrewCount.setText("Crew:");
+		txtCrewCount.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtCrewCount.setEditable(false);
+		txtCrewCount.setColumns(10);
+		txtCrewCount.setBounds(420, 229, 180, 40);
+		frame.getContentPane().add(txtCrewCount);
+		
+		txtPassengers = new JTextField();
+		txtPassengers.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtPassengers.setText("Passengers:");
+		txtPassengers.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtPassengers.setEditable(false);
+		txtPassengers.setColumns(10);
+		txtPassengers.setBounds(420, 269, 180, 40);
+		frame.getContentPane().add(txtPassengers);
+		
+		txtTemperature = new JTextField();
+		txtTemperature.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtTemperature.setText("Temperature:");
+		txtTemperature.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtTemperature.setEditable(false);
+		txtTemperature.setColumns(10);
+		txtTemperature.setBounds(420, 309, 180, 40);
+		frame.getContentPane().add(txtTemperature);
+		
+		txtCurrentSpeed = new JTextField();
+		txtCurrentSpeed.setEditable(false);
+		txtCurrentSpeed.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtCurrentSpeed.setText("Current Speed:");
+		txtCurrentSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtCurrentSpeed.setBounds(420, 149, 180, 40);
+		frame.getContentPane().add(txtCurrentSpeed);
+		txtCurrentSpeed.setColumns(10);
+		
+		ElevationDisp = new JTextField();
+		ElevationDisp.setHorizontalAlignment(SwingConstants.CENTER);
+		ElevationDisp.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		ElevationDisp.setEditable(false);
+		ElevationDisp.setColumns(10);
+		ElevationDisp.setBounds(577, 522, 133, 40);
+		frame.getContentPane().add(ElevationDisp);
+		
+		CurrBlockDisp = new JTextField();
+		CurrBlockDisp.setFont(new Font("Tahoma", Font.BOLD, 20));
+		CurrBlockDisp.setEditable(false);
+		CurrBlockDisp.setColumns(10);
+		CurrBlockDisp.setBounds(577, 400, 133, 40);
+		frame.getContentPane().add(CurrBlockDisp);
+		
+		txtTrackInfo = new JTextField();
+		txtTrackInfo.setEditable(false);
+		txtTrackInfo.setText("TRACK INFO");
+		txtTrackInfo.setFont(new Font("Tahoma", Font.BOLD, 18));
+		txtTrackInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		txtTrackInfo.setColumns(10);
+		txtTrackInfo.setBounds(362, 360, 348, 40);
+		frame.getContentPane().add(txtTrackInfo);
+		
+		txtCurrentBlock = new JTextField();
+		txtCurrentBlock.setEditable(false);
+		txtCurrentBlock.setText("Current Block #:");
+		txtCurrentBlock.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtCurrentBlock.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtCurrentBlock.setColumns(10);
+		txtCurrentBlock.setBounds(362, 400, 215, 40);
+		frame.getContentPane().add(txtCurrentBlock);
+		
+		txtNextBlock = new JTextField();
+		txtNextBlock.setEditable(false);
+		txtNextBlock.setText("Next Block #:");
+		txtNextBlock.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtNextBlock.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtNextBlock.setColumns(10);
+		txtNextBlock.setBounds(362, 442, 215, 40);
+		frame.getContentPane().add(txtNextBlock);
+		
+		txtNextBlockStatus = new JTextField();
+		txtNextBlockStatus.setEditable(false);
+		txtNextBlockStatus.setText("Next Block Status:");
+		txtNextBlockStatus.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtNextBlockStatus.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtNextBlockStatus.setColumns(10);
+		txtNextBlockStatus.setBounds(362, 482, 215, 40);
+		frame.getContentPane().add(txtNextBlockStatus);
+		
+		txtElevation = new JTextField();
+		txtElevation.setEditable(false);
+		txtElevation.setText("Elevation:");
+		txtElevation.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtElevation.setFont(new Font("Courier New", Font.BOLD, 18));
+		txtElevation.setColumns(10);
+		txtElevation.setBounds(362, 522, 215, 40);
+		frame.getContentPane().add(txtElevation);
+		
+		txtTrainInfo = new JTextField();
+		txtTrainInfo.setEditable(false);
+		txtTrainInfo.setText("TRAIN INFO");
+		txtTrainInfo.setFont(new Font("Tahoma", Font.BOLD, 18));
+		txtTrainInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		txtTrainInfo.setBounds(420, 110, 290, 40);
+		frame.getContentPane().add(txtTrainInfo);
+		txtTrainInfo.setColumns(10);
 		
 
 	}
