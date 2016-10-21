@@ -13,7 +13,7 @@ public class CTCOffice
 	private int simulationSpeed;
 	private Mode mode = Mode.MAUNAL; //1=manual 2=auto
 
-	private TrackBlock[] greenLine, redLine;
+	public TrackBlock[] greenLine, redLine;
 	
 	public CTCOffice()
 	{
@@ -24,7 +24,7 @@ public class CTCOffice
 			dataBase = new DBInteraction();
 			loadTrackData();
 		} catch (Exception e) {
-			
+
 		}
 	}
 	
@@ -64,6 +64,8 @@ public class CTCOffice
 		{
 			try {
 				greenLine[i] = dataBase.getSection("Green", i + 1);
+				if (i < redLine.length)
+					redLine[i] = dataBase.getSection("Red", i + 1);
 			} catch(SQLException e) {
 
 			}
