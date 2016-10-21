@@ -290,7 +290,7 @@ public class testGUI {
 					trainVelocity = train.getVelocity();
 					
 					String trainSpeedString1 = dc.format(trainVelocity);
-					currentSpeed.setText(trainSpeedString1);
+					currentSpeed.setText(trainSpeedString1+" mph");
 			
 				}
 				
@@ -322,9 +322,9 @@ public class testGUI {
 		double trainSpeed;
 		trainSpeed = train.getVelocity();
 		String trainSpeedString = dc.format(trainSpeed);
-		currentSpeed.setText(trainSpeedString);
+		currentSpeed.setText(trainSpeedString+" mph");
 		currentSpeed.setFont(new Font("Tahoma", Font.BOLD, 20));
-		currentSpeed.setBounds(600, 149, 110, 40);
+		currentSpeed.setBounds(557, 149, 153, 40);
 		frame.getContentPane().add(currentSpeed);
 		currentSpeed.setColumns(10);
 		
@@ -527,15 +527,18 @@ public class testGUI {
 		int crewCount;
 		crewCount = train.getCrewCount();
 		CrewDisp.setText(Integer.toString(crewCount));
-		CrewDisp.setBounds(600, 229, 110, 40);
+		CrewDisp.setBounds(557, 229, 153, 40);
 		frame.getContentPane().add(CrewDisp);
 		CrewDisp.setColumns(10);
 		
 		speedLimitDisp = new JTextField();
+		speedLimitDisp.setEditable(false);
+		
+			speedLimitDisp.setText("45.00"+" mph");
+		
 		speedLimitDisp.setFont(new Font("Tahoma", Font.BOLD, 20));
 		speedLimitDisp.setHorizontalAlignment(SwingConstants.CENTER);
-		speedLimitDisp.setEditable(false);
-		speedLimitDisp.setBounds(600, 189, 110, 40);
+		speedLimitDisp.setBounds(557, 189, 153, 40);
 		frame.getContentPane().add(speedLimitDisp);
 		speedLimitDisp.setColumns(10);
 		
@@ -546,7 +549,7 @@ public class testGUI {
 		int passCount;
 		passCount = train.getPassengerCount();
 		PassengerDisp.setText(Integer.toString(passCount));
-		PassengerDisp.setBounds(600, 269, 110, 40);
+		PassengerDisp.setBounds(557, 269, 153, 40);
 		frame.getContentPane().add(PassengerDisp);
 		PassengerDisp.setColumns(10);
 		
@@ -557,7 +560,7 @@ public class testGUI {
 		int temperature;
 		temperature = train.getTemperature();
 		TempDisp.setText(Integer.toString(temperature));
-		TempDisp.setBounds(600, 309, 110, 40);
+		TempDisp.setBounds(557, 309, 153, 40);
 		frame.getContentPane().add(TempDisp);
 		TempDisp.setColumns(10);
 		
@@ -581,7 +584,7 @@ public class testGUI {
 		txtSpeedLimit.setText("Speed Limit:");
 		txtSpeedLimit.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtSpeedLimit.setEditable(false);
-		txtSpeedLimit.setBounds(420, 189, 180, 40);
+		txtSpeedLimit.setBounds(362, 189, 195, 40);
 		frame.getContentPane().add(txtSpeedLimit);
 		txtSpeedLimit.setColumns(10);
 		
@@ -591,7 +594,7 @@ public class testGUI {
 		txtCrewCount.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtCrewCount.setEditable(false);
 		txtCrewCount.setColumns(10);
-		txtCrewCount.setBounds(420, 229, 180, 40);
+		txtCrewCount.setBounds(362, 229, 195, 40);
 		frame.getContentPane().add(txtCrewCount);
 		
 		txtPassengers = new JTextField();
@@ -600,7 +603,7 @@ public class testGUI {
 		txtPassengers.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtPassengers.setEditable(false);
 		txtPassengers.setColumns(10);
-		txtPassengers.setBounds(420, 269, 180, 40);
+		txtPassengers.setBounds(362, 269, 195, 40);
 		frame.getContentPane().add(txtPassengers);
 		
 		txtTemperature = new JTextField();
@@ -609,7 +612,7 @@ public class testGUI {
 		txtTemperature.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtTemperature.setEditable(false);
 		txtTemperature.setColumns(10);
-		txtTemperature.setBounds(420, 309, 180, 40);
+		txtTemperature.setBounds(362, 309, 195, 40);
 		frame.getContentPane().add(txtTemperature);
 		
 		txtCurrentSpeed = new JTextField();
@@ -617,7 +620,7 @@ public class testGUI {
 		txtCurrentSpeed.setFont(new Font("Courier New", Font.BOLD, 18));
 		txtCurrentSpeed.setText("Current Speed:");
 		txtCurrentSpeed.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtCurrentSpeed.setBounds(420, 149, 180, 40);
+		txtCurrentSpeed.setBounds(362, 149, 195, 40);
 		frame.getContentPane().add(txtCurrentSpeed);
 		txtCurrentSpeed.setColumns(10);
 		
@@ -633,7 +636,7 @@ public class testGUI {
 		CurrBlockDisp.setFont(new Font("Tahoma", Font.BOLD, 20));
 		CurrBlockDisp.setEditable(false);
 		CurrBlockDisp.setColumns(10);
-		CurrBlockDisp.setBounds(577, 400, 133, 40);
+		CurrBlockDisp.setBounds(577, 402, 133, 40);
 		frame.getContentPane().add(CurrBlockDisp);
 		
 		txtTrackInfo = new JTextField();
@@ -642,7 +645,7 @@ public class testGUI {
 		txtTrackInfo.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txtTrackInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		txtTrackInfo.setColumns(10);
-		txtTrackInfo.setBounds(362, 360, 348, 40);
+		txtTrackInfo.setBounds(362, 362, 348, 40);
 		frame.getContentPane().add(txtTrackInfo);
 		
 		txtCurrentBlock = new JTextField();
@@ -651,7 +654,7 @@ public class testGUI {
 		txtCurrentBlock.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtCurrentBlock.setFont(new Font("Courier New", Font.BOLD, 18));
 		txtCurrentBlock.setColumns(10);
-		txtCurrentBlock.setBounds(362, 400, 215, 40);
+		txtCurrentBlock.setBounds(362, 402, 215, 40);
 		frame.getContentPane().add(txtCurrentBlock);
 		
 		txtNextBlock = new JTextField();
@@ -686,7 +689,7 @@ public class testGUI {
 		txtTrainInfo.setText("TRAIN INFO");
 		txtTrainInfo.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txtTrainInfo.setHorizontalAlignment(SwingConstants.CENTER);
-		txtTrainInfo.setBounds(420, 110, 290, 40);
+		txtTrainInfo.setBounds(362, 110, 348, 40);
 		frame.getContentPane().add(txtTrainInfo);
 		txtTrainInfo.setColumns(10);
 		

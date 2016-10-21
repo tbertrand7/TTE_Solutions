@@ -9,20 +9,20 @@ public class TrainModel {
 	static double maxPower = 397629.8; //in J/s (N*m/s)
 	static double maxAcc = 0.5; //in m/s^2
 	
-	boolean rightDoorsOpen; //method made
-	boolean leftDoorsOpen; //method made
-	boolean lightsOn; //method made
+	boolean rightDoorsOpen; 
+	boolean leftDoorsOpen; 
+	boolean lightsOn; 
 	
 	boolean serviceBrakeOn;
 	boolean emergencyBrakeOn;
 	
-	int crewCount; //method made
-	int passengerCount; //method made
-	int temperature; //method made
+	int crewCount; 
+	int passengerCount; 
+	int temperature; 
 	int elevation;
 	
-	double power; //method made
-	double velocity; //method made
+	double power; 
+	double velocity; 
 	
 	
 	/**
@@ -90,7 +90,7 @@ public class TrainModel {
 					
 					*/
 					
-					velocity = .556 * power;
+					velocity = .625 * power;
 					
 					return velocity;
 				}
@@ -99,7 +99,7 @@ public class TrainModel {
 	/**
 	 * Allows for the number of passengers to be changed
 	 * @param delta - the number of passengers entering/exiting the train
-	 * @return true if passenger count change is valie
+	 * @return true if passenger count change is valid
 	 */
 	boolean changePassengerCount(int delta){
 		
