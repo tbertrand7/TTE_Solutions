@@ -2095,34 +2095,6 @@ public class OfficeUI extends JFrame {
 
         if (!selected.equals(selectedBlockBtn)) {
             selectedBlockBtn = selected;
-            logNotification(selected.toString() + " Selected");
-
-			lblBlockInfo.setText(Integer.toString(selectedBlockBtn.block));
-			lblGradeInfo.setText(Double.toString(selectedBlockBtn.grade) + "%");
-			lblElevationInfo.setText(Double.toString(selectedBlockBtn.elevation) + " ft");
-
-			if (selectedBlockBtn.block == 1)
-			{
-				lblStatusInfo.setText("Occupied");
-				lblTrainNumInfo.setText(Integer.toString(selectedBlockBtn.train));
-				lblSpeedInfo.setText("20 mph");
-				lblDestInfo.setText("Block 15");
-				lblAuthInfo.setText("14 Blocks");
-				lblStationInfo.setText("N/A");
-				btnToggleSwitch.setEnabled(false);
-				setHasTrain(true);
-			}
-			else
-			{
-				lblTrainNumInfo.setText("N/A");
-				lblSpeedInfo.setText("N/A");
-				lblDestInfo.setText("N/A");
-				lblAuthInfo.setText("N/A");
-				lblStatusInfo.setText("Open");
-				lblStationInfo.setText("Pioneer");
-				btnToggleSwitch.setEnabled(false);
-				setHasTrain(false);
-			}
         }
     }
 	
