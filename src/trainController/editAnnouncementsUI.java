@@ -21,7 +21,7 @@ public class editAnnouncementsUI extends JFrame {
 
 	private JPanel contentPane;
 	
-	private trainControllerUI tcui;
+	private TrainControllerUI tcui;
 
 	/**
 	 * Launch the application.
@@ -42,7 +42,7 @@ public class editAnnouncementsUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public editAnnouncementsUI(trainControllerUI ui, ArrayList<String> list) {
+	public editAnnouncementsUI(TrainControllerUI ui, ArrayList<String> list) {
 		tcui = ui;
 		
 		setTitle("Edit Announcements");
