@@ -2,15 +2,31 @@ package ctcOffice;
 
 import trackModel.*;
 import waysideController.*;
+import java.sql.*;
 
 public class CTCOffice
 {
-	//private DBInteraction dataBase = new DBInteraction();
+	private DBInteraction dataBase;
 	
 	public enum Mode {MAUNAL, AUTOMATIC};
 	
 	private int simulationSpeed;
 	private Mode mode = Mode.MAUNAL; //1=manual 2=auto
+
+	public TrackBlock[] greenLine, redLine;
+	
+	public CTCOffice()
+	{
+		greenLine = new TrackBlock[152];
+		redLine = new TrackBlock[77];
+
+		try {
+			dataBase = new DBInteraction();
+			loadTrackData();
+		} catch (Exception e) {
+
+		}
+	}
 	
 	public void setMode(Mode newMode)
 	{
@@ -39,5 +55,20 @@ public class CTCOffice
 	public Mode getMode()
 	{
 		return mode;
+	}
+
+	/** Load in initial track data */
+	private void loadTrackData()
+	{
+		for (int i=0; i < greenLine.length; i++)
+		{
+			try {
+				greenLine[i] = dataBase.getSection("Green", i + 1);
+				if (i < redLine.length)
+					redLine[i] = dataBase.getSection("Red", i + 1);
+			} catch(SQLException e) {
+
+			}
+		}
 	}
 }
