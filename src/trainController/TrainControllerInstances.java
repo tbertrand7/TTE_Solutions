@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class TrainControllerInstances {
 	
-	private HashMap<Integer, trainControllerUI> UIList;	//maps instance IDs to trainControllerUI classes
+	private HashMap<Integer, TrainControllerUI> UIList;	//maps instance IDs to trainControllerUI classes
 	private HashMap<Integer, PowerCalculator> powerList; //maps instance IDs to PowerCalculator classes <-- this should be train IDs, not instance IDs
 	private HashMap<Integer, TestPanel> testList; //maps instance IDs to TestPanel classes
 	
@@ -14,7 +14,7 @@ public class TrainControllerInstances {
 	
 	public TrainControllerInstances() {
 		nextID = 0;
-		UIList = new HashMap<Integer, trainControllerUI>();
+		UIList = new HashMap<Integer, TrainControllerUI>();
 		powerList = new HashMap<Integer, PowerCalculator>();
 		testList = new HashMap<Integer, TestPanel>();
 	}
@@ -98,7 +98,7 @@ public class TrainControllerInstances {
 		System.out.println();
 	}
 	
-	private void createNew(trainControllerUI tcui, TestPanel tp) {
+	private void createNew(TrainControllerUI tcui, TestPanel tp) {
 		//Put into list
 		UIList.put(nextID, tcui);
 		testList.put(nextID, tp);
@@ -124,7 +124,7 @@ public class TrainControllerInstances {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					trainControllerUI tcui = new trainControllerUI(nextID, instance);
+					TrainControllerUI tcui = new TrainControllerUI(nextID, instance);
 					TestPanel tp = new TestPanel(nextID, instance);
 					
 					instance.createNew(tcui, tp);

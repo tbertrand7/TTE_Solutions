@@ -2,7 +2,7 @@ package trainController;
 
 public class PowerCalculator extends Thread {
 
-	private final trainControllerUI ui;
+	private final TrainControllerUI ui;
 	
 	private double Pcmd;
 	private final double Kp = 30000;
@@ -19,7 +19,7 @@ public class PowerCalculator extends Thread {
 	
 	private boolean proceed;
 	
-	public PowerCalculator(trainControllerUI tcui) {
+	public PowerCalculator(TrainControllerUI tcui) {
 		ui = tcui;
 		Ek = 0;
 		Ek1 = 0;
