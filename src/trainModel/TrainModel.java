@@ -2,50 +2,50 @@ package trainModel;
 
 public class TrainModel {
 	
-	/*Static variables for Train specific stats*/
-	static int maxPassengers = 222; 	
-		static int maxCrew = 20; //don't know where to find this, "20" is dummy data for now
-	static double trainMass = 40900.0; //in kg         //56.7T or 40.9T (metric)
-	static double maxPower = 397629.8; //in J/s (N*m/s)
-	static double maxAcc = 0.5; //in m/s^2
-	
-	boolean rightDoorsOpen; 
-	boolean leftDoorsOpen; 
-	boolean lightsOn; 
-	
-	boolean serviceBrakeOn;
-	boolean emergencyBrakeOn;
-	
-	int crewCount; 
-	int passengerCount; 
-	int temperature; 
-	int elevation;
-	
-	double power; 
-	double velocity; 
-	
+	TrainState trainState = new TrainState();
+	TrainSpecs trainSpecs = new TrainSpecs();
+	Train trainDynamics = new Train();
 	
 	/**
 	 * Null constructor
 	 * sets all boolean variables to false and all numerical variables to 0
 	 */
 	public TrainModel() {		
-		rightDoorsOpen = false;
-		leftDoorsOpen = false;
-		lightsOn = false;
+		trainState.rightDoorsOpen = false;
+		trainState.leftDoorsOpen = false;
+		trainState.lightsOn = false;
 		
-		serviceBrakeOn = false;
-		emergencyBrakeOn = false;
+		trainState.serviceBrakeOn = false;
+		trainState.emergencyBrakeOn = false;
 		
-		crewCount = 0;
-		passengerCount = 0;
-		temperature = 0;
-		elevation = 0;
+		trainState.crewCount = 0;
+		trainState.passengerCount = 0;
+		trainState.temperature = 0;
+		trainDynamics.elevation = 0;
 		
-		power = 0.0;
-		velocity = 0.0;	
+		trainDynamics.power = 0.0;
+		trainDynamics.velocity = 0.0;	
 	}
 	
+	
+	/**
+	 * calls private method for failure protocol
+	 */
+	public void initFailureProto(){
+		initFailurePrivate();
+	}
+	
+	
+			/**
+			 * failure protocol
+			 */
+			private void initFailurePrivate(){
+				setPower(0); //set power to zero
+				serviceBrakeOn = true;   //<< Turn on brakes 
+				emergencyBrakeOn = true; //<<
+				lightsOn = true; // Turn on lights
+			}
+			
 	
 	/**
 	 * Gets the velocity of the train
@@ -105,6 +105,9 @@ public class TrainModel {
 		
 		int tempCount = passengerCount;
 		tempCount = tempCount + delta;
+		passengerCount = tempCount;
+		
+		trainMass =(passengerCount * personMass) + emptyTrainMass;
 		
 		if(tempCount > maxPassengers || tempCount < 0){
 			return false;
@@ -239,7 +242,7 @@ public class TrainModel {
 	
 	/**
 	 * Get the status of the Emergency Brakes
-	 * @return true if the emergency brakse are on
+	 * @return true if the emergency brakes are on
 	 */
 	boolean getEmergencyBrakeStatus(){
 		return emergencyBrakeOn;
