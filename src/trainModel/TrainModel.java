@@ -4,7 +4,10 @@ public class TrainModel {
 	
 	TrainState trainState = new TrainState();
 	TrainSpecs trainSpecs = new TrainSpecs();
-	Train trainDynamics = new Train();
+
+	int elevation;
+	double power; 
+	double velocity; 
 	
 	/**
 	 * Null constructor
@@ -21,10 +24,10 @@ public class TrainModel {
 		trainState.crewCount = 0;
 		trainState.passengerCount = 0;
 		trainState.temperature = 0;
-		trainDynamics.elevation = 0;
+		elevation = 0;
 		
-		trainDynamics.power = 0.0;
-		trainDynamics.velocity = 0.0;	
+		power = 0.0;
+		velocity = 0.0;	
 	}
 	
 	
@@ -41,9 +44,9 @@ public class TrainModel {
 			 */
 			private void initFailurePrivate(){
 				setPower(0); //set power to zero
-				serviceBrakeOn = true;   //<< Turn on brakes 
-				emergencyBrakeOn = true; //<<
-				lightsOn = true; // Turn on lights
+				trainState.serviceBrakeOn = true;   //<< Turn on brakes 
+				trainState.emergencyBrakeOn = true; //<<
+				trainState.lightsOn = true; // Turn on lights
 			}
 			
 	
@@ -66,7 +69,7 @@ public class TrainModel {
 		double tempPower;
 		tempPower = powerSetPoint;
 		
-		if(tempPower > maxPower || tempPower < 0){
+		if(tempPower > trainSpecs.maxPower || tempPower < 0){
 			return false;
 		}
 		else{ //velocity calculations here or in getVelocity() method???
@@ -103,17 +106,17 @@ public class TrainModel {
 	 */
 	boolean changePassengerCount(int delta){
 		
-		int tempCount = passengerCount;
+		int tempCount = trainState.passengerCount;
 		tempCount = tempCount + delta;
-		passengerCount = tempCount;
+		trainState.passengerCount = tempCount;
 		
-		trainMass =(passengerCount * personMass) + emptyTrainMass;
+		trainSpecs.trainMass =(trainState.passengerCount * trainSpecs.personMass) + trainSpecs.emptyTrainMass;
 		
-		if(tempCount > maxPassengers || tempCount < 0){
+		if(tempCount > trainSpecs.maxPassengers || tempCount < 0){
 			return false;
 		}
 		else{
-			passengerCount = passengerCount + delta;
+			trainState.passengerCount = trainState.passengerCount + delta;
 			return true;
 		}
 	}
@@ -124,7 +127,7 @@ public class TrainModel {
 	 * @return passenger count
 	 */
 	int getPassengerCount(){
-		return passengerCount;
+		return trainState.passengerCount;
 	}
 	
 	
@@ -133,7 +136,7 @@ public class TrainModel {
 	 * @return crew count
 	 */
 	int getCrewCount(){
-		return crewCount;
+		return trainState.crewCount;
 	}
 	
 	
@@ -142,11 +145,11 @@ public class TrainModel {
 	 */
 	void changeLightsStatus(){
 		
-		if(lightsOn == true){
-			lightsOn = false;
+		if(trainState.lightsOn == true){
+			trainState.lightsOn = false;
 		}
 		else{
-			lightsOn = true;
+			trainState.lightsOn = true;
 		}	
 	}
 	
@@ -156,7 +159,7 @@ public class TrainModel {
 	 * @return true if the lights are on, else false
 	 */
 	boolean getLightStatus(){
-		return lightsOn;
+		return trainState.lightsOn;
 	}
 	
 	
@@ -165,11 +168,11 @@ public class TrainModel {
 	 */
 	void changeRightDoors(){
 		
-		if(rightDoorsOpen){
-			rightDoorsOpen = false;
+		if(trainState.rightDoorsOpen){
+			trainState.rightDoorsOpen = false;
 		}
 		else{
-			rightDoorsOpen = true;
+			trainState.rightDoorsOpen = true;
 		}
 	}
 	
@@ -179,7 +182,7 @@ public class TrainModel {
 	 * @return true if the right doors are open, else false
 	 */
 	boolean getRightDoorStatus(){
-		return rightDoorsOpen;
+		return trainState.rightDoorsOpen;
 	}
 	
 	
@@ -188,11 +191,11 @@ public class TrainModel {
 	 */
 	void changeLeftDoors(){
 		
-		if(leftDoorsOpen){
-			leftDoorsOpen = false;
+		if(trainState.leftDoorsOpen){
+			trainState.leftDoorsOpen = false;
 		}
 		else{
-			leftDoorsOpen = true;
+			trainState.leftDoorsOpen = true;
 		}
 	}
 	
@@ -202,7 +205,7 @@ public class TrainModel {
 	 * @return true if the left doors are open, else false
 	 */
 	boolean getLeftDoorStatus(){
-		return leftDoorsOpen;
+		return trainState.leftDoorsOpen;
 	}
 	
 	
@@ -210,11 +213,11 @@ public class TrainModel {
 	 * Changes status of Service Brakes (on -> off OR off -> on)
 	 */
 	void serviceBrake(){
-		if(serviceBrakeOn){
-			serviceBrakeOn = false;
+		if(trainState.serviceBrakeOn){
+			trainState.serviceBrakeOn = false;
 		}
 		else{
-			serviceBrakeOn = true;
+			trainState.serviceBrakeOn = true;
 		}
 	}
 	
@@ -224,7 +227,7 @@ public class TrainModel {
 	 * @return true if service brakes are on
 	 */
 	boolean getServiceBrakeStatus(){
-		return serviceBrakeOn;
+		return trainState.serviceBrakeOn;
 	}
 	
 	
@@ -232,11 +235,11 @@ public class TrainModel {
 	 * Changes status of Emergency Brakes (on -> off OR off -> on)
 	 */
 	void emergencyBrake(){
-		if(emergencyBrakeOn){
-			emergencyBrakeOn = false;
+		if(trainState.emergencyBrakeOn){
+			trainState.emergencyBrakeOn = false;
 		}
 		else{
-			emergencyBrakeOn = true;
+			trainState.emergencyBrakeOn = true;
 		}
 	}
 	
@@ -245,7 +248,7 @@ public class TrainModel {
 	 * @return true if the emergency brakes are on
 	 */
 	boolean getEmergencyBrakeStatus(){
-		return emergencyBrakeOn;
+		return trainState.emergencyBrakeOn;
 	}
 	
 	
@@ -254,7 +257,7 @@ public class TrainModel {
 	 * @param setTemp - the setpoint temperature for the train
 	 */
 	void setTemperature(int setTemp){
-		temperature = setTemp;
+		trainState.temperature = setTemp;
 	}
 	
 	
@@ -263,7 +266,7 @@ public class TrainModel {
 	 * @return the temperature of the train
 	 */
 	int getTemperature(){
-		return temperature;
+		return trainState.temperature;
 	}
 	
 	/*
