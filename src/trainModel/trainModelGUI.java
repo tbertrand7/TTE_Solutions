@@ -32,7 +32,6 @@ public class trainModelGUI {
 	private JTextField currentSpeed;
 	private JTextField serviceBrakeStatus;
 	private JTextField emergencyBrakeStatus;
-	final JFrame parent = new JFrame();
 	private JTextField trainID;
 	private JTable table;
 	private JTextField CrewDisp;
@@ -58,7 +57,8 @@ public class trainModelGUI {
 	private JTextField currentTrainPower;
 	private Canvas canvas_4;
 	private Canvas canvas_5;
-	
+	final JFrame parent = new JFrame();
+
 	
 	private TrainModel train = new TrainModel(); 
 	DecimalFormat dc = new DecimalFormat("#0.00");

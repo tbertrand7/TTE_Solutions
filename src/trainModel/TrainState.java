@@ -12,6 +12,8 @@ public class TrainState extends TrainSpecs {
 	int crewCount; 
 	int passengerCount; 
 	int temperature; 
+	
+	double trainMass;
 		
 	public TrainState(){
 		rightDoorsOpen = false;

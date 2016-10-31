@@ -1,10 +1,9 @@
 package trainModel;
 
 public class TrainModel extends TrainState {
-	
-	TrainState trainState = new TrainState();  //State of train (lights, brakes, etc)
-	TrainSpecs trainSpecs = new TrainSpecs();  //info from Train Info Sheet
 
+	int trainID; //unique train ID
+	
 	double elevation;
 	double power; 
 	double velocity; 
@@ -14,16 +13,16 @@ public class TrainModel extends TrainState {
 	 * sets all boolean variables to false and all numerical variables to 0
 	 */
 	public TrainModel() {		
-		trainState.rightDoorsOpen = false;
-		trainState.leftDoorsOpen = false;
-		trainState.lightsOn = false;
+		rightDoorsOpen = false;
+		leftDoorsOpen = false;
+		lightsOn = false;
 		
-		trainState.serviceBrakeOn = false;
-		trainState.emergencyBrakeOn = false;
+		serviceBrakeOn = false;
+		emergencyBrakeOn = false;
 		
-		trainState.crewCount = 0;
-		trainState.passengerCount = 0;
-		trainState.temperature = 0;
+		crewCount = 0;
+		passengerCount = 0;
+		temperature = 0;
 		elevation = 0;
 		
 		power = 0.0;
@@ -44,9 +43,9 @@ public class TrainModel extends TrainState {
 			 */
 			private void initFailurePrivate(){
 				setPower(0); //set power to zero
-				trainState.serviceBrakeOn = true;   //<< Turn on brakes 
-				trainState.emergencyBrakeOn = true; //<<
-				trainState.lightsOn = true; // Turn on lights
+				serviceBrakeOn = true;   //<< Turn on brakes 
+				emergencyBrakeOn = true; //<<
+				lightsOn = true; // Turn on lights
 			}
 			
 	
@@ -62,14 +61,14 @@ public class TrainModel extends TrainState {
 	/**
 	 * Sets the power of the train based on a power input
 	 * Calculates the velocity given the power and sets velocity of train
-	 * @param powerSetPoint - power input
+	 * @param powerSetPoint - power input in KiloWatts
 	 * @return true if the power input is valid
 	 */
 	boolean setPower(double powerSetPoint){
 		double tempPower;
 		tempPower = powerSetPoint;
 		
-		if(tempPower > trainSpecs.maxPower || tempPower < 0){
+		if(tempPower > maxPower || tempPower < 0){
 			return false;
 		}
 		else{ //velocity calculations here or in getVelocity() method???
@@ -82,7 +81,7 @@ public class TrainModel extends TrainState {
 				/**
 				 * Private Method
 				 * Calculates the velocity of the train given a power input
-				 * @param power - the power input for the train
+				 * @param power - the power input for the train in KiloWatts
 				 * @return the velocity of the train
 				 */
 				private double calculateVelocity (double power){
