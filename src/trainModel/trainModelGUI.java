@@ -70,7 +70,7 @@ public class trainModelGUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					testGUI window = new testGUI();
+					trainModelGUI window = new trainModelGUI();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -267,7 +267,7 @@ public class trainModelGUI {
 		 */
 		powerInput = new JTextField();
 		
-		double trainPower = train.getPower();
+		double trainPower = train.power;
 		powerInput.setText(Double.toString(trainPower));
 		
 		powerInput.setHorizontalAlignment(SwingConstants.CENTER);
@@ -309,9 +309,9 @@ public class trainModelGUI {
 		
 		
 		/*
-		 * Horsepower Label
+		 * KiloWatts Label
 		 */
-		JLabel powerLabel = new JLabel("W");
+		JLabel powerLabel = new JLabel("Kw");
 		powerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		powerLabel.setFont(new Font("Courier New", Font.PLAIN, 24));
 		powerLabel.setBounds(285, 200, 30, 20);
@@ -441,7 +441,7 @@ public class trainModelGUI {
 					
 					
 					JOptionPane.showMessageDialog(parent, "Danger!! Engine Failure!!");	
-					train.initFailureProto();
+					train.initFailureProtocol();
 			
 				}
 			}
@@ -465,7 +465,7 @@ public class trainModelGUI {
 				
 					
 				JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
-				train.initFailureProto();
+				train.initFailureProtocol();
 			
 				
 				}
@@ -490,7 +490,7 @@ public class trainModelGUI {
 					
 					
 					JOptionPane.showMessageDialog(parent, "Danger!! Signal Pickup Failure!!");
-					train.initFailureProto();
+					train.initFailureProtocol();
 					
 				}
 			}

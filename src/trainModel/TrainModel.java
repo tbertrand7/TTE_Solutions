@@ -1,11 +1,11 @@
 package trainModel;
 
-public class TrainModel {
+public class TrainModel extends TrainState {
 	
-	TrainState trainState = new TrainState();
-	TrainSpecs trainSpecs = new TrainSpecs();
+	TrainState trainState = new TrainState();  //State of train (lights, brakes, etc)
+	TrainSpecs trainSpecs = new TrainSpecs();  //info from Train Info Sheet
 
-	int elevation;
+	double elevation;
 	double power; 
 	double velocity; 
 	
@@ -34,7 +34,7 @@ public class TrainModel {
 	/**
 	 * calls private method for failure protocol
 	 */
-	public void initFailureProto(){
+	public void initFailureProtocol(){
 		initFailurePrivate();
 	}
 	
@@ -89,185 +89,14 @@ public class TrainModel {
 					
 					/*REVISIT!!!!!     physics equations for velocity-power calculations
 					 * 
-					velocity = power / (trainMass * maxAcc); ??????????
-					
+					velocity = power / (trainMass * maxAcc); 
 					*/
 					
 					velocity = .625 * power;
 					
 					return velocity;
 				}
-		
-			
-	/**
-	 * Allows for the number of passengers to be changed
-	 * @param delta - the number of passengers entering/exiting the train
-	 * @return true if passenger count change is valid
-	 */
-	boolean changePassengerCount(int delta){
-		
-		int tempCount = trainState.passengerCount;
-		tempCount = tempCount + delta;
-		trainState.passengerCount = tempCount;
-		
-		trainSpecs.trainMass =(trainState.passengerCount * trainSpecs.personMass) + trainSpecs.emptyTrainMass;
-		
-		if(tempCount > trainSpecs.maxPassengers || tempCount < 0){
-			return false;
-		}
-		else{
-			trainState.passengerCount = trainState.passengerCount + delta;
-			return true;
-		}
-	}
-	
-	
-	/**
-	 * Gets the number of passengers on the train
-	 * @return passenger count
-	 */
-	int getPassengerCount(){
-		return trainState.passengerCount;
-	}
-	
-	
-	/**
-	 * Gets the number of crew members on the train
-	 * @return crew count
-	 */
-	int getCrewCount(){
-		return trainState.crewCount;
-	}
-	
-	
-	/**
-	 * Changes the status of the lights (off -> on OR on -> off)
-	 */
-	void changeLightsStatus(){
-		
-		if(trainState.lightsOn == true){
-			trainState.lightsOn = false;
-		}
-		else{
-			trainState.lightsOn = true;
-		}	
-	}
-	
-	
-	/**
-	 * Gets the status of the lights
-	 * @return true if the lights are on, else false
-	 */
-	boolean getLightStatus(){
-		return trainState.lightsOn;
-	}
-	
-	
-	/**
-	 * Changes the status of the right doors (open -> closed OR closed -> open)
-	 */
-	void changeRightDoors(){
-		
-		if(trainState.rightDoorsOpen){
-			trainState.rightDoorsOpen = false;
-		}
-		else{
-			trainState.rightDoorsOpen = true;
-		}
-	}
-	
-	
-	/**
-	 * Gets the status of the right doors
-	 * @return true if the right doors are open, else false
-	 */
-	boolean getRightDoorStatus(){
-		return trainState.rightDoorsOpen;
-	}
-	
-	
-	/**
-	 * Changes the status of the left doors (open -> closed OR closed -> open)
-	 */
-	void changeLeftDoors(){
-		
-		if(trainState.leftDoorsOpen){
-			trainState.leftDoorsOpen = false;
-		}
-		else{
-			trainState.leftDoorsOpen = true;
-		}
-	}
-	
-	
-	/**
-	 * Gets the status of the left doors
-	 * @return true if the left doors are open, else false
-	 */
-	boolean getLeftDoorStatus(){
-		return trainState.leftDoorsOpen;
-	}
-	
-	
-	/**
-	 * Changes status of Service Brakes (on -> off OR off -> on)
-	 */
-	void serviceBrake(){
-		if(trainState.serviceBrakeOn){
-			trainState.serviceBrakeOn = false;
-		}
-		else{
-			trainState.serviceBrakeOn = true;
-		}
-	}
-	
-	
-	/**
-	 * Get the status of the Service Brakes
-	 * @return true if service brakes are on
-	 */
-	boolean getServiceBrakeStatus(){
-		return trainState.serviceBrakeOn;
-	}
-	
-	
-	/**
-	 * Changes status of Emergency Brakes (on -> off OR off -> on)
-	 */
-	void emergencyBrake(){
-		if(trainState.emergencyBrakeOn){
-			trainState.emergencyBrakeOn = false;
-		}
-		else{
-			trainState.emergencyBrakeOn = true;
-		}
-	}
-	
-	/**
-	 * Get the status of the Emergency Brakes
-	 * @return true if the emergency brakes are on
-	 */
-	boolean getEmergencyBrakeStatus(){
-		return trainState.emergencyBrakeOn;
-	}
-	
-	
-	/**
-	 * Changes the temperature of the train
-	 * @param setTemp - the setpoint temperature for the train
-	 */
-	void setTemperature(int setTemp){
-		trainState.temperature = setTemp;
-	}
-	
-	
-	/**
-	 * Gets the current temperature of the train
-	 * @return the temperature of the train
-	 */
-	int getTemperature(){
-		return trainState.temperature;
-	}
+
 	
 	/*
 	 * Elevation method here
