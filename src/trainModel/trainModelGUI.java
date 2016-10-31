@@ -412,7 +412,7 @@ public class trainModelGUI {
 				//Only if in test mode
 				if(testModeButton.isSelected()){
 					boolean trainBrakeStatus = train.getServiceBrakeStatus();
-						if(trainBrakeStatus){
+					if(trainBrakeStatus){
 						train.serviceBrake();
 						serviceBrakeStatus.setText("Disengaged");
 					}
@@ -442,13 +442,22 @@ public class trainModelGUI {
 					
 					JOptionPane.showMessageDialog(parent, "Danger!! Engine Failure!!");	
 					train.initFailureProtocol();
+
+					emergencyBrakeControl.setSelected(true);
+					emergencyBrakeStatus.setText("Engaged");
+					
+					serviceBrakeControl.setSelected(true);
+					serviceBrakeStatus.setText("Engaged");
+					
+					lightsControl.setSelected(true);
+					lightsStatus.setText("On");
 			
 				}
 			}
 		});
 		engineFailureButton.setForeground(Color.RED);
 		engineFailureButton.setFont(new Font("Courier New", Font.BOLD, 16));
-		engineFailureButton.setBounds(41, 298, 243, 30);
+		engineFailureButton.setBounds(41, 298, 260, 30);
 		frame.getContentPane().add(engineFailureButton);
 		
 		
@@ -465,13 +474,22 @@ public class trainModelGUI {
 						
 					JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
 					train.initFailureProtocol();
+					
+					emergencyBrakeControl.setSelected(true);
+					emergencyBrakeStatus.setText("Engaged");
+					
+					serviceBrakeControl.setSelected(true);
+					serviceBrakeStatus.setText("Engaged");
+					
+					lightsControl.setSelected(true);
+					lightsStatus.setText("On");					
 			
 				}
 			}
 		});
 		brakeFailureButton.setForeground(Color.RED);
 		brakeFailureButton.setFont(new Font("Courier New", Font.BOLD, 16));
-		brakeFailureButton.setBounds(41, 329, 243, 30);
+		brakeFailureButton.setBounds(41, 329, 260, 30);
 		frame.getContentPane().add(brakeFailureButton);
 		
 		
@@ -490,12 +508,21 @@ public class trainModelGUI {
 					JOptionPane.showMessageDialog(parent, "Danger!! Signal Pickup Failure!!");
 					train.initFailureProtocol();
 					
+					emergencyBrakeControl.setSelected(true);
+					emergencyBrakeStatus.setText("Engaged");
+					
+					serviceBrakeControl.setSelected(true);
+					serviceBrakeStatus.setText("Engaged");
+					
+					lightsControl.setSelected(true);
+					lightsStatus.setText("On");
+										
 				}
 			}
 		});
 		signalPickupFailure.setForeground(Color.RED);
 		signalPickupFailure.setFont(new Font("Courier New", Font.BOLD, 16));
-		signalPickupFailure.setBounds(41, 360, 243, 30);
+		signalPickupFailure.setBounds(41, 360, 260, 30);
 		frame.getContentPane().add(signalPickupFailure);
 		
 		
@@ -569,7 +596,7 @@ public class trainModelGUI {
 		TempDisp.setEditable(false);
 		int temperature;
 		temperature = train.getTemperature();
-		TempDisp.setText(Integer.toString(temperature) + " \u2109");
+		TempDisp.setText(Integer.toString(temperature) + " *F");
 		TempDisp.setBounds(536, 349, 172, 40);
 		frame.getContentPane().add(TempDisp);
 		TempDisp.setColumns(10);
