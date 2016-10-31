@@ -10,7 +10,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import ctcOffice.*;
 import trackModel.trackModelUI;
-import trainController.trainControllerUI;
+import trainController.TrainControllerUI;
 import trainController.TrainControllerInstances;//******************
 import trainModel.testGUI;
 import waysideController.TC_UI_main;
