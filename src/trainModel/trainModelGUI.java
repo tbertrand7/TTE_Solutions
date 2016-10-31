@@ -311,7 +311,7 @@ public class trainModelGUI {
 		/*
 		 * KiloWatts Label
 		 */
-		JLabel powerLabel = new JLabel("Kw");
+		JLabel powerLabel = new JLabel("KW");
 		powerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		powerLabel.setFont(new Font("Courier New", Font.PLAIN, 24));
 		powerLabel.setBounds(285, 200, 30, 20);
@@ -460,14 +460,12 @@ public class trainModelGUI {
 		brakeFailureButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//If int Test Mode
+				//If in Test Mode
 				if(testModeButton.isSelected()){
-				
-					
-				JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
-				train.initFailureProtocol();
+						
+					JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
+					train.initFailureProtocol();
 			
-				
 				}
 			}
 		});
@@ -508,7 +506,7 @@ public class trainModelGUI {
 		trainID.setEditable(false);
 		trainID.setHorizontalAlignment(SwingConstants.CENTER);
 		trainID.setFont(new Font("Courier New", Font.BOLD, 24));
-		trainID.setText("12345");
+		trainID.setText(Integer.toString(train.trainID));
 		trainID.setBounds(593, 59, 115, 40);
 		frame.getContentPane().add(trainID);
 		trainID.setColumns(10);
@@ -571,7 +569,7 @@ public class trainModelGUI {
 		TempDisp.setEditable(false);
 		int temperature;
 		temperature = train.getTemperature();
-		TempDisp.setText(Integer.toString(temperature));
+		TempDisp.setText(Integer.toString(temperature) + " \u2109");
 		TempDisp.setBounds(536, 349, 172, 40);
 		frame.getContentPane().add(TempDisp);
 		TempDisp.setColumns(10);
@@ -733,7 +731,7 @@ public class trainModelGUI {
 		currentTrainPower.setFont(new Font("Courier New", Font.BOLD, 24));
 		
 		double currTrainPwr;
-		currTrainPwr = 100.00;
+		currTrainPwr = 00.00;
 		currentTrainPower.setText(Double.toString(currTrainPwr));
 
 		currentTrainPower.setEditable(false);
@@ -741,11 +739,11 @@ public class trainModelGUI {
 		frame.getContentPane().add(currentTrainPower);
 		currentTrainPower.setColumns(10);
 		
-		JLabel label = new JLabel("W");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setFont(new Font("Courier New", Font.PLAIN, 24));
-		label.setBounds(285, 156, 30, 20);
-		frame.getContentPane().add(label);
+		JLabel lblKw = new JLabel("KW");
+		lblKw.setHorizontalAlignment(SwingConstants.CENTER);
+		lblKw.setFont(new Font("Courier New", Font.PLAIN, 24));
+		lblKw.setBounds(285, 156, 30, 20);
+		frame.getContentPane().add(lblKw);
 		
 		canvas_4 = new Canvas();
 		canvas_4.setBackground(Color.BLACK);

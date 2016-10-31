@@ -12,7 +12,9 @@ public class TrainModel extends TrainState {
 	 * Null constructor
 	 * sets all boolean variables to false and all numerical variables to 0
 	 */
-	public TrainModel() {		
+	public TrainModel() {	
+		trainID = 99999;
+		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
 		lightsOn = false;
@@ -20,9 +22,9 @@ public class TrainModel extends TrainState {
 		serviceBrakeOn = false;
 		emergencyBrakeOn = false;
 		
-		crewCount = 0;
+		crewCount = 1;
 		passengerCount = 0;
-		temperature = 0;
+		temperature = 70;
 		elevation = 0;
 		
 		power = 0.0;

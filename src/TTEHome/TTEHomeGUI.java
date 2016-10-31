@@ -12,7 +12,7 @@ import ctcOffice.*;
 import trackModel.trackModelUI;
 import trainController.TrainControllerUI;
 import trainController.TrainControllerInstances;//******************
-import trainModel.testGUI;
+import trainModel.trainModelGUI;
 import waysideController.TC_UI_main;
 import waysideController.TC_UI_startup;
 
@@ -95,7 +95,7 @@ public class TTEHomeGUI {
 		JButton btnTrainModel = new JButton("Train Model");
 		btnTrainModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				testGUI.main(null);
+				trainModelGUI.main(null);
 			}
 		});
 		btnTrainModel.setBounds(289, 141, 135, 109);
