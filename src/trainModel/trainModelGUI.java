@@ -478,8 +478,8 @@ public class trainModelGUI {
 					emergencyBrakeControl.setSelected(true);
 					emergencyBrakeStatus.setText("Engaged");
 					
-					serviceBrakeControl.setSelected(true);
-					serviceBrakeStatus.setText("Engaged");
+					serviceBrakeControl.setSelected(false);
+					serviceBrakeStatus.setText("FAILURE!");
 					
 					lightsControl.setSelected(true);
 					lightsStatus.setText("On");					
