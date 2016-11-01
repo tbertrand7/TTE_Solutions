@@ -65,7 +65,7 @@ public class TestPanel extends JFrame {
 	
 	public void initialize() {
 		updateTrainInstances();
-		parent.setSpeedCommand((int)TrainSelect.getSelectedItem(), 30);
+		//parent.setSpeedCommand((int)TrainSelect.getSelectedItem(), 30);
 		
 		ts = new TestSpeed(this);
 		ts.start();
