@@ -443,14 +443,9 @@ public class trainModelGUI {
 					JOptionPane.showMessageDialog(parent, "Danger!! Engine Failure!!");	
 					train.initFailureProtocol();
 
-					emergencyBrakeControl.setSelected(true);
-					emergencyBrakeStatus.setText("Engaged");
-					
-					serviceBrakeControl.setSelected(true);
-					serviceBrakeStatus.setText("Engaged");
-					
-					lightsControl.setSelected(true);
-					lightsStatus.setText("On");
+					emergencyBrakeControl.doClick();					
+					serviceBrakeControl.doClick();	
+					lightsControl.doClick();
 			
 				}
 			}
@@ -475,14 +470,9 @@ public class trainModelGUI {
 					JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
 					train.initFailureProtocol();
 					
-					emergencyBrakeControl.setSelected(true);
-					emergencyBrakeStatus.setText("Engaged");
-					
-					serviceBrakeControl.setSelected(false);
-					serviceBrakeStatus.setText("FAILURE!");
-					
-					lightsControl.setSelected(true);
-					lightsStatus.setText("On");					
+					emergencyBrakeControl.doClick();					
+					serviceBrakeControl.doClick();	
+					lightsControl.doClick();				
 			
 				}
 			}
@@ -508,14 +498,9 @@ public class trainModelGUI {
 					JOptionPane.showMessageDialog(parent, "Danger!! Signal Pickup Failure!!");
 					train.initFailureProtocol();
 					
-					emergencyBrakeControl.setSelected(true);
-					emergencyBrakeStatus.setText("Engaged");
-					
-					serviceBrakeControl.setSelected(true);
-					serviceBrakeStatus.setText("Engaged");
-					
-					lightsControl.setSelected(true);
-					lightsStatus.setText("On");
+					emergencyBrakeControl.doClick();					
+					serviceBrakeControl.doClick();	
+					lightsControl.doClick();
 										
 				}
 			}
