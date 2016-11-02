@@ -464,8 +464,8 @@ public class TrainControllerUI extends JFrame {
 		btnAnnCustReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-//					EditAnnouncementsUI frame2 = new EditAnnouncementsUI(instance, annList);
-//					frame2.setVisible(true);
+				EditAnnouncementsUI frame2 = new EditAnnouncementsUI(instance, annList);
+					frame2.setVisible(true);
 				} catch (Exception exc) {
 					exc.printStackTrace();
 				}
