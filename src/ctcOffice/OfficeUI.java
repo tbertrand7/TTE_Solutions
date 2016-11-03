@@ -11,6 +11,7 @@ import javax.swing.event.*;
 import javax.swing.text.*;
 
 import ctcOffice.CTCOffice.Mode;
+import trackModel.*;
 
 import java.text.*;
 import java.util.*;
@@ -498,7 +499,7 @@ public class OfficeUI extends JFrame {
 	private void btnSetDestination_Click()
 	{
 		String newDest = cmbDestinations.getSelectedItem().toString();
-		logNotification("Train " + selectedBlockBtn.train + " dispatched to " + newDest);
+		//logNotification("Train " + selectedBlockBtn.train + " dispatched to " + newDest);
 		lblDestInfo.setText(newDest);
 		
 		int newAuthority;
@@ -513,9 +514,26 @@ public class OfficeUI extends JFrame {
 	private void selectedBlockChanged(ActionEvent e)
     {
         TrackButton selected = (TrackButton)e.getSource();
+		TrackBlock selectedBlock;
 
         if (!selected.equals(selectedBlockBtn)) {
             selectedBlockBtn = selected;
+			if (selectedBlockBtn.line.equals("Green"))
+				selectedBlock = ctcOffice.greenLine[selectedBlockBtn.block-1];
+			else
+				selectedBlock = ctcOffice.redLine[selectedBlockBtn.block-1];
+
+			//Set block info
+			lblLineInfo.setText(selectedBlockBtn.line);
+			lblBlockInfo.setText(Integer.toString(selectedBlockBtn.block));
+			lblSectionInfo.setText(selectedBlock.section);
+			lblLengthInfo.setText(selectedBlock.blockLength + " ft");
+			lblGradeInfo.setText(selectedBlock.blockGrade + "%");
+			lblSpeedLimitInfo.setText(selectedBlock.speedLimit + " mph");
+			lblElevationInfo.setText(selectedBlock.elevation + " ft");
+			lblStatusInfo.setText(selectedBlock.status);
+
+			logNotification(selectedBlockBtn.toString());
         }
     }
 
@@ -742,6 +760,14 @@ public class OfficeUI extends JFrame {
 		lblNotifications.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNotifications.setBounds(122, 6, 165, 22);
 		notificationPanel.add(lblNotifications);
+	}
+
+	/**
+	 * Initializes dynamic elements of Office UI
+	 */
+	private void initDynamicElements()
+	{
+
 	}
 
 	/**
@@ -2123,5 +2149,17 @@ public class OfficeUI extends JFrame {
 		toggleButtonR77.setBounds(692, 196, 15, 15);
 		trackDisplayPanel.add(toggleButtonR77);
 		redLine[76] = toggleButtonR77;
+
+		for (int i=0; i < greenLine.length; i++)
+		{
+			greenLine[i].line = "Green";
+			greenLine[i].block = i + 1;
+
+			if (i < redLine.length)
+			{
+				redLine[i].line = "Red";
+				redLine[i].block = i + 1;
+			}
+		}
 	}
 }
