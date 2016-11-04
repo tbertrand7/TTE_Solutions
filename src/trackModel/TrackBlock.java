@@ -29,7 +29,7 @@ public class TrackBlock {
 		speedLimit = 0;
 		infrastructure = "";
 		elevation = 0;
-		cumalativeElevation = 0;;
+		cumalativeElevation = 0;
 		switchBlock = "";
 		switchPosition = 0;
 		arrowDirection = "";
