@@ -25,7 +25,8 @@ public class OfficeUI extends JFrame {
 	private JSlider simulationSpeed;
 	private CTCOffice ctcOffice;
 	private JTextField txtFieldSpeed;
-	private JButton btnSetSpeed, btnSetDestination, btnToggleSwitch;
+	private JButton btnSetSpeed, btnSetDestination, btnToggleSwitch, btnCloseTrack;
+	private JButton btnSchCancel, btnSchConfirm, btnEditSchedule;
 	private TrackButton[] greenLine = new TrackButton[152];
 	private TrackButton[] redLine = new TrackButton[77];
     private TrackButton selectedBlockBtn;
@@ -101,9 +102,10 @@ public class OfficeUI extends JFrame {
 		mntmLoadSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mnSchedule.add(mntmLoadSchedule);
 
-		JMenuItem mntmScheduleByTrain = new JMenuItem("Schedule By Train");
-		mntmScheduleByTrain.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		mnSchedule.add(mntmScheduleByTrain);
+		JMenuItem mntmRunSchedule = new JMenuItem("Run Schedule");
+		mntmRunSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mnSchedule.add(mntmRunSchedule);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -141,29 +143,6 @@ public class OfficeUI extends JFrame {
 
 		initStaticElements();
 		initTrackButtons();
-		
-		JLabel lblTrackPicture = new JLabel("");
-		lblTrackPicture.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTrackPicture.setIcon(new ImageIcon(OfficeUI.class.getResource("/ctcOffice/track.png")));
-		lblTrackPicture.setBounds(2, 2, 730, 729);
-		trackDisplayPanel.add(lblTrackPicture);
-
-        ButtonGroup trackBtns = new ButtonGroup();
-        ActionListener blockSelectionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                selectedBlockChanged(e);
-            }
-        };
-        for (int i=0; i < greenLine.length; i++)
-        {
-            if (i < redLine.length) {
-                redLine[i].addActionListener(blockSelectionListener);
-                trackBtns.add(redLine[i]);
-            }
-            greenLine[i].addActionListener(blockSelectionListener);
-            trackBtns.add(greenLine[i]);
-        }
 		
 		simulationSpeed = new JSlider();
 		simulationSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -210,54 +189,54 @@ public class OfficeUI extends JFrame {
 		execMode.add(rdbtnAuto);
 		execMode.add(rdbtnManual);
 
-		lblLineInfo = new JLabel("Green");
+		lblLineInfo = new JLabel("");
 		lblLineInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblLineInfo.setBounds(80, 31, 90, 15);
 		statusPanel.add(lblLineInfo);
 		lblLineInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JButton btnCloseTrack = new JButton("Close Track");
+		btnCloseTrack = new JButton("Close Track");
 		btnCloseTrack.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnCloseTrack.setBounds(29, 231, 112, 30);
 		statusPanel.add(btnCloseTrack);
 		
-		lblStatusInfo = new JLabel("Open");
+		lblStatusInfo = new JLabel("");
 		lblStatusInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblStatusInfo.setBounds(80, 206, 90, 19);
 		statusPanel.add(lblStatusInfo);
 		lblStatusInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		lblElevationInfo = new JLabel("0.5 ft");
+		lblElevationInfo = new JLabel("");
 		lblElevationInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblElevationInfo.setBounds(80, 181, 90, 15);
 		statusPanel.add(lblElevationInfo);
 		lblElevationInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		lblSpeedLimitInfo = new JLabel("20 mph");
+		lblSpeedLimitInfo = new JLabel("");
 		lblSpeedLimitInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSpeedLimitInfo.setBounds(80, 156, 90, 15);
 		statusPanel.add(lblSpeedLimitInfo);
 		lblSpeedLimitInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		lblGradeInfo = new JLabel("0.5%");
+		lblGradeInfo = new JLabel("");
 		lblGradeInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblGradeInfo.setBounds(80, 131, 90, 15);
 		statusPanel.add(lblGradeInfo);
 		lblGradeInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		lblLengthInfo = new JLabel("150 ft");
+		lblLengthInfo = new JLabel("");
 		lblLengthInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblLengthInfo.setBounds(80, 106, 90, 15);
 		statusPanel.add(lblLengthInfo);
 		lblLengthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		lblBlockInfo = new JLabel("1");
+		lblBlockInfo = new JLabel("");
 		lblBlockInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblBlockInfo.setBounds(80, 80, 90, 15);
 		statusPanel.add(lblBlockInfo);
 		lblBlockInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		lblSectionInfo = new JLabel("A");
+		lblSectionInfo = new JLabel("");
 		lblSectionInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSectionInfo.setBounds(80, 56, 90, 15);
 		statusPanel.add(lblSectionInfo);
@@ -422,18 +401,18 @@ public class OfficeUI extends JFrame {
 		table.getColumnModel().getColumn(3).setPreferredWidth(45);
 		scrollPane.setViewportView(table);
 		
-		JButton btnEditSchedule = new JButton("Edit Schedule");
+		btnEditSchedule = new JButton("Edit Schedule");
 		btnEditSchedule.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnEditSchedule.setBounds(134, 423, 126, 30);
 		schedulePanel.add(btnEditSchedule);
 		
-		JButton btnSchConfirm = new JButton("Confirm");
+		btnSchConfirm = new JButton("Confirm");
 		btnSchConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnSchConfirm.setBounds(75, 424, 90, 30);
 		btnSchConfirm.setVisible(false);
 		schedulePanel.add(btnSchConfirm);
 		
-		JButton btnSchCancel = new JButton("Cancel");
+		btnSchCancel = new JButton("Cancel");
 		btnSchCancel.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnSchCancel.setBounds(230, 424, 90, 30);
 		btnSchCancel.setVisible(false);
@@ -533,7 +512,7 @@ public class OfficeUI extends JFrame {
 			lblElevationInfo.setText(selectedBlock.elevation + " ft");
 			lblStatusInfo.setText(selectedBlock.status);
 
-			logNotification(selectedBlockBtn.toString());
+			//logNotification(selectedBlockBtn.toString());
         }
     }
 
@@ -2150,13 +2129,32 @@ public class OfficeUI extends JFrame {
 		trackDisplayPanel.add(toggleButtonR77);
 		redLine[76] = toggleButtonR77;
 
+		//Track picture initialization must take place after buttons
+		JLabel lblTrackPicture = new JLabel("");
+		lblTrackPicture.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTrackPicture.setIcon(new ImageIcon(OfficeUI.class.getResource("/ctcOffice/track.png")));
+		lblTrackPicture.setBounds(2, 2, 730, 729);
+		trackDisplayPanel.add(lblTrackPicture);
+
+		ButtonGroup trackBtns = new ButtonGroup();
+		ActionListener blockSelectionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				selectedBlockChanged(e);
+			}
+		};
+
 		for (int i=0; i < greenLine.length; i++)
 		{
+			greenLine[i].addActionListener(blockSelectionListener);
+			trackBtns.add(greenLine[i]);
 			greenLine[i].line = "Green";
 			greenLine[i].block = i + 1;
 
 			if (i < redLine.length)
 			{
+				redLine[i].addActionListener(blockSelectionListener);
+				trackBtns.add(redLine[i]);
 				redLine[i].line = "Red";
 				redLine[i].block = i + 1;
 			}
