@@ -1,6 +1,10 @@
 package trackModel;
 
 public class TrackBlock {
+	public enum trackStatus {
+		UNOCCUPIED, OCCUPIED, CLOSED
+	}
+
 	public int pk;
 	public String line;
 	public String section;
