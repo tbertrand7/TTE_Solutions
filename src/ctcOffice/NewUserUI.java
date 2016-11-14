@@ -107,7 +107,7 @@ public class NewUserUI extends JFrame {
 		JButton btnConfirm = new JButton("Confirm");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnConfirm_Click();
+				btnConfirmClick();
 			}
 		});
 		btnConfirm.setBounds(50, 122, 84, 33);
@@ -125,7 +125,7 @@ public class NewUserUI extends JFrame {
 		contentPane.add(btnCancel);
 	}
 	
-	private void btnConfirm_Click()
+	private void btnConfirmClick()
 	{
 		if (txtFieldUsername.getText().equals("") || passwordField.getText().equals("") || passwordFieldConfirm.getText().equals(""))
 		{

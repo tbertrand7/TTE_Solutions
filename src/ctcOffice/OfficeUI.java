@@ -169,7 +169,7 @@ public class OfficeUI extends JFrame {
 		rdbtnManual.setBounds(885, 12, 80, 23);
 		rdbtnManual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rdbtnManual_Click();
+				rdbtnManualClick();
 			}
 		});
 		topButtonPanel.add(rdbtnManual);
@@ -180,7 +180,7 @@ public class OfficeUI extends JFrame {
 		rdbtnAuto.setBounds(885, 32, 80, 23);
 		rdbtnAuto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rdbtnAuto_Click();
+				rdbtnAutoClick();
 			}
 		});
 		topButtonPanel.add(rdbtnAuto);		
@@ -313,7 +313,7 @@ public class OfficeUI extends JFrame {
 		btnSetSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnSetSpeed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnSetSpeed_Click();
+				btnSetSpeedClick();
 			}
 		});
 		
@@ -328,7 +328,7 @@ public class OfficeUI extends JFrame {
 		btnSetDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnSetDestination.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnSetDestination_Click();
+				btnSetDestinationClick();
 			}
 		});
 		
@@ -429,14 +429,14 @@ public class OfficeUI extends JFrame {
 	}
 	
 	/** Set Manual Mode */
-	private void rdbtnManual_Click()
+	private void rdbtnManualClick()
 	{
 		ctcOffice.setMode(Mode.MAUNAL);
 		logNotification("Manual Mode Set");
 	}
 	
 	/** Set Automatic Mode */
-	private void rdbtnAuto_Click()
+	private void rdbtnAutoClick()
 	{
 		ctcOffice.setMode(Mode.AUTOMATIC);
 		logNotification("Auto Mode Set");
@@ -452,7 +452,7 @@ public class OfficeUI extends JFrame {
 		}
 	}
 	
-	private void btnSetSpeed_Click()
+	private void btnSetSpeedClick()
 	{
 		try 
 		{
@@ -475,7 +475,7 @@ public class OfficeUI extends JFrame {
 		}
 	}
 	
-	private void btnSetDestination_Click()
+	private void btnSetDestinationClick()
 	{
 		String newDest = cmbDestinations.getSelectedItem().toString();
 		//logNotification("Train " + selectedBlockBtn.train + " dispatched to " + newDest);
@@ -511,6 +511,27 @@ public class OfficeUI extends JFrame {
 			lblSpeedLimitInfo.setText(selectedBlock.speedLimit + " mph");
 			lblElevationInfo.setText(selectedBlock.elevation + " ft");
 			lblStatusInfo.setText(selectedBlock.status);
+
+            //Set infrastructure info
+            String[] infr = selectedBlock.infrastructure.split(";");
+
+            lblUnderInfo.setText("No");
+            lblStationInfo.setText("N/A");
+            for (int i=0; i < infr.length; i++)
+            {
+                infr[i] = infr[i].trim();
+
+                if (infr[i].equals("STATION"))
+                {
+                    if (i+1 < infr.length)
+                        lblStationInfo.setText(infr[i+1].trim());
+                    else
+                        lblStationInfo.setText("Unnamed");
+                }
+
+                if (infr[i].equals("UNDERGROUND"))
+                    lblUnderInfo.setText("Yes");
+            }
 
 			//logNotification(selectedBlockBtn.toString());
         }
