@@ -4,19 +4,19 @@ import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Set;
 
-public class TrainControllerInstances {
+public class TrainControllerInstancesOld {
 	
-	private HashMap<Integer, TrainControllerUI> UIList;	//maps instance IDs to trainControllerUI classes
-	private HashMap<Integer, PowerCalculator> powerList; //maps instance IDs to PowerCalculator classes <-- this should be train IDs, not instance IDs
-	private HashMap<Integer, TestPanel> testList; //maps instance IDs to TestPanel classes
+	private HashMap<Integer, TrainControllerUIOld> UIList;	//maps instance IDs to trainControllerUI classes
+	private HashMap<Integer, PowerCalculatorOld> powerList; //maps instance IDs to PowerCalculator classes <-- this should be train IDs, not instance IDs
+	private HashMap<Integer, TestPanelOld> testList; //maps instance IDs to TestPanel classes
 	
 	private int nextID; //this is NOT the next train ID, it's the next instance ID!!!!!
 	
-	public TrainControllerInstances() {
+	public TrainControllerInstancesOld() {
 		nextID = 0;
-		UIList = new HashMap<Integer, TrainControllerUI>();
-		powerList = new HashMap<Integer, PowerCalculator>();
-		testList = new HashMap<Integer, TestPanel>();
+		UIList = new HashMap<Integer, TrainControllerUIOld>();
+		powerList = new HashMap<Integer, PowerCalculatorOld>();
+		testList = new HashMap<Integer, TestPanelOld>();
 	}
 	
 	public synchronized double getPower(int id) {
@@ -98,7 +98,7 @@ public class TrainControllerInstances {
 		System.out.println();
 	}
 	
-	private void createNew(TrainControllerUI tcui, TestPanel tp) {
+	private void createNew(TrainControllerUIOld tcui, TestPanelOld tp) {
 		//Put into list
 		UIList.put(nextID, tcui);
 		testList.put(nextID, tp);
@@ -108,7 +108,7 @@ public class TrainControllerInstances {
 			testList.get(key).updateTrainInstances();
 		
 		//Create new power calculator
-		PowerCalculator pc = new PowerCalculator(tcui);
+		PowerCalculatorOld pc = new PowerCalculatorOld(tcui);
 		powerList.put(nextID, pc);
 		
 		tp.initialize();
@@ -119,13 +119,13 @@ public class TrainControllerInstances {
 	}
 	
 	public void newUI() {
-		TrainControllerInstances instance = this;
+		TrainControllerInstancesOld instance = this;
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TrainControllerUI tcui = new TrainControllerUI(nextID, instance);
-					TestPanel tp = new TestPanel(nextID, instance);
+					TrainControllerUIOld tcui = new TrainControllerUIOld(nextID, instance);
+					TestPanelOld tp = new TestPanelOld(nextID, instance);
 					
 					instance.createNew(tcui, tp);
 					
@@ -140,7 +140,7 @@ public class TrainControllerInstances {
 	public synchronized void removeUI(int id) {
 		UIList.remove(id);
 		
-		PowerCalculator pc = powerList.get(id);
+		PowerCalculatorOld pc = powerList.get(id);
 		pc.stopRun();
 		powerList.remove(id);
 	}

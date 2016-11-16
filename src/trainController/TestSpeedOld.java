@@ -1,8 +1,8 @@
 package trainController;
 
-public class TestSpeed extends Thread {
+public class TestSpeedOld extends Thread {
 	
-	private final TestPanel parent;
+	private final TestPanelOld parent;
 	private boolean proceed;
 	
 	//All of these variables will be stored in SI units
@@ -18,7 +18,7 @@ public class TestSpeed extends Thread {
 	private boolean sBraking;
 	private boolean eBraking;
 	
-	public TestSpeed(TestPanel tp) {
+	public TestSpeedOld(TestPanelOld tp) {
 		parent = tp;
 		v = parent.getCurrentSpeed();
 		M = 50*1000; //train is ~50 metric tons = 1000 kg

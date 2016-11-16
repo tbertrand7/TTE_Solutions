@@ -47,7 +47,7 @@ import javax.swing.JSlider;
 import java.awt.SystemColor;
 import java.awt.Font;
 
-public class TrainControllerUI extends JFrame {
+public class TrainControllerUIOld extends JFrame {
 
 	private JPanel contentPane;
 	
@@ -123,7 +123,7 @@ public class TrainControllerUI extends JFrame {
 	private double request;
 	
 	private final int id;
-	private final TrainControllerInstances parent;
+	private final TrainControllerInstancesOld parent;
 	
 	public void setSpeedCommand(double speed) {
 		command = speed;
@@ -220,7 +220,7 @@ public class TrainControllerUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TrainControllerUI frame = new TrainControllerUI(0, new TrainControllerInstances());
+					TrainControllerUIOld frame = new TrainControllerUIOld(0, new TrainControllerInstancesOld());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -242,7 +242,7 @@ public class TrainControllerUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TrainControllerUI(int instid, TrainControllerInstances tci) {
+	public TrainControllerUIOld(int instid, TrainControllerInstancesOld tci) {
 		id = instid;
 		parent = tci;
 		
@@ -259,7 +259,7 @@ public class TrainControllerUI extends JFrame {
 		
 		setResizable(false);
 		setTitle("Train Controller (Instance " + id + ")");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TrainControllerUI.class.getResource("/TrainController/computer1.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TrainControllerUIOld.class.getResource("/TrainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 828, 688);
 		contentPane = new JPanel();
@@ -343,7 +343,7 @@ public class TrainControllerUI extends JFrame {
 		imgLight = new JButton("");
 		imgLight.setBackground(UIManager.getColor("Button.disabledShadow"));
 		imgLight.setEnabled(false);
-		imgLight.setIcon(new ImageIcon(TrainControllerUI.class.getResource("/TrainController/LightOnTiny.png")));
+		imgLight.setIcon(new ImageIcon(TrainControllerUIOld.class.getResource("/TrainController/LightOnTiny.png")));
 		imgLight.setBounds(184, 86, 43, 46);
 		contentPane.add(imgLight);
 		
@@ -460,11 +460,11 @@ public class TrainControllerUI extends JFrame {
 		contentPane.add(lblCurrentAnnouncement);
 		
 		JButton btnAnnCustReq = new JButton("Edit Announcements");
-		TrainControllerUI instance = this;
+		TrainControllerUIOld instance = this;
 		btnAnnCustReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-				EditAnnouncementsUI frame2 = new EditAnnouncementsUI(instance, annList);
+				EditAnnouncementsUIOld frame2 = new EditAnnouncementsUIOld(instance, annList);
 					frame2.setVisible(true);
 				} catch (Exception exc) {
 					exc.printStackTrace();
@@ -582,7 +582,7 @@ public class TrainControllerUI extends JFrame {
 		PowerCurr.setText("0 W");
 		
 		JLabel TTEIcon = new JLabel("");
-		TTEIcon.setIcon(new ImageIcon(TrainControllerUI.class.getResource("/shared/TTESmall.png")));
+		TTEIcon.setIcon(new ImageIcon(TrainControllerUIOld.class.getResource("/shared/TTESmall.png")));
 		TTEIcon.setBounds(10, 578, 64, 65);
 		contentPane.add(TTEIcon);
 		

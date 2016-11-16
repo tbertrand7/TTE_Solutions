@@ -17,11 +17,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-public class EditAnnouncementsUI extends JFrame {
+public class EditAnnouncementsUIOld extends JFrame {
 
 	private JPanel contentPane;
 	
-	private TrainControllerUI tcui;
+	private TrainControllerUIOld tcui;
 
 	/**
 	 * Launch the application.
@@ -30,7 +30,7 @@ public class EditAnnouncementsUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EditAnnouncementsUI frame = new EditAnnouncementsUI(null, null);
+					EditAnnouncementsUIOld frame = new EditAnnouncementsUIOld(null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -42,11 +42,11 @@ public class EditAnnouncementsUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EditAnnouncementsUI(TrainControllerUI ui, ArrayList<String> list) {
+	public EditAnnouncementsUIOld(TrainControllerUIOld ui, ArrayList<String> list) {
 		tcui = ui;
 		
 		setTitle("Edit Announcements");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(EditAnnouncementsUI.class.getResource("/trainController/computer1.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(EditAnnouncementsUIOld.class.getResource("/trainController/computer1.jpg")));
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 685, 461);

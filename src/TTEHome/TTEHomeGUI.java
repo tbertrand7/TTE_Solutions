@@ -10,8 +10,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import ctcOffice.*;
 import trackModel.trackModelUI;
-import trainController.TrainControllerUI;
-import trainController.TrainControllerInstances;//******************
+import trainController.TrainControllerUIOld;
+import trainController.TrainControllerInstancesOld;//******************
 import trainModel.trainModelGUI;
 import waysideController.TC_UI_main;
 import waysideController.TC_UI_startup;
@@ -112,7 +112,7 @@ public class TTEHomeGUI {
 		
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {
-			TrainControllerInstances tci = new TrainControllerInstances();
+			TrainControllerInstancesOld tci = new TrainControllerInstancesOld();
 			
 			public void actionPerformed(ActionEvent e) {
 				//trainControllerUI.main(null);

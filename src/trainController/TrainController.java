@@ -15,7 +15,7 @@ public class TrainController extends TrainControllerInterface {
 		
 		super(uniqueid);
 		
-		//Create new array of PowerCalculators
+		//TODO Create new array of PowerCalculators
 		
 	}
 	

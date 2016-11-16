@@ -50,5 +50,14 @@ public abstract class TrainControllerInstancesInterface {
 		--dispatched;
 	
 	}
+	
+	/**
+	 * Creates a new instance of TrainControllerUI.
+	 */
+	public void newUI() {
+	
+		//TODO Create a new TrainControllerUI instance
+		
+	}
 
 }

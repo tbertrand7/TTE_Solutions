@@ -22,7 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
 
-public class TestPanel extends JFrame {
+public class TestPanelOld extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtSpeedLimit;
@@ -35,10 +35,10 @@ public class TestPanel extends JFrame {
 	
 	private JComboBox<Integer> TrainSelect;
 	
-	private final TrainControllerInstances parent;
+	private final TrainControllerInstancesOld parent;
 	private final int id;
 	private boolean keySetInitialized;
-	TestSpeed ts;
+	TestSpeedOld ts;
 	private JTextField txtTemperature;
 
 	/**
@@ -48,7 +48,7 @@ public class TestPanel extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TestPanel frame = new TestPanel(0, null);
+					TestPanelOld frame = new TestPanelOld(0, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -67,7 +67,7 @@ public class TestPanel extends JFrame {
 		updateTrainInstances();
 		//parent.setSpeedCommand((int)TrainSelect.getSelectedItem(), 30);
 		
-		ts = new TestSpeed(this);
+		ts = new TestSpeedOld(this);
 		ts.start();
 	}
 	
@@ -135,14 +135,14 @@ public class TestPanel extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TestPanel(int i, TrainControllerInstances tci) {
+	public TestPanelOld(int i, TrainControllerInstancesOld tci) {
 		id = i;
 		parent = tci;
 		keySetInitialized = false;
 		
 		setTitle("Train Controller Test Panel");
 		setResizable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TestPanel.class.getResource("/trainController/computer1.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TestPanelOld.class.getResource("/trainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 518);
 		contentPane = new JPanel();
