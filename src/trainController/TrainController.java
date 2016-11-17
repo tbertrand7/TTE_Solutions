@@ -3,17 +3,24 @@ package trainController;
 public class TrainController extends TrainControllerInterface {
 	
 	/**
+	 * The TrainControllerInstances class this train controller belongs to.
+	 */
+	protected TrainControllerInstances parent;
+	/**
 	 * The UI monitoring this train controller
 	 */
 	private TrainControllerUI ui;
+	
 
 	/**
-	 * Assigns id, creates TrainModel, creates PowerCalculators.
+	 * Assigns id and parent, creates TrainModel, creates PowerCalculators.
 	 * @param uniqueid
 	 */
-	public TrainController(int uniqueid) {
+	public TrainController(TrainControllerInstances tci, int uniqueid) {
 		
 		super(uniqueid);
+		
+		parent = tci;
 		
 		//TODO Create new array of PowerCalculators
 		
@@ -33,6 +40,26 @@ public class TrainController extends TrainControllerInterface {
 		//TODO Create TrainControllerUI method:
 		//ui.disconnect();
 		ui = null;
+		
+	}
+	
+	/**
+	 * Checks whether the train is connected to a UI.
+	 * @return true if a UI is connected, false otherwise
+	 */
+	public boolean connectedToUI() {
+	
+		return !(ui == null);
+		
+	}
+	
+	/**
+	 * Connects the train to the specified UI.
+	 * @param tcui - the TrainControllerUI to connect to the train
+	 */
+	public void connectToUI(TrainControllerUI tcui) {
+		
+		ui = tcui;
 		
 	}
 

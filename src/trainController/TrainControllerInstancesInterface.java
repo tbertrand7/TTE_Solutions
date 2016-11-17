@@ -14,12 +14,10 @@ public abstract class TrainControllerInstancesInterface {
 	 * Maps IDs to their trains (only lists existing trains)
 	 */
 	protected HashMap<Integer, TrainController> trainList;
-	
 	/**
 	 * Count of all dispatched trains
 	 */
 	private int dispatched;
-	
 	/**
 	 * The next unique id to assign to a train
 	 */
@@ -32,7 +30,8 @@ public abstract class TrainControllerInstancesInterface {
 	public void createTrain() {
 		
 		if (trainList.size() < (dispatched + 1)) {
-			trainList.put(nextID, new TrainController(nextID));
+			/* Not entirely sure if the cast below is okay - need to test! */
+			trainList.put(nextID, new TrainController((TrainControllerInstances) this, nextID));
 			++dispatched;
 			++nextID;
 		}
