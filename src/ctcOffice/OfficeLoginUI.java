@@ -139,5 +139,9 @@ public class OfficeLoginUI extends JFrame {
 			}
 		});
 		contentPane.add(btnLogin);
+		
+		//Set defaults for login
+		txtFieldUsername.setText("admin");
+		passwordField.setText("password");
 	}
 }
