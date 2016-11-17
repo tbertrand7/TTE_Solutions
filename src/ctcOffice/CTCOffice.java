@@ -8,10 +8,10 @@ public class CTCOffice
 {
 	private DBInteraction dataBase;
 	
-	public enum Mode {MAUNAL, AUTOMATIC};
+	public enum Mode {MANUAL, AUTOMATIC}
 	
 	private int simulationSpeed;
-	private Mode mode = Mode.MAUNAL; //1=manual 2=auto
+	private Mode mode = Mode.MANUAL; //1=manual 2=auto
 
 	public TrackBlock[] greenLine, redLine;
 	
