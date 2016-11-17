@@ -14,6 +14,7 @@ public class OfficeLoginUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtFieldUsername;
 	private JPasswordField passwordField;
+	private OfficeLogin officeLogin;
 
 	/**
 	 * Launch the application.
@@ -56,7 +57,9 @@ public class OfficeLoginUI extends JFrame {
 		} catch (Exception e) {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
-		
+
+		officeLogin = new OfficeLogin();
+
 		/* MENU */
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -124,7 +127,7 @@ public class OfficeLoginUI extends JFrame {
 		btnLogin.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(OfficeLogin.checkLogin(txtFieldUsername.getText(), passwordField.getText()))
+				if(officeLogin.validateLogin(txtFieldUsername.getText(), passwordField.getText()))
 				{
 					OfficeUI.main(null);
 					dispose();

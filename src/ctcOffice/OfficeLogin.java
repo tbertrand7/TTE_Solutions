@@ -3,22 +3,26 @@ package ctcOffice;
 public class OfficeLogin
 {
 	/** Checks for valid username and password */
-	public static boolean checkLogin(String username, String password)
+	public boolean validateLogin(String username, String password)
 	{
 		String tempUser = "admin";
 		String tempPassword = "password";
+
+		//TODO: Validate with user db
 		
 		if (username.equals(tempUser) && password.equals(tempPassword))
 			return true;
 		
 		return false;
 	}
-	
+
 	/** Checks if new username already exists */
-	public static boolean checkNewUsername(String username)
+	public boolean validateNewUser(String username)
 	{
 		String tempUser = "admin";
-		
+
+		//TODO: Check DB for existing user
+
 		if (username.equals(tempUser))
 			return false;
 		
@@ -26,11 +30,15 @@ public class OfficeLogin
 	}
 	
 	/** Checks if both password fields match */
-	public static boolean checkNewPassword(String password, String confirmPassword)
+	public boolean validateNewPassword(String password, String confirmPassword)
 	{
-		if (password.equals(confirmPassword))
-			return true;
-		
-		return false;
+		return password.equals(confirmPassword);
+	}
+
+	public boolean createNewUser(String username, String password)
+	{
+		//TODO: CreateUser in DB
+
+		return true;
 	}
 }

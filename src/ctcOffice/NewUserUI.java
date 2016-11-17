@@ -12,7 +12,9 @@ public class NewUserUI extends JFrame {
 	private static final String BAD_PASSWORD = "Error: Passwords do not match";
 	private static final String USERNAME_ALREADY_EXISTS = "Error: Username already exists";
 	private static final String FILL_OUT_FIELDS = "Error: Fill out all fields";
-	
+
+	private OfficeLogin officeLogin;
+
 	private JPanel contentPane;
 	private JTextField txtFieldUsername;
 	private JPasswordField passwordField;
@@ -59,6 +61,8 @@ public class NewUserUI extends JFrame {
 		} catch (Exception e) {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
+
+		officeLogin = new OfficeLogin();
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -134,21 +138,21 @@ public class NewUserUI extends JFrame {
 		}
 		else
 		{
-			if (!OfficeLogin.checkNewUsername(txtFieldUsername.getText()))
+			if (!officeLogin.validateNewUser(txtFieldUsername.getText()))
 			{
 				lblErrorMsg.setText(USERNAME_ALREADY_EXISTS);
 				lblErrorMsg.setVisible(true);
 			}
 			else
 			{
-				if (!OfficeLogin.checkNewPassword(passwordField.getText(), passwordFieldConfirm.getText()))
+				if (!officeLogin.validateNewPassword(passwordField.getText(), passwordFieldConfirm.getText()))
 				{
 					lblErrorMsg.setText(BAD_PASSWORD);
 					lblErrorMsg.setVisible(true);
 				}
 				else
 				{
-					//OfficeLogin.createUser();
+					officeLogin.createNewUser(txtFieldUsername.getText(), passwordField.getText());
 					JOptionPane.showMessageDialog(null, "User " + txtFieldUsername.getText() + " created successfully.", "User Created", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 				}
