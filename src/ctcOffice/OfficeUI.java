@@ -431,7 +431,7 @@ public class OfficeUI extends JFrame {
 	/** Set Manual Mode */
 	private void rdbtnManualClick()
 	{
-		ctcOffice.setMode(Mode.MAUNAL);
+		ctcOffice.setMode(Mode.MANUAL);
 		logNotification("Manual Mode Set");
 	}
 	
