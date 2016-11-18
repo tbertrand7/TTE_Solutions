@@ -21,6 +21,7 @@ public class DBInteraction {
 		stmt.execute("SELECT * FROM TTEDB.RailLines");
 		stmt.close();
 	}
+	
 	public TrackBlock getSection(String line, int block) throws SQLException{
 		TrackBlock tempBlock = new TrackBlock();
 		Statement stmt = conn.createStatement();
@@ -31,9 +32,19 @@ public class DBInteraction {
 		return tempBlock;
 	}
 	
+	public TrackBlock[] getLine(String line) throws SQLException{
+		TrackBlock [] track = new TrackBlock[200];
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.RailLines where line = '"+line);
+		track = populateTrackLine(rs,track);
+		stmt.close();
+		
+		return track;
+	}
+	
 	public boolean setSection(TrackBlock theBlock) throws SQLException{
 		Statement stmt = conn.createStatement();
-		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Section = '"+theBlock.section+"', BlockLength = "+theBlock.blockLength+", BlockGrade = "+theBlock.blockGrade+", SpeedLimit = "+theBlock.speedLimit+", Infrastructure = '"+theBlock.infrastructure+"', Elevation = "+theBlock.elevation+", CumalativeElevation = "+theBlock.cumalativeElevation+", SwitchBlock = '"+theBlock.switchBlock+"', SwitchPosition = "+theBlock.switchPosition+", ArrowDirection = '"+theBlock.arrowDirection+"', NumPass = "+theBlock.numPass+", temp = "+theBlock.temp+", status = '"+theBlock.status+"', OccupiedBy = '"+theBlock.occupiedBy+"' WHERE Line = '"+theBlock.line+"' and BlockNumber = "+theBlock.blockNumber+";");
+		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Section = '"+theBlock.section+"', BlockLength = "+theBlock.blockLength+", BlockGrade = "+theBlock.blockGrade+", SpeedLimit = "+theBlock.speedLimit+", Infrastructure = '"+theBlock.infrastructure+"', Elevation = "+theBlock.elevation+", CumalativeElevation = "+theBlock.cumualativeElevation+", SwitchBlock = '"+theBlock.switchBlock+"', SwitchPosition = "+theBlock.switchPosition+", ArrowDirection = '"+theBlock.arrowDirection+"', NumPass = "+theBlock.numPass+", temp = "+theBlock.temp+", status = '"+theBlock.status+"', Occupied = '"+theBlock.occupied+"', TrainID = '"+theBlock.trainID+"', Speed = '"+theBlock.speed+"', Authority = '"+theBlock.authority+"' WHERE Line = '"+theBlock.line+"' and BlockNumber = "+theBlock.blockNumber+";");
 		stmt.close();
 	
 		return sucess;
@@ -58,7 +69,7 @@ public class DBInteraction {
 	
 		return sucess;
 	}
-	
+	 
 	public boolean breakSectionCircuit(String line, int block) throws SQLException {
 		TrackBlock tempBlock = new TrackBlock();
 		Statement stmt = conn.createStatement();
@@ -95,16 +106,48 @@ public class DBInteraction {
 			section.speedLimit = rs.getDouble(7);
 			section.infrastructure = rs.getString(8);
 			section.elevation = rs.getDouble(9);
-			section.cumalativeElevation = rs.getDouble(10);
+			section.cumualativeElevation = rs.getDouble(10);
 			section.switchBlock = rs.getString(11);
 			section.switchPosition = rs.getInt(12);
 			section.arrowDirection = rs.getString(13);
 			section.numPass = rs.getInt(14);
 			section.temp = rs.getInt(15);
 			section.status = rs.getString(16);
-			section.occupiedBy = rs.getString(17);
+			section.occupied = rs.getString(17);
+			section.trainID = rs.getInt(18);
+			section.speed = rs.getDouble(19);
+			section.authority = rs.getInt(20);
 		}
 		return section;
+	}
+
+	public TrackBlock[] populateTrackLine(ResultSet rs, TrackBlock[] line) throws SQLException{
+		TrackBlock section = new TrackBlock();
+		for(int i =0; i<line.length; i++){
+			while(rs.next()){
+			section.pk = rs.getInt(1);
+			section.line = rs.getString(2);
+			section.section = rs.getString(3);
+			section.blockNumber = rs.getInt(4);
+			section.blockLength = rs.getDouble(5);
+			section.blockGrade = rs.getDouble(6);
+			section.speedLimit = rs.getDouble(7);
+			section.infrastructure = rs.getString(8);
+			section.elevation = rs.getDouble(9);
+			section.cumualativeElevation = rs.getDouble(10);
+			section.switchBlock = rs.getString(11);
+			section.switchPosition = rs.getInt(12);
+			section.arrowDirection = rs.getString(13);
+			section.numPass = rs.getInt(14);
+			section.temp = rs.getInt(15);
+			section.status = rs.getString(16);
+			section.occupied = rs.getString(17);
+			section.trainID = rs.getInt(18);
+			section.speed = rs.getDouble(19);
+			section.authority = rs.getInt(20);			}
+			line[i] = section;
+		}
+		return line;
 	}
 
 }

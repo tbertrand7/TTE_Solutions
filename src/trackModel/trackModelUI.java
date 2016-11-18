@@ -640,17 +640,17 @@ public class trackModelUI {
 				lblNewLabel_2.setText(String.valueOf(block.blockLength) + " ft");
 				textField_4.setText(String.valueOf(block.blockGrade) + " \u00b0");
 				textField_7.setText(String.valueOf(block.elevation) + " ft");
-				textField_5.setText(String.valueOf(block.cumalativeElevation) + " ft");
+				textField_5.setText(String.valueOf(block.cumualativeElevation) + " ft");
 				textField_6.setText(String.valueOf(block.speedLimit) + " mph");
 				lblF.setText(String.valueOf(block.temp) + " \u00b0F");
 				lblHead.setText(block.arrowDirection);
 				lblA.setText(block.section);
 				label_30.setText(String.valueOf(block.numPass));
 
-				if (block.occupiedBy.equals(""))
+				if (block.occupied.equals(""))
 					label_15.setText("OPEN BLOCK");
 				else
-					label_15.setText(block.occupiedBy);
+					label_15.setText(block.occupied);
 
 				if (block.temp < 32)
 					lblOn.setText("ON");
@@ -685,7 +685,7 @@ public class trackModelUI {
 				else
 					lblFalse.setText("OPEN");
 
-				if (block.occupiedBy.equals(""))
+				if (block.occupied.equals(""))
 					label_33.setText("GREEN");
 				else
 					label_33.setText("RED");
@@ -718,17 +718,17 @@ public class trackModelUI {
 				spinner.setText(String.valueOf(block.blockLength));
 				lblNewLabel_1.setText(String.valueOf(block.blockGrade));
 				label.setText(String.valueOf(block.elevation));
-				label_4.setText(String.valueOf(block.cumalativeElevation));
+				label_4.setText(String.valueOf(block.cumualativeElevation));
 				label_1.setText(String.valueOf(block.speedLimit));
 				label_25.setValue(block.temp);
 				label_24.setText(block.arrowDirection);
 				label_23.setText(block.section);
 				label_29.setValue(block.numPass);
 
-				if (block.occupiedBy.equals(""))
+				if (block.occupied.equals(""))
 					textField_2.setText("");
 				else
-					textField_2.setText(block.occupiedBy);
+					textField_2.setText(block.occupied);
 
 				if (block.temp < 32)
 					chckbxOn.setSelected(true);
@@ -763,7 +763,7 @@ public class trackModelUI {
 				else
 					label_19.setText("");
 
-				if (block.occupiedBy.equals(""))
+				if (block.occupied.equals(""))
 					comboBox_3.setText("GREEN");
 				else
 					comboBox_3.setText("RED");
@@ -798,14 +798,14 @@ public class trackModelUI {
 				}
 
 				theBlock.elevation = Double.parseDouble(label.getText());
-				theBlock.cumalativeElevation = Double.parseDouble(label_4.getText());
+				theBlock.cumualativeElevation = Double.parseDouble(label_4.getText());
 				theBlock.switchPosition = (int) label_27.getValue();
 				theBlock.arrowDirection = label_24.getText();
 				theBlock.numPass = (int) label_29.getValue();
 				theBlock.temp = (int) label_25.getValue();
 				theBlock.status = label_19.getText();
 				if (!textField_2.getText().equals("OPEN BLOCK"))
-					theBlock.occupiedBy = textField_2.getText();
+					theBlock.occupied = textField_2.getText();
 
 				Boolean result;
 				DBInteraction db = null;

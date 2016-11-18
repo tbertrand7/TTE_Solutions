@@ -14,14 +14,17 @@ public class TrackBlock {
 	public double speedLimit;
 	public String infrastructure;
 	public double elevation;
-	public double cumalativeElevation;
+	public double cumualativeElevation;
 	public String switchBlock;
 	public int switchPosition;
 	public String arrowDirection;
 	public int numPass;
 	public int temp;
 	public String status;
-	public String occupiedBy;
+	public String occupied;
+	public int trainID;
+	public double speed;
+	public int authority;
 	
 	public TrackBlock(){
 		pk = 0;
@@ -33,13 +36,16 @@ public class TrackBlock {
 		speedLimit = 0;
 		infrastructure = "";
 		elevation = 0;
-		cumalativeElevation = 0;
+		cumualativeElevation = 0;
 		switchBlock = "";
 		switchPosition = 0;
 		arrowDirection = "";
 		numPass = 0;
 		temp = 0;
 		status = "";
-		occupiedBy = "";
+		occupied = "";
+		trainID=0;
+		speed = 0;
+		authority = 0;
 	}
 }
