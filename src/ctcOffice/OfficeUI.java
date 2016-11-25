@@ -15,11 +15,12 @@ import trackModel.*;
 
 import java.text.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class OfficeUI extends JFrame {
 
-	private JPanel contentPane, trackDisplayPanel, topButtonPanel, statusPanel, notificationPanel;
+	private JPanel contentPane, trackDisplayPanel, topButtonPanel, statusPanel, notificationPanel, schedulePanel;
+	private JTabbedPane mainMenuTabPane;
 	private JTextArea notificationArea;
 	private JTable table;
 	private JSlider simulationSpeed;
@@ -27,14 +28,14 @@ public class OfficeUI extends JFrame {
 	private JTextField txtFieldSpeed;
 	private JButton btnSetSpeed, btnSetDestination, btnToggleSwitch, btnCloseTrack;
 	private JButton btnSchCancel, btnSchConfirm, btnEditSchedule;
-	private TrackButton[] greenLine = new TrackButton[152];
-	private TrackButton[] redLine = new TrackButton[77];
-    private TrackButton selectedBlockBtn;
+	private TrackButton[] greenLine = new TrackButton[152], redLine = new TrackButton[77];
     private JComboBox cmbDestinations;
     private JLabel lblSpeedInfo, lblDestInfo, lblAuthInfo, lblTrainNumInfo;
 	private JLabel lblLineInfo, lblSectionInfo, lblBlockInfo, lblStatusInfo;
 	private JLabel lblElevationInfo, lblSpeedLimitInfo, lblGradeInfo, lblLengthInfo;
 	private JLabel lblSwitchInfo, lblUnderInfo, lblCrossingInfo, lblThroughputInfo, lblSwPosInfo, lblStationInfo;
+
+    private TrackButton selectedBlockBtn = null;
 
 	/**
 	 * Launch the application.
@@ -124,7 +125,7 @@ public class OfficeUI extends JFrame {
 		contentPane.add(topButtonPanel);
 		topButtonPanel.setLayout(null);
 
-		JTabbedPane mainMenuTabPane = new JTabbedPane(JTabbedPane.TOP);
+		mainMenuTabPane = new JTabbedPane(JTabbedPane.TOP);
 		mainMenuTabPane.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		mainMenuTabPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		mainMenuTabPane.setBounds(0, 297, 520, 500);
@@ -142,25 +143,8 @@ public class OfficeUI extends JFrame {
 		notificationPanel.setLayout(null);
 
 		initStaticElements();
+        initDynamicElements();
 		initTrackButtons();
-		
-		simulationSpeed = new JSlider();
-		simulationSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		simulationSpeed.setToolTipText("Set speed of auto simulation");
-		simulationSpeed.setMajorTickSpacing(3);
-		simulationSpeed.setSnapToTicks(true);
-		simulationSpeed.setPaintLabels(true);
-		simulationSpeed.setPaintTicks(true);
-		simulationSpeed.setMinimum(1);
-		simulationSpeed.setMinorTickSpacing(1);
-		simulationSpeed.setMaximum(10);
-		simulationSpeed.setBounds(1071, 20, 175, 42);
-		simulationSpeed.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				simulationSpeedChanged();
-			}
-		});
-		topButtonPanel.add(simulationSpeed);
 		
 		JRadioButton rdbtnManual = new JRadioButton("Manual");
 		rdbtnManual.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -188,59 +172,6 @@ public class OfficeUI extends JFrame {
 		ButtonGroup execMode = new ButtonGroup();
 		execMode.add(rdbtnAuto);
 		execMode.add(rdbtnManual);
-
-		lblLineInfo = new JLabel("");
-		lblLineInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblLineInfo.setBounds(95, 30, 90, 20);
-		statusPanel.add(lblLineInfo);
-		lblLineInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		btnCloseTrack = new JButton("Close Track");
-		btnCloseTrack.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		btnCloseTrack.setBounds(51, 230, 112, 30);
-		statusPanel.add(btnCloseTrack);
-		
-		lblStatusInfo = new JLabel("");
-		lblStatusInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblStatusInfo.setBounds(95, 205, 90, 20);
-		statusPanel.add(lblStatusInfo);
-		lblStatusInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		lblElevationInfo = new JLabel("");
-		lblElevationInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblElevationInfo.setBounds(95, 180, 90, 20);
-		statusPanel.add(lblElevationInfo);
-		lblElevationInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		lblSpeedLimitInfo = new JLabel("");
-		lblSpeedLimitInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblSpeedLimitInfo.setBounds(95, 155, 90, 20);
-		statusPanel.add(lblSpeedLimitInfo);
-		lblSpeedLimitInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		lblGradeInfo = new JLabel("");
-		lblGradeInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblGradeInfo.setBounds(95, 130, 90, 20);
-		statusPanel.add(lblGradeInfo);
-		lblGradeInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		lblLengthInfo = new JLabel("");
-		lblLengthInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblLengthInfo.setBounds(95, 105, 90, 20);
-		statusPanel.add(lblLengthInfo);
-		lblLengthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		lblBlockInfo = new JLabel("");
-		lblBlockInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblBlockInfo.setBounds(95, 80, 90, 20);
-		statusPanel.add(lblBlockInfo);
-		lblBlockInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		lblSectionInfo = new JLabel("");
-		lblSectionInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblSectionInfo.setBounds(95, 55, 90, 20);
-		statusPanel.add(lblSectionInfo);
-		lblSectionInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		lblStationInfo = new JLabel("N/A");
 		lblStationInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -338,7 +269,7 @@ public class OfficeUI extends JFrame {
 		cmbDestinations.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		cmbDestinations.setModel(new DefaultComboBoxModel(new String[] {"Block 5", "Block 10"}));
 
-		JPanel schedulePanel = new JPanel();
+		schedulePanel = new JPanel();
 		schedulePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		mainMenuTabPane.addTab("Schedule", null, schedulePanel, null);
 		schedulePanel.setLayout(null);
@@ -426,23 +357,39 @@ public class OfficeUI extends JFrame {
 		notificationArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		scrollPane_1.setViewportView(notificationArea);
 		notificationArea.setEditable(false);
+
+		//Create Thread to update track info
+		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+		exec.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				ctcOffice.loadTrackData();
+				selectedBlockChanged();
+			}
+		}, 0, 1, TimeUnit.SECONDS);
 	}
 	
-	/** Set Manual Mode */
+	/**
+	 * Set Manual Mode
+	 */
 	private void rdbtnManualClick()
 	{
 		ctcOffice.setMode(Mode.MANUAL);
 		logNotification("Manual Mode Set");
 	}
 	
-	/** Set Automatic Mode */
+	/**
+	 * Set Automatic Mode
+	 */
 	private void rdbtnAutoClick()
 	{
 		ctcOffice.setMode(Mode.AUTOMATIC);
 		logNotification("Auto Mode Set");
 	}
 	
-	/** Change simulation speed */
+	/**
+	 * Change simulation speed
+	 */
 	private void simulationSpeedChanged()
 	{
 		if (!simulationSpeed.getValueIsAdjusting() && simulationSpeed.getValue() != ctcOffice.getSimulationSpeed())
@@ -490,17 +437,14 @@ public class OfficeUI extends JFrame {
 		lblAuthInfo.setText(newAuthority + " Blocks");
 	}
 
-	private void selectedBlockChanged(ActionEvent e)
-    {
-        TrackButton selected = (TrackButton)e.getSource();
-		TrackBlock selectedBlock;
+	private void selectedBlockChanged() {
+		if (selectedBlockBtn != null) {
+			TrackBlock selectedBlock;
 
-        if (!selected.equals(selectedBlockBtn)) {
-            selectedBlockBtn = selected;
 			if (selectedBlockBtn.line.equals("Green"))
-				selectedBlock = ctcOffice.greenLine[selectedBlockBtn.block-1];
+				selectedBlock = ctcOffice.greenLine[selectedBlockBtn.block - 1];
 			else
-				selectedBlock = ctcOffice.redLine[selectedBlockBtn.block-1];
+				selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
 
 			//Set block info
 			lblLineInfo.setText(selectedBlockBtn.line);
@@ -512,29 +456,25 @@ public class OfficeUI extends JFrame {
 			lblElevationInfo.setText(selectedBlock.elevation + " ft");
 			lblStatusInfo.setText(selectedBlock.status);
 
-            //Set infrastructure info
-            String[] infr = selectedBlock.infrastructure.split(";");
+			//Set infrastructure info
+			String[] infr = selectedBlock.infrastructure.split(";");
 
-            lblUnderInfo.setText("No");
-            lblStationInfo.setText("N/A");
-            for (int i=0; i < infr.length; i++)
-            {
-                infr[i] = infr[i].trim();
+			lblUnderInfo.setText("No");
+			lblStationInfo.setText("N/A");
+			for (int i = 0; i < infr.length; i++) {
+				infr[i] = infr[i].trim();
 
-                if (infr[i].equals("STATION"))
-                {
-                    if (i+1 < infr.length)
-                        lblStationInfo.setText(infr[i+1].trim());
-                    else
-                        lblStationInfo.setText("Unnamed");
-                }
+				if (infr[i].equals("STATION")) {
+					if (i + 1 < infr.length)
+						lblStationInfo.setText(infr[i + 1].trim());
+					else
+						lblStationInfo.setText("Unnamed");
+				}
 
-                if (infr[i].equals("UNDERGROUND"))
-                    lblUnderInfo.setText("Yes");
-            }
-
-			//logNotification(selectedBlockBtn.toString());
-        }
+				if (infr[i].equals("UNDERGROUND"))
+					lblUnderInfo.setText("Yes");
+			}
+		}
     }
 
 	/**
@@ -547,6 +487,10 @@ public class OfficeUI extends JFrame {
 		notificationArea.append(timeStamp + ": " + msg + "\n");
 	}
 
+	/**
+	 * Enables elements if block is occupied
+	 * @param x is block occupied
+	 */
 	private void setHasTrain(boolean x)
 	{
 		txtFieldSpeed.setEnabled(x);
@@ -762,8 +706,81 @@ public class OfficeUI extends JFrame {
 	 * Initializes dynamic elements of Office UI
 	 */
 	private void initDynamicElements()
-	{
+    {
+        /* Top Button Panel */
 
+        simulationSpeed = new JSlider();
+        simulationSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        simulationSpeed.setToolTipText("Set speed of auto simulation");
+        simulationSpeed.setMajorTickSpacing(3);
+        simulationSpeed.setSnapToTicks(true);
+        simulationSpeed.setPaintLabels(true);
+        simulationSpeed.setPaintTicks(true);
+        simulationSpeed.setMinimum(1);
+        simulationSpeed.setMinorTickSpacing(1);
+        simulationSpeed.setMaximum(10);
+        simulationSpeed.setBounds(1071, 20, 175, 42);
+        simulationSpeed.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                simulationSpeedChanged();
+            }
+        });
+        topButtonPanel.add(simulationSpeed);
+
+        /* Block Info Elements */
+
+        lblLineInfo = new JLabel("");
+        lblLineInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblLineInfo.setBounds(95, 30, 90, 20);
+        statusPanel.add(lblLineInfo);
+        lblLineInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        lblStatusInfo = new JLabel("");
+        lblStatusInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblStatusInfo.setBounds(95, 205, 90, 20);
+        statusPanel.add(lblStatusInfo);
+        lblStatusInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        lblElevationInfo = new JLabel("");
+        lblElevationInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblElevationInfo.setBounds(95, 180, 90, 20);
+        statusPanel.add(lblElevationInfo);
+        lblElevationInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        lblSpeedLimitInfo = new JLabel("");
+        lblSpeedLimitInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblSpeedLimitInfo.setBounds(95, 155, 90, 20);
+        statusPanel.add(lblSpeedLimitInfo);
+        lblSpeedLimitInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        lblGradeInfo = new JLabel("");
+        lblGradeInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblGradeInfo.setBounds(95, 130, 90, 20);
+        statusPanel.add(lblGradeInfo);
+        lblGradeInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        lblLengthInfo = new JLabel("");
+        lblLengthInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblLengthInfo.setBounds(95, 105, 90, 20);
+        statusPanel.add(lblLengthInfo);
+        lblLengthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        lblBlockInfo = new JLabel("");
+        lblBlockInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblBlockInfo.setBounds(95, 80, 90, 20);
+        statusPanel.add(lblBlockInfo);
+        lblBlockInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        lblSectionInfo = new JLabel("");
+        lblSectionInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblSectionInfo.setBounds(95, 55, 90, 20);
+        statusPanel.add(lblSectionInfo);
+        lblSectionInfo.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        btnCloseTrack = new JButton("Close Track");
+        btnCloseTrack.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        btnCloseTrack.setBounds(51, 230, 112, 30);
+        statusPanel.add(btnCloseTrack);
 	}
 
 	/**
@@ -772,7 +789,6 @@ public class OfficeUI extends JFrame {
 	private void initTrackButtons()
 	{
 		TrackButton toggleButtonG1 = new TrackButton("");
-		selectedBlockBtn = toggleButtonG1;
 		toggleButtonG1.setBackground(Color.LIGHT_GRAY);
 		toggleButtonG1.setBounds(354, 24, 15, 15);
 		trackDisplayPanel.add(toggleButtonG1);
@@ -2157,7 +2173,8 @@ public class OfficeUI extends JFrame {
 		ActionListener blockSelectionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				selectedBlockChanged(e);
+				selectedBlockBtn = (TrackButton)e.getSource();
+				selectedBlockChanged();
 			}
 		};
 
