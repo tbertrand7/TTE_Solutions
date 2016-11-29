@@ -34,16 +34,12 @@ public class UserDBInteraction {
 	//If there is a match the method will return true, else it will return false
 	public boolean verifyUser(String username, String password) throws SQLException{
 		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.Users where UserName = '"+username+"' and UserPW = '"+password+"'");
+		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM TTEDB.Users where UserName = '"+username+"' and UserPW = '"+password+"'");
+		rs.next();
+		int cnt = rs.getInt(1);
 		stmt.close();
 
-		String dbUsername = rs.getString(1);
-		String dbPassword = rs.getString(2);
-		boolean sucess = false;
-		
-		if(dbUsername.equals(username) && dbPassword.equals(password))
-			sucess = true;
-		
-		return sucess;
+		return cnt != 0;
+
 	}
 }

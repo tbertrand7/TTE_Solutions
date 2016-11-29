@@ -169,6 +169,7 @@ public class OfficeUI extends JFrame {
 			@Override
 			public void run() {
 				ctcOffice.loadTrackData();
+				updateTrackButtons();
 				selectedBlockChanged();
 			}
 		}, 0, 1, TimeUnit.SECONDS);
@@ -272,7 +273,7 @@ public class OfficeUI extends JFrame {
 			lblGradeInfo.setText(selectedBlock.blockGrade + "%");
 			lblSpeedLimitInfo.setText(selectedBlock.speedLimit + " mph");
 			lblElevationInfo.setText(selectedBlock.elevation + " ft");
-			lblStatusInfo.setText(selectedBlock.status);
+			lblStatusInfo.setText(""); //TODO: set text based on status enum
 
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");
@@ -294,6 +295,11 @@ public class OfficeUI extends JFrame {
 			}
 		}
     }
+
+    private void updateTrackButtons()
+	{
+
+	}
 
 	/**
 	 * Logs notification with the time to the notifications panel

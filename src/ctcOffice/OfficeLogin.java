@@ -1,19 +1,31 @@
 package ctcOffice;
 
+import trackModel.UserDBInteraction;
+
+import java.sql.SQLException;
+
 public class OfficeLogin
 {
+	private UserDBInteraction userDB;
+
+	public OfficeLogin()
+	{
+		try {
+			userDB = new UserDBInteraction();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	/** Checks for valid username and password */
 	public boolean validateLogin(String username, String password)
 	{
-		String tempUser = "admin";
-		String tempPassword = "password";
-
-		//TODO: Validate with user db
-		
-		if (username.equals(tempUser) && password.equals(tempPassword))
-			return true;
-		
-		return false;
+		try {
+			return userDB.verifyUser(username, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	/** Checks if new username already exists */
@@ -37,8 +49,11 @@ public class OfficeLogin
 
 	public boolean createNewUser(String username, String password)
 	{
-		//TODO: CreateUser in DB
-
-		return true;
+		try {
+			return userDB.addUser(username, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
