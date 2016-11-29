@@ -2,7 +2,7 @@ package trackModel;
 
 public class TrackBlock {
 	
-	public enum trackStatus {
+	public enum BlockStatus {
 		UNOCCUPIED, OCCUPIED, CLOSED
 	}
 	public int pk;

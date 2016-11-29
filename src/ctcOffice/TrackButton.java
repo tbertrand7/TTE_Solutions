@@ -26,10 +26,10 @@ public class TrackButton extends JToggleButton
      * Sets the color of the TrackButton to match the status of the corresponding block
      * @param status The status of the track block
      */
-    public void setStatus(trackStatus status) {
-        if (status == trackStatus.UNOCCUPIED) {
+    public void setStatus(BlockStatus status) {
+        if (status == BlockStatus.UNOCCUPIED) {
             this.setBackground(Color.LIGHT_GRAY);
-        } else if (status == trackStatus.CLOSED) {
+        } else if (status == BlockStatus.CLOSED) {
             this.setBackground(Color.BLACK);
         } else {
             this.setBackground(Color.BLUE);
