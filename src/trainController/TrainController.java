@@ -11,6 +11,16 @@ public class TrainController extends TrainControllerInterface {
 	 */
 	private TrainControllerUI ui;
 	
+	/**
+	 * Speed requested by the train controller
+	 */
+	private double speedRequest;
+	
+	/**
+	 * If true, train is in automatic mode. Otherwise, it's in manual mode.
+	 */
+	private boolean automatic;
+	
 
 	/**
 	 * Assigns id and parent, creates TrainModel, creates PowerCalculators.
@@ -21,6 +31,10 @@ public class TrainController extends TrainControllerInterface {
 		super(uniqueid);
 		
 		parent = tci;
+		ui = null;
+		
+		speedRequest = 0;
+		automatic = true;
 		
 		//TODO Create new array of PowerCalculators
 		
@@ -37,8 +51,7 @@ public class TrainController extends TrainControllerInterface {
 		//model.disconnect();
 		model = null;
 		
-		//TODO Create TrainControllerUI method:
-		//ui.disconnect();
+		ui.disconnect();
 		ui = null;
 		
 	}
@@ -60,6 +73,35 @@ public class TrainController extends TrainControllerInterface {
 	public void connectToUI(TrainControllerUI tcui) {
 		
 		ui = tcui;
+		
+	}
+	
+	/**
+	 * Disconnects the train from its UI.
+	 */
+	public void disconnectFromUI() {
+		
+		ui = null;
+		
+	}
+	
+	/**
+	 * Setter for speed request.
+	 * @param speed - speed requested by train controller, in mph
+	 */
+	public void setSpeedRequest(double speed) {
+		
+		speedRequest = speed * 1609.34 / 3600;
+		
+	}
+	
+	/**
+	 * Setter for automatic mode.
+	 * @param speed - speed requested by train controller, in mph
+	 */
+	public void setAutomatic(boolean auto) {
+		
+		automatic = auto;
 		
 	}
 
