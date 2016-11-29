@@ -1,5 +1,9 @@
 package trainModel;
 
+import trackModel.*; //for track block manipulation
+import trainController.*; //for train controller
+import TTEHome.*; //for clock
+
 public class TrainModel extends TrainState implements Runnable{
 
 	Thread t;
@@ -11,10 +15,18 @@ public class TrainModel extends TrainState implements Runnable{
 	double velocity; 
 	double mass;
 	
-	private final double accRate = 0.5; // m/s^2
-	
 	double speed;
 	int authority;
+	
+	boolean stop;
+	boolean proceed = true;
+	
+	TrackBlock trackBlock;
+	
+	double brakingDistance;
+	
+	double endOfBlock;
+	double currentPos;
 	
 	
 	/**
@@ -41,18 +53,39 @@ public class TrainModel extends TrainState implements Runnable{
 	}
 	
 	
+	public void pause(){
+		stop = true;
+	}
+	
+	public void resume(){
+		stop = false;
+	}
+	
+	
 	public void run(){
 		
-			mass = this.emptyTrainMass + (this.personMass * this.passengerCount); //calculate the mass of the train plus load of passengers
-			velocity = power / (mass * accRate);
+		this.resume(); //set stop to false to allow while loop to proceed
+		
+		while(proceed){
+			
+			while(stop); //wait here while stop is true 
 	
-			try {
-				t.sleep(1000); //sleep for 1 second
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
+				mass = this.emptyTrainMass + (this.personMass * this.passengerCount); //calculate the mass of the train plus load of passengers
+				velocity = power / (mass * this.accRate);
+				
+				brakingDistance = (velocity * velocity) / (2 * this.serviceBrakeRate); //calculate braking distance
+				
+				if(currentPos == endOfBlock){
+					this.pause();
+					currentPos = 0; //reset current position to zero (start of new block)
+				}
+				
+				
+				//switch case for braking??
+		}
 	}
+	
+	
 
 	/**
 	 * calls private method for failure protocol
@@ -89,19 +122,6 @@ public class TrainModel extends TrainState implements Runnable{
 	public void setPower(double powerSetPoint){
 			power = powerSetPoint;			
 		}
-
-	
-	/*
-	 * Elevation method here
-	 * 
-	 * Not sure how this method should work...
-	 * 
-	 * Could have getElevation() and setElevation(), but I don't know how that would work in real time
-	 * Need to ask for help on this...
-	 * 
-	 */
-
-	
 	
 	
 }//end of TrainModel class
