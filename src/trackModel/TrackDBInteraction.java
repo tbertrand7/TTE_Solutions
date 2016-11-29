@@ -33,9 +33,17 @@ public class TrackDBInteraction {
 	}
 
 	public TrackBlock[] getLine(String line) throws SQLException{
-		TrackBlock [] track = new TrackBlock[200];
+		
+		TrackBlock [] track = null;
+		
+		if(line.equals("Red")){
+			 track = new TrackBlock[77];
+		}
+		else{
+			track = new TrackBlock[152];
+		}
 		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.RailLines where line = '"+line+"'");
+		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.RailLines where line = '"+line+"'order by BlockNumber");
 		track = populateTrackLine(rs,track);
 		stmt.close();
 
@@ -90,7 +98,7 @@ public class TrackDBInteraction {
 
 	}
 
-	public TrackBlock populateTrackBlock(ResultSet rs) throws SQLException{
+	private TrackBlock populateTrackBlock(ResultSet rs) throws SQLException{
 		TrackBlock section = new TrackBlock();
 		while(rs.next()){
 			section.pk = rs.getInt(1);
@@ -117,7 +125,7 @@ public class TrackDBInteraction {
 		return section;
 	}
 
-	public TrackBlock[] populateTrackLine(ResultSet rs, TrackBlock[] line) throws SQLException{
+	private TrackBlock[] populateTrackLine(ResultSet rs, TrackBlock[] line) throws SQLException{
 		TrackBlock section = new TrackBlock();
 		for(int i =0; i<line.length; i++){
 			while(rs.next()){
