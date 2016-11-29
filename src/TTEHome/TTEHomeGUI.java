@@ -9,7 +9,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import ctcOffice.*;
-import trackModel.trackModelUI;
+import trackModel.TrackModelUI;
 import trainController.TrainControllerInstances;
 import trainModel.trainModelGUI;
 import waysideController.TC_UI_main;
@@ -103,7 +103,7 @@ public class TTEHomeGUI {
 		JButton btnTrackModel = new JButton("Track Model");
 		btnTrackModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				trackModelUI.main(null);
+				TrackModelUI.main(null);
 			}
 		});
 		btnTrackModel.setBounds(150, 141, 135, 109);

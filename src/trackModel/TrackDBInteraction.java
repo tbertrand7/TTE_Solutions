@@ -60,7 +60,7 @@ public class TrackDBInteraction {
 
 	public boolean breakSection(String line, int block) throws SQLException{
 		Statement stmt = conn.createStatement();
-		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = 'BROKEN', OccupiedBy = 'BROKEN' where Line = '"+line+"' and BlockNumber = "+block+";");
+		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = 'BROKEN', Status = 'BROKEN' where Line = '"+line+"' and BlockNumber = "+block+";");
 		stmt.close();
 
 
@@ -69,7 +69,7 @@ public class TrackDBInteraction {
 
 	public boolean cutSection(String line, int block) throws SQLException {
 		Statement stmt = conn.createStatement();
-		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = 'POWER CUT', OccupiedBy = 'POWER CUT' where Line = '"+line+"' and BlockNumber = "+block+";");
+		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = 'POWER CUT', Status = 'POWER CUT' where Line = '"+line+"' and BlockNumber = "+block+";");
 		stmt.close();
 
 
@@ -78,7 +78,7 @@ public class TrackDBInteraction {
 
 	public boolean breakSectionCircuit(String line, int block) throws SQLException {
 		Statement stmt = conn.createStatement();
-		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = 'CIRCUIT BROKEN', OccupiedBy = 'CIRCUIT BROKEN' where Line = '"+line+"' and BlockNumber = "+block+";");
+		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = 'CIRCUIT BROKEN', Status = 'CIRCUIT BROKEN' where Line = '"+line+"' and BlockNumber = "+block+";");
 		stmt.close();
 
 		return sucess;

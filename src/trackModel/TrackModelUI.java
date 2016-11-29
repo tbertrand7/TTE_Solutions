@@ -12,7 +12,7 @@ import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.util.Random;
 
-public class trackModelUI {
+public class TrackModelUI {
 
 	private JFrame frmTrackModelGui;
 	private JLabel textField_4;
@@ -23,6 +23,7 @@ public class trackModelUI {
 	private JTextField textField_2;
 	private JTextField textField;
 	private JPasswordField passwordField;
+	private TrackModel opps = new TrackModel();
 
 	/**
 	 * Launch the application.
@@ -31,7 +32,7 @@ public class trackModelUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					trackModelUI window = new trackModelUI();
+					TrackModelUI window = new TrackModelUI();
 					window.frmTrackModelGui.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +44,7 @@ public class trackModelUI {
 	/**
 	 * Create the application.
 	 */
-	public trackModelUI() {
+	public TrackModelUI() {
 		initialize();
 	}
 
@@ -52,7 +53,7 @@ public class trackModelUI {
 	 */
 	private void initialize() {
 		frmTrackModelGui = new JFrame();
-		frmTrackModelGui.setIconImage(Toolkit.getDefaultToolkit().getImage(trackModelUI.class.getResource("/shared/TTE.png")));
+		frmTrackModelGui.setIconImage(Toolkit.getDefaultToolkit().getImage(TrackModelUI.class.getResource("/shared/TTE.png")));
 		frmTrackModelGui.setFont(new Font("Arial", Font.PLAIN, 14));
 		frmTrackModelGui.getContentPane().setFont(new Font("Arial", Font.PLAIN, 11));
 		frmTrackModelGui.setTitle("Track Model");
@@ -464,36 +465,7 @@ public class trackModelUI {
 		breakRail.setBounds(1, 0, 159, 295);
 		breakRail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String[] lines = { "Red", "Green" };
-				boolean sucess = true; // method reeturns false if update works
-				Random rand = new Random();
-				int n = rand.nextInt(77) + 1;
-				int i = rand.nextInt(2);
-				String breakRailConfirm = JOptionPane.showInputDialog(parent,
-						"Are you sure you want break block: " + lines[i] + " " + n + "? (y/n)", null);
-
-				if (breakRailConfirm.equalsIgnoreCase("y")) {
-					TrackDBInteraction db = null;
-					try {
-						db = new TrackDBInteraction();
-					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
-							| SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					try {
-						sucess = db.breakSection(lines[i], n);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-				if (!sucess) {
-					JOptionPane.showMessageDialog(parent, "Block was broken!");
-				} else {
-					JOptionPane.showMessageDialog(parent, "Block was not broken!");
-				}
+				opps.breakRail();
 			}
 		});
 		failurePanel.setLayout(null);
@@ -504,36 +476,7 @@ public class trackModelUI {
 		powerFailure.setBounds(160, 0, 159, 295);
 		powerFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String[] lines = { "Red", "Green" };
-				boolean sucess = true; // method reeturns false if update works
-				Random rand = new Random();
-				int n = rand.nextInt(77) + 1;
-				int i = rand.nextInt(2);
-				String breakRailConfirm = JOptionPane.showInputDialog(parent,
-						"Are you sure you want cut the power to block: " + lines[i] + " " + n + "? (y/n)", null);
-
-				if (breakRailConfirm.equalsIgnoreCase("y")) {
-					TrackDBInteraction db = null;
-					try {
-						db = new TrackDBInteraction();
-					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
-							| SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					try {
-						sucess = db.cutSection(lines[i], n);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-				if (!sucess) {
-					JOptionPane.showMessageDialog(parent, "Power was cut!");
-				} else {
-					JOptionPane.showMessageDialog(parent, "Power was not cut!");
-				}
+				opps.cutRail();
 			}
 		});
 		failurePanel.add(powerFailure);
@@ -543,36 +486,7 @@ public class trackModelUI {
 		circuitFailure.setFont(new Font("Arial", Font.PLAIN, 11));
 		circuitFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[] lines = { "Red", "Green" };
-				boolean sucess = true; // method reeturns false if update works
-				Random rand = new Random();
-				int n = rand.nextInt(77) + 1;
-				int i = rand.nextInt(2);
-				String breakRailConfirm = JOptionPane.showInputDialog(parent,
-						"Are you sure you want break the circuit on block: " + lines[i] + " " + n + "? (y/n)", null);
-
-				if (breakRailConfirm.equalsIgnoreCase("y")) {
-					TrackDBInteraction db = null;
-					try {
-						db = new TrackDBInteraction();
-					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
-							| SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						sucess = db.breakSectionCircuit(lines[i], n);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-
-				if (!sucess) {
-					JOptionPane.showMessageDialog(parent, "Circuit was broken!");
-				} else {
-					JOptionPane.showMessageDialog(parent, "Circuit was not broken!");
-				}
+				opps.breakRailCircuit();
 			}
 		});
 		failurePanel.add(circuitFailure);
@@ -618,20 +532,9 @@ public class trackModelUI {
 		JButton getData = new JButton("Get Data");
 		getData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				TrackDBInteraction db = null;
-				try {
-					db = new TrackDBInteraction();
-				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					block = db.getSection(lineComboBoxView.getSelectedItem().toString(),
-							(Integer) blockComboBoxView.getSelectedItem());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
+				block = opps.getBlock(lineComboBox.getSelectedItem().toString(),
+							(Integer) railComboBox.getSelectedItem());
 
 				lblNewLabel_2.setText(String.valueOf(block.blockLength) + " ft");
 				textField_4.setText(String.valueOf(block.blockGrade) + " \u00b0");
@@ -696,20 +599,8 @@ public class trackModelUI {
 		JButton btnCheckLive = new JButton("Check Live");
 		btnCheckLive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				TrackDBInteraction db = null;
-				try {
-					db = new TrackDBInteraction();
-				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					block = db.getSection(lineComboBox.getSelectedItem().toString(),
-							(Integer) railComboBox.getSelectedItem());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				block = opps.getBlock(lineComboBox.getSelectedItem().toString(),
+						(Integer) railComboBox.getSelectedItem());
 
 				spinner.setText(String.valueOf(block.blockLength));
 				lblNewLabel_1.setText(String.valueOf(block.blockGrade));
@@ -876,19 +767,6 @@ public class trackModelUI {
 		if (!textField_2.getText().equals("OPEN BLOCK"))
 			theBlock.occupied = textField_2.getText();
 
-		Boolean result;
-		TrackDBInteraction db = null;
-		try {
-			db = new TrackDBInteraction();
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			result = db.setSection(theBlock);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		opps.setBlock(theBlock);
 	}
 }
