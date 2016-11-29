@@ -19,9 +19,20 @@ public abstract class TrainControllerInstancesInterface {
 	 */
 	private int dispatched;
 	/**
-	 * The next unique id to assign to a train
+	 * The next unique id to assign to a train (starts at 1)
 	 */
 	private int nextID;
+	
+	/**
+	 * The next unique instance id to assign to a UI (starts at 0).
+	 * (Don't pay attention to this variable if you're not implementing the TrainController.)
+	 */
+	private int instanceID;
+	
+	public TrainControllerInstancesInterface() {
+		nextID = 1;
+		instanceID = 0;
+	}
 	
 	/**
 	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
@@ -55,7 +66,10 @@ public abstract class TrainControllerInstancesInterface {
 	 */
 	public void newUI() {
 	
-		//TODO Create a new TrainControllerUI instance
+		/* Not entirely sure if the cast below is okay - need to test! */
+		new TrainControllerUI(instanceID, (TrainControllerInstances)this);
+		
+		++instanceID;
 		
 	}
 
