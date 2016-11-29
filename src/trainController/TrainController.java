@@ -12,11 +12,6 @@ public class TrainController extends TrainControllerInterface {
 	 */
 	private double speedRequest;
 	
-	/**
-	 * If true, train is in automatic mode. Otherwise, it's in manual mode.
-	 */
-	private boolean automatic;
-	
 
 	/**
 	 * Assigns id and parent, creates TrainModel, creates PowerCalculators.
