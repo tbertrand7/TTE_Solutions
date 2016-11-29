@@ -24,10 +24,10 @@ public class UserDBInteraction {
 	//If the user is added it will return true otherwise it will return false
 	public boolean addUser(String username, String password) throws SQLException{
 		Statement stmt = conn.createStatement();
-		boolean sucess = stmt.execute("insert into TTEDB.Users (UserName, UserPW) values ('"+username+"', '"+password+"')");
+		boolean success = stmt.execute("insert into TTEDB.Users (UserName, UserPW) values ('"+username+"', '"+password+"')");
 		stmt.close();
 
-		return sucess;
+		return success;
 	}
 
 	//verifyUser takes a user name and PW combination and checks to see that it exists in the database
@@ -40,6 +40,17 @@ public class UserDBInteraction {
 		stmt.close();
 
 		return cnt != 0;
+	}
 
+	//checkDuplicate takes a user name and checks to see if it exists in the database
+	//If there is a match the method will return true, else it will return false
+	public boolean checkDupUsername(String username) throws SQLException{
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM TTEDB.Users where UserName = '"+username+"'");
+		rs.next();
+		int cnt = rs.getInt(1);
+		stmt.close();
+
+		return cnt == 0;
 	}
 }

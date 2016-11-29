@@ -31,14 +31,12 @@ public class OfficeLogin
 	/** Checks if new username already exists */
 	public boolean validateNewUser(String username)
 	{
-		String tempUser = "admin";
-
-		//TODO: Check DB for existing user
-
-		if (username.equals(tempUser))
+		try {
+			return userDB.checkDupUsername(username);
+		} catch (SQLException e) {
+			e.printStackTrace();
 			return false;
-		
-		return true;
+		}
 	}
 	
 	/** Checks if both password fields match */
