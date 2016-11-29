@@ -7,7 +7,7 @@ import java.util.Set;
 public class TrainControllerInstancesOld {
 	
 	private HashMap<Integer, TrainControllerUIOld> UIList;	//maps instance IDs to trainControllerUI classes
-	private HashMap<Integer, PowerCalculatorOld> powerList; //maps instance IDs to PowerCalculator classes <-- this should be train IDs, not instance IDs
+	//private HashMap<Integer, PowerCalculatorOld> powerList; //maps instance IDs to PowerCalculator classes <-- this should be train IDs, not instance IDs
 	private HashMap<Integer, TestPanelOld> testList; //maps instance IDs to TestPanel classes
 	
 	private int nextID; //this is NOT the next train ID, it's the next instance ID!!!!!
@@ -15,14 +15,14 @@ public class TrainControllerInstancesOld {
 	public TrainControllerInstancesOld() {
 		nextID = 0;
 		UIList = new HashMap<Integer, TrainControllerUIOld>();
-		powerList = new HashMap<Integer, PowerCalculatorOld>();
+		//powerList = new HashMap<Integer, PowerCalculatorOld>();
 		testList = new HashMap<Integer, TestPanelOld>();
 	}
 	
 	public synchronized double getPower(int id) {
-		if (powerList.containsKey(id))
-			return powerList.get(id).getPower();
-		else
+		//if (powerList.containsKey(id))
+		//	return powerList.get(id).getPower();
+		//else
 			return -1;
 	}
 	
@@ -108,12 +108,12 @@ public class TrainControllerInstancesOld {
 			testList.get(key).updateTrainInstances();
 		
 		//Create new power calculator
-		PowerCalculatorOld pc = new PowerCalculatorOld(tcui);
-		powerList.put(nextID, pc);
+		//PowerCalculatorOld pc = new PowerCalculatorOld(tcui);
+		//powerList.put(nextID, pc);
 		
 		tp.initialize();
 		
-		pc.start();
+		//pc.start();
 		
 		nextID++;
 	}
@@ -140,9 +140,9 @@ public class TrainControllerInstancesOld {
 	public synchronized void removeUI(int id) {
 		UIList.remove(id);
 		
-		PowerCalculatorOld pc = powerList.get(id);
-		pc.stopRun();
-		powerList.remove(id);
+		//PowerCalculatorOld pc = powerList.get(id);
+		//pc.stopRun();
+		//powerList.remove(id);
 	}
 
 }
