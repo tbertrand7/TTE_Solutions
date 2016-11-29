@@ -1,5 +1,6 @@
 package trainController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -15,9 +16,9 @@ public abstract class TrainControllerInstancesInterface {
 	 */
 	protected HashMap<Integer, TrainController> trainList;
 	/**
-	 * Count of all dispatched trains
+	 * Maps instance IDs to their UIs (only lists existing UIs)
 	 */
-	private int dispatched;
+	protected HashMap<Integer, TrainControllerUI> uiList;
 	/**
 	 * The next unique id to assign to a train (starts at 1)
 	 */
@@ -38,13 +39,15 @@ public abstract class TrainControllerInstancesInterface {
 	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
 	 * then a new train is created.
 	 */
-	public void createTrain() {
+	public void createTrain(int newid) {
 		
-		if (trainList.size() < (dispatched + 1)) {
+		for (TrainControllerUI ui : uiList.values()) {
+			ui.addTrainID(newid);
+		}
+		
+		if (!trainList.containsKey(newid)) {
 			/* Not entirely sure if the cast below is okay - need to test! */
-			trainList.put(nextID, new TrainController((TrainControllerInstances) this, nextID));
-			++dispatched;
-			++nextID;
+			trainList.put(newid, new TrainController((TrainControllerInstances) this, newid));
 		}
 		
 	}
@@ -54,10 +57,15 @@ public abstract class TrainControllerInstancesInterface {
 	 * @param id - ID of the train to be deleted
 	 */
 	public void deleteTrain(int id) {
+		
+		for (TrainControllerUI ui : uiList.values()) {
+			ui.deleteTrainID(id);
+		}
 	
-		trainList.get(id).delete();
-		trainList.remove(id);
-		--dispatched;
+		if (trainList.containsKey(id)) {
+			trainList.get(id).delete();
+			trainList.remove(id);
+		}
 	
 	}
 	
@@ -67,10 +75,17 @@ public abstract class TrainControllerInstancesInterface {
 	public void newUI() {
 	
 		/* Not entirely sure if the cast below is okay - need to test! */
-		new TrainControllerUI(instanceID, (TrainControllerInstances)this);
+		uiList.put(instanceID, new TrainControllerUI(instanceID, (TrainControllerInstances)this));
 		
 		++instanceID;
 		
+	}
+	
+	/**
+	 * Removes a TrainControllerUI from the list.
+	 */
+	public void deleteUI(int id) {
+		uiList.remove(id);
 	}
 
 }
