@@ -1,8 +1,6 @@
 package trainController;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
@@ -191,7 +189,7 @@ public class TrainControllerUI extends JFrame {
 		
 		setResizable(false);
 		setTitle("Train Controller (Instance " + id + ")");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TrainControllerUIOld.class.getResource("/TrainController/computer1.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TrainControllerUI.class.getResource("/TrainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 828, 688);
 		contentPane = new JPanel();
@@ -272,7 +270,7 @@ public class TrainControllerUI extends JFrame {
 		imgLight = new JButton("");
 		imgLight.setBackground(UIManager.getColor("Button.disabledShadow"));
 		imgLight.setEnabled(false);
-		imgLight.setIcon(new ImageIcon(TrainControllerUIOld.class.getResource("/TrainController/LightOnTiny.png")));
+		imgLight.setIcon(new ImageIcon(TrainControllerUI.class.getResource("/TrainController/LightOnTiny.png")));
 		imgLight.setBounds(184, 86, 43, 46);
 		contentPane.add(imgLight);
 		
@@ -540,7 +538,7 @@ public class TrainControllerUI extends JFrame {
 		PowerCurr.setText("0 W");
 		
 		JLabel TTEIcon = new JLabel("");
-		TTEIcon.setIcon(new ImageIcon(TrainControllerUIOld.class.getResource("/shared/TTESmall.png")));
+		TTEIcon.setIcon(new ImageIcon(TrainControllerUI.class.getResource("/shared/TTESmall.png")));
 		TTEIcon.setBounds(10, 578, 64, 65);
 		contentPane.add(TTEIcon);
 		
