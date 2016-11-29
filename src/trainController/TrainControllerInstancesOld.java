@@ -8,7 +8,7 @@ public class TrainControllerInstancesOld {
 	
 	//private HashMap<Integer, TrainControllerUIOld> UIList;	//maps instance IDs to trainControllerUI classes
 	//private HashMap<Integer, PowerCalculatorOld> powerList; //maps instance IDs to PowerCalculator classes <-- this should be train IDs, not instance IDs
-	private HashMap<Integer, TestPanelOld> testList; //maps instance IDs to TestPanel classes
+	//private HashMap<Integer, TestPanelOld> testList; //maps instance IDs to TestPanel classes
 	
 	private int nextID; //this is NOT the next train ID, it's the next instance ID!!!!!
 	
@@ -16,7 +16,7 @@ public class TrainControllerInstancesOld {
 		nextID = 0;
 		//UIList = new HashMap<Integer, TrainControllerUIOld>();
 		//powerList = new HashMap<Integer, PowerCalculatorOld>();
-		testList = new HashMap<Integer, TestPanelOld>();
+		//testList = new HashMap<Integer, TestPanelOld>();
 	}
 	
 	public synchronized double getPower(int id) {
@@ -99,20 +99,20 @@ public class TrainControllerInstancesOld {
 		System.out.println();
 	}
 	
-	private void createNew(TestPanelOld tp) {//TrainControllerUIOld tcui, TestPanelOld tp) {
+	private void createNew(TestPanel tp) {//TrainControllerUIOld tcui, TestPanelOld tp) {
 		//Put into list
 		//UIList.put(nextID, tcui);
-		testList.put(nextID, tp);
+		//testList.put(nextID, tp);
 		
 		//Update all test panel train instance lists
-		for (int key : testList.keySet())
-			testList.get(key).updateTrainInstances();
+		//for (int key : testList.keySet())
+		//	testList.get(key).updateTrainInstances();
 		
 		//Create new power calculator
 		//PowerCalculatorOld pc = new PowerCalculatorOld(tcui);
 		//powerList.put(nextID, pc);
 		
-		tp.initialize();
+		//tp.initialize();
 		
 		//pc.start();
 		
@@ -126,11 +126,11 @@ public class TrainControllerInstancesOld {
 			public void run() {
 				try {
 					//TrainControllerUIOld tcui = new TrainControllerUIOld(nextID, instance);
-					TestPanelOld tp = new TestPanelOld(nextID, instance);
+					//TestPanelOld tp = new TestPanelOld(nextID, instance);
 					
-					instance.createNew(tp);//tcui, tp);
+					//instance.createNew(tp);//tcui, tp);
 					
-					tp.setVisible(true);
+					//tp.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

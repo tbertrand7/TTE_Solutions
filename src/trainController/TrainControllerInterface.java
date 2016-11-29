@@ -68,6 +68,11 @@ public abstract class TrainControllerInterface {
 	 */
 	public double power;
 	
+	/**
+	 * If true, train is in automatic mode. Otherwise, it's in manual mode.
+	 */
+	protected boolean automatic;
+	
 	//Door status
 	protected boolean rightDoorsOpen;
 	protected boolean leftDoorsOpen;
@@ -116,6 +121,40 @@ public abstract class TrainControllerInterface {
 		speedCommand = speed;
 		authority = auth;
 		inTunnel = under;
+		
+	}
+	
+	/**
+	 * Sets commanded speed.
+	 * @param speed - commanded speed in m/s
+	 */
+	public void setSpeedCommand(double speed) {
+		
+		speedCommand = speed;
+		
+	}
+	
+	/**
+	 * Sets commanded authority.
+	 * @param auth - authority in blocks
+	 */
+	public void setAuthority(int auth) {
+		
+		authority = auth;
+		
+	}
+	
+	/**
+	 * Sets whether the train is in a tunnel.
+	 * @param in - true if 
+	 */
+	public void setInTunnel(boolean in) {
+		
+		inTunnel = in;
+		
+		if (automatic) {
+			setLights(in);
+		}
 		
 	}
 	
@@ -236,12 +275,37 @@ public abstract class TrainControllerInterface {
 	}
 	
 	/**
+	 * Getter for the service brake.
+	 * @return true if the brake is engaged, otherwise false
+	 */
+	public boolean getServiceBrake() {
+		
+		return sBrakeOn;
+		
+	}
+	
+	/**
+	 * Getter for the emergency brake.
+	 * @return true if the brake is engaged, otherwise false
+	 */
+	public boolean getEmergencyBrake() {
+		
+		return eBrakeOn;
+		
+	}
+	
+	/**
 	 * Setter for the lights.
 	 * @param on - true if the light is on, otherwise false
 	 */
 	public void setLights(boolean on) {
 		
 		lightsOn = on;
+		
+		if (ui != null && automatic) {
+			ui.tglbtnLights.setSelected(on);
+			ui.imgLight.setEnabled(on);
+		}
 		//TODO @Matt model.setLights(on);?
 		
 	}
