@@ -11,40 +11,48 @@ public class CTCOffice
 	public enum Mode {MANUAL, AUTOMATIC}
 	
 	private int simulationSpeed;
-	private Mode mode = Mode.MANUAL; //1=manual 2=auto
+	private Mode mode = Mode.MANUAL;
 
 	public TrackBlock[] greenLine, redLine;
 	
 	public CTCOffice()
 	{
-		greenLine = new TrackBlock[152];
-		redLine = new TrackBlock[77];
-
-		try {
-			dataBase = new DBInteraction();
-			loadTrackData();
-		} catch (Exception e) {
-
-		}
+        try {
+            dataBase = new DBInteraction();
+            greenLine = new TrackBlock[152];
+            redLine = new TrackBlock[77];
+            loadTrackData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
-	
+
+    /**
+     * Changes mode between manual or automatic
+     * @param newMode new mode
+     */
 	public void setMode(Mode newMode)
 	{
 		mode = newMode;
 	}
 	
 	/** Set new simulation speed */
+	//TODO: Replace method with global system clock
 	public void setSimulationSpeed(int newSpeed)
 	{
 		simulationSpeed = newSpeed;
 	}
-	
-	/** Suggest speed to wayside controller */
+
 	public void suggestSpeed(int newTrainSpeed)
 	{
-		//TODO: also need to send train info
+		//TODO: suggest speed for a train to wayside controller
 	}
-	
+
+	public void suggestDestination()
+    {
+        //TODO: suggest new destination for a train to wayside controller
+    }
+
 	/** Returns the current simulation speed */
 	public int getSimulationSpeed()
 	{
@@ -57,8 +65,10 @@ public class CTCOffice
 		return mode;
 	}
 
-	/** Load in initial track data */
-	private void loadTrackData()
+	/**
+     * Load in track data
+     */
+	public void loadTrackData()
 	{
 		for (int i=0; i < greenLine.length; i++)
 		{
@@ -67,8 +77,14 @@ public class CTCOffice
 				if (i < redLine.length)
 					redLine[i] = dataBase.getSection("Red", i + 1);
 			} catch(SQLException e) {
-
+                e.printStackTrace();
 			}
 		}
+//        try {
+//            redLine = dataBase.getLine("Red");
+//            greenLine = dataBase.getLine("Green");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 	}
 }

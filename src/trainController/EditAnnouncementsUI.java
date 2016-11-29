@@ -1,52 +1,36 @@
 package trainController;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import java.awt.Toolkit;
-
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-
 import java.awt.Font;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class EditAnnouncementsUIOld extends JFrame {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+
+public class EditAnnouncementsUI extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9003840624225657749L;
 
 	private JPanel contentPane;
 	
-	private TrainControllerUIOld tcui;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					EditAnnouncementsUIOld frame = new EditAnnouncementsUIOld(null, null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private TrainControllerUI tcui;
 
 	/**
 	 * Create the frame.
 	 */
-	public EditAnnouncementsUIOld(TrainControllerUIOld ui, ArrayList<String> list) {
+	public EditAnnouncementsUI(TrainControllerUI ui, ArrayList<String> list) {
 		tcui = ui;
 		
 		setTitle("Edit Announcements");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(EditAnnouncementsUIOld.class.getResource("/trainController/computer1.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(EditAnnouncementsUI.class.getResource("/trainController/computer1.jpg")));
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 685, 461);
@@ -78,4 +62,5 @@ public class EditAnnouncementsUIOld extends JFrame {
 		btnSave.setBounds(290, 378, 89, 33);
 		contentPane.add(btnSave);
 	}
+
 }

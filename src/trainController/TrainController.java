@@ -6,10 +6,16 @@ public class TrainController extends TrainControllerInterface {
 	 * The TrainControllerInstances class this train controller belongs to.
 	 */
 	protected TrainControllerInstances parent;
+	
 	/**
-	 * The UI monitoring this train controller
+	 * Speed requested by the train controller
 	 */
-	private TrainControllerUI ui;
+	private double speedRequest;
+	
+	/**
+	 * If true, train is in automatic mode. Otherwise, it's in manual mode.
+	 */
+	private boolean automatic;
 	
 
 	/**
@@ -21,6 +27,10 @@ public class TrainController extends TrainControllerInterface {
 		super(uniqueid);
 		
 		parent = tci;
+		ui = null;
+		
+		speedRequest = 0;
+		automatic = true;
 		
 		//TODO Create new array of PowerCalculators
 		
@@ -37,8 +47,7 @@ public class TrainController extends TrainControllerInterface {
 		//model.disconnect();
 		model = null;
 		
-		//TODO Create TrainControllerUI method:
-		//ui.disconnect();
+		ui.disconnect();
 		ui = null;
 		
 	}
@@ -60,6 +69,71 @@ public class TrainController extends TrainControllerInterface {
 	public void connectToUI(TrainControllerUI tcui) {
 		
 		ui = tcui;
+		
+	}
+	
+	/**
+	 * Disconnects the train from its UI.
+	 */
+	public void disconnectFromUI() {
+		
+		ui = null;
+		
+	}
+	
+	/**
+	 * Setter for speed request.
+	 * @param speed - speed requested by train controller, in mph
+	 */
+	public void setSpeedRequest(double speed) {
+		
+		speedRequest = speed * 1609.34 / 3600;
+		
+	}
+	
+	/**
+	 * Setter for automatic mode.
+	 * @param speed - speed requested by train controller, in mph
+	 */
+	public void setAutomatic(boolean auto) {
+		
+		automatic = auto;
+		
+	}
+	
+	/**
+	 * Returns the speed command or speed request, depending on automatic/manual mode.
+	 * @return target speed of the train
+	 */
+	public synchronized double getSpeed() {
+		
+		if (automatic) {
+			return speedCommand;
+		} else {
+			return speedRequest;
+		}
+		
+	}
+	
+	/**
+	 * Getter for current speed.
+	 * @return current speed, in m/s
+	 */
+	public synchronized double getSpeedCurrent() {
+		
+		return speedCurrent;
+		
+	}
+	
+	/**
+	 * Setter for current power output.
+	 * @param pow - current power, in watts
+	 */
+	public void setPower(double pow) {
+		
+		power = pow;
+		
+		if (ui != null) ui.setPower(power);
 		
 	}
 
