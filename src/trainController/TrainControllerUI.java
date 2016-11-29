@@ -78,6 +78,10 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
+	public void announceStation(String stationName) {
+		AnnCurr.setText("ATTENTION: Approaching " + stationName + ".");
+	}
+	
 	private void newTestPanel() {
 		try {
 			TestPanel frame = new TestPanel(id, this);
@@ -105,19 +109,49 @@ public class TrainControllerUI extends JFrame {
 	public JToggleButton tglbtnLights;
 	public JButton imgLight;
 	
+	//Brakes
+	JToggleButton btnEmergencyBrake;
+	JToggleButton btnPassengerEmergencyBrake;
+	JToggleButton btnServiceBrake;
+	
 	//Doors
 	JToggleButton tglbtnRightDoors;
 	private JTextField txtRightDoors;
 	JToggleButton tglbtnLeftDoors;
 	private JTextField txtLeftDoors;
 	
+	//More stuff
+	JButton btnTempReq;
+	JButton btnSpeedReq;
+	
 	//Train Select
 	public JComboBox<Integer> TrainSelect; //selects which train to get information from
-	//TODO handle changes to this
+	
+	public void addTrainID(int id) {
+		TrainSelect.addItem(id);
+	}
+	
+	public void deleteTrainID(int id) {
+		TrainSelect.removeItem(id);
+	}
+	
+	public void changeTrainID(int id) {
+		TrainController temp = parent.connectUI(id, this);
+		
+		if (temp == null) {
+			TrainSelect.setSelectedIndex(0);
+		} else {
+			controller = temp;
+		}
+	}
 	
 	//System Messages
 	JTextPane txtMessages;
 	private JButton btnTestPanel;
+	
+	public void message(String message) {
+		txtMessages.setText(txtMessages.getText() + message);
+	}
 	
 	public void setSpeedLimit(double speed) {
 		int americanlimit = (int) ((speed / 1609.34) * 3600); //m/s * (1 mi / 1609.34 m) * (3600 s / 1 h)
@@ -173,13 +207,33 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
+	public void setPassengerEmergencyBrake() {
+		btnPassengerEmergencyBrake.setSelected(false);
+	}
+	
+	public void setEmergencyBrake(boolean set) {
+		btnEmergencyBrake.setSelected(set);
+	}
+	
+	public void setServiceBrake(boolean set) {
+		btnServiceBrake.setSelected(set);
+	}
+	
 	public void disconnect() {
-		controller.disconnectFromUI();
-		controller = null;
+		if (controller != null) {
+			controller.disconnectFromUI();
+			controller = null;
+		}
 		
 		athread.stopRun();
 		
-		//TODO add more to this (change TrainSelect, disable things, etc...)
+		TrainSelect.setSelectedIndex(0);
+		tglbtnLights.setEnabled(false);
+		tglbtnRightDoors.setEnabled(false);
+		tglbtnLeftDoors.setEnabled(false);
+		btnTempReq.setEnabled(false);
+		btnSpeedReq.setEnabled(false);
+		btnServiceBrake.setEnabled(false);
 	}
 	
 	/**
@@ -187,6 +241,8 @@ public class TrainControllerUI extends JFrame {
 	 */
 	@Override
 	public void dispose() {
+		parent.deleteUI(id);
+		
 		parent = null;
 		disconnect();
 		
@@ -218,6 +274,17 @@ public class TrainControllerUI extends JFrame {
 		contentPane.setLayout(null);
 		
 		TrainSelect = new JComboBox<Integer>();
+		TrainSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if (TrainSelect.getSelectedIndex() == 0) {
+					disconnect();
+				} else {
+					int tempid = (int) TrainSelect.getSelectedItem();
+					
+					changeTrainID(tempid);
+				}
+			}
+		});
 		TrainSelect.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		TrainSelect.setMaximumRowCount(100);
 		TrainSelect.setBounds(10, 41, 162, 28);
@@ -268,7 +335,7 @@ public class TrainControllerUI extends JFrame {
 		lblNewLabel.setBounds(589, 236, 134, 28);
 		contentPane.add(lblNewLabel);
 		
-		JButton btnSpeedReq = new JButton("Go");
+		btnSpeedReq = new JButton("Go");
 		btnSpeedReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (controller != null) {
@@ -280,7 +347,7 @@ public class TrainControllerUI extends JFrame {
 		btnSpeedReq.setBounds(731, 266, 71, 28);
 		contentPane.add(btnSpeedReq);
 		
-		JToggleButton btnEmergencyBrake = new JToggleButton("Emergency Brake");
+		btnEmergencyBrake = new JToggleButton("Emergency Brake");
 		btnEmergencyBrake.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		btnEmergencyBrake.setBackground(UIManager.getColor("Button.background"));
 		btnEmergencyBrake.setForeground(Color.RED);
@@ -429,7 +496,7 @@ public class TrainControllerUI extends JFrame {
 		lblRequestTemp.setBounds(10, 305, 148, 24);
 		contentPane.add(lblRequestTemp);
 		
-		JButton btnTempReq = new JButton("Go");
+		btnTempReq = new JButton("Go");
 		btnTempReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setTemperature(Integer.parseInt(TempReq.getText()));
@@ -492,7 +559,7 @@ public class TrainControllerUI extends JFrame {
 		tglbtnManual.setBounds(672, 41, 130, 28);
 		contentPane.add(tglbtnManual);
 		
-		JToggleButton btnServiceBrake = new JToggleButton("Service Brake");
+		btnServiceBrake = new JToggleButton("Service Brake");
 		btnServiceBrake.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		btnServiceBrake.setForeground(Color.BLACK);
 		btnServiceBrake.setBackground(SystemColor.menu);
@@ -562,7 +629,7 @@ public class TrainControllerUI extends JFrame {
 		lblTrainId.setBounds(10, 11, 162, 21);
 		contentPane.add(lblTrainId);
 		
-		JToggleButton btnPassengerEmergencyBrake = new JToggleButton("Passenger Emergency Brake");
+		btnPassengerEmergencyBrake = new JToggleButton("Passenger Emergency Brake");
 		btnPassengerEmergencyBrake.setForeground(Color.RED);
 		btnPassengerEmergencyBrake.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		btnPassengerEmergencyBrake.setBackground(SystemColor.menu);
@@ -573,14 +640,23 @@ public class TrainControllerUI extends JFrame {
 			public void actionPerformed(ActionEvent a) {
 				if (btnEmergencyBrake.isSelected()) {
 					if (controller != null) {
-						controller.setEmergencyBrake(true);
-						controller.setServiceBrake(false);
+						if (controller.setEmergencyBrake(true)) {
+							controller.setServiceBrake(false);
+							btnServiceBrake.setSelected(false);
+							btnPassengerEmergencyBrake.setSelected(false);
+						} else {
+							btnEmergencyBrake.setSelected(false);
+							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+						}
 					}
-					btnServiceBrake.setSelected(false);
-					btnPassengerEmergencyBrake.setSelected(false);
+					
 				} else {
-					if (controller != null)
-						controller.setEmergencyBrake(false);
+					if (controller != null) {
+						if (!controller.setEmergencyBrake(false)) {
+							btnEmergencyBrake.setSelected(true);
+							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+						}
+					}
 				}
 			}
 		});
@@ -588,28 +664,47 @@ public class TrainControllerUI extends JFrame {
 			public void actionPerformed(ActionEvent a) {
 				if (btnPassengerEmergencyBrake.isSelected()) {
 					if (controller != null) {
-						controller.setEmergencyBrake(true);
-						controller.setServiceBrake(false);
+						if (controller.setEmergencyBrake(true)) {
+							controller.setServiceBrake(false);
+							btnServiceBrake.setSelected(false);
+							btnEmergencyBrake.setSelected(false);
+						} else {
+							btnPassengerEmergencyBrake.setSelected(false);
+							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+						}
 					}
-					btnServiceBrake.setSelected(false);
-					btnEmergencyBrake.setSelected(false);
+					
 				} else {
-					if (controller != null)
-						controller.setEmergencyBrake(false);
+					if (controller != null) {
+						if (!controller.setEmergencyBrake(false)) {
+							btnPassengerEmergencyBrake.setSelected(true);
+							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+						}
+					}
 				}
 			}
 		});
 		btnServiceBrake.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (btnServiceBrake.isSelected()) {
-					if (controller != null)
-						controller.setServiceBrake(true);
+					if (controller != null) {
+						if (controller.setServiceBrake(true)) {
+							controller.setEmergencyBrake(false);
+							btnEmergencyBrake.setSelected(false);
+							btnPassengerEmergencyBrake.setSelected(false);
+						} else {
+							btnServiceBrake.setSelected(false);
+							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+						}
+					}
 					
-					btnEmergencyBrake.setSelected(false);
-					btnPassengerEmergencyBrake.setSelected(false);
 				} else {
-					if (controller != null)
-						controller.setServiceBrake(false);
+					if (controller != null) {
+						if (!controller.setServiceBrake(false)) {
+							btnServiceBrake.setSelected(true);
+							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+						}
+					}
 				}
 			}
 		});

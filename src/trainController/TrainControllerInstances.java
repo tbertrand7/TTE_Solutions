@@ -6,19 +6,19 @@ public class TrainControllerInstances extends TrainControllerInstancesInterface 
 	 * Connects the specified TrainControllerUI to the train with the specified train ID.
 	 * @param trainid - the ID of the train to connect to
 	 * @param tcui - the TrainControllerUI class to connect to the train
-	 * @return true if connection was successful, false otherwise
+	 * @return vlid if connection was successful, null otherwise
 	 */
-	public boolean connectUI(int trainid, TrainControllerUI tcui) {
+	public TrainController connectUI(int trainid, TrainControllerUI tcui) {
 		
 		if (trainList.containsKey(trainid)) {				//check that train ID exists
 			if (trainList.get(trainid).connectedToUI()) {	//check that train is not connected to a UI
-				return false;
+				return null;
 			} else {
 				trainList.get(trainid).connectToUI(tcui);
-				return true;
+				return trainList.get(trainid);
 			}
 		} else {
-			return false;
+			return null;
 		}
 		
 	}

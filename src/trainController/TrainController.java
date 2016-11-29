@@ -27,7 +27,9 @@ public class TrainController extends TrainControllerInterface {
 		speedRequest = 0;
 		automatic = true;
 		
-		//TODO Create new array of PowerCalculators
+		//TODO Create new array of PowerCalculators (for now it's just one)
+		pc = new PowerCalculator(this);
+		pc.start();
 		
 	}
 	
@@ -36,7 +38,8 @@ public class TrainController extends TrainControllerInterface {
 	 */
 	public void delete() {
 		
-		//TODO Stop all power calculators
+		//TODO Stop all power calculators (just one for now)
+		pc.stopRun();
 		
 		//@Matt: This TrainModel method needs to exist so garbage collection can pick up this TrainController:
 		//model.disconnect();
@@ -44,16 +47,6 @@ public class TrainController extends TrainControllerInterface {
 		
 		ui.disconnect();
 		ui = null;
-		
-	}
-	
-	/**
-	 * Checks whether the train is connected to a UI.
-	 * @return true if a UI is connected, false otherwise
-	 */
-	public boolean connectedToUI() {
-	
-		return !(ui == null);
 		
 	}
 	
@@ -124,11 +117,11 @@ public class TrainController extends TrainControllerInterface {
 	 * Setter for current power output.
 	 * @param pow - current power, in watts
 	 */
-	public void setPower(double pow) {
+	public synchronized void setPower(double pow) {
 		
 		power = pow;
 		
-		if (ui != null) ui.setPower(power);
+		if (connectedToUI()) ui.setPower(power);
 		
 	}
 

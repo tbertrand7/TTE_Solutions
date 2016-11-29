@@ -232,7 +232,7 @@ public class TestPanel extends JFrame {
 			public void actionPerformed(ActionEvent a) {
 				if (tglbtnApproachingStation.isSelected()) {
 					if (parent.controller != null)
-						parent.controller.approachStation("Arbitrary Name");
+						parent.controller.approachStation("Arbitrary Name", Side.RIGHT);
 				}
 			}
 		});
