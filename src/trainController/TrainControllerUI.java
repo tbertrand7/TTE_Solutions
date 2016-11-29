@@ -22,7 +22,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import trainController.TrainControllerInterface.Side;
+import trainController.TrainController.Side;
+import javax.swing.DefaultComboBoxModel;
 
 public class TrainControllerUI extends JFrame {
 
@@ -274,6 +275,8 @@ public class TrainControllerUI extends JFrame {
 		contentPane.setLayout(null);
 		
 		TrainSelect = new JComboBox<Integer>();
+		TrainSelect.setModel(new DefaultComboBoxModel(new String[] {"0"}));
+		TrainSelect.setSelectedIndex(0);
 		TrainSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (TrainSelect.getSelectedIndex() == 0) {
@@ -289,8 +292,6 @@ public class TrainControllerUI extends JFrame {
 		TrainSelect.setMaximumRowCount(100);
 		TrainSelect.setBounds(10, 41, 162, 28);
 		contentPane.add(TrainSelect);
-		TrainSelect.addItem(new Integer(null));
-		TrainSelect.setSelectedIndex(0);
 		
 		SpeedLimit = new JTextField();
 		SpeedLimit.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));

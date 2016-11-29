@@ -57,6 +57,8 @@ public class PowerCalculator extends Thread {
 		while (proceed) {
 			while (stop); //busy waiting if train is temporarily stopped
 			
+			long timestart = System.currentTimeMillis();
+			
 			double Vreq, Vcur;
 			
 			if (Uk == -1000 || Uk1 == -1000) {
@@ -93,6 +95,13 @@ public class PowerCalculator extends Thread {
 			System.out.println("Ek = " + Ek + "\t\tEk1 = "+Ek1);
 			System.out.println("Uk = " + Uk + "\t\tUk1 = "+Uk1);
 			System.out.println("Power out = " + Pcmd + "\n");*/
+			
+			//Sleep for one second (not perfect - there's a bit of drift)
+			try {
+				sleep(1000 - (System.currentTimeMillis()-timestart));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		controller = null;
