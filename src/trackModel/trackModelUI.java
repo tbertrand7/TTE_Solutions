@@ -2,17 +2,13 @@ package trackModel;
 
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Random;
 
@@ -30,7 +26,7 @@ public class trackModelUI {
 
 	/**
 	 * Launch the application.
-	 */
+	 */	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -78,7 +74,7 @@ public class trackModelUI {
 		lblSelectLineTo.setBounds(10, 14, 118, 14);
 		overview.add(lblSelectLineTo);
 
-		JComboBox lineComboBoxView = new JComboBox();
+		JComboBox<String> lineComboBoxView = new JComboBox<String>();
 		lineComboBoxView.setFont(new Font("Arial", Font.PLAIN, 11));
 		lineComboBoxView.setBounds(138, 11, 55, 20);
 		overview.add(lineComboBoxView);
@@ -125,7 +121,7 @@ public class trackModelUI {
 		label_8.setBounds(203, 47, 63, 14);
 		overview.add(label_8);
 
-		JComboBox blockComboBoxView = new JComboBox();
+		JComboBox<Integer> blockComboBoxView = new JComboBox<Integer>();
 		blockComboBoxView.setFont(new Font("Arial", Font.PLAIN, 11));
 		blockComboBoxView.setBounds(138, 42, 55, 20);
 		overview.add(blockComboBoxView);
@@ -258,7 +254,7 @@ public class trackModelUI {
 		lblNewLabel.setBounds(10, 10, 129, 14);
 		config.add(lblNewLabel);
 
-		JComboBox lineComboBox = new JComboBox();
+		JComboBox<String> lineComboBox = new JComboBox<String>();
 		lineComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
 		lineComboBox.setBounds(138, 7, 55, 20);
 		lineComboBox.addItem("Red");
@@ -270,7 +266,7 @@ public class trackModelUI {
 		lblSelectBlockTo.setBounds(10, 40, 129, 14);
 		config.add(lblSelectBlockTo);
 
-		JComboBox railComboBox = new JComboBox();
+		JComboBox<Integer> railComboBox = new JComboBox<Integer>();
 		railComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
 		railComboBox.setBounds(138, 37, 55, 20);
 		for (int i = 1; i <= 250; i++) {
@@ -477,9 +473,9 @@ public class trackModelUI {
 						"Are you sure you want break block: " + lines[i] + " " + n + "? (y/n)", null);
 
 				if (breakRailConfirm.equalsIgnoreCase("y")) {
-					DBInteraction db = null;
+					TrackDBInteraction db = null;
 					try {
-						db = new DBInteraction();
+						db = new TrackDBInteraction();
 					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
 							| SQLException e) {
 						// TODO Auto-generated catch block
@@ -517,9 +513,9 @@ public class trackModelUI {
 						"Are you sure you want cut the power to block: " + lines[i] + " " + n + "? (y/n)", null);
 
 				if (breakRailConfirm.equalsIgnoreCase("y")) {
-					DBInteraction db = null;
+					TrackDBInteraction db = null;
 					try {
-						db = new DBInteraction();
+						db = new TrackDBInteraction();
 					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
 							| SQLException e) {
 						// TODO Auto-generated catch block
@@ -556,9 +552,9 @@ public class trackModelUI {
 						"Are you sure you want break the circuit on block: " + lines[i] + " " + n + "? (y/n)", null);
 
 				if (breakRailConfirm.equalsIgnoreCase("y")) {
-					DBInteraction db = null;
+					TrackDBInteraction db = null;
 					try {
-						db = new DBInteraction();
+						db = new TrackDBInteraction();
 					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
 							| SQLException e1) {
 						// TODO Auto-generated catch block
@@ -622,9 +618,9 @@ public class trackModelUI {
 		JButton getData = new JButton("Get Data");
 		getData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DBInteraction db = null;
+				TrackDBInteraction db = null;
 				try {
-					db = new DBInteraction();
+					db = new TrackDBInteraction();
 				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -667,9 +663,9 @@ public class trackModelUI {
 				else
 					label_3.setText("FALSE");
 
-				if (!block.switchBlock.equals("")) {
-					label_32.setText(block.switchBlock);
-					lblNotAtSwitch.setText(String.valueOf(block.switchPosition));
+				if (block.switchBlock.getID() != "") {
+					label_32.setText(block.switchBlock.getID());
+					lblNotAtSwitch.setText(String.valueOf(block.switchBlock.getPosition()));
 				} else {
 					label_32.setText("FALSE");
 					lblNotAtSwitch.setText("N/A");
@@ -700,9 +696,9 @@ public class trackModelUI {
 		JButton btnCheckLive = new JButton("Check Live");
 		btnCheckLive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DBInteraction db = null;
+				TrackDBInteraction db = null;
 				try {
-					db = new DBInteraction();
+					db = new TrackDBInteraction();
 				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -745,9 +741,9 @@ public class trackModelUI {
 				else
 					checkBox.setSelected(false);
 
-				if (!block.switchBlock.equals("")) {
-					comboBox_2.setText(block.switchBlock);
-					label_27.setValue(block.switchPosition);
+				if (block.switchBlock.getID() != "") {
+					comboBox_2.setText(block.switchBlock.getID());
+					label_27.setValue(Integer.parseInt(block.switchBlock.getPosition()));
 				} else {
 					comboBox_2.setText("");
 					label_27.setValue(0);
@@ -778,49 +774,9 @@ public class trackModelUI {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				TrackBlock theBlock = new TrackBlock();
-
-				theBlock.line = (String) lineComboBox.getSelectedItem();
-				theBlock.section = label_23.getText();
-				theBlock.blockNumber = (Integer) railComboBox.getSelectedItem();
-				theBlock.blockLength = Double.parseDouble(spinner.getText());
-				theBlock.blockGrade = Double.parseDouble(lblNewLabel_1.getText());
-				theBlock.speedLimit = Double.parseDouble(label_1.getText());
-				if (!checkBox_1.getText().equals("") && !checkBox_1.getText().equals("FALSE"))
-					theBlock.infrastructure += "STATION; " + checkBox_1.getText() + " ";
-				if (chckbxNewCheckBox.isSelected())
-					theBlock.infrastructure += "UNDERGROUND ";
-				if (checkBox.isSelected())
-					theBlock.infrastructure += "RAILWAY CROSSING ";
-				if (!comboBox_2.getText().equals("") && !comboBox_2.getText().equals("FALSE")) {
-					theBlock.infrastructure += "SWITCH ";
-					theBlock.switchBlock = comboBox_2.getText();
-				}
-
-				theBlock.elevation = Double.parseDouble(label.getText());
-				theBlock.cumualativeElevation = Double.parseDouble(label_4.getText());
-				theBlock.switchPosition = (int) label_27.getValue();
-				theBlock.arrowDirection = label_24.getText();
-				theBlock.numPass = (int) label_29.getValue();
-				theBlock.temp = (int) label_25.getValue();
-				theBlock.status = label_19.getText();
-				if (!textField_2.getText().equals("OPEN BLOCK"))
-					theBlock.occupied = textField_2.getText();
-
-				Boolean result;
-				DBInteraction db = null;
-				try {
-					db = new DBInteraction();
-				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					result = db.setSection(theBlock);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				saveOpperation(lineComboBox, railComboBox, lblNewLabel_1, label, label_1, label_4, comboBox_2, label_19,
+						label_23, label_24, label_25, label_27, label_29, chckbxNewCheckBox, spinner, checkBox,
+						checkBox_1);
 
 			}
 		});
@@ -857,9 +813,9 @@ public class trackModelUI {
 
 				if (textField.getText().equals("tteuser")
 						&& String.valueOf(passwordField.getPassword()).equals("ttesolutions")) {
-					DBInteraction db = null;
+					TrackDBInteraction db = null;
 					try {
-						db = new DBInteraction();
+						db = new TrackDBInteraction();
 					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
 							| SQLException e) {
 						// TODO Auto-generated catch block
@@ -884,5 +840,55 @@ public class trackModelUI {
 
 
 
+	}
+
+	private void saveOpperation(JComboBox<String> lineComboBox, JComboBox<Integer> railComboBox,
+			JTextField lblNewLabel_1, JTextField label, JTextField label_1, JTextField label_4, JTextField comboBox_2,
+			JTextField label_19, JTextField label_23, JTextField label_24, JSpinner label_25, JSpinner label_27,
+			JSpinner label_29, JCheckBox chckbxNewCheckBox, JTextField spinner, JCheckBox checkBox,
+			JTextField checkBox_1) {
+		TrackBlock theBlock = new TrackBlock();
+
+		theBlock.line = (String) lineComboBox.getSelectedItem();
+		theBlock.section = label_23.getText();
+		theBlock.blockNumber = (Integer) railComboBox.getSelectedItem();
+		theBlock.blockLength = Double.parseDouble(spinner.getText());
+		theBlock.blockGrade = Double.parseDouble(lblNewLabel_1.getText());
+		theBlock.speedLimit = Double.parseDouble(label_1.getText());
+		if (!checkBox_1.getText().equals("") && !checkBox_1.getText().equals("FALSE"))
+			theBlock.infrastructure += "STATION; " + checkBox_1.getText() + " ";
+		if (chckbxNewCheckBox.isSelected())
+			theBlock.infrastructure += "UNDERGROUND ";
+		if (checkBox.isSelected())
+			theBlock.infrastructure += "RAILWAY CROSSING ";
+		if (!comboBox_2.getText().equals("") && !comboBox_2.getText().equals("FALSE")) {
+			theBlock.infrastructure += "SWITCH ";
+			theBlock.switchBlock.id = comboBox_2.getText();
+		}
+
+		theBlock.elevation = Double.parseDouble(label.getText());
+		theBlock.cumualativeElevation = Double.parseDouble(label_4.getText());
+		theBlock.switchBlock.position = label_27.getValue().toString();
+		theBlock.arrowDirection = label_24.getText();
+		theBlock.numPass = (int) label_29.getValue();
+		theBlock.temp = (int) label_25.getValue();
+		theBlock.status = label_19.getText();
+		if (!textField_2.getText().equals("OPEN BLOCK"))
+			theBlock.occupied = textField_2.getText();
+
+		Boolean result;
+		TrackDBInteraction db = null;
+		try {
+			db = new TrackDBInteraction();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			result = db.setSection(theBlock);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

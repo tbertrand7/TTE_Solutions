@@ -1,10 +1,10 @@
 package trackModel;
 
 public class TrackBlock {
+	
 	public enum trackStatus {
 		UNOCCUPIED, OCCUPIED, CLOSED
 	}
-
 	public int pk;
 	public String line;
 	public String section;
@@ -15,8 +15,7 @@ public class TrackBlock {
 	public String infrastructure;
 	public double elevation;
 	public double cumualativeElevation;
-	public String switchBlock;
-	public int switchPosition;
+	public SwitchBlock switchBlock;
 	public String arrowDirection;
 	public int numPass;
 	public int temp;
@@ -37,8 +36,7 @@ public class TrackBlock {
 		infrastructure = "";
 		elevation = 0;
 		cumualativeElevation = 0;
-		switchBlock = "";
-		switchPosition = 0;
+		switchBlock = new SwitchBlock();
 		arrowDirection = "";
 		numPass = 0;
 		temp = 0;
