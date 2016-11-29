@@ -13,8 +13,7 @@ public class TrainState extends TrainSpecs {
 	int passengerCount; 
 	int temperature; 
 	
-	double trainMass;
-		
+	
 	public TrainState(){
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -36,8 +35,7 @@ public class TrainState extends TrainSpecs {
 		int tempCount = passengerCount;
 		tempCount = tempCount + delta;
 		passengerCount = tempCount;
-		
-		trainMass =(passengerCount * personMass) + emptyTrainMass;
+	
 		
 		if(tempCount > maxPassengers || tempCount < 0){
 			return false;

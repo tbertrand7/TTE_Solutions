@@ -1,19 +1,27 @@
 package trainModel;
 
-public class TrainModel extends TrainState {
+public class TrainModel extends TrainState implements Runnable{
 
+	Thread t;
+	
 	int trainID; //unique train ID
 	
 	double elevation;
 	double power; 
 	double velocity; 
+	double mass;
+	
+	private final double accRate = 0.5; // m/s^2
+	
+	double speed;
+	int authority;
+	
 	
 	/**
 	 * Null constructor
 	 * sets all boolean variables to false and all numerical variables to 0
 	 */
 	public TrainModel() {	
-		trainID = 99999;
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -29,9 +37,23 @@ public class TrainModel extends TrainState {
 		
 		power = 0.0;
 		velocity = 0.0;	
+				
 	}
 	
 	
+	public void run(){
+		
+			mass = this.emptyTrainMass + (this.personMass * this.passengerCount); //calculate the mass of the train plus load of passengers
+			velocity = power / (mass * accRate);
+	
+			try {
+				t.sleep(1000); //sleep for 1 second
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+	}
+
 	/**
 	 * calls private method for failure protocol
 	 */
@@ -49,54 +71,24 @@ public class TrainModel extends TrainState {
 				emergencyBrakeOn = true; //<<
 				lightsOn = true; // Turn on lights
 			}
-			
 	
 	/**
 	 * Gets the velocity of the train
 	 * @return velocity of the train
 	 */
-	double getVelocity(){
+	public double getVelocity(){
 		return velocity;
-	}
-	
+	}			
+			
 	
 	/**
 	 * Sets the power of the train based on a power input
 	 * Calculates the velocity given the power and sets velocity of train
 	 * @param powerSetPoint - power input in KiloWatts
-	 * @return true if the power input is valid
 	 */
-	boolean setPower(double powerSetPoint){
-		double tempPower;
-		tempPower = powerSetPoint;
-		
-		if(tempPower > maxPower || tempPower < 0){
-			return false;
+	public void setPower(double powerSetPoint){
+			power = powerSetPoint;			
 		}
-		else{ //velocity calculations here or in getVelocity() method???
-			velocity = calculateVelocity(powerSetPoint);
-			return true;
-		}
-	}
-
-	
-				/**
-				 * Private Method
-				 * Calculates the velocity of the train given a power input
-				 * @param power - the power input for the train in KiloWatts
-				 * @return the velocity of the train
-				 */
-				private double calculateVelocity (double power){
-					
-					/*REVISIT!!!!!     physics equations for velocity-power calculations
-					 * 
-					velocity = power / (trainMass * maxAcc); 
-					*/
-					
-					velocity = .625 * power;
-					
-					return velocity;
-				}
 
 	
 	/*
