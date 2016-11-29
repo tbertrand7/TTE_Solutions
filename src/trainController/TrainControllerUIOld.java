@@ -464,8 +464,8 @@ public class TrainControllerUIOld extends JFrame {
 		btnAnnCustReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-				EditAnnouncementsUIOld frame2 = new EditAnnouncementsUIOld(instance, annList);
-					frame2.setVisible(true);
+					//EditAnnouncementsUIOld frame2 = new EditAnnouncementsUIOld(instance, annList);
+					//frame2.setVisible(true);
 				} catch (Exception exc) {
 					exc.printStackTrace();
 				}

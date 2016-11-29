@@ -1,7 +1,5 @@
 package trainController;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -16,7 +14,12 @@ import javax.swing.border.EmptyBorder;
 
 public class EditAnnouncementsUI extends JFrame {
 
-private JPanel contentPane;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9003840624225657749L;
+
+	private JPanel contentPane;
 	
 	private TrainControllerUI tcui;
 
@@ -27,7 +30,7 @@ private JPanel contentPane;
 		tcui = ui;
 		
 		setTitle("Edit Announcements");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(EditAnnouncementsUIOld.class.getResource("/trainController/computer1.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(EditAnnouncementsUI.class.getResource("/trainController/computer1.jpg")));
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 685, 461);
