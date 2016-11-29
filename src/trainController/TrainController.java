@@ -6,10 +6,6 @@ public class TrainController extends TrainControllerInterface {
 	 * The TrainControllerInstances class this train controller belongs to.
 	 */
 	protected TrainControllerInstances parent;
-	/**
-	 * The UI monitoring this train controller
-	 */
-	private TrainControllerUI ui;
 	
 	/**
 	 * Speed requested by the train controller
@@ -102,6 +98,42 @@ public class TrainController extends TrainControllerInterface {
 	public void setAutomatic(boolean auto) {
 		
 		automatic = auto;
+		
+	}
+	
+	/**
+	 * Returns the speed command or speed request, depending on automatic/manual mode.
+	 * @return target speed of the train
+	 */
+	public synchronized double getSpeed() {
+		
+		if (automatic) {
+			return speedCommand;
+		} else {
+			return speedRequest;
+		}
+		
+	}
+	
+	/**
+	 * Getter for current speed.
+	 * @return current speed, in m/s
+	 */
+	public synchronized double getSpeedCurrent() {
+		
+		return speedCurrent;
+		
+	}
+	
+	/**
+	 * Setter for current power output.
+	 * @param pow - current power, in watts
+	 */
+	public void setPower(double pow) {
+		
+		power = pow;
+		
+		if (ui != null) ui.setPower(power);
 		
 	}
 

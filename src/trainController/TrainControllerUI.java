@@ -34,6 +34,8 @@ public class TrainControllerUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
+	private final AnnouncementThread athread;
+	
 	/**
 	 * The TrainControllerInstances class this UI belongs to.
 	 */
@@ -101,7 +103,8 @@ public class TrainControllerUI extends JFrame {
 	private JTextField txtLeftDoors;
 	
 	//Train Select
-	private JComboBox<Integer> TrainSelect; //selects which train to get information from
+	public JComboBox<Integer> TrainSelect; //selects which train to get information from
+	//TODO handle changes to this
 	
 	//System Messages
 	JTextPane txtMessages;
@@ -122,14 +125,14 @@ public class TrainControllerUI extends JFrame {
 		PowerCurr.setText((int)power + " W"); //Watts OK for power
 	}
 	
-	public void inTunnel() {
-		tglbtnLights.setSelected(true);
-		imgLight.setEnabled(true);
-	}
-	
-	public void leftTunnel() {
-		tglbtnLights.setSelected(false);
-		imgLight.setEnabled(false);
+	public void tunnel(boolean in) {
+		if (in) {
+			tglbtnLights.setSelected(true);
+			imgLight.setEnabled(true);
+		} else {
+			tglbtnLights.setSelected(false);
+			imgLight.setEnabled(false);
+		}
 	}
 	
 	public void setRightDoors(boolean open) {
@@ -152,13 +155,11 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
-	public void setTemp(int temp) {
-		TempCurr.setText(temp + " \u2109");
-	}
-	
 	public void disconnect() {
 		controller.disconnectFromUI();
 		controller = null;
+		
+		athread.stopRun();
 		
 		//TODO add more to this (change TrainSelect, disable things, etc...)
 	}
@@ -171,6 +172,8 @@ public class TrainControllerUI extends JFrame {
 		parent = null;
 		disconnect();
 		
+		athread.stopRun();
+		
 	    super.dispose();
 	}
 	
@@ -180,6 +183,8 @@ public class TrainControllerUI extends JFrame {
 	public TrainControllerUI(int instid, TrainControllerInstances tci) {
 		id = instid;
 		parent = tci;
+		
+		athread = new AnnouncementThread(); //default - can be changed
 		
 		announcementList = new ArrayList<String>();
 		announcementIndex = 0;
@@ -199,12 +204,8 @@ public class TrainControllerUI extends JFrame {
 		TrainSelect.setMaximumRowCount(100);
 		TrainSelect.setBounds(10, 41, 162, 28);
 		contentPane.add(TrainSelect);
-		//Quick check of dynamic addItem()s to ComboBox, delete later*******************************
-		TrainSelect.addItem(new Integer(300000));
-		TrainSelect.addItem(new Integer(300100));
-		TrainSelect.addItem(new Integer(300300));
+		TrainSelect.addItem(new Integer(null));
 		TrainSelect.setSelectedIndex(0);
-		//*******************************************************************************************
 		
 		SpeedLimit = new JTextField();
 		SpeedLimit.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -252,8 +253,9 @@ public class TrainControllerUI extends JFrame {
 		JButton btnSpeedReq = new JButton("Go");
 		btnSpeedReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				if (controller != null)
+				if (controller != null) {
 					controller.setSpeedRequest(Double.parseDouble(SpeedReq.getText()));
+				}
 			}
 		});
 		btnSpeedReq.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -279,8 +281,14 @@ public class TrainControllerUI extends JFrame {
 		tglbtnLights.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (tglbtnLights.isSelected()) {
+					if (controller != null)
+						controller.setLights(true);
+						
 					imgLight.setEnabled(true);
 				} else {
+					if (controller != null)
+						controller.setLights(false);
+					
 					imgLight.setEnabled(false);
 				}
 			}
@@ -302,15 +310,25 @@ public class TrainControllerUI extends JFrame {
 		tglbtnRightDoors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (tglbtnRightDoors.isSelected()) {
-					if (controller.requestDoors(Side.RIGHT, true)) {
-						txtRightDoors.setText("Open");
+					if (controller != null) {
+						if (controller.requestDoors(Side.RIGHT, true)) {
+							txtRightDoors.setText("Open");
+						} else {
+							tglbtnRightDoors.setSelected(false);
+							txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
+						}
 					} else {
 						tglbtnRightDoors.setSelected(false);
 						txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
 					}
 				} else {
-					if (controller.requestDoors(Side.RIGHT, false)) {
-						txtRightDoors.setText("Closed");
+					if (controller != null) {
+						if (controller.requestDoors(Side.RIGHT, false)) {
+							txtRightDoors.setText("Closed");
+						} else {
+							tglbtnRightDoors.setSelected(true);
+							txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
+						}
 					} else {
 						tglbtnRightDoors.setSelected(true);
 						txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop.\n");
@@ -336,15 +354,25 @@ public class TrainControllerUI extends JFrame {
 		tglbtnLeftDoors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (tglbtnLeftDoors.isSelected()) {
-					if (controller.requestDoors(Side.LEFT, true)) {
-						txtLeftDoors.setText("Open");
+					if (controller != null) {
+						if (controller.requestDoors(Side.LEFT, true)) {
+							txtLeftDoors.setText("Open");
+						} else {
+							tglbtnLeftDoors.setSelected(false);
+							txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
+						}
 					} else {
 						tglbtnLeftDoors.setSelected(false);
 						txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
 					}
 				} else {
-					if (controller.requestDoors(Side.LEFT, false)) {
-						txtLeftDoors.setText("Closed");
+					if (controller != null) {
+						if (controller.requestDoors(Side.LEFT, false)) {
+							txtLeftDoors.setText("Closed");
+						} else {
+							tglbtnLeftDoors.setSelected(true);
+							txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop.\n");
+						}
 					} else {
 						tglbtnLeftDoors.setSelected(true);
 						txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop.\n");
@@ -386,10 +414,12 @@ public class TrainControllerUI extends JFrame {
 		JButton btnTempReq = new JButton("Go");
 		btnTempReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (controller.requestTemperature(Integer.parseInt(TempReq.getText()))) {
-					TempCurr.setText(Integer.parseInt(TempReq.getText()) + " \u2109");
-				} else {
-					txtMessages.setText(txtMessages.getText() + "Temperature is not in the allowed range. Request rejected.\n");
+				if (controller != null) {
+					if (controller.requestTemperature(Integer.parseInt(TempReq.getText()))) {
+						TempCurr.setText(Integer.parseInt(TempReq.getText()) + " \u2109");
+					} else {
+						txtMessages.setText(txtMessages.getText() + "Temperature is not in the allowed range. Request rejected.\n");
+					}
 				}
 			}
 		});
@@ -460,7 +490,8 @@ public class TrainControllerUI extends JFrame {
 		tglbtnAutomatic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (tglbtnAutomatic.isSelected()) { //deselects Manual button, disables Manual buttons
-					controller.setAutomatic(true);
+					if (controller != null)
+						controller.setAutomatic(true);
 					
 					tglbtnManual.setSelected(false);
 					tglbtnLights.setEnabled(false);
@@ -477,7 +508,8 @@ public class TrainControllerUI extends JFrame {
 		tglbtnManual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (tglbtnManual.isSelected()) { //deselects Automatic button, enables Manual buttons
-					controller.setAutomatic(false);
+					if (controller != null)
+						controller.setAutomatic(false);
 					
 					tglbtnAutomatic.setSelected(false);
 					tglbtnLights.setEnabled(true);
@@ -528,35 +560,44 @@ public class TrainControllerUI extends JFrame {
 		btnEmergencyBrake.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (btnEmergencyBrake.isSelected()) {
-					controller.setEmergencyBrake(true);
-					controller.setServiceBrake(false);
+					if (controller != null) {
+						controller.setEmergencyBrake(true);
+						controller.setServiceBrake(false);
+					}
 					btnServiceBrake.setSelected(false);
 					btnPassengerEmergencyBrake.setSelected(false);
 				} else {
-					controller.setEmergencyBrake(false);
+					if (controller != null)
+						controller.setEmergencyBrake(false);
 				}
 			}
 		});
 		btnPassengerEmergencyBrake.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (btnPassengerEmergencyBrake.isSelected()) {
-					controller.setEmergencyBrake(true);
-					controller.setServiceBrake(false);
+					if (controller != null) {
+						controller.setEmergencyBrake(true);
+						controller.setServiceBrake(false);
+					}
 					btnServiceBrake.setSelected(false);
 					btnEmergencyBrake.setSelected(false);
 				} else {
-					controller.setEmergencyBrake(false);
+					if (controller != null)
+						controller.setEmergencyBrake(false);
 				}
 			}
 		});
 		btnServiceBrake.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (btnServiceBrake.isSelected()) {
-					controller.setServiceBrake(true);
+					if (controller != null)
+						controller.setServiceBrake(true);
+					
 					btnEmergencyBrake.setSelected(false);
 					btnPassengerEmergencyBrake.setSelected(false);
 				} else {
-					controller.setServiceBrake(false);
+					if (controller != null)
+						controller.setServiceBrake(false);
 				}
 			}
 		});
@@ -571,6 +612,50 @@ public class TrainControllerUI extends JFrame {
 		//**************************************************
 		
 		this.setVisible(true);
+		athread.start();
+	}
+	
+	/**
+	 * Cycles through announcements after a specific amount of time has passed.
+	 * @author anna
+	 *
+	 */
+	private class AnnouncementThread extends Thread {
+		
+		private final long timer; //how long to wait between announcement changes
+		
+		private boolean proceed;
+		
+		public AnnouncementThread() {
+			timer = 10000; //default 10 seconds
+		}
+		
+		public AnnouncementThread(long time) {
+			timer = time;
+		}
+		
+		public void stopRun() {
+			proceed = false;
+		}
+		
+		/**
+		 * Changes announcements every "timer" milliseconds.
+		 */
+		public void run() {
+			proceed = true;
+			
+			while (proceed) {
+				//Sleep for specified time (not perfect)
+				try {
+					sleep(timer);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				changeAnnouncement();
+			}
+		}
+		
 	}
 
 }

@@ -40,6 +40,12 @@ public abstract class TrainControllerInterface {
 	 * The train's unique id
 	 */
 	protected int id;
+	
+	/**
+	 * The UI monitoring this train controller
+	 */
+	protected TrainControllerUI ui;
+	
 	/**
 	 * Speed commanded by the wayside controller
 	 */
@@ -72,6 +78,9 @@ public abstract class TrainControllerInterface {
 	//Brakes
 	protected boolean sBrakeOn;
 	protected boolean eBrakeOn;
+	
+	//Lights
+	protected boolean lightsOn;
 	
 	/**
 	 * Assigns train id and creates a TrainModel.
@@ -150,15 +159,17 @@ public abstract class TrainControllerInterface {
 		
 		speedCurrent = speed;
 		
+		if (ui != null) ui.setSpeedCurrent(speedCurrent);
+		
 	}
 	
 	/**
-	 * Setter for current power output.
-	 * @param pow - current power, in watts
+	 * Getter for current power output.
+	 * @return current power, in watts
 	 */
-	public void setPower(double pow) {
+	public double getPower() {
 		
-		power = pow;
+		return power;
 		
 	}
 	
@@ -221,6 +232,17 @@ public abstract class TrainControllerInterface {
 		
 		eBrakeOn = on;
 		//TODO @Matt model.setEmergencyBrake(on);?
+		
+	}
+	
+	/**
+	 * Setter for the lights.
+	 * @param on - true if the light is on, otherwise false
+	 */
+	public void setLights(boolean on) {
+		
+		lightsOn = on;
+		//TODO @Matt model.setLights(on);?
 		
 	}
 
