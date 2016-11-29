@@ -41,7 +41,9 @@ public class TrainControllerUI extends JFrame {
 	/**
 	 * The TrainController this UI is connected to.
 	 */
-	private TrainController controller;
+	public TrainController controller;
+	
+	private final int id;
 	
 	/**
 	 * List of all announcements this UI cycles through (excluding station announcements).
@@ -76,6 +78,15 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
+	private void newTestPanel() {
+		try {
+			TestPanel frame = new TestPanel(id, this);
+			frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	//Speed/Power
 	private JTextField SpeedLimit;
 	private JTextField SpeedCurr;
@@ -91,8 +102,8 @@ public class TrainControllerUI extends JFrame {
 	private JToggleButton tglbtnManual;
 	
 	//Lights
-	private JToggleButton tglbtnLights;
-	private JButton imgLight;
+	public JToggleButton tglbtnLights;
+	public JButton imgLight;
 	
 	//Doors
 	JToggleButton tglbtnRightDoors;
@@ -106,8 +117,7 @@ public class TrainControllerUI extends JFrame {
 	
 	//System Messages
 	JTextPane txtMessages;
-	
-	private final int id;
+	private JButton btnTestPanel;
 	
 	public void setSpeedLimit(double speed) {
 		int americanlimit = (int) ((speed / 1609.34) * 3600); //m/s * (1 mi / 1609.34 m) * (3600 s / 1 h)
@@ -150,6 +160,16 @@ public class TrainControllerUI extends JFrame {
 		} else {
 			tglbtnLeftDoors.setSelected(false);
 			txtLeftDoors.setText("Closed");
+		}
+	}
+	
+	public void setTemperature(int temp) {
+		if (controller != null) {
+			if (controller.requestTemperature(temp)) {
+				TempCurr.setText(temp + " \u2109");
+			} else {
+				txtMessages.setText(txtMessages.getText() + "Temperature is not in the allowed range. Request rejected.\n");
+			}
 		}
 	}
 	
@@ -412,13 +432,7 @@ public class TrainControllerUI extends JFrame {
 		JButton btnTempReq = new JButton("Go");
 		btnTempReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (controller != null) {
-					if (controller.requestTemperature(Integer.parseInt(TempReq.getText()))) {
-						TempCurr.setText(Integer.parseInt(TempReq.getText()) + " \u2109");
-					} else {
-						txtMessages.setText(txtMessages.getText() + "Temperature is not in the allowed range. Request rejected.\n");
-					}
-				}
+				setTemperature(Integer.parseInt(TempReq.getText()));
 			}
 		});
 		btnTempReq.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -599,6 +613,16 @@ public class TrainControllerUI extends JFrame {
 				}
 			}
 		});
+		
+		btnTestPanel = new JButton("Test Panel");
+		btnTestPanel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				newTestPanel();
+			}
+		});
+		btnTestPanel.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
+		btnTestPanel.setBounds(652, 610, 170, 33);
+		contentPane.add(btnTestPanel);
 		
 		//Initialization for default Automatic mode ************
 		tglbtnLights.setEnabled(false);
