@@ -35,7 +35,7 @@ public class TrackDBInteraction {
 	public TrackBlock[] getLine(String line) throws SQLException{
 		TrackBlock [] track = new TrackBlock[200];
 		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.RailLines where line = '"+line);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.RailLines where line = '"+line+"'");
 		track = populateTrackLine(rs,track);
 		stmt.close();
 
