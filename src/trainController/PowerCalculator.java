@@ -2,7 +2,7 @@ package trainController;
 
 public class PowerCalculator extends Thread {
 	
-	private final TrainController controller;
+	private TrainController controller;
 	
 	private double Pcmd;
 	private final double Kp = 30000;
@@ -17,6 +17,7 @@ public class PowerCalculator extends Thread {
 	private final double Pmax; //max power, calculated from info provided by train model
 	
 	private boolean proceed;
+	private boolean stop;
 	
 	public PowerCalculator(TrainController tc) {
 		controller = tc;
@@ -33,8 +34,18 @@ public class PowerCalculator extends Thread {
 		Pmax = M*maxa*maxv;
 	}
 	
+	/**
+	 * Used before the controller this calculator is connected to is disposed.
+	 */
 	public void stopRun() {
 		proceed = false;
+	}
+	
+	/**
+	 * Used when the train needs to temporarily stop, and no power calculation is needed.
+	 */
+	public void tempStop(boolean dontgo) {
+		stop = dontgo;
 	}
 	
 	/**
@@ -44,6 +55,8 @@ public class PowerCalculator extends Thread {
 		proceed = true;
 		
 		while (proceed) {
+			while (stop); //busy waiting if train is temporarily stopped
+			
 			double Vreq, Vcur;
 			
 			if (Uk == -1000 || Uk1 == -1000) {
@@ -70,8 +83,7 @@ public class PowerCalculator extends Thread {
 				
 				//Calc Pcmd
 				Pcmd = Kp*Ek + Ki*Uk;
-				if (Pcmd < 0 || Vreq == 0) Pcmd = 0;
-				else if (Pcmd > Pmax) Pcmd = Pmax;
+				if (Vreq == 0 && Vcur == 0) Pcmd = 0;
 			}
 			
 			controller.setPower(Pcmd);
@@ -82,6 +94,8 @@ public class PowerCalculator extends Thread {
 			System.out.println("Uk = " + Uk + "\t\tUk1 = "+Uk1);
 			System.out.println("Power out = " + Pcmd + "\n");*/
 		}
+		
+		controller = null;
 	}
 
 }

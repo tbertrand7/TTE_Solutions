@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class CTCOffice
 {
-	private DBInteraction dataBase;
+	private TrackDBInteraction trackDB;
 	
 	public enum Mode {MANUAL, AUTOMATIC}
 	
@@ -18,7 +18,7 @@ public class CTCOffice
 	public CTCOffice()
 	{
         try {
-            dataBase = new DBInteraction();
+            trackDB = new TrackDBInteraction();
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
             loadTrackData();
@@ -73,16 +73,16 @@ public class CTCOffice
 		for (int i=0; i < greenLine.length; i++)
 		{
 			try {
-				greenLine[i] = dataBase.getSection("Green", i + 1);
+				greenLine[i] = trackDB.getSection("Green", i + 1);
 				if (i < redLine.length)
-					redLine[i] = dataBase.getSection("Red", i + 1);
+					redLine[i] = trackDB.getSection("Red", i + 1);
 			} catch(SQLException e) {
                 e.printStackTrace();
 			}
 		}
 //        try {
-//            redLine = dataBase.getLine("Red");
-//            greenLine = dataBase.getLine("Green");
+//            redLine = trackDB.getLine("Red");
+//            greenLine = trackDB.getLine("Green");
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
