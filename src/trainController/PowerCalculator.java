@@ -55,7 +55,14 @@ public class PowerCalculator extends Thread {
 		proceed = true;
 		
 		while (proceed) {
-			while (stop); //busy waiting if train is temporarily stopped
+			
+			while (stop) {
+				try {
+					sleep(1000); //busy waiting if train is temporarily stopped
+				} catch (InterruptedException e1) {
+					//don't need to do anything
+				}
+			}
 			
 			long timestart = System.currentTimeMillis();
 			

@@ -86,7 +86,10 @@ public class TestSpeed extends Thread {
 			
 			//Sleep for one second (not perfect - there's a bit of drift)
 			try {
-				sleep(1000 - (System.currentTimeMillis()-timestart));
+				if ((1000 - (System.currentTimeMillis()-timestart)) > 0)
+					sleep(1000 - (System.currentTimeMillis()-timestart));
+				else
+					sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

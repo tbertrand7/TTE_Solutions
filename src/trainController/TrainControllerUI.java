@@ -53,6 +53,10 @@ public class TrainControllerUI extends JFrame {
 	private int announcementIndex;
 	JTextArea AnnCurr;
 	
+	/**
+	 * Sets the list of announcements to be displayed on the train.
+	 * @param text - the list of announcements to be displayed, with '\n' as a delimiter
+	 */
 	public void setAnnouncements(char[] text) {
 		announcementList.clear();
 		StringBuilder sb = new StringBuilder();
@@ -69,6 +73,9 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * Cycles to the next announcement.
+	 */
 	public void changeAnnouncement() {
 		if (!announcementList.isEmpty()) {
 			if (announcementList.size() <= announcementIndex) { //we don't want any NullPointerExceptions...
@@ -79,10 +86,20 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * Announces the next stop.
+	 * @param stationName - name of the station to be announced
+	 */
 	public void announceStation(String stationName) {
 		AnnCurr.setText("ATTENTION: Approaching " + stationName + ".");
 	}
 	
+	//Test Panel button
+	private JButton btnTestPanel;
+	
+	/**
+	 * Creates and displays a new TestPanel.
+	 */
 	private void newTestPanel() {
 		try {
 			TestPanel frame = new TestPanel(id, this);
@@ -121,22 +138,36 @@ public class TrainControllerUI extends JFrame {
 	JToggleButton tglbtnLeftDoors;
 	private JTextField txtLeftDoors;
 	
-	//More stuff
+	//Temperature and speed request buttons
 	JButton btnTempReq;
 	JButton btnSpeedReq;
 	
 	//Train Select
 	public JComboBox<Integer> TrainSelect; //selects which train to get information from
 	
+	/**
+	 * Add train ID to the drop-down.
+	 * @param id
+	 */
 	public void addTrainID(int id) {
 		TrainSelect.addItem(id);
 	}
 	
+	/**
+	 * Remove train ID from the drop-down.
+	 * @param id
+	 */
 	public void deleteTrainID(int id) {
 		TrainSelect.removeItem(id);
 	}
 	
+	/**
+	 * Attempt to change the train this UI is connected to.
+	 * @param id - new train's ID
+	 */
 	public void changeTrainID(int id) {
+		disconnect();
+		
 		TrainController temp = parent.connectUI(id, this);
 		
 		if (temp == null) {
@@ -148,26 +179,48 @@ public class TrainControllerUI extends JFrame {
 	
 	//System Messages
 	JTextPane txtMessages;
-	private JButton btnTestPanel;
 	
+	/**
+	 * Display a message in the system messages box.
+	 * @param message - message to be displayed
+	 */
 	public void message(String message) {
 		txtMessages.setText(txtMessages.getText() + message);
 	}
 	
+	/**
+	 * Display a new speed limit.
+	 * @param speed - new speed limit to be displayed, in m/s
+	 */
 	public void setSpeedLimit(double speed) {
 		int americanlimit = (int) ((speed / 1609.34) * 3600); //m/s * (1 mi / 1609.34 m) * (3600 s / 1 h)
 		SpeedLimit.setText(americanlimit + " MPH");
 	}
 	
+	/**
+	 * Display a new current speed.
+	 * @param speed - new current speed to be displayed, in m/s
+	 */
 	public void setSpeedCurrent(double speed) {
 		int americancurrent = (int) ((speed / 1609.34) * 3600);
 		SpeedCurr.setText(americancurrent + " MPH");
 	}
 	
+	/**
+	 * Display a new power.
+	 * @param power - new power to be displayed, in Watts
+	 */
 	public void setPower(double power) {
-		PowerCurr.setText((int)power + " W"); //Watts OK for power
+		if (power < 5000)
+			PowerCurr.setText((int)power + " W");
+		else
+			PowerCurr.setText((int)(power/1000) + " kW");
 	}
 	
+	/**
+	 * Sets lights to on or off.
+	 * @param in - true if in a tunnel, false otherwise
+	 */
 	public void tunnel(boolean in) {
 		if (in) {
 			tglbtnLights.setSelected(true);
@@ -178,6 +231,10 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * Sets right doors to open or closed.
+	 * @param open - true if doors are open, false otherwise
+	 */
 	public void setRightDoors(boolean open) {
 		if (open) {
 			tglbtnRightDoors.setSelected(true);
@@ -188,6 +245,10 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * Sets left doors to open or closed.
+	 * @param open - true if doors are open, false otherwise
+	 */
 	public void setLeftDoors(boolean open) {
 		if (open) {
 			tglbtnLeftDoors.setSelected(true);
@@ -198,26 +259,85 @@ public class TrainControllerUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * Set door status.
+	 * @param left - true if left doors are open, false otherwise
+	 * @param right - true if left doors are open, false otherwise
+	 */
+	public void setDoorsDirect(boolean left, boolean right) {
+		if (left) {
+			tglbtnLeftDoors.setSelected(true);
+			txtLeftDoors.setText("Open");
+		} else {
+			tglbtnLeftDoors.setSelected(false);
+			txtLeftDoors.setText("Closed");
+		}
+		if (right) {
+			tglbtnRightDoors.setSelected(true);
+			txtRightDoors.setText("Open");
+		} else {
+			tglbtnRightDoors.setSelected(false);
+			txtRightDoors.setText("Closed");
+		}
+	}
+	
+	/**
+	 * Sets the temperature, if it is safe.
+	 * @param temp - temperature to be set
+	 */
 	public void setTemperature(int temp) {
 		if (controller != null) {
-			if (controller.requestTemperature(temp)) {
-				TempCurr.setText(temp + " \u2109");
-			} else {
+			if (!controller.requestTemperature(temp)) {
 				txtMessages.setText(txtMessages.getText() + "Temperature is not in the allowed range. Request rejected.\n");
 			}
 		}
 	}
 	
+	/**
+	 * Displays a new temperature.
+	 * @param temp - temperature to display
+	 */
+	public void setTemperatureDirect(int temp) {
+		TempCurr.setText(temp + " \u2109");
+	}
+	
+	/**
+	 * Sets the passenger emergency brake to false.
+	 */
 	public void setPassengerEmergencyBrake() {
 		btnPassengerEmergencyBrake.setSelected(false);
 	}
 	
+	/**
+	 * Sets the emergency brake.
+	 * @param set - true if brake is on, false otherwise
+	 */
 	public void setEmergencyBrake(boolean set) {
 		btnEmergencyBrake.setSelected(set);
+		if (set) {
+			setPassengerEmergencyBrake();
+			setServiceBrake(false);
+		}
 	}
 	
+	/**
+	 * Sets the service brake.
+	 * @param set - true if brake is on, false otherwise
+	 */
 	public void setServiceBrake(boolean set) {
 		btnServiceBrake.setSelected(set);
+		if (set) {
+			setPassengerEmergencyBrake();
+			setEmergencyBrake(false);
+		}
+	}
+	
+	/**
+	 * Sets the mode to automatic.
+	 */
+	public void setAutomatic() {
+		tglbtnAutomatic.setSelected(true);
+		tglbtnManual.setSelected(false);
 	}
 	
 	public void disconnect() {
@@ -642,7 +762,6 @@ public class TrainControllerUI extends JFrame {
 				if (btnEmergencyBrake.isSelected()) {
 					if (controller != null) {
 						if (controller.setEmergencyBrake(true)) {
-							controller.setServiceBrake(false);
 							btnServiceBrake.setSelected(false);
 							btnPassengerEmergencyBrake.setSelected(false);
 						} else {
@@ -666,7 +785,6 @@ public class TrainControllerUI extends JFrame {
 				if (btnPassengerEmergencyBrake.isSelected()) {
 					if (controller != null) {
 						if (controller.setEmergencyBrake(true)) {
-							controller.setServiceBrake(false);
 							btnServiceBrake.setSelected(false);
 							btnEmergencyBrake.setSelected(false);
 						} else {
@@ -690,7 +808,6 @@ public class TrainControllerUI extends JFrame {
 				if (btnServiceBrake.isSelected()) {
 					if (controller != null) {
 						if (controller.setServiceBrake(true)) {
-							controller.setEmergencyBrake(false);
 							btnEmergencyBrake.setSelected(false);
 							btnPassengerEmergencyBrake.setSelected(false);
 						} else {
@@ -698,7 +815,6 @@ public class TrainControllerUI extends JFrame {
 							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
 						}
 					}
-					
 				} else {
 					if (controller != null) {
 						if (!controller.setServiceBrake(false)) {
