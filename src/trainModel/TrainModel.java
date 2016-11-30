@@ -4,6 +4,7 @@ import trackModel.*; //for track block manipulation
 import trackModel.TrackBlock.BlockStatus;
 import trainController.*; //for train controller
 import TTEHome.*; //for clock
+import java.lang.*;
 
 public class TrainModel extends TrainState implements Runnable{
 
@@ -42,6 +43,8 @@ public class TrainModel extends TrainState implements Runnable{
 	double currentPos;
 	
 	int nextBlockNum;
+	
+	double accRate;
 	
 	
 	/**
@@ -99,27 +102,30 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		while(proceed){
 			
-			//while(stop); //wait here while stop is true 
+			while(stop); //wait here while stop is true 
 			
 				//calc new V every 1 second (for now)
 	
 				power = trainCon.getPower();
 			
 				mass = this.emptyTrainMass + (this.personMass * this.passengerCount); //calculate the mass of the train plus load of passengers
-				velocity = power / (mass * this.accRate);
 				
 				brakingDistance = (velocity * velocity) / (2 * this.serviceBrakeRate); //calculate braking distance
 				
-				
+	
 				time1 = time2;
 				time2 = System.currentTimeMillis()/1000;
 				deltaTime = time2 - time1;
 				
+				
+				velocity = Math.sqrt((2 * power * deltaTime) / mass);
+				accRate = velocity / deltaTime;
+				
 				currentPos = currentPos + velocity * deltaTime + ( .5 * accRate * deltaTime * deltaTime);
 				
 				
-				if(currentPos == endOfBlock){
-					//this.pause();
+				if(currentPos == endOfBlock){ 
+				//end of block reached by train	
 					
 					/*
 					 *Update the block we're leaving 
@@ -158,7 +164,7 @@ public class TrainModel extends TrainState implements Runnable{
 				}
 				
 				try {
-					t.sleep(1000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}		

@@ -15,7 +15,7 @@ public class TrainSpecs {
 	final double height = 3.42;
 	final double width = 2.65;
 	
-	final double accRate = 0.5; //in m/s^2
+	final double maxAccRate = 0.5; //in m/s^2
 	
 	final double serviceBrakeRate = -1.2; //m/s^2
 	final double emergencyBrakeRate = -2.73;// m/s^2
