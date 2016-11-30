@@ -28,7 +28,6 @@ public class OfficeUI extends JFrame {
 	private CTCOffice ctcOffice;
 	private JTextField txtFieldSpeed;
 	private JButton btnSetSpeed, btnSetDestination, btnToggleSwitch, btnCloseTrack;
-	private JButton btnSchCancel, btnSchConfirm, btnEditSchedule;
 	private TrackButton[] greenLine = new TrackButton[152], redLine = new TrackButton[77];
     private JComboBox cmbDestinations;
     private JLabel lblSpeedInfo, lblDestInfo, lblAuthInfo, lblTrainNumInfo;
@@ -90,7 +89,7 @@ public class OfficeUI extends JFrame {
 		cmbDestinations.setModel(new DefaultComboBoxModel(new String[] {"Block 5", "Block 10"}));
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 6, 506, 412);
+		scrollPane.setBounds(6, 6, 506, 451);
 		schedulePanel.add(scrollPane);
 
 		tblSchedule = new JTable();
@@ -146,34 +145,17 @@ public class OfficeUI extends JFrame {
 		tblSchedule.getColumnModel().getColumn(3).setResizable(false);
 		tblSchedule.getColumnModel().getColumn(3).setPreferredWidth(45);
 		scrollPane.setViewportView(tblSchedule);
-		
-		btnEditSchedule = new JButton("Edit Schedule");
-		btnEditSchedule.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		btnEditSchedule.setBounds(198, 422, 126, 30);
-		schedulePanel.add(btnEditSchedule);
-		
-		btnSchConfirm = new JButton("Confirm");
-		btnSchConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		btnSchConfirm.setBounds(139, 423, 90, 30);
-		btnSchConfirm.setVisible(false);
-		schedulePanel.add(btnSchConfirm);
-		
-		btnSchCancel = new JButton("Cancel");
-		btnSchCancel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		btnSchCancel.setBounds(294, 423, 90, 30);
-		btnSchCancel.setVisible(false);
-		schedulePanel.add(btnSchCancel);
 
 		//Create Thread to update track info
 		exec = Executors.newSingleThreadScheduledExecutor();
-		trackUpdate = exec.scheduleAtFixedRate(new Runnable() {
+		trackUpdate = exec.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
 				ctcOffice.loadTrackData();
 				updateTrackButtons();
 				selectedBlockChanged();
 			}
-		}, 0, 1, TimeUnit.SECONDS);
+		}, 0, 10, TimeUnit.MILLISECONDS);
 	}
 	
 	/**
@@ -208,7 +190,7 @@ public class OfficeUI extends JFrame {
 
 	private void btnCloseTrackClick()
 	{
-
+		logNotification(ctcOffice.closeBlock(selectedBlockBtn.line, selectedBlockBtn.block));
 	}
 
 	private void btnToggleSwitchClick()
@@ -266,7 +248,7 @@ public class OfficeUI extends JFrame {
 			else
 				selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
 
-			//Set block info
+			//Set block info labels
 			lblLineInfo.setText(selectedBlockBtn.line);
 			lblBlockInfo.setText(Integer.toString(selectedBlockBtn.block));
 			lblSectionInfo.setText(selectedBlock.section);
@@ -283,6 +265,11 @@ public class OfficeUI extends JFrame {
 			} else {
 				lblStatusInfo.setText("Occupied");
 			}
+
+			if (selectedBlock.status == BlockStatus.CLOSED)
+				btnCloseTrack.setText("Open Block");
+			else
+				btnCloseTrack.setText("Close Block");
 
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");
@@ -568,16 +555,16 @@ public class OfficeUI extends JFrame {
 
 		JLabel lblSwitch = new JLabel("Switch:");
 		lblSwitch.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblSwitch.setBounds(285, 80, 75, 20);
+		lblSwitch.setBounds(260, 80, 75, 20);
 		statusPanel.add(lblSwitch);
 
 		JLabel lblStation = new JLabel("Station:");
 		lblStation.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblStation.setBounds(285, 30, 75, 20);
+		lblStation.setBounds(260, 30, 75, 20);
 		statusPanel.add(lblStation);
 
 		JLabel lblInfrastracture = new JLabel("Infrastructure");
-		lblInfrastracture.setBounds(285, 6, 218, 20);
+		lblInfrastracture.setBounds(260, 6, 243, 20);
 		statusPanel.add(lblInfrastracture);
 		lblInfrastracture.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInfrastracture.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -607,17 +594,17 @@ public class OfficeUI extends JFrame {
 
 		JLabel lblUnder = new JLabel("Underground:");
 		lblUnder.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblUnder.setBounds(285, 130, 103, 20);
+		lblUnder.setBounds(260, 130, 103, 20);
 		statusPanel.add(lblUnder);
 
 		JLabel lblCrossing = new JLabel("Railway Crossing:");
 		lblCrossing.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblCrossing.setBounds(285, 155, 125, 20);
+		lblCrossing.setBounds(260, 155, 125, 20);
 		statusPanel.add(lblCrossing);
 
 		JLabel lblThroughput = new JLabel("Throughput:");
 		lblThroughput.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblThroughput.setBounds(285, 55, 90, 20);
+		lblThroughput.setBounds(260, 55, 90, 20);
 		statusPanel.add(lblThroughput);
 
 		JLabel lblTrainNum = new JLabel("Train Number:");
@@ -628,7 +615,7 @@ public class OfficeUI extends JFrame {
 
 		JLabel lblSwitchPos = new JLabel("Switch Position:");
 		lblSwitchPos.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblSwitchPos.setBounds(285, 105, 125, 20);
+		lblSwitchPos.setBounds(260, 105, 125, 20);
 		statusPanel.add(lblSwitchPos);
 
 		JLabel lblMph = new JLabel("mph");
@@ -741,7 +728,7 @@ public class OfficeUI extends JFrame {
 		lblStationInfo = new JLabel("");
 		lblStationInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblStationInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblStationInfo.setBounds(344, 30, 159, 20);
+		lblStationInfo.setBounds(313, 30, 190, 20);
 		statusPanel.add(lblStationInfo);
 
 		lblSwitchInfo = new JLabel("");
@@ -794,7 +781,7 @@ public class OfficeUI extends JFrame {
 
 		btnToggleSwitch = new JButton("Toggle Switch Position");
 		btnToggleSwitch.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		btnToggleSwitch.setBounds(300, 180, 188, 30);
+		btnToggleSwitch.setBounds(288, 180, 188, 30);
 		btnToggleSwitch.setEnabled(false);
 		btnToggleSwitch.addActionListener(new ActionListener() {
 			@Override
