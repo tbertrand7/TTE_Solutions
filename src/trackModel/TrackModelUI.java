@@ -691,9 +691,11 @@ public class TrackModelUI {
 		textField.setBounds(110, 66, 140, 36);
 		adminControls.add(textField);
 		textField.setColumns(10);
+		textField.setText("tteuser");
 
 		passwordField = new JPasswordField();
 		passwordField.setBounds(110, 113, 140, 36);
+		passwordField.setText("ttesolutions");
 		adminControls.add(passwordField);
 
 		JButton resetDB = new JButton("Reset Database");

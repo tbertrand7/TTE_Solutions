@@ -52,7 +52,8 @@ public class TrackDBInteraction {
 
 	public boolean setSection(TrackBlock theBlock) throws SQLException{
 		Statement stmt = conn.createStatement();
-		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Section = '"+theBlock.section+"', BlockLength = "+theBlock.blockLength+", BlockGrade = "+theBlock.blockGrade+", SpeedLimit = "+theBlock.speedLimit+", Infrastructure = '"+theBlock.infrastructure+"', Elevation = "+theBlock.elevation+", CumalativeElevation = "+theBlock.cumualativeElevation+", SwitchBlock = '"+theBlock.switchBlock.id+"', SwitchPosition = "+theBlock.switchBlock.position+", ArrowDirection = '"+theBlock.arrowDirection+"', NumPass = "+theBlock.numPass+", temp = "+theBlock.temp+", status = '"+theBlock.status+"', Occupied = '"+theBlock.occupied+"', TrainID = '"+theBlock.trainID+"', Speed = '"+theBlock.speed+"', Authority = '"+theBlock.authority+"' WHERE Line = '"+theBlock.line+"' and BlockNumber = "+theBlock.blockNumber+";");
+		theBlock.nextBlock = 666;
+		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Section = '"+theBlock.section+"', BlockLength = "+theBlock.blockLength+", BlockGrade = "+theBlock.blockGrade+", SpeedLimit = "+theBlock.speedLimit+", Infrastructure = '"+theBlock.infrastructure+"', Elevation = "+theBlock.elevation+", CumalativeElevation = "+theBlock.cumualativeElevation+", SwitchBlock = '"+theBlock.switchBlock.id+"', SwitchPosition = "+theBlock.switchBlock.position+", ArrowDirection = '"+theBlock.arrowDirection+"', NumPass = "+theBlock.numPass+", temp = "+theBlock.temp+", status = '"+theBlock.status+"', Occupied = '"+theBlock.occupied+"', TrainID = '"+theBlock.trainID+"', Speed = '"+theBlock.speed+"', Authority = '"+theBlock.authority+"', NextBlock = '"+theBlock.nextBlock+"' WHERE Line = '"+theBlock.line+"' and BlockNumber = "+theBlock.blockNumber+";");
 		stmt.close();
 
 		return sucess;
@@ -121,6 +122,7 @@ public class TrackDBInteraction {
 			section.trainID = rs.getInt(18);
 			section.speed = rs.getDouble(19);
 			section.authority = rs.getInt(20);
+			section.nextBlock = rs.getInt(21);
 		}
 		return section;
 	}
@@ -148,7 +150,8 @@ public class TrackDBInteraction {
 				section.occupied = rs.getString(17);
 				section.trainID = rs.getInt(18);
 				section.speed = rs.getDouble(19);
-				section.authority = rs.getInt(20);			
+				section.authority = rs.getInt(20);	
+				section.nextBlock = rs.getInt(21);
 			}
 			line[i] = section;
 		}

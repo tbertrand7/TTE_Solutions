@@ -24,6 +24,7 @@ public class TrackBlock {
 	public int trainID;
 	public double speed;
 	public int authority;
+	public int nextBlock;
 	
 	public TrackBlock(){
 		pk = 0;
@@ -45,5 +46,6 @@ public class TrackBlock {
 		trainID=0;
 		speed = 0;
 		authority = 0;
+		nextBlock = 0;
 	}
 }
