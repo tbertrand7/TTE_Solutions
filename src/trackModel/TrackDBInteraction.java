@@ -62,10 +62,10 @@ public class TrackDBInteraction {
 	}
 
 	public boolean breakSection(String line, int block) throws SQLException{
+		
 		Statement stmt = conn.createStatement();
 		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = '3', Status = '3' where Line = '"+line+"' and BlockNumber = "+block+";");
 		stmt.close();
-
 
 		return sucess;
 	}
@@ -74,7 +74,6 @@ public class TrackDBInteraction {
 		Statement stmt = conn.createStatement();
 		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = '4', Status = '4' where Line = '"+line+"' and BlockNumber = "+block+";");
 		stmt.close();
-
 
 		return sucess;
 	}

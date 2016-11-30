@@ -536,8 +536,8 @@ public class TrackModelUI {
 		getData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				block = opps.getBlock(lineComboBox.getSelectedItem().toString(),
-							(Integer) railComboBox.getSelectedItem());
+				block = opps.getBlock(lineComboBoxView.getSelectedItem().toString(),
+							(Integer) blockComboBoxView.getSelectedItem());
 
 				lblNewLabel_2.setText(String.valueOf(block.blockLength) + " ft");
 				textField_4.setText(String.valueOf(block.blockGrade) + " \u00b0");
