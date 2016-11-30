@@ -148,14 +148,14 @@ public class OfficeUI extends JFrame {
 
 		//Create Thread to update track info
 		exec = Executors.newSingleThreadScheduledExecutor();
-		trackUpdate = exec.scheduleAtFixedRate(new Runnable() {
+		trackUpdate = exec.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
 				ctcOffice.loadTrackData();
 				updateTrackButtons();
 				selectedBlockChanged();
 			}
-		}, 0, 1, TimeUnit.SECONDS);
+		}, 0, 10, TimeUnit.MILLISECONDS);
 	}
 	
 	/**
@@ -190,7 +190,7 @@ public class OfficeUI extends JFrame {
 
 	private void btnCloseTrackClick()
 	{
-
+		logNotification(ctcOffice.closeBlock(selectedBlockBtn.line, selectedBlockBtn.block));
 	}
 
 	private void btnToggleSwitchClick()
@@ -248,7 +248,7 @@ public class OfficeUI extends JFrame {
 			else
 				selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
 
-			//Set block info
+			//Set block info labels
 			lblLineInfo.setText(selectedBlockBtn.line);
 			lblBlockInfo.setText(Integer.toString(selectedBlockBtn.block));
 			lblSectionInfo.setText(selectedBlock.section);
@@ -265,6 +265,11 @@ public class OfficeUI extends JFrame {
 			} else {
 				lblStatusInfo.setText("Occupied");
 			}
+
+			if (selectedBlock.status == BlockStatus.CLOSED)
+				btnCloseTrack.setText("Open Block");
+			else
+				btnCloseTrack.setText("Close Block");
 
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");

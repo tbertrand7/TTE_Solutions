@@ -15,7 +15,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import trainController.TrainController.Side;
-import trainController.TrainController.Signal;
 
 public class TestPanel extends JFrame {
 	
@@ -107,7 +106,7 @@ public class TestPanel extends JFrame {
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TestPanel.class.getResource("/trainController/computer1.jpg")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 726, 518);
+		setBounds(100, 100, 726, 432);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -179,7 +178,7 @@ public class TestPanel extends JFrame {
 			}
 		});
 		btnOpenRightDoors.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
-		btnOpenRightDoors.setBounds(20, 415, 253, 31);
+		btnOpenRightDoors.setBounds(393, 323, 253, 31);
 		contentPane.add(btnOpenRightDoors);
 		
 		JToggleButton btnOpenLeftDoors = new JToggleButton("Open Left Doors");
@@ -192,7 +191,7 @@ public class TestPanel extends JFrame {
 			}
 		});
 		btnOpenLeftDoors.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
-		btnOpenLeftDoors.setBounds(20, 447, 253, 31);
+		btnOpenLeftDoors.setBounds(393, 355, 253, 31);
 		contentPane.add(btnOpenLeftDoors);
 		
 		JToggleButton tglbtnInTunnel = new JToggleButton("In Tunnel");
@@ -203,7 +202,7 @@ public class TestPanel extends JFrame {
 			}
 		});
 		tglbtnInTunnel.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
-		tglbtnInTunnel.setBounds(20, 324, 253, 31);
+		tglbtnInTunnel.setBounds(121, 323, 253, 31);
 		contentPane.add(tglbtnInTunnel);
 		
 		JLabel lblTemperature = new JLabel("Temperature");
@@ -237,18 +236,18 @@ public class TestPanel extends JFrame {
 			}
 		});
 		tglbtnApproachingStation.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
-		tglbtnApproachingStation.setBounds(20, 356, 253, 31);
+		tglbtnApproachingStation.setBounds(121, 355, 253, 31);
 		contentPane.add(tglbtnApproachingStation);
 		
 		JLabel lblAuthority = new JLabel("Authority");
 		lblAuthority.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAuthority.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
-		lblAuthority.setBounds(368, 102, 154, 31);
+		lblAuthority.setBounds(368, 144, 154, 31);
 		contentPane.add(lblAuthority);
 		
 		txtAuthority = new JTextField();
 		txtAuthority.setColumns(10);
-		txtAuthority.setBounds(545, 102, 86, 31);
+		txtAuthority.setBounds(545, 144, 86, 31);
 		contentPane.add(txtAuthority);
 		
 		JButton btnSendAuthority = new JButton("Send");
@@ -259,46 +258,39 @@ public class TestPanel extends JFrame {
 			}
 		});
 		btnSendAuthority.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
-		btnSendAuthority.setBounds(641, 102, 69, 31);
+		btnSendAuthority.setBounds(641, 144, 69, 31);
 		contentPane.add(btnSendAuthority);
 		
 		JLabel lblSignal = new JLabel("Signal");
 		lblSignal.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSignal.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
-		lblSignal.setBounds(368, 144, 154, 31);
+		lblSignal.setBounds(368, 186, 154, 31);
 		contentPane.add(lblSignal);
 		
 		txtSignal = new JTextField();
 		txtSignal.setColumns(10);
-		txtSignal.setBounds(545, 144, 86, 31);
+		txtSignal.setBounds(545, 186, 86, 31);
 		contentPane.add(txtSignal);
 		
 		JButton btnSendSignal = new JButton("Send");
 		btnSendSignal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (parent.controller != null) {
-					Signal sig = null;
+					boolean repair = false;
 					
-					if (txtSignal.getText().compareToIgnoreCase("engine") == 0) {
-						sig = Signal.ENGINE_FAILURE;
-					} else if (txtSignal.getText().compareToIgnoreCase("rail") == 0) {
-						sig = Signal.RAIL_FAILURE;
-					} else if (txtSignal.getText().compareToIgnoreCase("signal pickup") == 0) {
-						sig = Signal.SIGNAL_PICKUP_FAILURE;
-					} else if (txtSignal.getText().compareToIgnoreCase("brake") == 0) {
-						sig = Signal.BRAKE_FAILURE;
-					}
+					if (txtSignal.getText().compareToIgnoreCase("repair") == 0)
+						repair = true;
 					
-					if (sig != null) {
-						parent.controller.signal(sig);
-					} else if (txtSignal.getText().compareToIgnoreCase("repair") == 0) {
+					if (!repair) {
+						parent.controller.signal();
+					} else {
 						parent.controller.repair();
 					}
 				}
 			}
 		});
 		btnSendSignal.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
-		btnSendSignal.setBounds(641, 144, 69, 31);
+		btnSendSignal.setBounds(641, 186, 69, 31);
 		contentPane.add(btnSendSignal);
 		
 		ts = new TestSpeed(this);

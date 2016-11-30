@@ -5,18 +5,6 @@ import trainModel.TrainModel;
 public class TrainController {
 	
 	/**
-	 * All error signals that can occur.
-	 * @author anna
-	 *
-	 */
-	public enum Signal {
-		ENGINE_FAILURE,
-		RAIL_FAILURE,
-		SIGNAL_PICKUP_FAILURE,
-		BRAKE_FAILURE
-	}
-	
-	/**
 	 * Door sides, because I believe this is the cleanest way
 	 * @author anna
 	 *
@@ -68,6 +56,11 @@ public class TrainController {
 	public double power;
 	
 	/**
+	 * Speed limit
+	 */
+	protected double speedLimit;
+	
+	/**
 	 * Used if the train needs to stop for a station or because of a failure.
 	 */
 	protected boolean stop;
@@ -103,6 +96,7 @@ public class TrainController {
 		inTunnel = false;
 		speedCurrent = 0;
 		power = 0;
+		speedLimit = 31.2928; //default to 70 mph
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
 		temperature = 68;
@@ -135,19 +129,31 @@ public class TrainController {
 	 */
 	public void passInfo(double speed, double auth, boolean under) {
 		
+		if (authority > 0) authority -= 1;
+		
 		if (authority == 0 && auth > 0) {
 			
 			setStop(false);
 			
 			sBrakeOn = false;
 			if (connectedToUI()) ui.setServiceBrake(false);
-			//TODO @Matt model.setServiceBrake(false);?
+			//TODO @Matt model.setServiceBrake(false);
 			
 		}
 		
 		speedCommand = speed;
-		authority = auth;
+		if (auth >= 0) authority = auth;
 		inTunnel = under;
+		
+		if (authority == 0) {
+			setStop(true);
+			
+			sBrakeOn = true;
+			if (connectedToUI()) ui.setServiceBrake(true);
+			//TODO @Matt model.setServiceBrake(true);
+			
+			power = 0;
+		}
 		
 	}
 	
@@ -173,11 +179,23 @@ public class TrainController {
 			
 			sBrakeOn = false;
 			if (connectedToUI()) ui.setServiceBrake(false);
-			//TODO @Matt model.setServiceBrake(false);?
+			//TODO @Matt model.setServiceBrake(false);
 			
 		}
 		
-		authority = auth;
+		if (auth >= 0) authority = auth;
+		
+		if (authority == 0) {
+			
+			setStop(true);
+			
+			sBrakeOn = true;
+			if (connectedToUI()) ui.setServiceBrake(true);
+			//TODO @Matt model.setServiceBrake(true);
+			
+			power = 0;
+			
+		}
 		
 	}
 	
@@ -197,32 +215,18 @@ public class TrainController {
 	
 	/**
 	 * Signals that an error has occurred.
-	 * @param signaltype - a Signal describing the error
 	 */
-	public synchronized void signal(Signal signaltype) {
+	public synchronized void signal() {
 		
 		if (connectedToUI()) {
-			String message = null;
-			
-			switch (signaltype) {
-			case ENGINE_FAILURE:
-				message = "ERROR: ENGINE FAILURE\n"; break;
-			case RAIL_FAILURE:
-				message = "ERROR: RAIL FAILURE\n"; break;
-			case SIGNAL_PICKUP_FAILURE:
-				message = "ERROR: SIGNAL PICKUP FAILURE\n"; break;
-			case BRAKE_FAILURE:
-				message = "ERROR: BRAKE FAILURE\n"; break;
-			}
-			
-			if (message != null) ui.message(message);
+			ui.message("ERROR: FAILURE\n");
 		}
 		
 		setStop(true);
 		
 		eBrakeOn = true;
 		if (connectedToUI()) ui.setEmergencyBrake(true);
-		//TODO @Matt model.setEmergencyBrake(true);?
+		//TODO @Matt model.setEmergencyBrake(true);
 	}
 	
 	/**
@@ -234,26 +238,8 @@ public class TrainController {
 		
 		eBrakeOn = false;
 		if (connectedToUI()) ui.setEmergencyBrake(false);
-		//TODO @Matt model.setEmergencyBrake(false);?
+		//TODO @Matt model.setEmergencyBrake(false);
 		
-	}
-	
-	/**
-	 * Communicates that the train has entered a new block.
-	 */
-	public void newBlock() {
-		
-		authority -= 1;
-		
-		if (authority == 0) {
-			setStop(true);
-			
-			sBrakeOn = true;
-			if (connectedToUI()) ui.setServiceBrake(true);
-			//TODO @Matt model.setServiceBrake(true);?
-			
-			power = 0;
-		}
 	}
 	
 	/**
@@ -267,34 +253,55 @@ public class TrainController {
 		
 		sBrakeOn = true;
 		if (connectedToUI()) ui.setServiceBrake(true);
-		//TODO @Matt model.setServiceBrake(true);?
+		//TODO @Matt model.setServiceBrake(true);
 		
 		if (connectedToUI()) ui.announceStation(name);
 		
-		while(speedCurrent != 0); //busy wait until the train stops
+		WaitThread wt = new WaitThread(doors, 1000, 1);
+		wt.start();
+		
+	}
+	
+	/**
+	 * Second phase in the approach station protocol.
+	 * @param doors - which side of the train the doors will open on
+	 */
+	private synchronized void openDoors(Side doors) {
 		
 		if (doors == Side.RIGHT) {
 			rightDoorsOpen = true;
-			//TODO @Matt model.setRightDoorsOpen(true);?
+			if (connectedToUI()) ui.setDoorsDirect(false, true);
+			//TODO @Matt model.setRightDoorsOpen(true);
 		} else {
 			leftDoorsOpen = true;
-			//TODO @Matt model.setLeftDoorsOpen(true);?
+			if (connectedToUI()) ui.setDoorsDirect(true, false);
+			//TODO @Matt model.setLeftDoorsOpen(true);
 		}
 		
-		long timestart = System.currentTimeMillis();
-		while (System.currentTimeMillis() < (timestart + 5000)); //busy wait for 5 seconds (SPEEDY PASSENGERS)
+		WaitThread wt = new WaitThread(doors, 5000, 2);
+		wt.start();
+		
+	}
+	
+	/**
+	 * Last phase in the approach station protocol.
+	 * @param doors - which side of the train the doors will close on
+	 */
+	private synchronized void closeDoors(Side doors) {
 		
 		if (doors == Side.RIGHT) {
 			rightDoorsOpen = false;
-			//TODO @Matt model.setRightDoorsOpen(false);?
+			if (connectedToUI()) ui.setDoorsDirect(false, false);
+			//TODO @Matt model.setRightDoorsOpen(false);
 		} else {
 			leftDoorsOpen = false;
-			//TODO @Matt model.setLeftDoorsOpen(false);?
+			if (connectedToUI()) ui.setDoorsDirect(false, false);
+			//TODO @Matt model.setLeftDoorsOpen(false);
 		}
 		
 		sBrakeOn = false;
 		if (connectedToUI()) ui.setServiceBrake(false);
-		//TODO @Matt model.setServiceBrake(false);?
+		//TODO @Matt model.setServiceBrake(false);
 		
 		setStop(false);
 		
@@ -323,6 +330,16 @@ public class TrainController {
 	}
 	
 	/**
+	 * Sets speed limit.
+	 * @param speed - speed limit in m/s
+	 */
+	public synchronized void setSpeedLimit(double speed) {
+		
+		speedLimit = speed;
+		
+	}
+	
+	/**
 	 * Checks whether the train is connected to a UI.
 	 * @return true if a UI is connected, false otherwise
 	 */
@@ -343,10 +360,10 @@ public class TrainController {
 		if (speedCurrent == 0 && power == 0) {
 			if (side == Side.RIGHT) {
 				rightDoorsOpen = open;
-				//TODO @Matt model.setRightDoorsOpen(open);?
+				//TODO @Matt model.setRightDoorsOpen(open);
 			} else {
 				leftDoorsOpen = open;
-				//TODO @Matt model.setLeftDoorsOpen(open);?
+				//TODO @Matt model.setLeftDoorsOpen(open);
 			}
 			
 			return true;
@@ -364,7 +381,9 @@ public class TrainController {
 		
 		if (temp < 75 && temp > 65) { //absolutely arbitrary numbers
 			temperature = temp;
-			//TODO @Matt model.setTemperature(temperature);?
+			if (connectedToUI()) ui.setTemperatureDirect(temperature);
+			
+			//TODO @Matt model.setTemperature(temperature);
 			
 			return true;
 		}
@@ -381,9 +400,9 @@ public class TrainController {
 		
 		if (!stop) {
 			sBrakeOn = on;
-			eBrakeOn = !on;
-			//TODO @Matt model.setServiceBrake(on);?
-			//TODO @Matt model.setEmergencyBrake(!on);?
+			eBrakeOn = false;
+			//TODO @Matt model.setServiceBrake(on);
+			//TODO @Matt model.setEmergencyBrake(false);
 			
 			return true;
 		} else return false;
@@ -399,9 +418,9 @@ public class TrainController {
 		
 		if (!stop) {
 			eBrakeOn = on;
-			sBrakeOn = !on;
-			//TODO @Matt model.setEmergencyBrake(on);?
-			//TODO @Matt model.setServiceBrake(!on);?
+			sBrakeOn = false;
+			//TODO @Matt model.setEmergencyBrake(on);
+			//TODO @Matt model.setServiceBrake(false);
 			
 			return true;
 		} else return false;
@@ -437,10 +456,9 @@ public class TrainController {
 		lightsOn = on;
 		
 		if (connectedToUI() && automatic) {
-			ui.tglbtnLights.setSelected(on);
-			ui.imgLight.setEnabled(on);
+			ui.tunnel(on);
 		}
-		//TODO @Matt model.setLights(on);?
+		//TODO @Matt model.changeLightStatus(on);
 		
 	}
 	
@@ -479,17 +497,28 @@ public class TrainController {
 		model = null;
 		
 		ui.disconnect();
-		ui = null;
+		disconnectFromUI();
 		
 	}
 	
 	/**
-	 * Connects the train to the specified UI.
+	 * Connects the train to the specified UI and initialize its display.
 	 * @param tcui - the TrainControllerUI to connect to the train
 	 */
 	public void connectToUI(TrainControllerUI tcui) {
 		
 		ui = tcui;
+		
+		ui.setSpeedCurrent(speedCurrent);
+		ui.setPower(power);
+		ui.setSpeedLimit(speedLimit);
+		ui.tunnel(lightsOn);
+		ui.setDoorsDirect(leftDoorsOpen, rightDoorsOpen);
+		ui.setTemperatureDirect(temperature);
+		ui.setPassengerEmergencyBrake();
+		ui.setEmergencyBrake(eBrakeOn);
+		ui.setServiceBrake(sBrakeOn);
+		ui.setAutomatic();
 		
 	}
 	
@@ -552,9 +581,52 @@ public class TrainController {
 	 */
 	public synchronized void setPower(double pow) {
 		
-		power = pow;
+		if (!sBrakeOn && !eBrakeOn)
+			power = pow;
+		else
+			power = 0;
 		
 		if (connectedToUI()) ui.setPower(power);
+		
+	}
+	
+	/**
+	 * Waits for a specified amount of time.
+	 * @author anna
+	 *
+	 */
+	private class WaitThread extends Thread {
+		
+		private final Side side;
+		private final long timer;
+		private final int method;
+		
+		public WaitThread(Side s, long timetowait, int meth) {
+			side = s;
+			timer = timetowait;
+			method = meth;
+		}
+		
+		/**
+		 * Calls a method after a certain amount of time has elapsed.
+		 */
+		public void run() {
+			
+			//Sleep for specified time (not perfect)
+			try {
+				do {
+					sleep(timer);
+				} while (method == 1 && speedCurrent != 0);
+			} catch (InterruptedException e) {
+				//irrelevant
+			}
+			
+			if (method == 1)
+				openDoors(side);
+			else
+				closeDoors(side);
+			
+		}
 		
 	}
 
