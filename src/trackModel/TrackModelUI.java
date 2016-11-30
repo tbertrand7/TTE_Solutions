@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+
+import trackModel.TrackBlock.BlockStatus;
+
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.sql.SQLException;
@@ -580,7 +583,7 @@ public class TrackModelUI {
 					label_34.setText("FALSE");
 
 				if (!block.status.equals(""))
-					lblFalse.setText(block.status);
+					lblFalse.setText(block.status.name());
 				else
 					lblFalse.setText("OPEN");
 
@@ -646,7 +649,7 @@ public class TrackModelUI {
 					chckbxNewCheckBox.setSelected(false);
 
 				if (!block.status.equals(""))
-					label_19.setText(block.status);
+					label_19.setText(block.status.name());
 				else
 					label_19.setText("");
 
@@ -765,7 +768,7 @@ public class TrackModelUI {
 		theBlock.arrowDirection = label_24.getText();
 		theBlock.numPass = (int) label_29.getValue();
 		theBlock.temp = (int) label_25.getValue();
-		theBlock.status = label_19.getText();
+		theBlock.status = BlockStatus.valueOf(label_19.getText());
 		if (!textField_2.getText().equals("OPEN BLOCK"))
 			theBlock.occupied = textField_2.getText();
 

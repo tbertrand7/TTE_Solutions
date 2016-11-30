@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import trackModel.TrackBlock.BlockStatus;
+
 public class TrackDBInteraction {
 	Connection conn = null;
 
@@ -53,7 +55,7 @@ public class TrackDBInteraction {
 	public boolean setSection(TrackBlock theBlock) throws SQLException{
 		Statement stmt = conn.createStatement();
 		theBlock.nextBlock = 666;
-		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Section = '"+theBlock.section+"', BlockLength = "+theBlock.blockLength+", BlockGrade = "+theBlock.blockGrade+", SpeedLimit = "+theBlock.speedLimit+", Infrastructure = '"+theBlock.infrastructure+"', Elevation = "+theBlock.elevation+", CumalativeElevation = "+theBlock.cumualativeElevation+", SwitchBlock = '"+theBlock.switchBlock.id+"', SwitchPosition = "+theBlock.switchBlock.position+", ArrowDirection = '"+theBlock.arrowDirection+"', NumPass = "+theBlock.numPass+", temp = "+theBlock.temp+", status = '"+theBlock.status+"', Occupied = '"+theBlock.occupied+"', TrainID = '"+theBlock.trainID+"', Speed = '"+theBlock.speed+"', Authority = '"+theBlock.authority+"', NextBlock = '"+theBlock.nextBlock+"' WHERE Line = '"+theBlock.line+"' and BlockNumber = "+theBlock.blockNumber+";");
+		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Section = '"+theBlock.section+"', BlockLength = "+theBlock.blockLength+", BlockGrade = "+theBlock.blockGrade+", SpeedLimit = "+theBlock.speedLimit+", Infrastructure = '"+theBlock.infrastructure+"', Elevation = "+theBlock.elevation+", CumalativeElevation = "+theBlock.cumualativeElevation+", SwitchBlock = '"+theBlock.switchBlock.id+"', SwitchPosition = "+theBlock.switchBlock.position+", ArrowDirection = '"+theBlock.arrowDirection+"', NumPass = "+theBlock.numPass+", temp = "+theBlock.temp+", status = '"+theBlock.status.ordinal()+"', Occupied = '"+theBlock.occupied+"', TrainID = '"+theBlock.trainID+"', Speed = '"+theBlock.speed+"', Authority = '"+theBlock.authority+"', NextBlock = '"+theBlock.nextBlock+"' WHERE Line = '"+theBlock.line+"' and BlockNumber = "+theBlock.blockNumber+";");
 		stmt.close();
 
 		return sucess;
@@ -117,7 +119,7 @@ public class TrackDBInteraction {
 			section.arrowDirection = rs.getString(13);
 			section.numPass = rs.getInt(14);
 			section.temp = rs.getInt(15);
-			section.status = rs.getString(16);
+			section.status = BlockStatus.values()[(rs.getInt(16))];
 			section.occupied = rs.getString(17);
 			section.trainID = rs.getInt(18);
 			section.speed = rs.getDouble(19);
@@ -146,7 +148,7 @@ public class TrackDBInteraction {
 				section.arrowDirection = rs.getString(13);
 				section.numPass = rs.getInt(14);
 				section.temp = rs.getInt(15);
-				section.status = rs.getString(16);
+				section.status = BlockStatus.values()[(rs.getInt(16))];
 				section.occupied = rs.getString(17);
 				section.trainID = rs.getInt(18);
 				section.speed = rs.getDouble(19);

@@ -19,7 +19,7 @@ public class TrackBlock {
 	public String arrowDirection;
 	public int numPass;
 	public int temp;
-	public String status;
+	public BlockStatus status;
 	public String occupied;
 	public int trainID;
 	public double speed;
@@ -41,7 +41,7 @@ public class TrackBlock {
 		arrowDirection = "";
 		numPass = 0;
 		temp = 0;
-		status = "";
+		status = BlockStatus.UNOCCUPIED;
 		occupied = "";
 		trainID=0;
 		speed = 0;
