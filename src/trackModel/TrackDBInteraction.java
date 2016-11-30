@@ -46,6 +46,7 @@ public class TrackDBInteraction {
 		}
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.RailLines where line = '"+line+"'order by BlockNumber");
+		rs.next();
 		track = populateTrackLine(rs,track);
 		stmt.close();
 
@@ -130,33 +131,34 @@ public class TrackDBInteraction {
 
 	private TrackBlock[] populateTrackLine(ResultSet rs, TrackBlock[] line) throws SQLException{
 		TrackBlock section = new TrackBlock();
-		for(int i =0; i<line.length; i++){
-			while(rs.next()){
-				section.pk = rs.getInt(1);
-				section.line = rs.getString(2);
-				section.section = rs.getString(3);
-				section.blockNumber = rs.getInt(4);
-				section.blockLength = rs.getDouble(5);
-				section.blockGrade = rs.getDouble(6);
-				section.speedLimit = rs.getDouble(7);
-				section.infrastructure = rs.getString(8);
-				section.elevation = rs.getDouble(9);
-				section.cumualativeElevation = rs.getDouble(10);
-				section.switchBlock.id = rs.getString(11);
-				section.switchBlock.position = rs.getString(12);
-				section.arrowDirection = rs.getString(13);
-				section.numPass = rs.getInt(14);
-				section.temp = rs.getInt(15);
-				section.status = BlockStatus.values()[(rs.getInt(16))];
-				section.occupied = rs.getString(17);
-				section.trainID = rs.getInt(18);
-				section.speed = rs.getDouble(19);
-				section.authority = rs.getInt(20);	
-				section.nextBlock = rs.getInt(21);
-			}
+
+		for (int i =0; i<line.length; i++) {
+			section.pk = rs.getInt(1);
+			section.line = rs.getString(2);
+			section.section = rs.getString(3);
+			section.blockNumber = rs.getInt(4);
+			section.blockLength = rs.getDouble(5);
+			section.blockGrade = rs.getDouble(6);
+			section.speedLimit = rs.getDouble(7);
+			section.infrastructure = rs.getString(8);
+			section.elevation = rs.getDouble(9);
+			section.cumualativeElevation = rs.getDouble(10);
+			section.switchBlock.id = rs.getString(11);
+			section.switchBlock.position = rs.getString(12);
+			section.arrowDirection = rs.getString(13);
+			section.numPass = rs.getInt(14);
+			section.temp = rs.getInt(15);
+			section.status = BlockStatus.values()[(rs.getInt(16))];
+			section.occupied = rs.getString(17);
+			section.trainID = rs.getInt(18);
+			section.speed = rs.getDouble(19);
+			section.authority = rs.getInt(20);
+			section.nextBlock = rs.getInt(21);
+
 			line[i] = section;
+			section = new TrackBlock();
+			rs.next();
 		}
 		return line;
 	}
-
 }
