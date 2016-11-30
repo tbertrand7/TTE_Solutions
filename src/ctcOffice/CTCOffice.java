@@ -100,13 +100,9 @@ public class CTCOffice
 	{
 		for (int i=0; i < greenLine.length; i++)
 		{
-			try {
-				greenLine[i] = trackDB.getSection("Green", i + 1);
-				if (i < redLine.length)
-					redLine[i] = trackDB.getSection("Red", i + 1);
-			} catch(SQLException e) {
-                e.printStackTrace();
-			}
+			greenLine[i] = track.getBlock("Green", i + 1);
+			if (i < redLine.length)
+				redLine[i] = track.getBlock("Red", i + 1);
 		}
 //        try {
 //            redLine = trackDB.getLine("Red");
