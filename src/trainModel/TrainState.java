@@ -69,9 +69,7 @@ public class TrainState extends TrainSpecs {
 	 * Changes the status of the lights (off -> on OR on -> off)
 	 */
 	void changeLightsStatus(boolean status){
-		
-		//true if on
-		
+		lightsOn = status;
 	}
 	
 	
@@ -85,7 +83,7 @@ public class TrainState extends TrainSpecs {
 	
 	
 	public void setRightDoorsOpen(boolean rDoors){
-		//true is open
+		rightDoorsOpen = rDoors;
 	}
 	
 	/**
@@ -101,7 +99,7 @@ public class TrainState extends TrainSpecs {
 	 * Changes the status of the left doors (open -> closed OR closed -> open)
 	 */
 	public void setLeftDoorsOpen(boolean lDoors){
-		//true is open
+		leftDoorsOpen = lDoors;
 	}
 	
 	
@@ -117,10 +115,8 @@ public class TrainState extends TrainSpecs {
 	/**
 	 * Changes status of Service Brakes (on -> off OR off -> on)
 	 */
-	void setServiceBrake(boolean breaks){ //REVISIT!!
-		
-		//true if on
-		
+	void setServiceBrake(boolean sBrake){ //REVISIT!!
+		serviceBrakeOn = sBrake;
 	}
 	
 	
@@ -136,9 +132,8 @@ public class TrainState extends TrainSpecs {
 	/**
 	 * Changes status of Emergency Brakes (on -> off OR off -> on)
 	 */
-	void setEmergencyBrake(boolean stuff){ //REVIST!!!!!!
-
-			//true if on
+	void setEmergencyBrake(boolean eBrake){ //REVIST!!!!!!
+		emergencyBrakeOn = eBrake;
 	}
 	
 	/**
@@ -154,10 +149,8 @@ public class TrainState extends TrainSpecs {
 	 * Changes the temperature of the train
 	 * @param setTemp - the setpoint temperature for the train
 	 */
-	void setTemperature(int setTemp){
-		
+	void setTemperature(int setTemp){	
 		temperature = setTemp;
-		
 	}
 	
 	
