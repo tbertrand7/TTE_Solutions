@@ -68,14 +68,10 @@ public class TrainState extends TrainSpecs {
 	/**
 	 * Changes the status of the lights (off -> on OR on -> off)
 	 */
-	void changeLightsStatus(){
+	void changeLightsStatus(boolean status){
 		
-		if(lightsOn == true){
-			lightsOn = false;
-		}
-		else{
-			lightsOn = true;
-		}	
+		//true if on
+		
 	}
 	
 	
@@ -88,19 +84,9 @@ public class TrainState extends TrainSpecs {
 	}
 	
 	
-	/**
-	 * Changes the status of the right doors (open -> closed OR closed -> open)
-	 */
-	void changeRightDoors(){
-		
-		if(rightDoorsOpen){
-			rightDoorsOpen = false;
-		}
-		else{
-			rightDoorsOpen = true;
-		}
+	public void setRightDoorsOpen(boolean rDoors){
+		//true is open
 	}
-	
 	
 	/**
 	 * Gets the status of the right doors
@@ -114,14 +100,8 @@ public class TrainState extends TrainSpecs {
 	/**
 	 * Changes the status of the left doors (open -> closed OR closed -> open)
 	 */
-	void changeLeftDoors(){
-		
-		if(leftDoorsOpen){
-			leftDoorsOpen = false;
-		}
-		else{
-			leftDoorsOpen = true;
-		}
+	public void setLeftDoorsOpen(boolean lDoors){
+		//true is open
 	}
 	
 	
@@ -137,13 +117,10 @@ public class TrainState extends TrainSpecs {
 	/**
 	 * Changes status of Service Brakes (on -> off OR off -> on)
 	 */
-	void serviceBrake(){
-		if(serviceBrakeOn){
-			serviceBrakeOn = false;
-		}
-		else{
-			serviceBrakeOn = true;
-		}
+	void setServiceBrake(boolean breaks){ //REVISIT!!
+		
+		//true if on
+		
 	}
 	
 	
@@ -159,13 +136,9 @@ public class TrainState extends TrainSpecs {
 	/**
 	 * Changes status of Emergency Brakes (on -> off OR off -> on)
 	 */
-	void emergencyBrake(){
-		if(emergencyBrakeOn){
-			emergencyBrakeOn = false;
-		}
-		else{
-			emergencyBrakeOn = true;
-		}
+	void setEmergencyBrake(boolean stuff){ //REVIST!!!!!!
+
+			//true if on
 	}
 	
 	/**
@@ -183,10 +156,8 @@ public class TrainState extends TrainSpecs {
 	 */
 	void setTemperature(int setTemp){
 		
-		//acceptable range of temps 65-75 *F
-		if(setTemp>65 && setTemp<75){
-			temperature = setTemp;
-		}
+		temperature = setTemp;
+		
 	}
 	
 	

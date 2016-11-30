@@ -9,6 +9,8 @@ public class TrainModel extends TrainState implements Runnable{
 	Thread t;
 	
 	int trainID; //unique train ID
+	String trainLine;
+	TrainController trainCon;
 	
 	double elevation;
 	double power; 
@@ -28,12 +30,27 @@ public class TrainModel extends TrainState implements Runnable{
 	double endOfBlock;
 	double currentPos;
 	
+	double nextBlock;
+	
 	
 	/**
 	 * Null constructor
 	 * sets all boolean variables to false and all numerical variables to 0
 	 */
-	public TrainModel() {	
+	public TrainModel(TrainController tc, int id, String line) {	
+		
+		trainCon = tc;
+		trainID = id;
+		trainLine = line;
+		
+		if(trainLine.compareTo("Green") == 0)
+		{
+			nextBlock = 152;
+		}
+		else
+		{
+			nextBlock = 77;
+		}
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -69,11 +86,14 @@ public class TrainModel extends TrainState implements Runnable{
 		while(proceed){
 			
 			while(stop); //wait here while stop is true 
+			
+				
 	
 				mass = this.emptyTrainMass + (this.personMass * this.passengerCount); //calculate the mass of the train plus load of passengers
 				velocity = power / (mass * this.accRate);
 				
 				brakingDistance = (velocity * velocity) / (2 * this.serviceBrakeRate); //calculate braking distance
+				
 				
 				if(currentPos == endOfBlock){
 					this.pause();
