@@ -12,6 +12,7 @@ import javax.swing.text.*;
 
 import ctcOffice.CTCOffice.Mode;
 import trackModel.*;
+import trackModel.TrackBlock.*;
 
 import java.text.*;
 import java.util.*;
@@ -273,7 +274,15 @@ public class OfficeUI extends JFrame {
 			lblGradeInfo.setText(selectedBlock.blockGrade + "%");
 			lblSpeedLimitInfo.setText(selectedBlock.speedLimit + " mph");
 			lblElevationInfo.setText(selectedBlock.elevation + " ft");
-			lblStatusInfo.setText(""); //TODO: set text based on status enum
+
+			//Set status text
+			if (selectedBlock.status == BlockStatus.UNOCCUPIED) {
+				lblStatusInfo.setText("Unoccupied");
+			} else if (selectedBlock.status == BlockStatus.CLOSED) {
+				lblStatusInfo.setText("Closed");
+			} else {
+				lblStatusInfo.setText("Occupied");
+			}
 
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");
