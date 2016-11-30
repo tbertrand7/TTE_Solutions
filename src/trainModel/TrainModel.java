@@ -155,7 +155,6 @@ public class TrainModel extends TrainState implements Runnable{
 					 * Pass info to train controller
 					 */
 					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground); //pass the train controller the new block info
-					trainCon.newBlock(); //communicates that we are in a new block
 				}
 				
 				try {
