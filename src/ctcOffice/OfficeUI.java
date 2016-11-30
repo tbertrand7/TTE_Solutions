@@ -271,6 +271,8 @@ public class OfficeUI extends JFrame {
 			else
 				btnCloseTrack.setText("Close Block");
 
+			lblThroughputInfo.setText(ctcOffice.calcThroughput(selectedBlock) + " trains/hr");
+
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");
 
@@ -767,7 +769,7 @@ public class OfficeUI extends JFrame {
 		lblCrossingInfo.setBounds(433, 155, 70, 20);
 		statusPanel.add(lblCrossingInfo);
 
-		lblThroughputInfo = new JLabel("2 trains/hr");
+		lblThroughputInfo = new JLabel("");
 		lblThroughputInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblThroughputInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblThroughputInfo.setBounds(387, 55, 116, 20);

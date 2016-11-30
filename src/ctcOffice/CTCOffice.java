@@ -3,7 +3,6 @@ package ctcOffice;
 import trackModel.*;
 import trackModel.TrackBlock.*;
 import waysideController.*;
-import java.sql.*;
 
 public class CTCOffice
 {
@@ -66,10 +65,16 @@ public class CTCOffice
 		return mode;
 	}
 
+	/**
+	 * Closes/Opens a selected block
+	 * @param line line the block is on
+	 * @param block block number
+	 * @return Notification string for block close/open
+	 */
 	public String closeBlock(String line, int block)
 	{
 		TrackBlock currBlock;
-		String rtnStr = "";
+		String rtnStr;
 
 		//Get block from appropriate line
 		if (line.equals("Red"))
@@ -89,6 +94,12 @@ public class CTCOffice
 
 		track.setBlock(currBlock); //Update block in DB
 		return rtnStr;
+	}
+
+	public int calcThroughput(TrackBlock block)
+	{
+		//TODO: Calculate throughput
+		return 0;
 	}
 
 	/**
