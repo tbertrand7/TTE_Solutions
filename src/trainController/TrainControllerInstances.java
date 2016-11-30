@@ -34,15 +34,17 @@ public class TrainControllerInstances {
 	/**
 	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
 	 * then a new train is created.
+	 * @param newid - the id of the new train
+	 * @param line - "green" or "red"
 	 */
-	public void createTrain(int newid) {
+	public void createTrain(int newid, String line) {
 		
 		for (Integer i : uiList.keySet()) {
 			uiList.get(i).addTrainID(newid);
 		}
 		
 		if (!trainList.containsKey(newid)) {
-			trainList.put(newid, new TrainController(this, newid));
+			trainList.put(newid, new TrainController(this, newid, line));
 		}
 		
 	}
@@ -74,7 +76,7 @@ public class TrainControllerInstances {
 		++instanceID;
 		
 		//DELETE LATER
-		createTrain(1);
+		createTrain(1, "green");
 		
 	}
 	
