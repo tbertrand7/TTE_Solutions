@@ -146,7 +146,7 @@ public class WaysideController
 	//---------------SAFETY--------------------
 	public void load_plc(String path)
 	{
-		plc.clearConditions();
+		/*plc.clearConditions();
 		try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -213,12 +213,12 @@ public class WaysideController
 		catch(Exception e)
 		{
 			System.out.println(e);
-		}
+		}*/
 	}
 	
 	public void run_plc()
 	{
-		ArrayList<ArrayList<String>> conditions = plc.getConditions();
+		/*ArrayList<ArrayList<String>> conditions = plc.getConditions();
 		ArrayList<String> results = plc.getResults();
 		
 		
@@ -239,7 +239,7 @@ public class WaysideController
 				}
 				else if(s.contains("!s"))
 				{
-					temp = !switch_position;
+					temp = controlledSwitches.get(Character.getNumericValue(s.charAt(2)));
 				}
 				else if(s.contains("b"))
 				{
@@ -336,7 +336,7 @@ public class WaysideController
 				System.out.println("CONDITION is NOT SATISFIED");
 			
 			satisfied = false;
-		}
+		}*/
 	}
 
 
