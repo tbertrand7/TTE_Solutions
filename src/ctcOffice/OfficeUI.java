@@ -278,8 +278,14 @@ public class OfficeUI extends JFrame {
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");
 
+			//Set infrastructure info to defaults
 			lblUnderInfo.setText("No");
 			lblStationInfo.setText("N/A");
+			lblSwitchInfo.setText("N/A");
+			lblSwPosInfo.setText("N/A");
+			lblCrossingInfo.setText("No");
+			btnToggleSwitch.setEnabled(false);
+
 			for (int i = 0; i < infr.length; i++) {
 				infr[i] = infr[i].trim();
 
@@ -292,6 +298,15 @@ public class OfficeUI extends JFrame {
 
 				if (infr[i].equals("UNDERGROUND"))
 					lblUnderInfo.setText("Yes");
+
+				if (infr[i].equals("SWITCH")) {
+					lblSwitchInfo.setText(selectedBlock.switchBlock.getID());
+					lblSwPosInfo.setText(selectedBlock.switchBlock.getPosition());
+					btnToggleSwitch.setEnabled(true);
+				}
+
+				if (infr[i].equals("RAILWAY CROSSING"))
+					lblCrossingInfo.setText("Yes");
 			}
 		}
     }
@@ -709,19 +724,19 @@ public class OfficeUI extends JFrame {
 			}
 		});
 
-		lblStationInfo = new JLabel("N/A");
+		lblStationInfo = new JLabel("");
 		lblStationInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblStationInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblStationInfo.setBounds(344, 30, 159, 20);
 		statusPanel.add(lblStationInfo);
 
-		lblSwitchInfo = new JLabel("N/A");
+		lblSwitchInfo = new JLabel("");
 		lblSwitchInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSwitchInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblSwitchInfo.setBounds(413, 80, 90, 20);
 		statusPanel.add(lblSwitchInfo);
 
-		lblUnderInfo = new JLabel("No");
+		lblUnderInfo = new JLabel("");
 		lblUnderInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblUnderInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblUnderInfo.setBounds(423, 130, 80, 20);
@@ -745,7 +760,7 @@ public class OfficeUI extends JFrame {
 		lblAuthInfo.setBounds(80, 400, 90, 20);
 		statusPanel.add(lblAuthInfo);
 
-		lblCrossingInfo = new JLabel("No");
+		lblCrossingInfo = new JLabel("");
 		lblCrossingInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblCrossingInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblCrossingInfo.setBounds(433, 155, 70, 20);
@@ -757,7 +772,7 @@ public class OfficeUI extends JFrame {
 		lblThroughputInfo.setBounds(387, 55, 116, 20);
 		statusPanel.add(lblThroughputInfo);
 
-		lblSwPosInfo = new JLabel("N/A");
+		lblSwPosInfo = new JLabel("");
 		lblSwPosInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblSwPosInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSwPosInfo.setBounds(413, 105, 90, 20);
@@ -766,6 +781,7 @@ public class OfficeUI extends JFrame {
 		btnToggleSwitch = new JButton("Toggle Switch Position");
 		btnToggleSwitch.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnToggleSwitch.setBounds(300, 180, 188, 30);
+		btnToggleSwitch.setEnabled(false);
 		btnToggleSwitch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
