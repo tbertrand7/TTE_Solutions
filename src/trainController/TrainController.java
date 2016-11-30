@@ -94,7 +94,7 @@ public class TrainController {
 	/**
 	 * Assigns train id and creates a TrainModel, assigns id and parent, creates TrainModel, creates PowerCalculators.
 	 */
-	public TrainController(TrainControllerInstances tci, int uniqueid) {
+	public TrainController(TrainControllerInstances tci, int uniqueid, String line) {
 		
 		id = uniqueid;
 		
@@ -110,7 +110,7 @@ public class TrainController {
 		eBrakeOn = false;
 		
 		/* @Matt: This TrainModel constructor needs to be added to the TrainModel class! */
-		//model = new TrainModel((TrainController)this, id);
+		//model = new TrainModel((TrainController)this, id, line);
 		
 		parent = tci;
 		ui = null;
