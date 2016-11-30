@@ -8,6 +8,7 @@ import javax.swing.UIManager.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.*;
 import javax.swing.text.*;
 
 import ctcOffice.CTCOffice.Mode;
@@ -188,6 +189,15 @@ public class OfficeUI extends JFrame {
 		}
 	}
 
+	private void loadScheduleClick()
+	{
+		JFileChooser fc = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(".csv", "csv");
+		fc.setFileFilter(filter);
+		fc.showOpenDialog(contentPane);
+		ctcOffice.loadSchedule(fc.getSelectedFile());
+	}
+
 	private void btnCloseTrackClick()
 	{
 		logNotification(ctcOffice.closeBlock(selectedBlockBtn.line, selectedBlockBtn.block));
@@ -309,7 +319,10 @@ public class OfficeUI extends JFrame {
 		}
     }
 
-    private void updateTrackButtons()
+	/**
+	 * Updates the status colors for all of the track buttons every time new data is brought in from DB
+	 */
+	private void updateTrackButtons()
 	{
         for (int i=0; i < greenLine.length; i++)
         {
@@ -371,6 +384,11 @@ public class OfficeUI extends JFrame {
 
 		JMenuItem mntmLoadSchedule = new JMenuItem("Load Schedule");
 		mntmLoadSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mntmLoadSchedule.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadScheduleClick();
+			}
+		});
 		mnSchedule.add(mntmLoadSchedule);
 
 		JMenuItem mntmRunSchedule = new JMenuItem("Run Schedule");

@@ -1,5 +1,7 @@
 package ctcOffice;
 
+import java.io.*;
+
 import trackModel.*;
 import trackModel.TrackBlock.*;
 import waysideController.*;
@@ -95,6 +97,11 @@ public class CTCOffice
 		track.setBlock(currBlock); //Update block in DB
 		return rtnStr;
 	}
+
+	public void loadSchedule(File file)
+    {
+        //TODO: Process loaded csv
+    }
 
 	public int calcThroughput(TrackBlock block)
 	{
