@@ -109,10 +109,9 @@ public class TTEHomeGUI {
 		btnTrackModel.setBounds(150, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnTrackModel);
 		
+		TrainControllerInstances tci = new TrainControllerInstances();
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {
-			TrainControllerInstances tci = new TrainControllerInstances();
-			
 			public void actionPerformed(ActionEvent e) {
 				tci.newUI();
 			}

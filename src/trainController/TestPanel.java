@@ -14,8 +14,8 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import trainController.TrainControllerInterface.Side;
-import trainController.TrainControllerInterface.Signal;
+import trainController.TrainController.Side;
+import trainController.TrainController.Signal;
 
 public class TestPanel extends JFrame {
 	
@@ -289,8 +289,11 @@ public class TestPanel extends JFrame {
 						sig = Signal.BRAKE_FAILURE;
 					}
 					
-					if (sig != null)
+					if (sig != null) {
 						parent.controller.signal(sig);
+					} else if (txtSignal.getText().compareToIgnoreCase("repair") == 0) {
+						parent.controller.repair();
+					}
 				}
 			}
 		});
