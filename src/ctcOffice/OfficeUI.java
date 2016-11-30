@@ -313,7 +313,12 @@ public class OfficeUI extends JFrame {
 
     private void updateTrackButtons()
 	{
-
+        for (int i=0; i < greenLine.length; i++)
+        {
+            greenLine[i].setStatus(ctcOffice.greenLine[i].status);
+            if (i < redLine.length)
+                redLine[i].setStatus(ctcOffice.redLine[i].status);
+        }
 	}
 
 	/**
