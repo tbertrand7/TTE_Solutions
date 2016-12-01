@@ -543,7 +543,7 @@ public class TrainController {
 	
 	/**
 	 * Setter for automatic mode.
-	 * @param speed - speed requested by train controller, in mph
+	 * @param auto - true if automatic mode, false if manual mode
 	 */
 	public void setAutomatic(boolean auto) {
 		

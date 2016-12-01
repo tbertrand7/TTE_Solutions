@@ -68,15 +68,6 @@ public class TestPanel extends JFrame {
 		}
 	}
 	
-	private void sendCurrentSpeed() {
-		if (parent.controller != null) {
-			double americancurrent = Double.parseDouble(txtCurrentSpeed.getText());
-			current = americancurrent * 1609.34 / 3600;
-			parent.setSpeedCurrent(current);
-			parent.controller.setSpeedCurrent(current);
-		}
-	}
-	
 	public void setCurrentSpeed(double speed) {
 		if (parent.controller != null) {
 			current = speed;
@@ -161,7 +152,7 @@ public class TestPanel extends JFrame {
 		JButton btnSendCurrentSpeed = new JButton("Send");
 		btnSendCurrentSpeed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				sendCurrentSpeed();
+				setCurrentSpeed(Double.parseDouble(txtCurrentSpeed.getText()));
 			}
 		});
 		btnSendCurrentSpeed.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));

@@ -14,15 +14,16 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import trainController.TrainController.Side;
+
 import javax.swing.DefaultComboBoxModel;
 
 public class TrainControllerUI extends JFrame {
@@ -34,6 +35,8 @@ public class TrainControllerUI extends JFrame {
 	private JPanel contentPane;
 	
 	private final AnnouncementThread athread;
+	
+	private boolean announcing;
 	
 	/**
 	 * The TrainControllerInstances class this UI belongs to.
@@ -78,11 +81,13 @@ public class TrainControllerUI extends JFrame {
 	 */
 	public void changeAnnouncement() {
 		if (!announcementList.isEmpty()) {
-			if (announcementList.size() <= announcementIndex) { //we don't want any NullPointerExceptions...
-				announcementIndex = 0;
+			if (!announcing) {
+				if (announcementList.size() <= announcementIndex) { //we don't want any NullPointerExceptions...
+					announcementIndex = 0;
+				}
+				AnnCurr.setText(announcementList.get(announcementIndex));
+				announcementIndex++;
 			}
-			AnnCurr.setText(announcementList.get(announcementIndex));
-			announcementIndex++;
 		}
 	}
 	
@@ -91,6 +96,7 @@ public class TrainControllerUI extends JFrame {
 	 * @param stationName - name of the station to be announced
 	 */
 	public void announceStation(String stationName) {
+		announcing = true;
 		AnnCurr.setText("ATTENTION: Approaching " + stationName + ".");
 	}
 	
@@ -166,7 +172,8 @@ public class TrainControllerUI extends JFrame {
 	 * @param id - new train's ID
 	 */
 	public void changeTrainID(int id) {
-		disconnect();
+		if (controller != null)
+			disconnect();
 		
 		TrainController temp = parent.connectUI(id, this);
 		
@@ -178,7 +185,7 @@ public class TrainControllerUI extends JFrame {
 	}
 	
 	//System Messages
-	JTextPane txtMessages;
+	JTextArea txtMessages;
 	
 	/**
 	 * Display a message in the system messages box.
@@ -211,7 +218,7 @@ public class TrainControllerUI extends JFrame {
 	 * @param power - new power to be displayed, in Watts
 	 */
 	public void setPower(double power) {
-		if (power < 5000)
+		if (power < 5000 && power > -5000)
 			PowerCurr.setText((int)power + " W");
 		else
 			PowerCurr.setText((int)(power/1000) + " kW");
@@ -265,6 +272,8 @@ public class TrainControllerUI extends JFrame {
 	 * @param right - true if left doors are open, false otherwise
 	 */
 	public void setDoorsDirect(boolean left, boolean right) {
+		announcing = false;
+		
 		if (left) {
 			tglbtnLeftDoors.setSelected(true);
 			txtLeftDoors.setText("Open");
@@ -383,6 +392,7 @@ public class TrainControllerUI extends JFrame {
 		
 		announcementList = new ArrayList<String>();
 		announcementIndex = 0;
+		announcing = false;
 		
 		setResizable(false);
 		setTitle("Train Controller (Instance " + id + ")");
@@ -403,8 +413,14 @@ public class TrainControllerUI extends JFrame {
 					disconnect();
 				} else {
 					int tempid = (int) TrainSelect.getSelectedItem();
+					boolean change = false;
 					
-					changeTrainID(tempid);
+					if (controller == null) change = true;
+					if (controller != null)
+						if (controller.id != tempid)
+							change = true;
+						
+					if (change) changeTrainID(tempid);
 				}
 			}
 		});
@@ -631,8 +647,12 @@ public class TrainControllerUI extends JFrame {
 		AnnCurr.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		AnnCurr.setEditable(false);
 		AnnCurr.setLineWrap(true);
-		AnnCurr.setBounds(184, 499, 449, 100);
-		contentPane.add(AnnCurr);
+		//AnnCurr.setBounds(184, 499, 449, 100);
+		
+		JScrollPane jspann = new JScrollPane(AnnCurr);
+		jspann.setBounds(184, 499, 449, 100);
+		
+		contentPane.add(jspann);
 		
 		JLabel lblCurrentAnnouncement = new JLabel("Current Announcement");
 		lblCurrentAnnouncement.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -656,11 +676,16 @@ public class TrainControllerUI extends JFrame {
 		btnAnnCustReq.setBounds(300, 610, 225, 33);
 		contentPane.add(btnAnnCustReq);
 		
-		txtMessages = new JTextPane();
+		txtMessages = new JTextArea();
 		txtMessages.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		txtMessages.setEditable(false);
-		txtMessages.setBounds(300, 119, 225, 330);
-		contentPane.add(txtMessages);
+		txtMessages.setLineWrap(true);
+		//txtMessages.setBounds(300, 119, 225, 330);
+		
+		JScrollPane jsptxt = new JScrollPane(txtMessages);
+		jsptxt.setBounds(300, 119, 225, 330);
+		
+		contentPane.add(jsptxt);
 		
 		JLabel lblSystemMessages = new JLabel("System Messages");
 		lblSystemMessages.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
