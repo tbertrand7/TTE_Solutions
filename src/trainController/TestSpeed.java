@@ -64,14 +64,16 @@ public class TestSpeed extends Thread {
 				//Calculate new current velocity
 				P = parent.getPower();
 				
-				if (P == 0) F = 0;
-				else if (v == 0) F = P/1; //we're gonna pretend we're going ~2 mph
-				else F = P/v;
-				
-				if (F == 0) a = 0;
-				else a = F/M;
-				
-				v = v + a*T;
+				if (P != -1) {
+					if (P == 0) F = 0;
+					else if (v == 0) F = P/1; //we're gonna pretend we're going ~2 mph
+					else F = P/v;
+					
+					if (F == 0) a = 0;
+					else a = F/M;
+					
+					v = v + a*T;
+				}
 			}
 			
 			if (v < 0) v = 0;
