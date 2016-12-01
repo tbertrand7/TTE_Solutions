@@ -339,9 +339,9 @@ public class OfficeUI extends JFrame {
 	{
         for (int i=0; i < greenLine.length; i++)
         {
-            greenLine[i].setStatus(ctcOffice.greenLine[i].status);
+            greenLine[i].setStatus(ctcOffice.greenLine[i]);
             if (i < redLine.length)
-                redLine[i].setStatus(ctcOffice.redLine[i].status);
+                redLine[i].setStatus(ctcOffice.redLine[i]);
         }
 	}
 

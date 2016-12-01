@@ -2,6 +2,8 @@ package ctcOffice;
 
 import javax.swing.*;
 import java.awt.*;
+
+import trackModel.TrackBlock;
 import trackModel.TrackBlock.*;
 
 /**
@@ -23,16 +25,20 @@ public class TrackButton extends JToggleButton
     }
 
     /**
-     * Sets the color of the TrackButton to match the status of the corresponding block
-     * @param status The status of the track block
+     * Sets the color of the TrackButton to match the status of the corresponding block.
+     * Sets tooltip text if train is present
+     * @param block The track block represented by the button
      */
-    public void setStatus(BlockStatus status) {
-        if (status == BlockStatus.UNOCCUPIED) {
+    public void setStatus(TrackBlock block) {
+        if (block.status == BlockStatus.UNOCCUPIED) {
             this.setBackground(Color.LIGHT_GRAY);
-        } else if (status == BlockStatus.CLOSED) {
+            this.setToolTipText(null);
+        } else if (block.status == BlockStatus.CLOSED) {
             this.setBackground(Color.BLACK);
         } else {
             this.setBackground(Color.BLUE);
+            if (block.trainID > 0)
+                this.setToolTipText(""+block.trainID);
         }
     }
 }
