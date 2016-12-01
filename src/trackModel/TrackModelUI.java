@@ -476,7 +476,7 @@ public class TrackModelUI {
 
 		JButton breakRail = new JButton("Break Rail");
 		breakRail.setFont(new Font("Arial", Font.PLAIN, 11));
-		breakRail.setBounds(1, 0, 159, 282);
+		breakRail.setBounds(1, 0, 159, 307);
 		breakRail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				opps.breakRail();
@@ -487,7 +487,7 @@ public class TrackModelUI {
 
 		JButton powerFailure = new JButton("Cut Power");
 		powerFailure.setFont(new Font("Arial", Font.PLAIN, 11));
-		powerFailure.setBounds(159, 0, 159, 282);
+		powerFailure.setBounds(172, 0, 159, 307);
 		powerFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				opps.cutRail();
@@ -496,7 +496,7 @@ public class TrackModelUI {
 		failurePanel.add(powerFailure);
 
 		JButton circuitFailure = new JButton("Break Circuit");
-		circuitFailure.setBounds(317, 0, 159, 282);
+		circuitFailure.setBounds(335, 0, 159, 307);
 		circuitFailure.setFont(new Font("Arial", Font.PLAIN, 11));
 		circuitFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -628,7 +628,7 @@ public class TrackModelUI {
 			}
 		});
 		getData.setFont(new Font("Arial", Font.PLAIN, 11));
-		getData.setBounds(10, 273, 463, 20);
+		getData.setBounds(6, 276, 488, 31);
 		overview.add(getData);
 		
 
@@ -694,7 +694,7 @@ public class TrackModelUI {
 			}
 		});
 		btnCheckLive.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnCheckLive.setBounds(10, 244, 246, 47);
+		btnCheckLive.setBounds(10, 244, 246, 63);
 		config.add(btnCheckLive);
 
 		// SAVE BUTTON FUNCTIONALITY
@@ -708,7 +708,7 @@ public class TrackModelUI {
 			}
 		});
 		btnSave.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnSave.setBounds(260, 245, 212, 47);
+		btnSave.setBounds(260, 245, 234, 62);
 		config.add(btnSave);
 
 		JPanel adminControls = new JPanel();
@@ -764,7 +764,7 @@ public class TrackModelUI {
 			}
 
 		});
-		resetDB.setBounds(285, 6, 180, 256);
+		resetDB.setBounds(285, 6, 209, 301);
 		adminControls.add(resetDB);
 
 
