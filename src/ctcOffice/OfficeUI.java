@@ -205,13 +205,20 @@ public class OfficeUI extends JFrame {
 	{
 		try 
 		{
-			int newTrainSpeed = Integer.parseInt(txtFieldSpeed.getText());
+			double newTrainSpeed = Double.parseDouble(txtFieldSpeed.getText());
 			
 			if (newTrainSpeed < 1 || newTrainSpeed > 1000)
 				throw new NumberFormatException();
 			else
 			{
-				ctcOffice.suggestSpeed(newTrainSpeed);
+				TrackBlock selectedBlock;
+
+				if (selectedBlockBtn.line.equals("Green"))
+					selectedBlock = ctcOffice.greenLine[selectedBlockBtn.block - 1];
+				else
+					selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
+				
+				ctcOffice.suggestSpeed(newTrainSpeed,selectedBlock.trainID);
 				logNotification("Speed of " + newTrainSpeed + " mph suggested");
 				txtFieldSpeed.setText("");
 				lblSpeedInfo.setText(newTrainSpeed + " mph");
