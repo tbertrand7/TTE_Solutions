@@ -3,16 +3,14 @@ package trainModel;
 import trackModel.*; //for track block manipulation
 import trackModel.TrackBlock.BlockStatus;
 import trainController.*; //for train controller
-import TTEHome.*; //for clock
-import java.lang.*;
+
 
 public class TrainModel extends TrainState implements Runnable{
 
 	Thread t;
 	
-	TrackModel tm;
+	TrackModel tm = new TrackModel();
 	TrackBlock trackBlock;
-	
 	
 	int trainID; //unique train ID
 	String trainLine;
@@ -76,23 +74,50 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
-		lightsOn = false;
-		
+		lightsOn = false;		
 		serviceBrakeOn = false;
 		emergencyBrakeOn = false;
-		
 		crewCount = 1;
 		passengerCount = 0;
 		temperature = 70;
 		elevation = 0;
 		
 		power = 0.0;
-		velocity = 13.4112;	
+		velocity = 0.0;	
 		
 		t.start();
 				
 	}
 	
+	public void setServiceBrake(boolean sBrake){
+		this.serviceBrake(sBrake);
+		ui.sBrake(sBrake);
+	}
+	
+	public void setEmergencyBrake(boolean eBrake){
+		this.eBrake(eBrake);
+		ui.eBrake(eBrake);
+	}
+	
+	public void setTemperature (int temp){
+		this.setTemp(temp);
+		ui.setTemp(temp);
+	}
+	
+	public void setLeftDoorsOpen(boolean lDoors){
+		this.setLeftDoors(lDoors);
+		ui.lDoors(lDoors);
+	}
+	
+	public void setRightDoorsOpen(boolean rDoors){
+		this.setRightDoors(rDoors);
+		ui.rDoors(rDoors);
+	}
+	
+	public void changeLightsStatus(boolean lights){
+		this.changeLights(lights);
+		ui.lights(lights);
+	}
 	
 	public void pause(){
 		stop = true;
@@ -106,7 +131,7 @@ public class TrainModel extends TrainState implements Runnable{
 	public void run(){
 		
 		this.resume(); //set stop to false to allow while loop to proceed
-		time2 = System.currentTimeMillis() / 1000; //initialize time1
+		time2 = System.currentTimeMillis() / 1000; //initialize time2
 		
 		while(proceed){
 			
@@ -146,6 +171,7 @@ public class TrainModel extends TrainState implements Runnable{
 				elevation = trackBlock.elevation;
 				grade = trackBlock.blockGrade;
 				speedLimit = trackBlock.speedLimit;
+				trainLine = trackBlock.line;
 				
 				if(trackBlock.infrastructure.compareToIgnoreCase("underground") == 0){
 					underground = true;
@@ -206,9 +232,8 @@ public class TrainModel extends TrainState implements Runnable{
 			 */
 			private void initFailurePrivate(){
 				setPower(0); //set power to zero
-				serviceBrakeOn = true;   //<< Turn on brakes 
-				emergencyBrakeOn = true; //<<
-				lightsOn = true; // Turn on lights
+				setEmergencyBrake(true);
+				changeLightsStatus(true);
 			}
 	
 		
@@ -232,8 +257,14 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public void connectToUI(trainModelGUI gui) {
 		
-		ui = gui;		
+		ui = gui;	
 		
+		ui.sBrake(serviceBrakeOn);
+		ui.eBrake(emergencyBrakeOn);
+		ui.lights(lightsOn);
+		ui.rDoors(rightDoorsOpen);
+		ui.lDoors(leftDoorsOpen);
+		ui.setTemp(temperature);	
 	}
 	
 	/**

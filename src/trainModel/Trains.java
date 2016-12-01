@@ -13,29 +13,14 @@ public class Trains {
 	 */
 	protected HashMap<Integer, trainModelGUI> uiList;
 	
-	/**
-	 * The next unique instance id to assign to a UI (starts at 0).
-	 * (Don't pay attention to this variable if you're not implementing the TrainController.)
-	 */
-	private int instanceID;
 	
 	public Trains() {
 		trainList = new HashMap<Integer, TrainModel>();
 		uiList = new HashMap<Integer, trainModelGUI>();
 		
 		//nextID = 1;
-		instanceID = 0;
 	}
 	
-	/**
-	 * Creates a new instance of TrainControllerUI.
-	 */
-	public void newUI() {
-		
-		uiList.put(instanceID, new trainModelGUI(instanceID, this));
-		
-		++instanceID;
-	}
 	
 	/**
 	 * Removes a TrainControllerUI from the list.
@@ -48,7 +33,7 @@ public class Trains {
 	/**
 	 * Connects the specified TrainControllerUI to the train with the specified train ID.
 	 * @param trainid - the ID of the train to connect to
-	 * @param tcui - the TrainControllerUI class to connect to the train
+	 * @param tmui - the TrainModelGUI class to connect to the train
 	 * @return valid TrainController if connection was successful, null otherwise
 	 */
 	public TrainModel connectUI(int id, trainModelGUI tmui) {
