@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import trackModel.TrackBlock.BlockStatus;
 
@@ -55,6 +56,16 @@ public class TrackModelUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
 		frmTrackModelGui = new JFrame();
 		frmTrackModelGui.setIconImage(Toolkit.getDefaultToolkit().getImage(TrackModelUI.class.getResource("/shared/TTE.png")));
 		frmTrackModelGui.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -465,7 +476,7 @@ public class TrackModelUI {
 
 		JButton breakRail = new JButton("Break Rail");
 		breakRail.setFont(new Font("Arial", Font.PLAIN, 11));
-		breakRail.setBounds(1, 0, 159, 295);
+		breakRail.setBounds(1, 0, 159, 307);
 		breakRail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				opps.breakRail();
@@ -476,7 +487,7 @@ public class TrackModelUI {
 
 		JButton powerFailure = new JButton("Cut Power");
 		powerFailure.setFont(new Font("Arial", Font.PLAIN, 11));
-		powerFailure.setBounds(160, 0, 159, 295);
+		powerFailure.setBounds(172, 0, 159, 307);
 		powerFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				opps.cutRail();
@@ -485,7 +496,7 @@ public class TrackModelUI {
 		failurePanel.add(powerFailure);
 
 		JButton circuitFailure = new JButton("Break Circuit");
-		circuitFailure.setBounds(319, 0, 159, 295);
+		circuitFailure.setBounds(341, 0, 159, 307);
 		circuitFailure.setFont(new Font("Arial", Font.PLAIN, 11));
 		circuitFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -532,6 +543,26 @@ public class TrackModelUI {
 		checkBox_1.setBounds(138, 139, 103, 23);
 		config.add(checkBox_1);
 
+		JLabel lblTrainId = new JLabel("Train ID:");
+		lblTrainId.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblTrainId.setBounds(10, 258, 90, 14);
+		overview.add(lblTrainId);
+		
+		JLabel lblAuthority = new JLabel("Authority:");
+		lblAuthority.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblAuthority.setBounds(269, 258, 90, 14);
+		overview.add(lblAuthority);
+		
+		JLabel label_26 = new JLabel("-----");
+		label_26.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_26.setBounds(138, 258, 113, 14);
+		overview.add(label_26);
+		
+		JLabel label_35 = new JLabel("-----");
+		label_35.setFont(new Font("Arial", Font.PLAIN, 11));
+		label_35.setBounds(404, 257, 72, 14);
+		overview.add(label_35);
+		
 		JButton getData = new JButton("Get Data");
 		getData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -544,6 +575,8 @@ public class TrackModelUI {
 				textField_7.setText(String.valueOf(block.elevation) + " ft");
 				textField_5.setText(String.valueOf(block.cumualativeElevation) + " ft");
 				textField_6.setText(String.valueOf(block.speedLimit) + " mph");
+				label_26.setText(String.valueOf(block.trainID));
+				label_35.setText(String.valueOf(block.authority));
 				lblF.setText(String.valueOf(block.temp) + " \u00b0F");
 				lblHead.setText(block.arrowDirection);
 				lblA.setText(block.section);
@@ -595,8 +628,9 @@ public class TrackModelUI {
 			}
 		});
 		getData.setFont(new Font("Arial", Font.PLAIN, 11));
-		getData.setBounds(10, 261, 459, 23);
+		getData.setBounds(10, 275, 484, 32);
 		overview.add(getData);
+		
 
 		// Button to get live data for the config panel
 		JButton btnCheckLive = new JButton("Check Live");
@@ -614,6 +648,7 @@ public class TrackModelUI {
 				label_24.setText(block.arrowDirection);
 				label_23.setText(block.section);
 				label_29.setValue(block.numPass);
+
 
 				if (block.occupied.equals(""))
 					textField_2.setText("");
@@ -661,7 +696,7 @@ public class TrackModelUI {
 			}
 		});
 		btnCheckLive.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnCheckLive.setBounds(10, 251, 231, 33);
+		btnCheckLive.setBounds(10, 244, 246, 63);
 		config.add(btnCheckLive);
 
 		// SAVE BUTTON FUNCTIONALITY
@@ -675,7 +710,7 @@ public class TrackModelUI {
 			}
 		});
 		btnSave.setFont(new Font("Arial", Font.PLAIN, 11));
-		btnSave.setBounds(238, 251, 231, 33);
+		btnSave.setBounds(260, 245, 234, 62);
 		config.add(btnSave);
 
 		JPanel adminControls = new JPanel();
@@ -731,7 +766,7 @@ public class TrackModelUI {
 			}
 
 		});
-		resetDB.setBounds(260, 11, 209, 273);
+		resetDB.setBounds(285, 6, 209, 301);
 		adminControls.add(resetDB);
 
 
