@@ -139,7 +139,7 @@ public class TrainController {
 	 */
 	public void passInfo(double speed, double auth, boolean under) { 
 		
-		if (authority > 0) authority -= 1;
+		//if (authority > 0) authority -= 1;
 		
 		if (authority == 0 && auth > 0) {
 			
