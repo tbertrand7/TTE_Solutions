@@ -378,7 +378,7 @@ public class OfficeUI extends JFrame {
 		mntmLogout.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mntmLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				OfficeLoginUI.main(null);
+				new OfficeLogin();
 				dispose();
 			}
 		});

@@ -6,12 +6,15 @@ import java.sql.SQLException;
 
 public class OfficeLogin
 {
+	private OfficeLoginUI loginUI;
 	private UserDBInteraction userDB;
 
 	public OfficeLogin()
 	{
 		try {
 			userDB = new UserDBInteraction();
+			loginUI = new OfficeLoginUI(this);
+			loginUI.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

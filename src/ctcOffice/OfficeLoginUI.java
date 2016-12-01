@@ -16,31 +16,7 @@ public class OfficeLoginUI extends JFrame {
 	private JPasswordField passwordField;
 	private OfficeLogin officeLogin;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					OfficeLoginUI frame = new OfficeLoginUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public OfficeLoginUI() {
+	public OfficeLoginUI(OfficeLogin login) {
 		setResizable(false);
 		setTitle("CTC Office Login");
 		setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -58,7 +34,7 @@ public class OfficeLoginUI extends JFrame {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
 
-		officeLogin = new OfficeLogin();
+		officeLogin = login;
 
 		/* MENU */
 		
@@ -74,7 +50,8 @@ public class OfficeLoginUI extends JFrame {
 		mntmCreateNewUser.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mntmCreateNewUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewUserUI.main(null);
+				NewUserUI newUserUI = new NewUserUI(officeLogin);
+				newUserUI.setVisible(true);
 			}
 		});
 		mnSettings.add(mntmCreateNewUser);

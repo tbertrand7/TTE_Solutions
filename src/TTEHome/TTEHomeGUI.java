@@ -71,7 +71,7 @@ public class TTEHomeGUI {
 		JButton btnNewButton = new JButton("The Office");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				OfficeLoginUI.main(null);
+				new OfficeLogin();
 			}
 		});
 		btnNewButton.setBounds(10, 11, 135, 109);
