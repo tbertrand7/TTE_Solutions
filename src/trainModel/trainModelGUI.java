@@ -2,7 +2,6 @@ package trainModel;
 import java.awt.EventQueue;
 
 import java.text.DecimalFormat;
-import java.lang.*;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -18,9 +17,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
-import javax.swing.JTextArea;
 import java.awt.Canvas;
 import javax.swing.UIManager;
+
+import javax.swing.JComboBox;
 
 public class trainModelGUI {
 
@@ -32,7 +32,6 @@ public class trainModelGUI {
 	private JTextField currentSpeed;
 	private JTextField serviceBrakeStatus;
 	private JTextField emergencyBrakeStatus;
-	private JTextField trainID;
 	private JTable table;
 	private JTextField CrewDisp;
 	private JTextField speedLimitDisp;
@@ -50,7 +49,7 @@ public class trainModelGUI {
 	private JTextField txtTrackInfo;
 	private JTextField txtCurrentBlock;
 	private JTextField txtNextBlock;
-	private JTextField txtNextBlockStatus;
+	private JTextField lineColor;
 	private JTextField txtElevation;
 	private JTextField txtTrainInfo;
 	private Canvas canvas_3;
@@ -59,9 +58,15 @@ public class trainModelGUI {
 	private Canvas canvas_5;
 	final JFrame parent = new JFrame();
 
+	private Trains trainModelInstances = new Trains();
 	
-	private TrainModel train = new TrainModel(); 
+	private TrainModel train;
+	
 	DecimalFormat dc = new DecimalFormat("#0.00");
+	
+	JComboBox<Integer> trainList = new JComboBox<Integer>();
+
+	
 	
 	/**
 	 * Launch the application.
@@ -79,17 +84,97 @@ public class trainModelGUI {
 		});
 	}
 
+	
+	public void eBrake(boolean eBrake){
+		if(!eBrake){
+			emergencyBrakeStatus.setText("Disengaged");
+		}
+		else{
+			emergencyBrakeStatus.setText("Engaged");
+		}
+	}
+	
+	public void sBrake(boolean sBrake){
+		
+		if(!sBrake){
+			serviceBrakeStatus.setText("Disengaged");
+		}
+		else{
+			serviceBrakeStatus.setText("Engaged");
+		}		
+		
+	}
+	
+	public void lights(boolean lights){
+		if(!lights){
+			lightsStatus.setText("Off");
+		}
+		else{
+			lightsStatus.setText("On");
+		}
+	}
+	
+	public void rDoors(boolean rDoors){
+		if(!rDoors){
+			rightDoorStatus.setText("Closed");
+		}
+		else{
+			rightDoorStatus.setText("Open");
+		}
+	}
+	
+	public void lDoors(boolean lDoors){
+		if(!lDoors){
+			leftDoorStatus.setText("Closed");
+		}
+		else{
+			leftDoorStatus.setText("Open");
+		}
+		
+	}
+	
+	public void setTemp(int temp){
+		TempDisp.setText(train.temperature + " *F");
+	}
+	
+	
+	
+	
+	
+	public void changeTrainID(int id){
+		if(train != null){
+			//disconnect first
+		}
+		
+		TrainModel temp = trainModelInstances.connectUI(id, this);
+		
+		if (temp == null) {
+			trainList.setSelectedIndex(0);
+		} else {
+			train = temp;
+		}
+		
+	}
+	
+	
+	public void disconnect() {
+		if (train != null) {
+			train.disconnectFromUI();
+			train = null;
+		}
+		
+		trainList.setSelectedIndex(0);
+	}
+	
+	
+	
+	
+	
 	/**
-	 * Create the application.
+	 * Create the contents of the frame.
 	 */
 	public trainModelGUI() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+				
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 		frame.setBounds(100, 100, 749, 680);
@@ -127,19 +212,16 @@ public class trainModelGUI {
 		 */
 		JToggleButton leftDoorControl = new JToggleButton("Left Doors");
 		leftDoorControl.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				boolean leftDoorTrain = train.getLeftDoorStatus();
-				
+			public void actionPerformed(ActionEvent e) {				
 				//If in Test Mode
 				if(testModeButton.isSelected()){
-					
-					
-					if(leftDoorTrain){
-						train.changeLeftDoors();
+
+					if(train.leftDoorsOpen){
+						train.setLeftDoorsOpen(false);
 						leftDoorStatus.setText("Closed");
 					}
 					else{
-						train.changeLeftDoors();
+						train.setLeftDoorsOpen(true);
 						leftDoorStatus.setText("Open");
 					}	
 					
@@ -160,13 +242,12 @@ public class trainModelGUI {
 				
 				//If in Test Mode
 				if(testModeButton.isSelected()){
-					boolean rightDoorTrain = train.getRightDoorStatus();
-					if(rightDoorTrain){
-						train.changeRightDoors();
+					if(train.rightDoorsOpen){
+						train.setRightDoorsOpen(false);
 						rightDoorStatus.setText("Closed");
 					}
 					else{
-						train.changeRightDoors();
+						train.setRightDoorsOpen(true);
 						rightDoorStatus.setText("Open");
 					}	
 				}	
@@ -182,8 +263,7 @@ public class trainModelGUI {
 		 */
 		leftDoorStatus = new JTextField();
 		leftDoorStatus.setEditable(false);
-		boolean leftDoors = train.getLeftDoorStatus();
-			if(leftDoors){
+			if(train.leftDoorsOpen){
 				leftDoorStatus.setText("Open");
 			}
 			else{
@@ -201,8 +281,7 @@ public class trainModelGUI {
 		 */
 		rightDoorStatus = new JTextField();
 		rightDoorStatus.setEditable(false);
-		boolean rightDoors = train.getRightDoorStatus();
-			if(rightDoors){
+			if(train.rightDoorsOpen){
 				rightDoorStatus.setText("Open");
 			}
 			else{
@@ -224,14 +303,12 @@ public class trainModelGUI {
 				
 				//If in Test Mode
 				if(testModeButton.isSelected()){
-					
-					boolean lightsTrain = train.getLightStatus();
-					if(lightsTrain){
-						train.changeLightsStatus();
+					if(train.lightsOn){
+						train.changeLightsStatus(false);
 						lightsStatus.setText("Off");
 					}
 					else{
-						train.changeLightsStatus();
+						train.changeLightsStatus(true);
 						lightsStatus.setText("On");
 					}
 				}	
@@ -249,8 +326,7 @@ public class trainModelGUI {
 		lightsStatus = new JTextField();
 		lightsStatus.setEditable(false);
 		lightsStatus.setFont(new Font("Tahoma", Font.BOLD, 18));
-		boolean lights = train.getLightStatus();
-			if(lights){
+			if(train.lightsOn){
 				lightsStatus.setText("On");
 			}
 			else{
@@ -294,7 +370,8 @@ public class trainModelGUI {
 					double trainVelocity;
 					
 					train.setPower(trainPowerInput);				
-					trainVelocity = train.getVelocity();
+					
+					trainVelocity = train.velocity;
 					
 					String trainSpeedString1 = dc.format(trainVelocity);
 					currentSpeed.setText(trainSpeedString1+" mph");
@@ -316,8 +393,6 @@ public class trainModelGUI {
 		powerLabel.setFont(new Font("Courier New", Font.PLAIN, 24));
 		powerLabel.setBounds(285, 200, 30, 20);
 		frame.getContentPane().add(powerLabel);
-		int trainPassengers = train.getPassengerCount();
-		int trainCrew = train.getCrewCount();
 		
 		
 		/*
@@ -326,10 +401,7 @@ public class trainModelGUI {
 		currentSpeed = new JTextField();
 		currentSpeed.setEditable(false); //editable status
 		currentSpeed.setHorizontalAlignment(SwingConstants.CENTER);
-		double trainSpeed;
-		trainSpeed = train.getVelocity();
-		String trainSpeedString = dc.format(trainSpeed);
-		currentSpeed.setText(trainSpeedString+" mph");
+		currentSpeed.setText(train.velocity * 2.23694 +" mph");
 		currentSpeed.setFont(new Font("Courier New", Font.BOLD, 20));
 		currentSpeed.setBounds(536, 189, 172, 40);
 		frame.getContentPane().add(currentSpeed);
@@ -341,8 +413,7 @@ public class trainModelGUI {
 		 */
 		serviceBrakeStatus = new JTextField();
 		serviceBrakeStatus.setEditable(false);
-		boolean trainBrakes = train.getServiceBrakeStatus();
-			if(trainBrakes){
+			if(train.serviceBrakeOn){
 				serviceBrakeStatus.setText("Engaged");
 			}
 			else{
@@ -360,8 +431,7 @@ public class trainModelGUI {
 		 */
 		emergencyBrakeStatus = new JTextField();
 		emergencyBrakeStatus.setEditable(false);
-		boolean trainEmergencyBrakes = train.getEmergencyBrakeStatus();
-			if(trainEmergencyBrakes){
+			if(train.emergencyBrakeOn){
 				emergencyBrakeStatus.setText("Engaged");
 			}
 			else{
@@ -383,13 +453,12 @@ public class trainModelGUI {
 				
 				//only if in test mode
 				if(testModeButton.isSelected()){
-					boolean eBrakeStatus = train.getEmergencyBrakeStatus();
-						if(eBrakeStatus){
-							train.emergencyBrake();
+						if(train.emergencyBrakeOn){
+							train.setEmergencyBrake(false);
 							emergencyBrakeStatus.setText("Disengaged");
 						}
 						else{
-							train.emergencyBrake();
+							train.setEmergencyBrake(true);
 							emergencyBrakeStatus.setText("Engaged");
 						}
 				}
@@ -411,13 +480,12 @@ public class trainModelGUI {
 				
 				//Only if in test mode
 				if(testModeButton.isSelected()){
-					boolean trainBrakeStatus = train.getServiceBrakeStatus();
-					if(trainBrakeStatus){
-						train.serviceBrake();
+					if(train.serviceBrakeOn){
+						train.setServiceBrake(false);
 						serviceBrakeStatus.setText("Disengaged");
 					}
 					else{
-							train.serviceBrake();
+						train.setServiceBrake(true);
 						serviceBrakeStatus.setText("Engaged");
 					}
 				}
@@ -443,9 +511,8 @@ public class trainModelGUI {
 					JOptionPane.showMessageDialog(parent, "Danger!! Engine Failure!!");	
 					train.initFailureProtocol();
 
-					emergencyBrakeControl.doClick();					
-					serviceBrakeControl.doClick();	
-					lightsControl.doClick();
+					eBrake(true);
+					lights(true);
 			
 				}
 			}
@@ -470,9 +537,8 @@ public class trainModelGUI {
 					JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
 					train.initFailureProtocol();
 					
-					emergencyBrakeControl.doClick();					
-					serviceBrakeControl.doClick();	
-					lightsControl.doClick();				
+					eBrake(true);
+					lights(true);
 			
 				}
 			}
@@ -498,9 +564,9 @@ public class trainModelGUI {
 					JOptionPane.showMessageDialog(parent, "Danger!! Signal Pickup Failure!!");
 					train.initFailureProtocol();
 					
-					emergencyBrakeControl.doClick();					
-					serviceBrakeControl.doClick();	
-					lightsControl.doClick();
+					eBrake(true);
+					lights(true);
+				
 										
 				}
 			}
@@ -509,19 +575,6 @@ public class trainModelGUI {
 		signalPickupFailure.setFont(new Font("Courier New", Font.BOLD, 16));
 		signalPickupFailure.setBounds(41, 360, 260, 30);
 		frame.getContentPane().add(signalPickupFailure);
-		
-		
-		/*
-		 * Train ID Display Box
-		 */
-		trainID = new JTextField();
-		trainID.setEditable(false);
-		trainID.setHorizontalAlignment(SwingConstants.CENTER);
-		trainID.setFont(new Font("Courier New", Font.BOLD, 24));
-		trainID.setText(Integer.toString(train.trainID));
-		trainID.setBounds(593, 59, 115, 40);
-		frame.getContentPane().add(trainID);
-		trainID.setColumns(10);
 		
 		JLabel trainIDLabel = new JLabel("TRAIN ID:");
 		trainIDLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -546,18 +599,14 @@ public class trainModelGUI {
 		CrewDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		CrewDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		CrewDisp.setEditable(false);
-		int crewCount;
-		crewCount = train.getCrewCount();
-		CrewDisp.setText(Integer.toString(crewCount));
+		CrewDisp.setText(Integer.toString(train.crewCount));
 		CrewDisp.setBounds(536, 269, 172, 40);
 		frame.getContentPane().add(CrewDisp);
 		CrewDisp.setColumns(10);
 		
 		speedLimitDisp = new JTextField();
 		speedLimitDisp.setEditable(false);
-		
-			speedLimitDisp.setText("45.00"+" mph");
-		
+		speedLimitDisp.setText(Double.toString(train.speedLimit) + " mph");
 		speedLimitDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		speedLimitDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		speedLimitDisp.setBounds(536, 229, 172, 40);
@@ -568,9 +617,7 @@ public class trainModelGUI {
 		PassengerDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		PassengerDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		PassengerDisp.setEditable(false);
-		int passCount;
-		passCount = train.getPassengerCount();
-		PassengerDisp.setText(Integer.toString(passCount));
+		PassengerDisp.setText(Integer.toString(train.passengerCount));
 		PassengerDisp.setBounds(536, 309, 172, 40);
 		frame.getContentPane().add(PassengerDisp);
 		PassengerDisp.setColumns(10);
@@ -579,24 +626,22 @@ public class trainModelGUI {
 		TempDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		TempDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		TempDisp.setEditable(false);
-		int temperature;
-		temperature = train.getTemperature();
-		TempDisp.setText(Integer.toString(temperature) + " *F");
+		TempDisp.setText(Integer.toString(train.temperature) + " *F");
 		TempDisp.setBounds(536, 349, 172, 40);
 		frame.getContentPane().add(TempDisp);
 		TempDisp.setColumns(10);
 		
 		NextBlockDisp = new JTextField();
+		NextBlockDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		NextBlockDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		NextBlockDisp.setEditable(false);
 		NextBlockDisp.setBounds(575, 511, 133, 40);
 		frame.getContentPane().add(NextBlockDisp);
 		NextBlockDisp.setColumns(10);
+		NextBlockDisp.setText(Integer.toString(train.nextBlockNum));
 		
 		NextBlockStatusDisp = new JTextField();
-		
-		NextBlockStatusDisp.setText("Unoccupied");
-		
+		NextBlockStatusDisp.setText(train.trainLine);
 		NextBlockStatusDisp.setFont(new Font("Courier New", Font.BOLD, 18));
 		NextBlockStatusDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		NextBlockStatusDisp.setEditable(false);
@@ -651,18 +696,21 @@ public class trainModelGUI {
 		
 		ElevationDisp = new JTextField();
 		ElevationDisp.setHorizontalAlignment(SwingConstants.CENTER);
-		ElevationDisp.setFont(new Font("Courier New", Font.PLAIN, 20));
+		ElevationDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		ElevationDisp.setEditable(false);
 		ElevationDisp.setColumns(10);
 		ElevationDisp.setBounds(575, 591, 133, 40);
 		frame.getContentPane().add(ElevationDisp);
+		ElevationDisp.setText(Double.toString(train.elevation) + " ft");
 		
 		CurrBlockDisp = new JTextField();
+		CurrBlockDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		CurrBlockDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		CurrBlockDisp.setEditable(false);
 		CurrBlockDisp.setColumns(10);
 		CurrBlockDisp.setBounds(575, 471, 133, 40);
 		frame.getContentPane().add(CurrBlockDisp);
+		CurrBlockDisp.setText(Integer.toString(train.curBlockNum));
 		
 		txtTrackInfo = new JTextField();
 		txtTrackInfo.setEditable(false);
@@ -691,14 +739,14 @@ public class trainModelGUI {
 		txtNextBlock.setBounds(362, 511, 213, 40);
 		frame.getContentPane().add(txtNextBlock);
 		
-		txtNextBlockStatus = new JTextField();
-		txtNextBlockStatus.setEditable(false);
-		txtNextBlockStatus.setText("Next Block Status:");
-		txtNextBlockStatus.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtNextBlockStatus.setFont(new Font("Courier New", Font.BOLD, 18));
-		txtNextBlockStatus.setColumns(10);
-		txtNextBlockStatus.setBounds(362, 551, 213, 40);
-		frame.getContentPane().add(txtNextBlockStatus);
+		lineColor = new JTextField();
+		lineColor.setEditable(false);
+		lineColor.setText("Line:");
+		lineColor.setHorizontalAlignment(SwingConstants.RIGHT);
+		lineColor.setFont(new Font("Courier New", Font.BOLD, 18));
+		lineColor.setColumns(10);
+		lineColor.setBounds(362, 551, 213, 40);
+		frame.getContentPane().add(lineColor);
 		
 		txtElevation = new JTextField();
 		txtElevation.setEditable(false);
@@ -743,7 +791,7 @@ public class trainModelGUI {
 		currentTrainPower.setFont(new Font("Courier New", Font.BOLD, 24));
 		
 		double currTrainPwr;
-		currTrainPwr = 00.00;
+		currTrainPwr = train.power;
 		currentTrainPower.setText(Double.toString(currTrainPwr));
 
 		currentTrainPower.setEditable(false);
@@ -767,6 +815,24 @@ public class trainModelGUI {
 		canvas_5.setBounds(362, 110, 346, 5);
 		frame.getContentPane().add(canvas_5);
 		
+		trainList.setBounds(575, 61, 133, 40);
+		frame.getContentPane().add(trainList);
+		trainList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if (trainList.getSelectedIndex() == 0) {
+					disconnect();
+				} else {
+					int tempid = (int) trainList.getSelectedItem();
+					boolean change = false;
+					
+					if (train == null) change = true;
+					if (train != null)
+						if (train.trainID != tempid)
+							change = true;
+						
+					if (change) changeTrainID(tempid);
+				}
+			}});
 
 	}
 }

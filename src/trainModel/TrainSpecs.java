@@ -6,7 +6,7 @@ public class TrainSpecs {
 	
 	final int maxPassengers = 222; 	
 	
-			final int maxCrew = 20; //don't know where to find this, "20" is dummy data for now
+			final int maxCrew = 5; //don't know where to find this, "5" is dummy data for now
 	
 	final double personMass = 71.17; // in Kg	
 	final double emptyTrainMass = 40900.0; //in kg         //40.9T (metric)
@@ -15,9 +15,7 @@ public class TrainSpecs {
 	final double height = 3.42;
 	final double width = 2.65;
 	
-	final double maxPower = 480; //in KW
-	final double maxAcc = 0.5; //in m/s^2
-	final double maxVelocity = 70.0; // kph
+	final double maxAccRate = 0.5; //in m/s^2
 	
 	final double serviceBrakeRate = -1.2; //m/s^2
 	final double emergencyBrakeRate = -2.73;// m/s^2

@@ -20,7 +20,7 @@ public class TrackBlock {
 	public int numPass;
 	public int temp;
 	public BlockStatus status;
-	public String occupied;
+	public String occupied; //why is this here?
 	public int trainID;
 	public double speed;
 	public int authority;
