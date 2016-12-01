@@ -628,7 +628,7 @@ public class TrackModelUI {
 			}
 		});
 		getData.setFont(new Font("Arial", Font.PLAIN, 11));
-		getData.setBounds(6, 277, 463, 20);
+		getData.setBounds(10, 273, 463, 20);
 		overview.add(getData);
 		
 
