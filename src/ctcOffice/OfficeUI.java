@@ -9,7 +9,6 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
-import javax.swing.text.*;
 
 import ctcOffice.CTCOffice.Mode;
 import trackModel.*;
@@ -82,12 +81,7 @@ public class OfficeUI extends JFrame {
 		initStaticElements();
         initDynamicElements();
 		initTrackButtons();
-
-		cmbDestinations = new JComboBox();
-		cmbDestinations.setBounds(313, 375, 162, 30);
-		statusPanel.add(cmbDestinations);
-		cmbDestinations.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		cmbDestinations.setModel(new DefaultComboBoxModel(new String[] {"Block 5", "Block 10"}));
+		setHasTrain(false);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(6, 6, 506, 451);
@@ -315,6 +309,19 @@ public class OfficeUI extends JFrame {
 
 				if (infr[i].equals("RAILWAY CROSSING"))
 					lblCrossingInfo.setText("Yes");
+			}
+
+			//Train info
+			if (selectedBlock.trainID == 0) {
+				lblTrainNumInfo.setText("");
+				lblSpeedInfo.setText("");
+				lblDestInfo.setText("");
+				lblAuthInfo.setText("");
+				setHasTrain(false);
+			} else {
+				lblTrainNumInfo.setText(selectedBlock.trainID + "");
+				lblSpeedInfo.setText(selectedBlock.speed + " mph");
+				setHasTrain(true);
 			}
 		}
     }
@@ -763,19 +770,19 @@ public class OfficeUI extends JFrame {
 		lblUnderInfo.setBounds(423, 130, 80, 20);
 		statusPanel.add(lblUnderInfo);
 
-		lblSpeedInfo = new JLabel("20 mph");
+		lblSpeedInfo = new JLabel("");
 		lblSpeedInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblSpeedInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblSpeedInfo.setBounds(80, 350, 90, 20);
 		statusPanel.add(lblSpeedInfo);
 
-		lblDestInfo = new JLabel("Block 15");
+		lblDestInfo = new JLabel("");
 		lblDestInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblDestInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDestInfo.setBounds(80, 375, 90, 20);
 		statusPanel.add(lblDestInfo);
 
-		lblAuthInfo = new JLabel("14 Blocks");
+		lblAuthInfo = new JLabel("");
 		lblAuthInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblAuthInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAuthInfo.setBounds(80, 400, 90, 20);
@@ -811,7 +818,7 @@ public class OfficeUI extends JFrame {
 		});
 		statusPanel.add(btnToggleSwitch);
 
-		lblTrainNumInfo = new JLabel("1");
+		lblTrainNumInfo = new JLabel("");
 		lblTrainNumInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblTrainNumInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		lblTrainNumInfo.setBounds(80, 325, 90, 20);
@@ -841,6 +848,11 @@ public class OfficeUI extends JFrame {
 				btnSetDestinationClick();
 			}
 		});
+
+		cmbDestinations = new JComboBox();
+		cmbDestinations.setBounds(313, 375, 162, 30);
+		statusPanel.add(cmbDestinations);
+		cmbDestinations.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
 		/* Notification Panel */
 		JScrollPane scrollPane_1 = new JScrollPane();
