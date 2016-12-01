@@ -105,6 +105,7 @@ public class TrainController {
 		
 		/* @Matt: This TrainModel constructor needs to be added to the TrainModel class! */
 		//model = new TrainModel((TrainController)this, id, line);
+		//Trains.add(id, model);???
 		
 		parent = tci;
 		ui = null;
@@ -581,9 +582,15 @@ public class TrainController {
 	 */
 	public synchronized void setPower(double pow) {
 		
-		if (!sBrakeOn && !eBrakeOn)
+		if (!sBrakeOn && !eBrakeOn) { //only assign power if the brakes are not engaged
 			power = pow;
-		else
+			
+			if (rightDoorsOpen || leftDoorsOpen) { //if doors are open, close the doors!
+				rightDoorsOpen = false;
+				leftDoorsOpen = false;
+				if (connectedToUI()) ui.setDoorsDirect(false, false);
+			}
+		} else
 			power = 0;
 		
 		if (connectedToUI()) ui.setPower(power);
@@ -591,7 +598,8 @@ public class TrainController {
 	}
 	
 	/**
-	 * Waits for a specified amount of time.
+	 * Waits for a specified amount of time, then calls a specified method.
+	 * (Used for the "approach station" function.)
 	 * @author anna
 	 *
 	 */
