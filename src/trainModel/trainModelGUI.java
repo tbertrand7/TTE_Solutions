@@ -66,6 +66,22 @@ public class trainModelGUI {
 	
 	JComboBox<Integer> trainList = new JComboBox<Integer>();
 
+	public void displayVelocity(double v){
+		currentSpeed.setText(dc.format(v* 2.23694) +" mph");
+	}
+	
+	public void displayBlockInfo(int curBlock, int nextBlock, double elevation, String line,double spLimit ,int temp){
+		ElevationDisp.setText(Double.toString(elevation) + " ft");
+		CurrBlockDisp.setText(Double.toString(curBlock));
+		NextBlockDisp.setText(Double.toString(nextBlock));
+		NextBlockStatusDisp.setText(line);
+		speedLimitDisp.setText(Double.toString(spLimit) + " mph");
+		TempDisp.setText(Integer.toString(temp) + " *F");
+	}
+	
+	public void displayPower(){
+		currentTrainPower.setText(Double.toString(train.power / 1000));
+	}
 
 	
 	public void eBrake(boolean eBrake){
@@ -150,7 +166,9 @@ public class trainModelGUI {
 	}
 	
 	
-	
+	public static void main(String[] args){
+		trainModelGUI tmg = new trainModelGUI( new TrainModel());
+	}
 	
 	
 	/**
@@ -360,12 +378,7 @@ public class trainModelGUI {
 						//display velocity in velocity display box
 						String powerInputString = powerInput.getText();
 						double trainPowerInput = Double.parseDouble(powerInputString) * 1000; //convert kilowatts to watts
-						System.out.println("Velocity before: "+ train.velocity);
 						train.setPower(trainPowerInput);
-						
-						System.out.println("Power = " +train.power);
-						
-						System.out.println("Velocity after: "+ train.velocity);
 					}
 				}
 				

@@ -7,8 +7,10 @@ import trainController.*; //for train controller
 
 public class TrainModel extends TrainState implements Runnable{
 	
+	final double MU = .003;
+	
 	protected TrackModel tm = new TrackModel();
-	TrackBlock trackBlock;
+	TrackBlock trackBlock = new TrackBlock(); //= tm.getBlock("Green", 102); //First block for Demo
 	
 	int trainID; //unique train ID
 	String trainLine;
@@ -21,7 +23,11 @@ public class TrainModel extends TrainState implements Runnable{
 	double grade;
 	double power; 
 	double velocity; 
-	double mass;
+	double mass = 40900.0;
+	
+	double normalForce;
+	double friction;
+	double resistivePower;
 	
 	long time1;
 	long time2;
@@ -41,6 +47,7 @@ public class TrainModel extends TrainState implements Runnable{
 	
 	double endOfBlock;
 	double currentPos;
+	double tempPos;
 	
 	int curBlockNum;
 	int nextBlockNum;
@@ -54,10 +61,18 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		//DATA FOR SYSTEM PROTOTYPE ONLY
 		curBlockNum = 102; //starting on block 102 of green line for demo
+		currentPos=0;
+		
+		trackBlock = tm.getBlock("Green",102);
+		nextBlockNum = trackBlock.blockNumber + 1;
+		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
+		elevation = trackBlock.elevation;
+		grade = trackBlock.blockGrade;
+		speedLimit = trackBlock.speedLimit;
 		
 		trainCon = null;
 		trainID = 1;
-		trainLine = "Green";
+		trainLine = trackBlock.line;
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -67,12 +82,16 @@ public class TrainModel extends TrainState implements Runnable{
 		crewCount = 1;
 		passengerCount = 0;
 		temperature = 68;
-		elevation = 0;
+
 		
 		power = 0.0;
+		resistivePower=0.0;
 		velocity = 0.0;		
 		
-		//run();
+		trackBlock.trainID = trainID;
+		trackBlock.status=BlockStatus.OCCUPIED;
+		
+		run();
 		
 		
 	}
@@ -116,11 +135,30 @@ public class TrainModel extends TrainState implements Runnable{
 	public void setServiceBrake(boolean sBrake){
 		this.serviceBrake(sBrake);
 		ui.sBrake(sBrake);
+		pause();
+		if(sBrake){
+			setPower(0);
+		}
+		else{
+			setPower(power);
+		}
+		accRate = serviceBrakeRate;
+		resume();
 	}
 	
 	public void setEmergencyBrake(boolean eBrake){
 		this.eBrake(eBrake);
 		ui.eBrake(eBrake);
+		pause();
+		if(eBrake){
+			setPower(0);
+		}
+		else{
+			setPower(power);
+		}
+		setPower(0);
+		accRate = emergencyBrakeRate;
+		resume();
 	}
 	
 	public void setTemperature (int temp){
@@ -167,7 +205,7 @@ public class TrainModel extends TrainState implements Runnable{
 				}
 			}
 			
-			if(currentPos == endOfBlock){ 
+			if(currentPos >= endOfBlock){ 
 			//end of block reached by train	
 				
 				/*
@@ -185,13 +223,15 @@ public class TrainModel extends TrainState implements Runnable{
 				trackBlock.trainID = trainID; //set the train ID to the train ID	
 				tm.setBlock(trackBlock); //update the Track DB with new trackBlock info
 				
+				
 				/*
 				 * Update position tracking info	
 				 */
 				curBlockNum = nextBlockNum;
-				nextBlockNum = trackBlock.nextBlock; //set the next block equal to the nextBlock in trackBlock
-				currentPos = 0; //reset current position to zero (start of new block)					
-				endOfBlock = trackBlock.blockLength; //set the new end of block
+				nextBlockNum = trackBlock.blockNumber + 1; //set the next block equal to the nextBlock in trackBlock
+				currentPos = 0; //reset current position to zero (start of new block)
+				deltaTime = 0; //reset delta time
+				endOfBlock = trackBlock.blockLength * .3048; //set the new end of block
 				elevation = trackBlock.elevation;
 				grade = trackBlock.blockGrade;
 				speedLimit = trackBlock.speedLimit;
@@ -208,28 +248,61 @@ public class TrainModel extends TrainState implements Runnable{
 				/*
 				 * Pass info to train controller
 				 */
-				trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground); //pass the train controller the new block info
+				if(trainCon != null){
+					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground); //pass the train controller the new block info
+				}
 			}
 			
 			
 			
 				//calc new V every 1 second (for now)
 	
-				power = trainCon.getPower();
+				if(trainCon != null){
+					power = trainCon.getPower();
+				}
 			
 				mass = this.emptyTrainMass + (this.personMass * this.passengerCount); //calculate the mass of the train plus load of passengers
+				
+				normalForce = 9.8 * mass;
+				friction = MU * normalForce *-1;
 				
 				brakingDistance = (velocity * velocity) / (2 * this.serviceBrakeRate); //calculate braking distance
 				
 	
 				time1 = time2;
 				time2 = System.currentTimeMillis()/1000;
-				deltaTime = time2 - time1;
-							
-				velocity = Math.sqrt((2 * power * deltaTime) / mass);
-				accRate = velocity / deltaTime;
+				deltaTime = deltaTime + (time2 - time1);
 				
-				currentPos = currentPos + velocity * deltaTime + ( .5 * accRate * deltaTime * deltaTime);
+				if(power == 0 && velocity == 0 && !serviceBrakeOn && !emergencyBrakeOn){
+					accRate = 0;
+				}
+				else if(power == 0 && velocity != 0 && !serviceBrakeOn && !emergencyBrakeOn){
+					accRate = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1;
+				}
+				else if(!serviceBrakeOn && !emergencyBrakeOn){
+					accRate = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+				}
+
+				
+				velocity = velocity + (accRate*deltaTime);	
+				resistivePower = friction * velocity;
+				
+				if(velocity<0){
+					velocity =0;
+				}
+				
+				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);
+				
+				System.out.println("Velocity = "+ velocity);
+				System.out.println("Power = " +power);
+				System.out.println("ResistivePower = "+ resistivePower);
+				
+				
+				ui.displayVelocity(velocity);
+				ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
+				
+			
+				
 				
 				try {
 					Thread.sleep(1000);
@@ -270,7 +343,8 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public void setPower(double powerSetPoint){
 			pause();
-			power = powerSetPoint;			
+			power = powerSetPoint;		
+			ui.displayPower();
 			resume();
 		}
 	
