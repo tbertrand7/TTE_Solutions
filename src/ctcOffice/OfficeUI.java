@@ -219,7 +219,7 @@ public class OfficeUI extends JFrame {
 					selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
 				
 				ctcOffice.suggestSpeed(newTrainSpeed,selectedBlock.trainID);
-				logNotification("Speed of " + newTrainSpeed + " mph suggested");
+				logNotification("Speed of " + newTrainSpeed + " mph suggested for Train " + selectedBlock.trainID);
 				txtFieldSpeed.setText("");
 				lblSpeedInfo.setText(newTrainSpeed + " mph");
 			}
