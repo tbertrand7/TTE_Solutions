@@ -18,6 +18,11 @@ public class TrainController {
 	 * The train controller's personal train model
 	 */
 	protected TrainModel model;
+	
+	public TrainModel getTrainModel() {
+		return model;
+	}
+	
 	/**
 	 * The train's unique id
 	 */

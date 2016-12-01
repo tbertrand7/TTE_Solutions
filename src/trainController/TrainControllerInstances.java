@@ -2,6 +2,8 @@ package trainController;
 
 import java.util.HashMap;
 
+import trainModel.TrainModel;
+
 public class TrainControllerInstances {
 	
 	/**
@@ -25,7 +27,10 @@ public class TrainControllerInstances {
 		
 		//nextID = 1;
 		instanceID = 0;
+		
 	}
+	
+	
 	
 	/**
 	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
@@ -33,15 +38,23 @@ public class TrainControllerInstances {
 	 * @param newid - the id of the new train
 	 * @param line - "green" or "red" (case doesn't matter)
 	 */
-	public void createTrain(int newid, String line) {
+	public TrainModel createTrain(int newid, String line) {
+		
+		TrainModel tm = null;
 		
 		for (TrainControllerUI ui : uiList.values()) {
 			ui.addTrainID(newid);
 		}
 		
 		if (!trainList.containsKey(newid)) {
-			trainList.put(newid, new TrainController(this, newid, line));
+			TrainController tc = new TrainController(this, newid, line);
+			trainList.put(newid, tc);
+			tm = tc.getTrainModel();
+			
+			//trainList.put(newid, new TrainController(this, newid, line));
 		}
+		
+		return tm;
 		
 	}
 	
@@ -70,11 +83,6 @@ public class TrainControllerInstances {
 		uiList.put(instanceID, new TrainControllerUI(instanceID, this));
 		
 		++instanceID;
-		
-		//DELETE LATER
-		createTrain(1, "green");
-		createTrain(2, "green");
-		createTrain(3, "green");
 		
 	}
 	

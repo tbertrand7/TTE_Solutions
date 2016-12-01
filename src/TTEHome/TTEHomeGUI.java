@@ -99,6 +99,17 @@ public class TTEHomeGUI {
 		btnWaysideController.setBounds(10, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnWaysideController);
 		
+		TrainControllerInstances tci = new TrainControllerInstances();
+		TrainModel usethis = tci.createTrain(1, "green");
+		
+		JButton btnTrainController = new JButton("Train Controller");
+		btnTrainController.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tci.newUI();
+			}
+		});
+		btnTrainController.setBounds(289, 11, 135, 109);
+		frmTteTrainHome.getContentPane().add(btnTrainController);
 		
 		//Trains trainModelInstances = new Trains();
 		JButton btnTrainModel = new JButton("Train Model");
@@ -123,14 +134,6 @@ public class TTEHomeGUI {
 		btnTrackModel.setBounds(150, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnTrackModel);
 		
-		TrainControllerInstances tci = new TrainControllerInstances();
-		JButton btnTrainController = new JButton("Train Controller");
-		btnTrainController.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				tci.newUI();
-			}
-		});
-		btnTrainController.setBounds(289, 11, 135, 109);
-		frmTteTrainHome.getContentPane().add(btnTrainController);
+		
 	}
 }
