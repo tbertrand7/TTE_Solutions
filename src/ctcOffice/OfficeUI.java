@@ -2,7 +2,6 @@ package ctcOffice;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import javax.swing.border.*;
@@ -29,7 +28,7 @@ public class OfficeUI extends JFrame {
 	private JTextField txtFieldSpeed;
 	private JButton btnSetSpeed, btnSetDestination, btnToggleSwitch, btnCloseTrack;
 	private TrackButton[] greenLine = new TrackButton[152], redLine = new TrackButton[77];
-    private JComboBox cmbDestinations;
+    private JComboBox<TrackBlock> cmbDestinations;
     private JLabel lblSpeedInfo, lblDestInfo, lblAuthInfo, lblTrainNumInfo;
 	private JLabel lblLineInfo, lblSectionInfo, lblBlockInfo, lblStatusInfo;
 	private JLabel lblElevationInfo, lblSpeedLimitInfo, lblGradeInfo, lblLengthInfo;
@@ -227,17 +226,17 @@ public class OfficeUI extends JFrame {
 	
 	private void btnSetDestinationClick()
 	{
-		String newDest = cmbDestinations.getSelectedItem().toString();
-		//logNotification("Train " + selectedBlockBtn.train + " dispatched to " + newDest);
-		lblDestInfo.setText(newDest);
-		
-		int newAuthority;
-		if (newDest.equals("Block 5"))
-			newAuthority = 4;
+		TrackBlock selectedBlock, destBlock;
+
+		if (selectedBlockBtn.line.equals("Green"))
+			selectedBlock = ctcOffice.greenLine[selectedBlockBtn.block - 1];
 		else
-			newAuthority = 9;
-		logNotification("New authority calculated to be " + newAuthority);
-		lblAuthInfo.setText(newAuthority + " Blocks");
+			selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
+
+		destBlock = (TrackBlock)cmbDestinations.getSelectedItem();
+
+		ctcOffice.suggestDestination(destBlock, selectedBlock.trainID);
+		logNotification("Train " + selectedBlock.trainID + " dispatched to " + destBlock.toString());
 	}
 
 	/**
@@ -864,7 +863,7 @@ public class OfficeUI extends JFrame {
 			}
 		});
 
-		cmbDestinations = new JComboBox();
+		cmbDestinations = new JComboBox<>();
 		cmbDestinations.setBounds(313, 375, 162, 30);
 		statusPanel.add(cmbDestinations);
 		cmbDestinations.setFont(new Font("SansSerif", Font.PLAIN, 16));
