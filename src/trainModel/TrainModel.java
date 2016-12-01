@@ -50,6 +50,27 @@ public class TrainModel extends TrainState implements Runnable{
 	double accRate;
 	
 	
+	public TrainModel(){
+		
+		trainCon = null;
+		trainID = -1;
+		trainLine = "";
+		
+		rightDoorsOpen = false;
+		leftDoorsOpen = false;
+		lightsOn = false;		
+		serviceBrakeOn = false;
+		emergencyBrakeOn = false;
+		crewCount = 1;
+		passengerCount = 0;
+		temperature = 70;
+		elevation = 0;
+		
+		power = 0.0;
+		velocity = 0.0;			
+		
+	}
+	
 	/**
 	 * Null constructor
 	 * sets all boolean variables to false and all numerical variables to 0

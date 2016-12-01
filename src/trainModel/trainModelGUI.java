@@ -143,7 +143,7 @@ public class trainModelGUI {
 	
 	public void changeTrainID(int id){
 		if(train != null){
-			//disconnect first
+			disconnect();
 		}
 		
 		TrainModel temp = trainModelInstances.connectUI(id, this);
