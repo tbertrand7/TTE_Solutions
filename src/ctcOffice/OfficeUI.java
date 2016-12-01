@@ -2271,7 +2271,20 @@ public class OfficeUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				selectedBlockBtn = (TrackButton)e.getSource();
 				selectedBlockChanged();
-			}
+
+                //Populate destinations for combo box
+                cmbDestinations.removeAllItems();
+                TrackBlock[] line;
+                if (selectedBlockBtn.line.equals("Red"))
+                    line = ctcOffice.redLine;
+                else
+                    line = ctcOffice.greenLine;
+
+                for (int i=0; i < line.length; i++)
+                {
+                    cmbDestinations.addItem(line[i]);
+                }
+            }
 		};
 
 		//Init variables for TrackButton class for each button
