@@ -12,6 +12,7 @@ import ctcOffice.*;
 import trackModel.TrackModelUI;
 import trainController.TrainControllerInstances;
 import trainModel.TrainModel;
+import trainModel.trainModelGUI;
 import waysideController.TC_UI_main;
 import waysideController.TC_UI_startup;
 import waysideController.WaysideController;
@@ -107,8 +108,7 @@ public class TTEHomeGUI {
 				//trainModelInstances.newUI();
 				
 				TrainModel train = new TrainModel();
-
-				
+				train.start();
 			}
 		});
 		btnTrainModel.setBounds(289, 141, 135, 109);

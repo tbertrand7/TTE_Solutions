@@ -91,7 +91,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trackBlock.trainID = trainID;
 		trackBlock.status=BlockStatus.OCCUPIED;
 		
-		run();
+		//run();
 		
 		
 	}
@@ -308,6 +308,18 @@ public class TrainModel extends TrainState implements Runnable{
 				
 		}
 	}
+	
+	/**
+	 * Used to start a thread for the train model
+	 */
+	private Thread t;
+	public void start () {
+		 //System.out.println("Starting train");
+		      if (t == null) {
+		         t = new Thread (this, "train");
+		         t.start ();
+		      }
+		   }
 	
 
 	
