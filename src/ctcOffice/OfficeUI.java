@@ -384,6 +384,14 @@ public class OfficeUI extends JFrame {
 			}
 		});
 		mnFile.add(mntmLogout);
+		
+		JMenu mnDispatch = new JMenu("Dispatch");
+		mnDispatch.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		menuBar.add(mnDispatch);
+		
+		JMenuItem mntmDispatchNewTrain = new JMenuItem("Dispatch New Train");
+		mntmDispatchNewTrain.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mnDispatch.add(mntmDispatchNewTrain);
 
 		JMenu mnSchedule = new JMenu("Schedule");
 		mnSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
