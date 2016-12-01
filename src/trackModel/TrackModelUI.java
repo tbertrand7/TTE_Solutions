@@ -650,10 +650,8 @@ public class TrackModelUI {
 				label_29.setValue(block.numPass);
 
 
-				if (block.occupied.equals(""))
-					textField_2.setText("");
-				else
-					textField_2.setText(block.occupied);
+
+				textField_2.setText(String.valueOf(block.trainID));
 
 				if (block.temp < 32)
 					chckbxOn.setSelected(true);
@@ -778,8 +776,9 @@ public class TrackModelUI {
 			JTextField label_19, JTextField label_23, JTextField label_24, JSpinner label_25, JSpinner label_27,
 			JSpinner label_29, JCheckBox chckbxNewCheckBox, JTextField spinner, JCheckBox checkBox,
 			JTextField checkBox_1) {
-		TrackBlock theBlock = new TrackBlock();
-
+		TrackModel db = new TrackModel();
+		TrackBlock theBlock = db.getBlock((String) lineComboBox.getSelectedItem(), (Integer) railComboBox.getSelectedItem());
+		
 		theBlock.line = (String) lineComboBox.getSelectedItem();
 		theBlock.section = label_23.getText();
 		theBlock.blockNumber = (Integer) railComboBox.getSelectedItem();
@@ -804,8 +803,9 @@ public class TrackModelUI {
 		theBlock.numPass = (int) label_29.getValue();
 		theBlock.temp = (int) label_25.getValue();
 		theBlock.status = BlockStatus.valueOf(label_19.getText());
-		if (!textField_2.getText().equals("OPEN BLOCK"))
-			theBlock.occupied = textField_2.getText();
+		theBlock.trainID = Integer.parseInt(textField_2.getText());
+		if(theBlock.trainID >= 0)
+			theBlock.status = BlockStatus.OCCUPIED;
 
 		opps.setBlock(theBlock);
 	}
