@@ -1,47 +1,23 @@
 package ctcOffice;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import trackModel.TrackBlock;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.Toolkit;
-import java.awt.Font;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.UIManager.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class DispatchNewUI extends JFrame {
 
 	private JPanel contentPane;
+	private JComboBox<TrackBlock> cmbDest;
+	private CTCOffice ctcOffice;
+	private JButton btnDispatch;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DispatchNewUI frame = new DispatchNewUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	public DispatchNewUI(CTCOffice office) {
+		ctcOffice = office;
 
-	/**
-	 * Create the frame.
-	 */
-	public DispatchNewUI() {
 		setTitle("Dispatch New Train");
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -89,14 +65,25 @@ public class DispatchNewUI extends JFrame {
 		gbc_lblLine.gridy = 0;
 		topPanel.add(lblLine, gbc_lblLine);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		JComboBox<String> cmbLine = new JComboBox<>();
+		cmbLine.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		cmbLine.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (cmbLine.getSelectedItem().equals("Red"))
+					populateDestinations(ctcOffice.redLine);
+				else
+					populateDestinations(ctcOffice.greenLine);
+
+				btnDispatch.setEnabled(true);
+			}
+		});
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.insets = new Insets(0, 0, 5, 0);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 1;
 		gbc_comboBox.gridy = 0;
-		topPanel.add(comboBox, gbc_comboBox);
+		topPanel.add(cmbLine, gbc_comboBox);
 		
 		JLabel lblDestination = new JLabel("Destination:");
 		lblDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
@@ -106,13 +93,14 @@ public class DispatchNewUI extends JFrame {
 		gbc_lblDestination.gridy = 1;
 		topPanel.add(lblDestination, gbc_lblDestination);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		cmbDest = new JComboBox<>();
+		cmbDest.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		cmbDest.setEnabled(false);
 		GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
 		gbc_comboBox_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox_1.gridx = 1;
 		gbc_comboBox_1.gridy = 1;
-		topPanel.add(comboBox_1, gbc_comboBox_1);
+		topPanel.add(cmbDest, gbc_comboBox_1);
 		
 		JPanel bottomPanel = new JPanel();
 		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
@@ -121,9 +109,28 @@ public class DispatchNewUI extends JFrame {
 		gbc_bottomPanel.gridy = 1;
 		contentPane.add(bottomPanel, gbc_bottomPanel);
 		
-		JButton btnDispatch = new JButton("Dispatch");
+		btnDispatch = new JButton("Dispatch");
 		btnDispatch.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		btnDispatch.setEnabled(false);
+		btnDispatch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ctcOffice.suggestDestination((TrackBlock)cmbDest.getSelectedItem());
+			}
+		});
 		bottomPanel.add(btnDispatch);
+
+		cmbLine.addItem("Green");
+		cmbLine.addItem("Red");
 	}
 
+	private void populateDestinations(TrackBlock[] line)
+	{
+		cmbDest.removeAllItems();
+		for (int i=0; i < line.length; i++)
+		{
+			cmbDest.addItem(line[i]);
+		}
+		cmbDest.setEnabled(true);
+	}
 }
