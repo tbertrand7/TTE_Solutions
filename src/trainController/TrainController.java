@@ -112,6 +112,8 @@ public class TrainController {
 		//model = new TrainModel((TrainController)this, id, line);
 		//Trains.add(id, model);???
 		
+		model = new TrainModel();
+		
 		parent = tci;
 		ui = null;
 		
@@ -143,7 +145,7 @@ public class TrainController {
 			
 			sBrakeOn = false;
 			if (connectedToUI()) ui.setServiceBrake(false);
-			//TODO @Matt model.setServiceBrake(false);
+			model.setServiceBrake(false);
 			
 		}
 		
@@ -156,7 +158,7 @@ public class TrainController {
 			
 			sBrakeOn = true;
 			if (connectedToUI()) ui.setServiceBrake(true);
-			//TODO @Matt model.setServiceBrake(true);
+			model.setServiceBrake(true);
 			
 			power = 0;
 		}
@@ -185,7 +187,7 @@ public class TrainController {
 			
 			sBrakeOn = false;
 			if (connectedToUI()) ui.setServiceBrake(false);
-			//TODO @Matt model.setServiceBrake(false);
+			model.setServiceBrake(false);
 			
 		}
 		
@@ -197,7 +199,7 @@ public class TrainController {
 			
 			sBrakeOn = true;
 			if (connectedToUI()) ui.setServiceBrake(true);
-			//TODO @Matt model.setServiceBrake(true);
+			model.setServiceBrake(true);
 			
 			power = 0;
 			
@@ -232,7 +234,7 @@ public class TrainController {
 		
 		eBrakeOn = true;
 		if (connectedToUI()) ui.setEmergencyBrake(true);
-		//TODO @Matt model.setEmergencyBrake(true);
+		model.setEmergencyBrake(true);
 	}
 	
 	/**
@@ -244,7 +246,7 @@ public class TrainController {
 		
 		eBrakeOn = false;
 		if (connectedToUI()) ui.setEmergencyBrake(false);
-		//TODO @Matt model.setEmergencyBrake(false);
+		model.setEmergencyBrake(false);
 		
 	}
 	
@@ -259,7 +261,7 @@ public class TrainController {
 		
 		sBrakeOn = true;
 		if (connectedToUI()) ui.setServiceBrake(true);
-		//TODO @Matt model.setServiceBrake(true);
+		model.setServiceBrake(true);
 		
 		if (connectedToUI()) ui.announceStation(name);
 		
@@ -277,11 +279,11 @@ public class TrainController {
 		if (doors == Side.RIGHT) {
 			rightDoorsOpen = true;
 			if (connectedToUI()) ui.setDoorsDirect(false, true);
-			//TODO @Matt model.setRightDoorsOpen(true);
+			model.setRightDoorsOpen(true);
 		} else {
 			leftDoorsOpen = true;
 			if (connectedToUI()) ui.setDoorsDirect(true, false);
-			//TODO @Matt model.setLeftDoorsOpen(true);
+			model.setLeftDoorsOpen(true);
 		}
 		
 		WaitThread wt = new WaitThread(doors, 5000, 2);
@@ -298,16 +300,16 @@ public class TrainController {
 		if (doors == Side.RIGHT) {
 			rightDoorsOpen = false;
 			if (connectedToUI()) ui.setDoorsDirect(false, false);
-			//TODO @Matt model.setRightDoorsOpen(false);
+			model.setRightDoorsOpen(false);
 		} else {
 			leftDoorsOpen = false;
 			if (connectedToUI()) ui.setDoorsDirect(false, false);
-			//TODO @Matt model.setLeftDoorsOpen(false);
+			model.setLeftDoorsOpen(false);
 		}
 		
 		sBrakeOn = false;
 		if (connectedToUI()) ui.setServiceBrake(false);
-		//TODO @Matt model.setServiceBrake(false);
+		model.setServiceBrake(false);
 		
 		setStop(false);
 		
@@ -366,10 +368,10 @@ public class TrainController {
 		if (speedCurrent == 0 && power == 0) {
 			if (side == Side.RIGHT) {
 				rightDoorsOpen = open;
-				//TODO @Matt model.setRightDoorsOpen(open);
+				model.setRightDoorsOpen(open);
 			} else {
 				leftDoorsOpen = open;
-				//TODO @Matt model.setLeftDoorsOpen(open);
+				model.setLeftDoorsOpen(open);
 			}
 			
 			return true;
@@ -389,7 +391,7 @@ public class TrainController {
 			temperature = temp;
 			if (connectedToUI()) ui.setTemperatureDirect(temperature);
 			
-			//TODO @Matt model.setTemperature(temperature);
+			model.setTemperature(temperature);
 			
 			return true;
 		}
@@ -407,8 +409,8 @@ public class TrainController {
 		if (!stop) {
 			sBrakeOn = on;
 			eBrakeOn = false;
-			//TODO @Matt model.setServiceBrake(on);
-			//TODO @Matt model.setEmergencyBrake(false);
+			model.setServiceBrake(on);
+			model.setEmergencyBrake(false);
 			
 			return true;
 		} else return false;
@@ -425,8 +427,8 @@ public class TrainController {
 		if (!stop) {
 			eBrakeOn = on;
 			sBrakeOn = false;
-			//TODO @Matt model.setEmergencyBrake(on);
-			//TODO @Matt model.setServiceBrake(false);
+			model.setEmergencyBrake(on);
+			model.setServiceBrake(false);
 			
 			return true;
 		} else return false;
@@ -464,7 +466,7 @@ public class TrainController {
 		if (connectedToUI() && automatic) {
 			ui.tunnel(on);
 		}
-		//TODO @Matt model.changeLightStatus(on);
+		model.changeLightsStatus(on);
 		
 	}
 	
