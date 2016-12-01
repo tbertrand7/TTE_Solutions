@@ -66,10 +66,9 @@ public class trainModelGUI {
 	private final int id;
 	
 	DecimalFormat dc = new DecimalFormat("#0.00");
-	
-/*	/**
+	/**
 	 * Launch the application.
-	 
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -82,7 +81,7 @@ public class trainModelGUI {
 			}
 		});
 	}
-*/
+
 	/**
 	 * Create the contents of the frame.
 	 */
