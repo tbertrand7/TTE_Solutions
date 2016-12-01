@@ -44,7 +44,7 @@ public class TestPanel extends JFrame {
 	public void dispose() {
 		parent = null;
 		
-	    ts.stopRun();
+	    //ts.stopRun();
 	    
 	    super.dispose();
 	}
@@ -284,7 +284,7 @@ public class TestPanel extends JFrame {
 		btnSendSignal.setBounds(641, 186, 69, 31);
 		contentPane.add(btnSendSignal);
 		
-		ts = new TestSpeed(this);
-		ts.start();
+		//ts = new TestSpeed(this);
+		//ts.start();
 	}
 }
