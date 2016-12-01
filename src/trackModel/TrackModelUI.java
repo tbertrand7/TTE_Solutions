@@ -14,7 +14,6 @@ import trackModel.TrackBlock.BlockStatus;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.sql.SQLException;
-import java.util.Random;
 
 public class TrackModelUI {
 
