@@ -14,25 +14,28 @@ public class WaysideController
 	
 	private int[] blocks;
 	private trackModel.TrackBlock[] trackBlocks;
-	private ArrayList<Integer> brokenBlocks;
-	private Hashtable<Integer,String> controlledSwitches;
+	private Hashtable<Integer,Integer[]> controlledSwitches;
 	private Hashtable<Integer, Integer> trains;
 	
 	public WaysideController(String line, int[] b, String[] s)
 	{
 		blocks = b;
 		trackBlocks = new trackModel.TrackBlock[b.length];
-		brokenBlocks = new ArrayList<Integer>();
-		controlledSwitches = new Hashtable<Integer,String>();
+		controlledSwitches = new Hashtable<Integer,Integer[]>();
 		trains = new Hashtable<Integer, Integer>();
 		
 		for(String sw: s)
 		{
-			String[] split = sw.split("|");
-			controlledSwitches.put(Integer.parseInt(split[0]),split[1]);
+			System.out.println(sw);
+			String[] split = sw.split("-");
+			System.out.println(split[0]);
+			String[] switchInfo = split[1].split(":");
+			
+			controlledSwitches.put(Integer.parseInt(split[0]),new Integer[]{Integer.parseInt(switchInfo[0]),Integer.parseInt(switchInfo[1]),Integer.parseInt(switchInfo[2]),Integer.parseInt(switchInfo[3])});
 		}
-		
 		this.line = line;
+		
+		updateLocalTrackInfo();
 	}
 	
 	//------------------------------MAINTAINING UP-TO-DATE TRACK---------------------------------------
@@ -42,7 +45,8 @@ public class WaysideController
 		for(int i = 0; i < blocks.length; i++)
 		{
 			trackBlocks[i] = track.getBlock(line, blocks[i]);
-			updateLocalBrokenRail(blocks[i], trackBlocks[i].status);
+			System.out.println(trackBlocks[i].switchBlock.id);
+			
 			if( trackBlocks[i].switchBlock != null)
 			{
 				updateLocalSwitchInfo(Integer.parseInt( trackBlocks[i].switchBlock.getID()) , trackBlocks[i].switchBlock.getPosition() );
@@ -55,21 +59,11 @@ public class WaysideController
 		}
 	}
 	
-	public void updateLocalBrokenRail(int brokenRailBlock, trackModel.TrackBlock.BlockStatus status)
-	{
-		if(status == trackModel.TrackBlock.BlockStatus.BROKENRAIL || status == trackModel.TrackBlock.BlockStatus.CUTRAIL || status == trackModel.TrackBlock.BlockStatus.BROKENCIRCUIT)
-		{
-			brokenBlocks.add(brokenRailBlock);
-		}
-		else
-		{
-			brokenBlocks.remove(brokenRailBlock);
-		}
-	}
-	
 	public void updateLocalSwitchInfo(int switchNum, String position)
 	{
-		controlledSwitches.put(switchNum, position);
+		Integer[] current = controlledSwitches.get(switchNum);
+		current[0] = Integer.parseInt(position);
+		controlledSwitches.put(switchNum, current);
 	}
 	
 	//------------------------COMMS FROM CTC OFFICE ---------------------------
@@ -117,6 +111,9 @@ public class WaysideController
 	public ArrayList<Integer> calculateRoute(int start, int end)
 	{
 		//TO DO
+		//get the start track block
+		//search forwards
+		return null;
 	}
 	
 	//------------------------COMMS TO TRACK------------------------------------
@@ -131,7 +128,10 @@ public class WaysideController
 	
 	public String changeSwitchPosition(int switchNum, String Position)
 	{
-		//TO DO 
+		if(Position.equals("0"))
+			return "1";
+		else
+			return "0";
 	}
 	
 	//set traffic lights, cross bar and its lights
@@ -146,7 +146,7 @@ public class WaysideController
 	//---------------SAFETY--------------------
 	public void load_plc(String path)
 	{
-		/*plc.clearConditions();
+		plc.clearConditions();
 		try
 		{
 			BufferedReader br = new BufferedReader(new FileReader(path));
@@ -213,7 +213,7 @@ public class WaysideController
 		catch(Exception e)
 		{
 			System.out.println(e);
-		}*/
+		}
 	}
 	
 	public void run_plc()
@@ -226,7 +226,7 @@ public class WaysideController
 		{
 			boolean satisfied = false;
 			ArrayList<String> current = conditions.get(i);
-			System.out.println("\nTESTING THE CONDITION: "+current);
+
 			Boolean temp = false, arg1 = false, arg2 = false; 
 			String operator = "";
 			for(int j = 0; j < current.size(); j++)
@@ -235,6 +235,7 @@ public class WaysideController
 				
 				if(s.contains("!b"))
 				{
+					
 					temp = !blocks[Character.getNumericValue(s.charAt(2))];
 				}
 				else if(s.contains("!s"))
@@ -307,11 +308,11 @@ public class WaysideController
 			
 			if(satisfied)
 			{
-				System.out.println("CONDITION is SATISFIED");
+				//System.out.println("CONDITION is SATISFIED");
 				switch(results.get(i))
 				{
 					case "r":
-						lights = "red";
+						lights.put("red");
 						System.out.println("RESULT: turn lights RED");
 						break;
 					case "y":
@@ -344,7 +345,9 @@ public class WaysideController
 	
 	public static void main(String[] args)
 	{
-	
+		WaysideController wc = new WaysideController("Red",new int[]{1},new String[]{"1-0:1:2:1"});
+		Integer[] i = wc.controlledSwitches.get(1);
+		System.out.println(i[0]+" , "+i[1]+" , "+i[2]+" , "+i[3]);
 	}
 }
 
