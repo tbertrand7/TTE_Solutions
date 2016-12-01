@@ -90,6 +90,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trackBlock.trainID = trainID;
 		trackBlock.status=BlockStatus.OCCUPIED;
 
+		start();
 		
 		
 	}
@@ -361,8 +362,10 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public void setPower(double powerSetPoint){
 			pause();
-			power = powerSetPoint;		
-			ui.displayPower();
+			power = powerSetPoint;
+			if(ui != null){
+				ui.displayPower();
+			}
 			resume();
 		}
 	
