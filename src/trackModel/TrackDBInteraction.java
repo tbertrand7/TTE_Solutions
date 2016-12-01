@@ -30,6 +30,7 @@ public class TrackDBInteraction {
 		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.RailLines where line = '"+line+"' and BlockNumber = "+block);
 		tempBlock = populateTrackBlock(rs);
 		stmt.close();
+		conn.close();
 
 		return tempBlock;
 	}
@@ -49,6 +50,7 @@ public class TrackDBInteraction {
 		rs.next();
 		track = populateTrackLine(rs,track);
 		stmt.close();
+		conn.close();
 
 		return track;
 	}
@@ -58,6 +60,7 @@ public class TrackDBInteraction {
 		theBlock.nextBlock = 666;
 		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Section = '"+theBlock.section+"', BlockLength = "+theBlock.blockLength+", BlockGrade = "+theBlock.blockGrade+", SpeedLimit = "+theBlock.speedLimit+", Infrastructure = '"+theBlock.infrastructure+"', Elevation = "+theBlock.elevation+", CumalativeElevation = "+theBlock.cumualativeElevation+", SwitchBlock = '"+theBlock.switchBlock.id+"', SwitchPosition = "+theBlock.switchBlock.position+", ArrowDirection = '"+theBlock.arrowDirection+"', NumPass = "+theBlock.numPass+", temp = "+theBlock.temp+", status = '"+theBlock.status.ordinal()+"', Occupied = '"+theBlock.occupied+"', TrainID = '"+theBlock.trainID+"', Speed = '"+theBlock.speed+"', Authority = '"+theBlock.authority+"', NextBlock = '"+theBlock.nextBlock+"' WHERE Line = '"+theBlock.line+"' and BlockNumber = "+theBlock.blockNumber+";");
 		stmt.close();
+		conn.close();
 
 		return sucess;
 	}
@@ -67,6 +70,7 @@ public class TrackDBInteraction {
 		Statement stmt = conn.createStatement();
 		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = '3', Status = '3' where Line = '"+line+"' and BlockNumber = "+block+";");
 		stmt.close();
+		conn.close();
 
 		return sucess;
 	}
@@ -75,6 +79,7 @@ public class TrackDBInteraction {
 		Statement stmt = conn.createStatement();
 		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = '4', Status = '4' where Line = '"+line+"' and BlockNumber = "+block+";");
 		stmt.close();
+		conn.close();
 
 		return sucess;
 	}
@@ -83,6 +88,7 @@ public class TrackDBInteraction {
 		Statement stmt = conn.createStatement();
 		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = '5', Status = '5' where Line = '"+line+"' and BlockNumber = "+block+";");
 		stmt.close();
+		conn.close();
 
 		return sucess;
 	}
@@ -96,6 +102,7 @@ public class TrackDBInteraction {
 			stmt.execute(str);
 		}
 		in.close();
+		conn.close();
 
 		stmt.close();
 
