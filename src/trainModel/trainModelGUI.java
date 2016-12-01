@@ -359,7 +359,7 @@ public class trainModelGUI {
 					if(train != null){
 						//display velocity in velocity display box
 						String powerInputString = powerInput.getText();
-						double trainPowerInput = Double.parseDouble(powerInputString);
+						double trainPowerInput = Double.parseDouble(powerInputString) * 1000; //convert kilowatts to watts
 						System.out.println("Velocity before: "+ train.velocity);
 						train.setPower(trainPowerInput);
 						

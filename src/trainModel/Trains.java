@@ -29,7 +29,7 @@ public class Trains {
 	 */
 	public void newUI() {
 		
-		uiList.add(new trainModelGUI(this));
+	//	uiList.add(new trainModelGUI(this));
 	}
 	
 	/**

@@ -72,7 +72,7 @@ public class TrainModel extends TrainState implements Runnable{
 		power = 0.0;
 		velocity = 0.0;		
 		
-		run();
+		//run();
 		
 		
 	}
@@ -152,20 +152,8 @@ public class TrainModel extends TrainState implements Runnable{
 	}
 	
 	
-	public void run(){
-		
-		System.out.println("Beginning of RUN method");
-		
-		resume(); //set stop to false to allow while loop to proceed
-		
-		/*
-		 * Get the next block
-		 */
-		trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
-		trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
-		trackBlock.trainID = trainID; //set the train ID to the train ID	
-		tm.setBlock(trackBlock); //update the Track DB with new trackBlock info		
-		
+	public void run(){		
+		resume(); //set stop to false to allow while loop to proceed	
 		
 		time2 = System.currentTimeMillis() / 1000; //initialize time2
 		
@@ -237,9 +225,7 @@ public class TrainModel extends TrainState implements Runnable{
 				time1 = time2;
 				time2 = System.currentTimeMillis()/1000;
 				deltaTime = time2 - time1;
-				
-				System.out.println("In TrainModel: deltaTime = " +deltaTime);
-				
+							
 				velocity = Math.sqrt((2 * power * deltaTime) / mass);
 				accRate = velocity / deltaTime;
 				
