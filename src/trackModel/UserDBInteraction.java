@@ -26,7 +26,7 @@ public class UserDBInteraction {
 		Statement stmt = conn.createStatement();
 		boolean success = stmt.execute("insert into TTEDB.Users (UserName, UserPW) values ('"+username+"', '"+password+"')");
 		stmt.close();
-
+		conn.close();
 		return success;
 	}
 
@@ -38,7 +38,7 @@ public class UserDBInteraction {
 		rs.next();
 		int cnt = rs.getInt(1);
 		stmt.close();
-
+		conn.close();
 		return cnt != 0;
 	}
 
@@ -50,7 +50,7 @@ public class UserDBInteraction {
 		rs.next();
 		int cnt = rs.getInt(1);
 		stmt.close();
-
+		conn.close();
 		return cnt == 0;
 	}
 }
