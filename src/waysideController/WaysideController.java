@@ -7,26 +7,32 @@ import trackModel.*;
 public class WaysideController 
 {
 	//GLOBAL VARIABLES:
-	private PLC plc = new PLC();
+	//private PLC plc = new PLC();
 	private String line;
 	
 	private int[] blocks;
+	private String[] direction;
 	private trackModel.TrackBlock[] trackBlocks;
 	private Hashtable<Integer,Integer[]> controlledSwitches;
 	private Hashtable<Integer, Integer> trains;
 	
-	public WaysideController(String line, int[] b, String[] s)
+	public WaysideController(String line, String[] b, String[] s)
 	{
-		blocks = b;
+		blocks = new int[b.length];
 		trackBlocks = new trackModel.TrackBlock[b.length];
 		controlledSwitches = new Hashtable<Integer,Integer[]>();
 		trains = new Hashtable<Integer, Integer>();
 		
+		for(int i = 0; i < b.length; i++)
+		{
+			String[] split = b[i].split("-");
+			blocks[i] = Integer.parseInt(split[0]);
+			direction[i] = split[1];
+		}
+		
 		for(String sw: s)
 		{
-			System.out.println(sw);
 			String[] split = sw.split("-");
-			System.out.println(split[0]);
 			String[] switchInfo = split[1].split(":");
 			
 			controlledSwitches.put(Integer.parseInt(split[0]),new Integer[]{Integer.parseInt(switchInfo[0]),Integer.parseInt(switchInfo[1]),Integer.parseInt(switchInfo[2]),Integer.parseInt(switchInfo[3])});
