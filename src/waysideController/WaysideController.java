@@ -11,7 +11,7 @@ public class WaysideController
 	private String line;
 	
 	private int[] blocks;
-	private String[] direction;
+	private Hashtable<Integer,Integer> direction;
 	private trackModel.TrackBlock[] trackBlocks;
 	private Hashtable<Integer,Integer[]> controlledSwitches;
 	private Hashtable<Integer, Integer> trains;
@@ -21,21 +21,25 @@ public class WaysideController
 		blocks = new int[b.length];
 		trackBlocks = new trackModel.TrackBlock[b.length];
 		controlledSwitches = new Hashtable<Integer,Integer[]>();
+		direction = new Hashtable<Integer,Integer>();
 		trains = new Hashtable<Integer, Integer>();
 		
 		for(int i = 0; i < b.length; i++)
 		{
 			String[] split = b[i].split("-");
 			blocks[i] = Integer.parseInt(split[0]);
-			direction[i] = split[1];
+			direction.put(blocks[i], Integer.parseInt(split[1]));
 		}
 		
+		if(s != null)
+		{
 		for(String sw: s)
 		{
 			String[] split = sw.split("-");
 			String[] switchInfo = split[1].split(":");
 			
 			controlledSwitches.put(Integer.parseInt(split[0]),new Integer[]{Integer.parseInt(switchInfo[0]),Integer.parseInt(switchInfo[1]),Integer.parseInt(switchInfo[2]),Integer.parseInt(switchInfo[3])});
+		}
 		}
 		this.line = line;
 		
@@ -51,7 +55,7 @@ public class WaysideController
 		{
 			trackBlocks[i] = track.getBlock(line, blocks[i]);
 			
-			if( trackBlocks[i].switchBlock != null)
+			if(!trackBlocks[i].switchBlock.id.equals(""))
 			{
 				String id = trackBlocks[i].switchBlock.getID().substring(trackBlocks[i].switchBlock.getID().length()-1);
 				String position = trackBlocks[i].switchBlock.getPosition();
@@ -60,7 +64,7 @@ public class WaysideController
 			
 			if(trackBlocks[i].status == trackModel.TrackBlock.BlockStatus.OCCUPIED)
 			{
-				trains.put(Integer.parseInt(trackBlocks[i].occupied), trackBlocks[i].blockNumber);
+				trains.put(trackBlocks[i].trainID, trackBlocks[i].blockNumber);
 			}
 		}
 	}
@@ -98,16 +102,22 @@ public class WaysideController
 		int currentBlock = trains.get(train);
 		ArrayList<Integer> path = calculateRoute(currentBlock, destination);
 		
-		for(int i = 0; i < path.size(); i++)
+		for(Integer i: path)
 		{
-			if(i == 0)
-				trackBlocks[i].authority = path.size() - 1; //end at start of end block, therefore not in authority
-			else if(i == 1)
-				trackBlocks[i].authority = path.size() - 2; //just in case train was leaving block as authority was issued
+			if(blocks[i] == currentBlock)
+			{
+				trackBlocks[i].authority = path.size() - 2; //end at start of end block, therefore not in authority
+			}
+			else if(blocks[i] == currentBlock+1)
+			{
+				trackBlocks[i].authority = path.size() - 3; //just in case train was leaving block as authority was issued
+			}
 			else
 				trackBlocks[i].authority = (-1);
 			
-			trackBlocks[i].nextBlock = path.get(i+1);
+			if(blocks[i] != destination && i+1 < path.size())
+				trackBlocks[i].nextBlock = path.get(i+1);
+			//System.out.println(trackBlocks[i].authority);
 			track.setBlock(trackBlocks[i]);
 		}
 	}
@@ -116,9 +126,21 @@ public class WaysideController
 	{
 		//TO DO
 		//get the start track block
-		//search forwards
+		ArrayList<Integer> j = new ArrayList<Integer>();
 		
-		return null;
+		for(int i = 0; i < blocks.length; i++)
+		{
+			if(blocks[i] >= start)
+			{
+				if(blocks[i] == end)
+				{
+					j.add(i);
+					break;
+				}
+				j.add(i);
+			}
+		}
+		return j;
 	}
 	
 	//------------------------COMMS TO TRACK------------------------------------
@@ -148,8 +170,10 @@ public class WaysideController
 	public static void main(String[] args)
 	{
 		//TEST CODE
-		/*WaysideController wc = new WaysideController("Red",new int[]{1},new String[]{"6-0:1:2:1"});
-		Integer[] i = wc.controlledSwitches.get(6);
-		System.out.println(i[0]+" , "+i[1]+" , "+i[2]+" , "+i[3]);*/
+		String[] demoBlocks = new String[]{"102-0","103-0","104-0","105-0","106-0","107-0","108-0","108-0","109-0","110-0","111-0","112-0","113-0",
+				"114-0","115-0","116-0","117-0","118-0","119-0","120-0","121-0","122-0","123-0","124-0","125-0",
+				"126-0","127-0","128-0","129-0","130-0","131-0","132-0","133-0","134-0","135-0","136-0","137-0",
+				"138-0","139-0","140-0","141-0","142-0","143-0","144-0","145-0","146-0","147-0","148-0","149-0"};
+		WaysideController wc = new WaysideController("Green",demoBlocks,null);
 	}
 }
