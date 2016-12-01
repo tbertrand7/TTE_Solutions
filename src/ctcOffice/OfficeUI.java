@@ -884,6 +884,8 @@ public class OfficeUI extends JFrame {
 		notificationArea.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		scrollPane_1.setViewportView(notificationArea);
 		notificationArea.setEditable(false);
+		notificationArea.setLineWrap(true);
+		notificationArea.setWrapStyleWord(true);
 	}
 
 	/**
