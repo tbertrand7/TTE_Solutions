@@ -391,6 +391,13 @@ public class OfficeUI extends JFrame {
 		
 		JMenuItem mntmDispatchNewTrain = new JMenuItem("Dispatch New Train");
 		mntmDispatchNewTrain.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mntmDispatchNewTrain.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DispatchNewUI dispNew = new DispatchNewUI(ctcOffice);
+				dispNew.setVisible(true);
+			}
+		});
 		mnDispatch.add(mntmDispatchNewTrain);
 
 		JMenu mnSchedule = new JMenu("Schedule");
