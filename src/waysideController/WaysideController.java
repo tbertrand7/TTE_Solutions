@@ -14,7 +14,7 @@ public class WaysideController
 	private Hashtable<Integer,Integer> direction;
 	private trackModel.TrackBlock[] trackBlocks;
 	private Hashtable<Integer,Integer[]> controlledSwitches;
-	private Hashtable<Integer, Integer> trains;
+	public Hashtable<Integer, Integer> trains;
 	
 	public WaysideController(String line, String[] b, String[] s)
 	{
@@ -79,12 +79,24 @@ public class WaysideController
 	//------------------------COMMS FROM CTC OFFICE ---------------------------
 	public void suggestSpeed(double speed, int train)
 	{
-		int block = trains.get(train);
-		trackModel.TrackModel track = new trackModel.TrackModel();
+		updateLocalTrackInfo();
 		
-		if(checkSpeed(speed,trackBlocks[block].speedLimit))
+		int block = trains.get(train);
+		int tblock=0;
+		for(int i = 0; i < blocks.length;i++)
 		{
-			track.setBlock(trackBlocks[block]);
+			if(blocks[i] == block)
+				tblock = i;
+		}
+		
+		trackModel.TrackModel track = new trackModel.TrackModel();
+		//System.out.println(speed);
+		//System.out.println(trackBlocks[tblock].speedLimit);
+		if(checkSpeed(speed,trackBlocks[tblock].speedLimit))
+		{
+			//System.out.println("here");
+			trackBlocks[tblock].speed = speed;
+			track.setBlock(trackBlocks[tblock]);
 		}
 	}
 	
@@ -99,10 +111,13 @@ public class WaysideController
 	public void suggestAuthority(int destination, int train)
 	{
 		trackModel.TrackModel track = new trackModel.TrackModel();
+		
+		updateLocalTrackInfo();
+		
 		int currentBlock = trains.get(train);
 		ArrayList<Integer> path = calculateRoute(currentBlock, destination);
 		
-		for(Integer i: path)
+		for(int i = 0; i < path.size(); i++)
 		{
 			if(blocks[i] == currentBlock)
 			{
@@ -115,8 +130,11 @@ public class WaysideController
 			else
 				trackBlocks[i].authority = (-1);
 			
-			if(blocks[i] != destination && i+1 < path.size())
-				trackBlocks[i].nextBlock = path.get(i+1);
+			if(i+1 < path.size())
+			{
+				//System.out.println(blocks[path.get(i+1)]);
+				trackBlocks[i].nextBlock = blocks[path.get(i+1)];
+			}
 			//System.out.println(trackBlocks[i].authority);
 			track.setBlock(trackBlocks[i]);
 		}

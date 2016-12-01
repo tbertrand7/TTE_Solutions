@@ -205,14 +205,21 @@ public class OfficeUI extends JFrame {
 	{
 		try 
 		{
-			int newTrainSpeed = Integer.parseInt(txtFieldSpeed.getText());
+			double newTrainSpeed = Double.parseDouble(txtFieldSpeed.getText());
 			
 			if (newTrainSpeed < 1 || newTrainSpeed > 1000)
 				throw new NumberFormatException();
 			else
 			{
-				ctcOffice.suggestSpeed(newTrainSpeed);
-				logNotification("Speed of " + newTrainSpeed + " mph suggested");
+				TrackBlock selectedBlock;
+
+				if (selectedBlockBtn.line.equals("Green"))
+					selectedBlock = ctcOffice.greenLine[selectedBlockBtn.block - 1];
+				else
+					selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
+				
+				ctcOffice.suggestSpeed(newTrainSpeed,selectedBlock.trainID);
+				logNotification("Speed of " + newTrainSpeed + " mph suggested for Train " + selectedBlock.trainID);
 				txtFieldSpeed.setText("");
 				lblSpeedInfo.setText(newTrainSpeed + " mph");
 			}
@@ -311,7 +318,7 @@ public class OfficeUI extends JFrame {
 			}
 
 			//Train info
-			if (selectedBlock.trainID == 0) {
+			if (selectedBlock.trainID <= 0) {
 				lblTrainNumInfo.setText("");
 				lblSpeedInfo.setText("");
 				lblDestInfo.setText("");

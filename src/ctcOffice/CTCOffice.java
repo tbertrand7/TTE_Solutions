@@ -46,14 +46,18 @@ public class CTCOffice
 		simulationSpeed = newSpeed;
 	}
 
-	public void suggestSpeed(int newTrainSpeed)
+	public void suggestSpeed(double newTrainSpeed, int train)
 	{
 		//TODO: suggest speed for a train to wayside controller
+		TTEHome.TTEHomeGUI.wc.suggestSpeed(newTrainSpeed, train);
 	}
 
 	public void suggestDestination(TrackBlock dest, int train)
     {
         //TODO: suggest new destination for a train to wayside controller
+		//System.out.println("HERE");
+
+		TTEHome.TTEHomeGUI.wc.suggestAuthority(dest.blockNumber, train);
     }
 
 	/** Returns the current simulation speed */
