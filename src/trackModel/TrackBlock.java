@@ -7,7 +7,7 @@ public class TrackBlock {
 	}
 	public int pk;
 	public String line;
-	public String section;
+	public String section;    
 	public int blockNumber;
 	public double blockLength;
 	public double blockGrade;
@@ -20,7 +20,7 @@ public class TrackBlock {
 	public int numPass;
 	public int temp;
 	public BlockStatus status;
-	public String occupied;
+	public String occupied; //why is this here?
 	public int trainID;
 	public double speed;
 	public int authority;

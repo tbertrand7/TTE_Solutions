@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
@@ -43,14 +44,18 @@ public class EditAnnouncementsUI extends JFrame {
 		txtArea.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
 		txtArea.setWrapStyleWord(true);
 		txtArea.setLineWrap(true);
-		txtArea.setBounds(10, 11, 649, 356);
+		//txtArea.setBounds(10, 11, 649, 356);
 		StringBuilder sb = new StringBuilder();
 		for (String s : list) {
 			sb.append(s);
 			sb.append("\n");
 		}
 		txtArea.setText(sb.toString());
-		contentPane.add(txtArea);
+		
+		JScrollPane jsp = new JScrollPane(txtArea);
+		jsp.setBounds(10, 11, 649, 356);
+		
+		contentPane.add(jsp);
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {

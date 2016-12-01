@@ -127,7 +127,7 @@ public class TrainController {
 	 * @param auth - authority passed from the wayside controller
 	 * @param under - true if underground, false otherwise
 	 */
-	public void passInfo(double speed, double auth, boolean under) {
+	public void passInfo(double speed, double auth, boolean under) { 
 		
 		if (authority > 0) authority -= 1;
 		
