@@ -136,7 +136,6 @@ public class TrainModel extends TrainState implements Runnable{
 		this.serviceBrake(sBrake);
 		ui.sBrake(sBrake);
 		pause();
-		
 		if(sBrake){
 			setPower(0);
 		}
