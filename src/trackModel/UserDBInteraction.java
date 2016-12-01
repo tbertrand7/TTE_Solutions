@@ -23,6 +23,7 @@ public class UserDBInteraction {
 	//addUser will take two strings and insert them into the user database
 	//If the user is added it will return true otherwise it will return false
 	public boolean addUser(String username, String password) throws SQLException{
+		conn = DriverManager.getConnection("jdbc:mysql://107.180.27.178:3306/TTEDB", "TTE", "ttesolutions");
 		Statement stmt = conn.createStatement();
 		boolean success = stmt.execute("insert into TTEDB.Users (UserName, UserPW) values ('"+username+"', '"+password+"')");
 		stmt.close();
@@ -33,6 +34,7 @@ public class UserDBInteraction {
 	//verifyUser takes a user name and PW combination and checks to see that it exists in the database
 	//If there is a match the method will return true, else it will return false
 	public boolean verifyUser(String username, String password) throws SQLException{
+		conn = DriverManager.getConnection("jdbc:mysql://107.180.27.178:3306/TTEDB", "TTE", "ttesolutions");
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM TTEDB.Users where UserName = '"+username+"' and UserPW = '"+password+"'");
 		rs.next();
@@ -45,6 +47,7 @@ public class UserDBInteraction {
 	//checkDuplicate takes a user name and checks to see if it exists in the database
 	//If there is a match the method will return true, else it will return false
 	public boolean checkDupUsername(String username) throws SQLException{
+		conn = DriverManager.getConnection("jdbc:mysql://107.180.27.178:3306/TTEDB", "TTE", "ttesolutions");
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM TTEDB.Users where UserName = '"+username+"'");
 		rs.next();

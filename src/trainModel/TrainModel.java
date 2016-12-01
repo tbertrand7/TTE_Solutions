@@ -6,16 +6,14 @@ import trainController.*; //for train controller
 
 
 public class TrainModel extends TrainState implements Runnable{
-
-	Thread t;
 	
-	TrackModel tm = new TrackModel();
+	protected TrackModel tm = new TrackModel();
 	TrackBlock trackBlock;
 	
 	int trainID; //unique train ID
 	String trainLine;
-	protected TrainController trainCon;
 	
+	protected TrainController trainCon;
 	protected trainModelGUI ui;
 	
 	double speedLimit;
@@ -49,9 +47,38 @@ public class TrainModel extends TrainState implements Runnable{
 	
 	double accRate;
 	
+	//TODO: @Matt Fix and add gui as parameter
+	public TrainModel(){
+		
+		ui= new trainModelGUI(this);
+		
+		//DATA FOR SYSTEM PROTOTYPE ONLY
+		curBlockNum = 102; //starting on block 102 of green line for demo
+		
+		trainCon = null;
+		trainID = 1;
+		trainLine = "Green";
+		
+		rightDoorsOpen = false;
+		leftDoorsOpen = false;
+		lightsOn = false;		
+		serviceBrakeOn = false;
+		emergencyBrakeOn = false;
+		crewCount = 1;
+		passengerCount = 0;
+		temperature = 68;
+		elevation = 0;
+		
+		power = 0.0;
+		velocity = 0.0;		
+		
+		//run();
+		
+		
+	}
 	
 	/**
-	 * Null constructor
+	 * constructor
 	 * sets all boolean variables to false and all numerical variables to 0
 	 */
 	public TrainModel(TrainController tc, int id, String line) {	
@@ -83,10 +110,7 @@ public class TrainModel extends TrainState implements Runnable{
 		elevation = 0;
 		
 		power = 0.0;
-		velocity = 0.0;	
-		
-		t.start();
-				
+		velocity = 0.0;					
 	}
 	
 	public void setServiceBrake(boolean sBrake){
@@ -128,9 +152,9 @@ public class TrainModel extends TrainState implements Runnable{
 	}
 	
 	
-	public void run(){
+	public void run(){		
+		resume(); //set stop to false to allow while loop to proceed	
 		
-		this.resume(); //set stop to false to allow while loop to proceed
 		time2 = System.currentTimeMillis() / 1000; //initialize time2
 		
 		while(proceed){
@@ -201,8 +225,7 @@ public class TrainModel extends TrainState implements Runnable{
 				time1 = time2;
 				time2 = System.currentTimeMillis()/1000;
 				deltaTime = time2 - time1;
-				
-				
+							
 				velocity = Math.sqrt((2 * power * deltaTime) / mass);
 				accRate = velocity / deltaTime;
 				
@@ -212,7 +235,8 @@ public class TrainModel extends TrainState implements Runnable{
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}		
+				}	
+				
 				
 		}
 	}
@@ -245,9 +269,9 @@ public class TrainModel extends TrainState implements Runnable{
 	 * @param powerSetPoint - power input in KiloWatts
 	 */
 	public void setPower(double powerSetPoint){
-			this.pause();
+			pause();
 			power = powerSetPoint;			
-			this.resume();
+			resume();
 		}
 	
 	

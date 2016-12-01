@@ -21,31 +21,7 @@ public class NewUserUI extends JFrame {
 	private JPasswordField passwordFieldConfirm;
 	private JLabel lblErrorMsg;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					NewUserUI frame = new NewUserUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public NewUserUI() {
+	public NewUserUI(OfficeLogin login) {
 		setTitle("Create New User");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NewUserUI.class.getResource("/shared/TTE.png")));
 		setResizable(false);
@@ -62,7 +38,7 @@ public class NewUserUI extends JFrame {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
 
-		officeLogin = new OfficeLogin();
+		officeLogin = login;
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
