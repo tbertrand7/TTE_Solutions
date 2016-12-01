@@ -48,4 +48,23 @@ public class TrackBlock {
 		authority = 0;
 		nextBlock = 0;
 	}
+
+	public String toString()
+	{
+		String rtnStr = "Block " + blockNumber;
+
+		if (!infrastructure.equals("")) {
+			String[] infr = infrastructure.split(";");
+
+			for (int i = 0; i < infr.length; i++) {
+				infr[i] = infr[i].trim();
+
+				if (infr[i].equals("STATION")) {
+					if (i + 1 < infr.length)
+						rtnStr = (infr[i + 1].trim());
+				}
+			}
+		}
+		return rtnStr;
+	}
 }
