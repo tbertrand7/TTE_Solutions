@@ -3,11 +3,11 @@ package trackModel;
 public class TrackBlock {
 	
 	public enum BlockStatus {
-		UNOCCUPIED, OCCUPIED, CLOSED, BROKENRAIL, CUTRAIL, BROKENCIRCUIT, ISSUE
+		UNOCCUPIED, OCCUPIED, CLOSED, BROKENRAIL, CUTRAIL, BROKENCIRCUIT
 	}
 	public int pk;
 	public String line;
-	public String section;
+	public String section;    
 	public int blockNumber;
 	public double blockLength;
 	public double blockGrade;
