@@ -118,8 +118,8 @@ public class TTEHomeGUI {
 				//TODO: @Matt revisit after fixing Trains class
 				//trainModelInstances.newUI();
 				
-				TrainModel train = new TrainModel();
-				train.start();
+				trainModelGUI tmg = new trainModelGUI(usethis);
+				usethis.start();
 			}
 		});
 		btnTrainModel.setBounds(289, 141, 135, 109);
