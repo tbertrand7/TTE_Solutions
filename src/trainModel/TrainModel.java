@@ -16,7 +16,7 @@ public class TrainModel extends TrainState implements Runnable{
 	String trainLine;
 	
 	protected TrainController trainCon;
-	protected trainModelGUI ui;
+	public trainModelGUI ui;
 	
 	double speedLimit;
 	double elevation;
