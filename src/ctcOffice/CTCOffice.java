@@ -14,6 +14,7 @@ public class CTCOffice
 	
 	private int simulationSpeed;
 	private Mode mode = Mode.MANUAL;
+	private ScheduleItem[] schedule;
 
 	public TrackBlock[] greenLine, redLine;
 	
@@ -50,7 +51,7 @@ public class CTCOffice
 		//TODO: suggest speed for a train to wayside controller
 	}
 
-	public void suggestDestination()
+	public void suggestDestination(TrackBlock dest, int train)
     {
         //TODO: suggest new destination for a train to wayside controller
     }

@@ -115,7 +115,7 @@ public class DispatchNewUI extends JFrame {
 		btnDispatch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ctcOffice.suggestDestination((TrackBlock)cmbDest.getSelectedItem());
+				ctcOffice.suggestDestination((TrackBlock)cmbDest.getSelectedItem(), 0);
 			}
 		});
 		bottomPanel.add(btnDispatch);
