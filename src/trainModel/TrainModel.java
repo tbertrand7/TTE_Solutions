@@ -299,7 +299,7 @@ public class TrainModel extends TrainState implements Runnable{
 				resistivePower = friction * velocity;
 				
 				if(trainCon != null){
-					trainCon.setSpeedCurrent(velocity);
+					trainCon.setSpeedCurrent(velocity / 1609.34 * 3600);
 				}
 				
 				if(velocity<0){

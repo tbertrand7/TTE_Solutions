@@ -406,7 +406,7 @@ public class trainModelGUI {
 		currentSpeed.setEditable(false); //editable status
 		currentSpeed.setHorizontalAlignment(SwingConstants.CENTER);
 		if(train != null){
-			currentSpeed.setText(train.velocity * 2.23694 +" mph");
+			currentSpeed.setText(train.velocity / 1609.34 *3600 +" mph");
 		}
 		currentSpeed.setFont(new Font("Courier New", Font.BOLD, 20));
 		currentSpeed.setBounds(536, 189, 172, 40);
