@@ -57,7 +57,6 @@ public class TrainModel extends TrainState implements Runnable{
 	//TODO: @Matt Fix and add gui as parameter
 	public TrainModel(){
 		
-		ui= new trainModelGUI(this);
 		
 		//DATA FOR SYSTEM PROTOTYPE ONLY
 		curBlockNum = 102; //starting on block 102 of green line for demo
@@ -90,8 +89,7 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		trackBlock.trainID = trainID;
 		trackBlock.status=BlockStatus.OCCUPIED;
-		
-		//run();
+
 		
 		
 	}
@@ -134,7 +132,9 @@ public class TrainModel extends TrainState implements Runnable{
 	
 	public void setServiceBrake(boolean sBrake){
 		this.serviceBrake(sBrake);
-		ui.sBrake(sBrake);
+		if(ui != null){
+			ui.sBrake(sBrake);
+		}
 		pause();
 		if(sBrake){
 			setPower(0);
@@ -148,7 +148,9 @@ public class TrainModel extends TrainState implements Runnable{
 	
 	public void setEmergencyBrake(boolean eBrake){
 		this.eBrake(eBrake);
-		ui.eBrake(eBrake);
+		if(ui != null){
+			ui.eBrake(eBrake);
+		}
 		pause();
 		if(eBrake){
 			setPower(0);
@@ -163,22 +165,30 @@ public class TrainModel extends TrainState implements Runnable{
 	
 	public void setTemperature (int temp){
 		this.setTemp(temp);
-		ui.setTemp(temp);
+		if(ui != null){
+			ui.setTemp(temp);
+		}
 	}
 	
 	public void setLeftDoorsOpen(boolean lDoors){
 		this.setLeftDoors(lDoors);
-		ui.lDoors(lDoors);
+		if(ui != null){
+			ui.lDoors(lDoors);
+		}
 	}
 	
 	public void setRightDoorsOpen(boolean rDoors){
 		this.setRightDoors(rDoors);
-		ui.rDoors(rDoors);
+		if(ui != null){
+			ui.rDoors(rDoors);
+		}
 	}
 	
 	public void changeLightsStatus(boolean lights){
 		this.changeLights(lights);
-		ui.lights(lights);
+		if(ui != null){
+			ui.lights(lights);
+		}
 	}
 	
 	public void pause(){
@@ -293,9 +303,10 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);				
 				
-				ui.displayVelocity(velocity);
-				ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
-				
+				if(ui != null){
+					ui.displayVelocity(velocity);
+					ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
+				}
 			
 				
 				
