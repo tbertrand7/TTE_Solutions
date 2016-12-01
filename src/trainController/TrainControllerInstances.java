@@ -2,7 +2,9 @@ package trainController;
 
 import java.util.HashMap;
 
+import trainController.TrainController.Side;
 import trainModel.TrainModel;
+import trainModel.trainModelGUI;
 
 public class TrainControllerInstances {
 	
@@ -28,9 +30,14 @@ public class TrainControllerInstances {
 		//nextID = 1;
 		instanceID = 0;
 		
+		//UpdateThread ut = new UpdateThread();
+		//ut.start();
+		
 	}
 	
-	
+	public void connectModelToUI(int newid, trainModelGUI gui) {
+		trainList.get(newid).model.ui = gui;
+	}
 	
 	/**
 	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
@@ -42,16 +49,16 @@ public class TrainControllerInstances {
 		
 		TrainModel tm = null;
 		
-		for (TrainControllerUI ui : uiList.values()) {
-			ui.addTrainID(newid);
-		}
-		
 		if (!trainList.containsKey(newid)) {
 			TrainController tc = new TrainController(this, newid, line);
 			trainList.put(newid, tc);
 			tm = tc.getTrainModel();
 			
 			//trainList.put(newid, new TrainController(this, newid, line));
+			
+			for (TrainControllerUI ui : uiList.values()) {
+				ui.addTrainID(newid);
+			}
 		}
 		
 		return tm;
@@ -80,9 +87,14 @@ public class TrainControllerInstances {
 	 */
 	public void newUI() {
 		
-		uiList.put(instanceID, new TrainControllerUI(instanceID, this));
+		TrainControllerUI temp = new TrainControllerUI(instanceID, this);
+		uiList.put(instanceID, temp);
 		
 		++instanceID;
+		
+		for (int newid : trainList.keySet()) {
+			temp.addTrainID(newid);
+		}
 		
 	}
 	
@@ -111,6 +123,34 @@ public class TrainControllerInstances {
 			}
 		} else {
 			return null;
+		}
+		
+	}
+	
+private class UpdateThread extends Thread {
+		
+		public UpdateThread() {
+			//nothing
+		}
+		
+		/**
+		 * Calls a method after a certain amount of time has elapsed.
+		 */
+		public void run() {
+			
+			//Sleep for specified time (not perfect)
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				//irrelevant
+			}
+			
+			for (TrainControllerUI ui : uiList.values()) {
+				for (int newid : trainList.keySet()) {
+					System.out.println("updating");
+					ui.addTrainID(newid);
+				}
+			}
 		}
 		
 	}

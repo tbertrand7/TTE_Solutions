@@ -119,6 +119,7 @@ public class TTEHomeGUI {
 				//trainModelInstances.newUI();
 				
 				trainModelGUI tmg = new trainModelGUI(usethis);
+				tci.connectModelToUI(1, tmg);
 			}
 		});
 		btnTrainModel.setBounds(289, 141, 135, 109);
