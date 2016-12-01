@@ -209,6 +209,7 @@ public class TrainControllerUI extends JFrame {
 	 * @param speed - new current speed to be displayed, in m/s
 	 */
 	public void setSpeedCurrent(double speed) {
+		System.out.println("setting ui speed to "+speed);
 		int americancurrent = (int) ((speed / 1609.34) * 3600);
 		SpeedCurr.setText(americancurrent + " MPH");
 	}

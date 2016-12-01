@@ -55,7 +55,7 @@ public class TrainModel extends TrainState implements Runnable{
 	double accRate;
 	
 	//TODO: @Matt Fix and add gui as parameter
-	public TrainModel(){
+	public TrainModel(TrainController tc){
 		
 		
 		//DATA FOR SYSTEM PROTOTYPE ONLY
@@ -69,7 +69,7 @@ public class TrainModel extends TrainState implements Runnable{
 		grade = trackBlock.blockGrade;
 		speedLimit = trackBlock.speedLimit;
 		
-		trainCon = null;
+		trainCon = tc;
 		trainID = 1;
 		trainLine = trackBlock.line;
 		

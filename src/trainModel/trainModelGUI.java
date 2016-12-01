@@ -167,7 +167,7 @@ public class trainModelGUI {
 	
 	
 	public static void main(String[] args){
-		trainModelGUI tmg = new trainModelGUI( new TrainModel());
+		trainModelGUI tmg = new trainModelGUI( new TrainModel(null));
 	}
 	
 	
