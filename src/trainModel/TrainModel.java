@@ -16,9 +16,13 @@ public class TrainModel extends TrainState implements Runnable{
 	
 	int trainID; //unique train ID
 	String trainLine;
-	TrainController trainCon;
+	protected TrainController trainCon;
 	
+	protected trainModelGUI ui;
+	
+	double speedLimit;
 	double elevation;
+	double grade;
 	double power; 
 	double velocity; 
 	double mass;
@@ -42,6 +46,7 @@ public class TrainModel extends TrainState implements Runnable{
 	double endOfBlock;
 	double currentPos;
 	
+	int curBlockNum;
 	int nextBlockNum;
 	
 	double accRate;
@@ -57,8 +62,6 @@ public class TrainModel extends TrainState implements Runnable{
 		trainID = id;
 		trainLine = line;
 		
-		t.start();
-		
 		if(trainLine.compareToIgnoreCase("Green") == 0)
 		{
 			nextBlockNum = 152;
@@ -67,6 +70,9 @@ public class TrainModel extends TrainState implements Runnable{
 		{
 			nextBlockNum = 77;
 		}
+		
+		endOfBlock = 0;
+		currentPos = 0;
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -81,7 +87,9 @@ public class TrainModel extends TrainState implements Runnable{
 		elevation = 0;
 		
 		power = 0.0;
-		velocity = 0.0;	
+		velocity = 13.4112;	
+		
+		t.start();
 				
 	}
 	
@@ -102,7 +110,58 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		while(proceed){
 			
-			while(stop); //wait here while stop is true 
+			while(stop){ //busy wait here while stop is true 
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(currentPos == endOfBlock){ 
+			//end of block reached by train	
+				
+				/*
+				 *Update the block we're leaving 
+				 */
+				trackBlock.status = BlockStatus.UNOCCUPIED; //set the block we are leaving to be unoccupied
+				trackBlock.trainID = -1; //set the train ID -1					
+				tm.setBlock(trackBlock);
+			
+				/*
+				 * Get the next block
+				 */
+				trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
+				trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
+				trackBlock.trainID = trainID; //set the train ID to the train ID	
+				tm.setBlock(trackBlock); //update the Track DB with new trackBlock info
+				
+				/*
+				 * Update position tracking info	
+				 */
+				curBlockNum = nextBlockNum;
+				nextBlockNum = trackBlock.nextBlock; //set the next block equal to the nextBlock in trackBlock
+				currentPos = 0; //reset current position to zero (start of new block)					
+				endOfBlock = trackBlock.blockLength; //set the new end of block
+				elevation = trackBlock.elevation;
+				grade = trackBlock.blockGrade;
+				speedLimit = trackBlock.speedLimit;
+				
+				if(trackBlock.infrastructure.compareToIgnoreCase("underground") == 0){
+					underground = true;
+				}
+				else{
+					underground = false;
+				}
+				
+				
+				/*
+				 * Pass info to train controller
+				 */
+				trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground); //pass the train controller the new block info
+			}
+			
+			
 			
 				//calc new V every 1 second (for now)
 	
@@ -122,46 +181,6 @@ public class TrainModel extends TrainState implements Runnable{
 				accRate = velocity / deltaTime;
 				
 				currentPos = currentPos + velocity * deltaTime + ( .5 * accRate * deltaTime * deltaTime);
-				
-				
-				if(currentPos == endOfBlock){ 
-				//end of block reached by train	
-					
-					/*
-					 *Update the block we're leaving 
-					 */
-					trackBlock.status = BlockStatus.UNOCCUPIED; //set the block we are leaving to be unoccupied
-					trackBlock.trainID = -1; //set the train ID -1					
-					tm.setBlock(trackBlock);
-				
-					/*
-					 * Get the next block
-					 */
-					trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
-					trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
-					trackBlock.trainID = trainID; //set the train ID to the train ID	
-					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info
-					
-					/*
-					 * Update position tracking info	
-					 */
-					nextBlockNum = trackBlock.nextBlock; //set the next block equal to the nextBlock in trackBlock
-					currentPos = 0; //reset current position to zero (start of new block)					
-					endOfBlock = trackBlock.blockLength; //set the new end of block
-					
-					if(trackBlock.infrastructure.compareToIgnoreCase("underground") == 0){
-						underground = true;
-					}
-					else{
-						underground = false;
-					}
-					
-					
-					/*
-					 * Pass info to train controller
-					 */
-					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground); //pass the train controller the new block info
-				}
 				
 				try {
 					Thread.sleep(1000);
@@ -192,13 +211,7 @@ public class TrainModel extends TrainState implements Runnable{
 				lightsOn = true; // Turn on lights
 			}
 	
-	/**
-	 * Gets the velocity of the train
-	 * @return velocity of the train
-	 */
-	public double getVelocity(){
-		return velocity;
-	}			
+		
 			
 	
 	/**
@@ -211,6 +224,37 @@ public class TrainModel extends TrainState implements Runnable{
 			power = powerSetPoint;			
 			this.resume();
 		}
+	
+	
+	/**
+	 * Connects the train to the specified UI and initialize its display.
+	 * @param tcui - the TrainControllerUI to connect to the train
+	 */
+	public void connectToUI(trainModelGUI gui) {
+		
+		ui = gui;		
+		
+	}
+	
+	/**
+	 * Disconnects the train from its UI.
+	 */
+	public void disconnectFromUI() {
+		
+		ui = null;
+		
+	}	
+	
+	/**
+	 * Checks whether the train is connected to a UI.
+	 * @return true if a UI is connected, false otherwise
+	 */
+	public synchronized boolean connectedToUI() {
+	
+		return !(ui == null);
+		
+	}
+	
 	
 	
 }//end of TrainModel class
