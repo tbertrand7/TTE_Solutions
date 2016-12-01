@@ -95,7 +95,7 @@ public class TrackDBInteraction {
 	public void resetDB() throws SQLException, IOException {
 		Statement stmt = conn.createStatement();
 
-		BufferedReader in = new BufferedReader(new FileReader("src/shared/DBWipe.sql"));
+		BufferedReader in = new BufferedReader(new FileReader("src/shared/NEWWIPE.sql"));
 		String str;
 		while ((str = in.readLine()) != null) {
 			stmt.execute(str);
