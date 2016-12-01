@@ -258,7 +258,7 @@ public class TrainModel extends TrainState implements Runnable{
 				//calc new V every 1 second (for now)
 	
 				if(trainCon != null){
-					power = trainCon.getPower();
+					setPower(trainCon.getPower());
 				}
 			
 				mass = this.emptyTrainMass + (this.personMass * this.passengerCount); //calculate the mass of the train plus load of passengers
@@ -291,12 +291,7 @@ public class TrainModel extends TrainState implements Runnable{
 					velocity =0;
 				}
 				
-				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);
-				
-				System.out.println("Velocity = "+ velocity);
-				System.out.println("Power = " +power);
-				System.out.println("ResistivePower = "+ resistivePower);
-				
+				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);				
 				
 				ui.displayVelocity(velocity);
 				ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
