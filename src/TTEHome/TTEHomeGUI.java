@@ -11,7 +11,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import ctcOffice.*;
 import trackModel.TrackModelUI;
 import trainController.TrainControllerInstances;
-import trainModel.trainModelGUI;
+import trainModel.TrainModel;
 import waysideController.TC_UI_main;
 import waysideController.TC_UI_startup;
 
@@ -91,10 +91,17 @@ public class TTEHomeGUI {
 		btnWaysideController.setBounds(10, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnWaysideController);
 		
+		
+		//Trains trainModelInstances = new Trains();
 		JButton btnTrainModel = new JButton("Train Model");
 		btnTrainModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				trainModelGUI.main(null);
+				//TODO: @Matt revisit after fixing Trains class
+				//trainModelInstances.newUI();
+				
+				TrainModel train = new TrainModel();
+
+				
 			}
 		});
 		btnTrainModel.setBounds(289, 141, 135, 109);
