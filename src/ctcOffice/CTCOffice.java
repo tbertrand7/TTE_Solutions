@@ -51,7 +51,7 @@ public class CTCOffice
 		//TODO: suggest speed for a train to wayside controller
 	}
 
-	public void suggestDestination(TrackBlock dest)
+	public void suggestDestination(TrackBlock dest, int train)
     {
         //TODO: suggest new destination for a train to wayside controller
     }
