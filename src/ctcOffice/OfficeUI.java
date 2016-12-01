@@ -318,7 +318,7 @@ public class OfficeUI extends JFrame {
 			}
 
 			//Train info
-			if (selectedBlock.trainID == 0) {
+			if (selectedBlock.trainID <= 0) {
 				lblTrainNumInfo.setText("");
 				lblSpeedInfo.setText("");
 				lblDestInfo.setText("");
