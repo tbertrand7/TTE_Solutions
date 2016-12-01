@@ -95,8 +95,12 @@ public class CTCOffice
 			rtnStr = line + " Line: Block " + block + " opened";
 		}
 		else {
-			currBlock.status = BlockStatus.CLOSED;
-			rtnStr = line + " Line: Block " + block + " closed for maintenance";
+			if (currBlock.trainID > 0) {
+				rtnStr = "ERROR: Block " + block + " cannot be closed because it is occupied by a train";
+			} else {
+				currBlock.status = BlockStatus.CLOSED;
+				rtnStr = line + " Line: Block " + block + " closed for maintenance";
+			}
 		}
 
 		track.setBlock(currBlock); //Update block in DB
