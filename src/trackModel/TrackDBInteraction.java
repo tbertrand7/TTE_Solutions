@@ -36,9 +36,9 @@ public class TrackDBInteraction {
 	}
 	
 	public TrackBlock[] getBlocks(String line, int [] blocks) throws SQLException{
-		TrackBlock [] track = null;
+		TrackBlock [] track = new TrackBlock[blocks.length];
 		String[] blockNum = new String[blocks.length];
-		for(int i=0; i<= blocks.length; i++)
+		for(int i=0; i< blocks.length; i++)
 			blockNum[i] = String.valueOf(blocks[i]);
 			
 		String joined = String.join(",", blockNum);
