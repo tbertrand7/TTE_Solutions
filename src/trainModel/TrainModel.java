@@ -366,7 +366,12 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public void setPower(double powerSetPoint){
 			pause();
-			power = powerSetPoint;
+			if(powerSetPoint > 0){
+				power = powerSetPoint;
+			}
+			else{
+				power = 0;
+			}
 			if(ui != null){
 				ui.displayPower();
 			}
