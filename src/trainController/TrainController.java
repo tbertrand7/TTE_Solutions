@@ -94,8 +94,6 @@ public class TrainController {
 	 */
 	public TrainController(TrainControllerInstances tci, int uniqueid, String line) {
 		
-		System.out.println("new controller: " + uniqueid);
-		
 		id = uniqueid;
 		
 		speedCommand = 0;
@@ -126,8 +124,7 @@ public class TrainController {
 		pc = new PowerCalculator(this);
 		pc.start();
 		
-		stop = false;
-		pc.tempStop(false);
+		setStop(false);
 		
 	}
 	
@@ -322,8 +319,6 @@ public class TrainController {
 	 * @param speed - current speed, in m/s
 	 */
 	public synchronized void setSpeedCurrent(double speed) {
-		
-		System.out.println("setting current speed");
 		
 		speedCurrent = speed;
 		
