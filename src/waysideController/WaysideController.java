@@ -48,7 +48,7 @@ public class WaysideController
 	
 	
 	//------------------------------MAINTAINING UP-TO-DATE TRACK---------------------------------------
-	private void updateLocalTrackInfo()
+	public void updateLocalTrackInfo()
 	{
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		for(int i = 0; i < blocks.length; i++)

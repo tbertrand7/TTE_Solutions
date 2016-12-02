@@ -34,6 +34,25 @@ public class TrackDBInteraction {
 
 		return tempBlock;
 	}
+	
+	public TrackBlock[] getBlocks(String line, int [] blocks) throws SQLException{
+		TrackBlock [] track = null;
+		String[] blockNum = new String[blocks.length];
+		for(int i=0; i<= blocks.length; i++)
+			blockNum[i] = String.valueOf(blocks[i]);
+			
+		String joined = String.join(",", blockNum);
+
+		
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM TTEDB.RailLines where line = '"+line+"' and BlockNumber in ("+joined+")");
+		rs.next();
+		track = populateTrackLine(rs,track);
+		stmt.close();
+		conn.close();
+		
+		return track;
+	}
 
 	public TrackBlock[] getLine(String line) throws SQLException{
 		

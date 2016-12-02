@@ -200,6 +200,7 @@ public class TC_UI_main extends JFrame {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				choice.removeAll();
+				TTEHome.TTEHomeGUI.wc.updateLocalTrackInfo();
 				for(Integer i: TTEHome.TTEHomeGUI.wc.trains.keySet())
 				{
 					choice.add(""+i);

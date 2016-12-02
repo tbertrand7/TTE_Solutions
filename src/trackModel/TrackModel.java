@@ -11,6 +11,24 @@ public class TrackModel {
 	final JFrame parent = new JFrame();
 	TrackDBInteraction db = null;
 
+	public TrackBlock[] getBlock(String line, int[] blocks){
+		
+		TrackBlock theBlock [] = null;
+		
+		try {
+			db = new TrackDBInteraction();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			theBlock = db.getBlocks(line, blocks);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return theBlock;
+	}
+	
 	public TrackBlock[] getBlock(String line)
 	{
 		TrackBlock theBlock [] = null;

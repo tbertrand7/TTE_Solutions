@@ -90,6 +90,8 @@ public class TrainModel extends TrainState implements Runnable{
 		trackBlock.trainID = trainID;
 		trackBlock.status=BlockStatus.OCCUPIED;
 
+		tm.setBlock(trackBlock);
+		
 		start();
 		
 		
