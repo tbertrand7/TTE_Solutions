@@ -47,6 +47,7 @@ public class TrainModel extends TrainState implements Runnable{
 	boolean proceed = true;
 		
 	double brakingDistance;
+	double distanceLeftInBlock;
 	
 	double endOfBlock;
 	double currentPos;
@@ -141,9 +142,9 @@ public class TrainModel extends TrainState implements Runnable{
 		elevation = 0;
 		
 		power = 0.0;
-		velocity = 0.0;			
+		velocity = 0.0;		
 		
-		start();
+		//start();
 		
 	}
 	
@@ -272,7 +273,7 @@ public class TrainModel extends TrainState implements Runnable{
 					trainLine = trackBlock.line;
 				}
 				
-				if(trackBlock.infrastructure.compareToIgnoreCase("underground") == 0){
+				if(trackBlock.infrastructure.contains("UNDERGROUND")){
 					underground = true;
 				}
 				else{
@@ -339,8 +340,18 @@ public class TrainModel extends TrainState implements Runnable{
 					trainCon.setSpeedCurrent(velocity);
 				}
 				
-				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);				
+				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);			
 				
+				distanceLeftInBlock = endOfBlock - currentPos;
+				
+				//Tell Train controller to brake before the station
+				if(distanceLeftInBlock <= brakingDistance){
+					
+				//TODO: uncomment out when Anna modifies method	
+				//	trainCon.approachStation();
+				}
+				
+							
 				if(ui != null){
 					ui.displayVelocity(velocity);
 					ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
@@ -352,8 +363,6 @@ public class TrainModel extends TrainState implements Runnable{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}	
-				
-				
 		}
 	}
 	
