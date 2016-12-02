@@ -30,8 +30,8 @@ public class TrainControllerInstances {
 		//nextID = 1;
 		instanceID = 0;
 		
-		//UpdateThread ut = new UpdateThread();
-		//ut.start();
+		UpdateThread ut = new UpdateThread();
+		ut.start();
 		
 	}
 	
@@ -140,14 +140,15 @@ private class UpdateThread extends Thread {
 			
 			//Sleep for specified time (not perfect)
 			try {
-				sleep(1000);
+				sleep(2000);
 			} catch (InterruptedException e) {
 				//irrelevant
 			}
 			
+			System.out.println("updating");
+			
 			for (TrainControllerUI ui : uiList.values()) {
 				for (int newid : trainList.keySet()) {
-					System.out.println("updating");
 					ui.addTrainID(newid);
 				}
 			}

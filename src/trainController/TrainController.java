@@ -109,10 +109,10 @@ public class TrainController {
 		eBrakeOn = false;
 		
 		/* @Matt: This TrainModel constructor needs to be added to the TrainModel class! */
-		//model = new TrainModel((TrainController)this, id, line);
+		model = new TrainModel((TrainController)this, id, line);
 		//Trains.add(id, model);???
 		
-		model = new TrainModel(this);
+		//model = new TrainModel(this);
 		
 		parent = tci;
 		ui = null;
@@ -133,12 +133,13 @@ public class TrainController {
 	 * @param speed - speed passed from the wayside controller
 	 * @param auth - authority passed from the wayside controller
 	 * @param under - true if underground, false otherwise
+	 * @param newblock - true if this is the first time this block's info is being passed
 	 */
-	public void passInfo(double speed, double auth, boolean under) { 
+	public void passInfo(double speed, double auth, boolean under, boolean newblock) { 
 		
-		//if (authority > 0) authority -= 1;
+		if (authority > 0 && newblock) authority -= 1; //decrement authority
 		
-		/*if (authority == 0 && auth > 0) {
+		if (authority == 0 && auth > 0) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -146,13 +147,13 @@ public class TrainController {
 			if (connectedToUI()) ui.setServiceBrake(false);
 			model.setServiceBrake(false);
 			
-		}*/
+		}
 		
 		speedCommand = speed;
 		if (auth >= 0) authority = auth;
 		inTunnel = under;
 		
-		/*if (authority == 0) {
+		if (authority == 0) { //authority is 0, need to stop
 			setStop(true);
 			
 			sBrakeOn = true;
@@ -160,7 +161,7 @@ public class TrainController {
 			model.setServiceBrake(true);
 			
 			power = 0;
-		}*/
+		}
 		
 	}
 	

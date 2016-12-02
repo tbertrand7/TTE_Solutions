@@ -156,6 +156,7 @@ public class TrainControllerUI extends JFrame {
 	 * @param id
 	 */
 	public void addTrainID(int id) {
+		TrainSelect.removeItem(id);
 		TrainSelect.addItem(id);
 	}
 	
