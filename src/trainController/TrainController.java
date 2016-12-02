@@ -141,7 +141,7 @@ public class TrainController {
 		
 		//if (authority > 0) authority -= 1;
 		
-		if (authority == 0 && auth > 0) {
+		/*if (authority == 0 && auth > 0) {
 			
 			setStop(false);
 			
@@ -149,13 +149,13 @@ public class TrainController {
 			if (connectedToUI()) ui.setServiceBrake(false);
 			model.setServiceBrake(false);
 			
-		}
+		}*/
 		
 		speedCommand = speed;
 		if (auth >= 0) authority = auth;
 		inTunnel = under;
 		
-		if (authority == 0) {
+		/*if (authority == 0) {
 			setStop(true);
 			
 			sBrakeOn = true;
@@ -163,7 +163,7 @@ public class TrainController {
 			model.setServiceBrake(true);
 			
 			power = 0;
-		}
+		}*/
 		
 	}
 	
@@ -183,7 +183,7 @@ public class TrainController {
 	 */
 	public synchronized void setAuthority(int auth) {
 		
-		if (authority == 0 && auth > 0) {
+		/*if (authority == 0 && auth > 0) {
 			
 			setStop(false);
 			
@@ -191,11 +191,11 @@ public class TrainController {
 			if (connectedToUI()) ui.setServiceBrake(false);
 			model.setServiceBrake(false);
 			
-		}
+		}*/
 		
 		if (auth >= 0) authority = auth;
 		
-		if (authority == 0) {
+		/*if (authority == 0) {
 			
 			setStop(true);
 			
@@ -205,7 +205,7 @@ public class TrainController {
 			
 			power = 0;
 			
-		}
+		}*/
 		
 	}
 	
