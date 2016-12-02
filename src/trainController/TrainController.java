@@ -66,6 +66,11 @@ public class TrainController {
 	protected double speedLimit;
 	
 	/**
+	 * The name of the next station.
+	 */
+	protected String station;
+	
+	/**
 	 * Used if the train needs to stop for a station or because of a failure.
 	 */
 	protected boolean stop;
@@ -135,7 +140,9 @@ public class TrainController {
 	 * @param under - true if underground, false otherwise
 	 * @param newblock - true if this is the first time this block's info is being passed, false otherwise
 	 */
-	public void passInfo(double speed, double auth, boolean under, boolean newblock) { 
+	public void passInfo(double speed, double auth, boolean under, String nextstation, boolean newblock) {
+		
+		if (newblock) station = nextstation;
 		
 		if (authority > 0 && newblock) {
 			authority -= 1; //decrement authority
@@ -261,9 +268,8 @@ public class TrainController {
 	/**
 	 * Signals that the train is approaching a station. The train will announce the upcoming station, 
 	 * slow down and stop, open its doors for a bit, close its doors, and continue on its way.
-	 * @param name - the station name
 	 */
-	public synchronized void approachStation(String name, Side doors) {
+	public synchronized void approachStation() {
 		
 		setStop(true);
 		
@@ -271,9 +277,9 @@ public class TrainController {
 		if (connectedToUI()) ui.setServiceBrake(true);
 		model.setServiceBrake(true);
 		
-		if (connectedToUI()) ui.announceStation(name);
+		if (connectedToUI()) ui.announceStation(station);
 		
-		WaitThread wt = new WaitThread(doors, 1000, 1);
+		WaitThread wt = new WaitThread(Side.RIGHT, 1000, 1); //default to right doors
 		wt.start();
 		
 	}
