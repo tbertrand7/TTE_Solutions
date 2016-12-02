@@ -25,6 +25,8 @@ public class TrainModel extends TrainState implements Runnable{
 	double velocity; 
 	double mass = 40900.0;
 	
+	double tempAcc;
+	
 	double normalForce;
 	double friction;
 	double resistivePower;
@@ -289,15 +291,23 @@ public class TrainModel extends TrainState implements Runnable{
 					accRate = 0;
 				}
 				else if(power == 0 && velocity != 0 && !serviceBrakeOn && !emergencyBrakeOn){
-					accRate = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1;
+					accRate = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1; //multiply by -1 because resistance is in the opposite direction
 				}
 				else if(!serviceBrakeOn && !emergencyBrakeOn){
-					accRate = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+					
+					if(power + resistivePower < 0){
+						tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+						accRate = tempAcc * -1;
+					}
+					else{
+						accRate = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+					}
 				}
 
 				
 				velocity = velocity + (accRate*deltaTime);	
 				resistivePower = friction * velocity;
+				
 				
 				if(velocity<0){
 					velocity =0;
@@ -353,8 +363,8 @@ public class TrainModel extends TrainState implements Runnable{
 			 */
 			private void initFailurePrivate(){
 				setPower(0); //set power to zero
-				setEmergencyBrake(true);
-				changeLightsStatus(true);
+				setEmergencyBrake(true); //engage eBrake
+				changeLightsStatus(true); //turn on lights
 			}
 	
 		
@@ -393,7 +403,10 @@ public class TrainModel extends TrainState implements Runnable{
 		ui.lights(lightsOn);
 		ui.rDoors(rightDoorsOpen);
 		ui.lDoors(leftDoorsOpen);
-		ui.setTemp(temperature);	
+		
+		ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
+		ui.displayPower();
+		ui.displayVelocity(velocity);
 	}
 	
 	/**

@@ -25,15 +25,15 @@ public class Trains {
 	
 	
 	/**
-	 * Creates a new instance of TrainControllerUI.
+	 * Creates a new instance of TrainModelUI.
 	 */
 	public void newUI() {
 		
-	//	uiList.add(new trainModelGUI(this));
+		//uiList.add(new trainModelGUI(this));
 	}
 	
 	/**
-	 * Removes a TrainControllerUI from the list.
+	 * Removes a TrainModelUI from the list.
 	 */
 	public void deleteUI(trainModelGUI t) {
 		if (uiList.contains(t))
@@ -41,7 +41,7 @@ public class Trains {
 	}
 
 	/**
-	 * Connects the specified TrainControllerUI to the train with the specified train ID.
+	 * Connects the specified TrainModelUI to the train with the specified train ID.
 	 * @param trainid - the ID of the train to connect to
 	 * @param tmui - the TrainModelGUI class to connect to the train
 	 * @return valid TrainModel if connection was successful, null otherwise
