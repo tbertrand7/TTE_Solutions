@@ -298,12 +298,12 @@ public class TrainModel extends TrainState implements Runnable{
 				velocity = velocity + (accRate*deltaTime);	
 				resistivePower = friction * velocity;
 				
-				if(trainCon != null){
-					trainCon.setSpeedCurrent(velocity);
-				}
-				
 				if(velocity<0){
 					velocity =0;
+				}
+				
+				if(trainCon != null){
+					trainCon.setSpeedCurrent(velocity);
 				}
 				
 				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);				
@@ -362,7 +362,7 @@ public class TrainModel extends TrainState implements Runnable{
 	/**
 	 * Sets the power of the train based on a power input
 	 * Calculates the velocity given the power and sets velocity of train
-	 * @param powerSetPoint - power input in KiloWatts
+	 * @param powerSetPoint - power input in watts
 	 */
 	public void setPower(double powerSetPoint){
 			pause();
