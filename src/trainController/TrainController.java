@@ -97,7 +97,7 @@ public class TrainController {
 		id = uniqueid;
 		
 		speedCommand = 0;
-		authority = 100;
+		authority = 0;
 		inTunnel = false;
 		speedCurrent = 0;
 		power = 0;
@@ -133,13 +133,16 @@ public class TrainController {
 	 * @param speed - speed passed from the wayside controller
 	 * @param auth - authority passed from the wayside controller
 	 * @param under - true if underground, false otherwise
-	 * @param newblock - true if this is the first time this block's info is being passed
+	 * @param newblock - true if this is the first time this block's info is being passed, false otherwise
 	 */
 	public void passInfo(double speed, double auth, boolean under, boolean newblock) { 
 		
-		if (authority > 0 && newblock) authority -= 1; //decrement authority
+		if (authority > 0 && newblock) {
+			authority -= 1; //decrement authority
+			System.out.println("Decrementing auth");
+		}
 		
-		if (authority == 0 && auth > 0) { //authority is being changed from 0 to something valid
+		if (authority == 0 && auth > 0 && stop == true) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -149,14 +152,13 @@ public class TrainController {
 			
 		}
 		
-		speedCommand = speed;
-		if (auth >= 0) authority = auth;
+		//speedCommand = speed; //FOR TEST PURPOSES
+		if (auth >= 0 && newblock) authority = auth;
 		inTunnel = under;
 		
-		System.out.println("New speed command: "+speedCommand);
-		System.out.println("New authority: "+authority);
+		if (newblock) System.out.println("New authority: "+authority);
 		
-		if (authority == 0) { //authority is 0, need to stop
+		if (authority == 0 && stop == false) { //authority is 0, need to stop
 			setStop(true);
 			
 			sBrakeOn = true;
@@ -184,7 +186,7 @@ public class TrainController {
 	 */
 	public synchronized void setAuthority(int auth) {
 		
-		if (authority == 0 && auth > 0) { //authority is being changed from 0 to something valid
+		if (authority == 0 && auth > 0 && stop == true) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -194,10 +196,12 @@ public class TrainController {
 			
 		}
 		
-		if (auth >= 0) authority = auth;
-		System.out.println("New authority: "+authority);
+		if (auth >= 0) {
+			authority = auth;
+			System.out.println("New authority: "+authority);
+		}
 		
-		if (authority == 0) { //authority is 0, need to stop
+		if (authority == 0 && stop == false) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -485,6 +489,10 @@ public class TrainController {
 		
 		stop = dontgo;
 		
+		while (pc == null) {
+			WaitThread wt = new WaitThread(500);
+			wt.start();
+		}
 		pc.tempStop(stop);
 		
 	}
@@ -629,8 +637,14 @@ public class TrainController {
 			method = meth;
 		}
 		
+		public WaitThread(long timetowait) {
+			side = null;
+			timer = timetowait;
+			method = 3;
+		}
+		
 		/**
-		 * Calls a method after a certain amount of time has elapsed.
+		 * Calls a method (maybe) after a certain amount of time has elapsed.
 		 */
 		public void run() {
 			
@@ -645,7 +659,7 @@ public class TrainController {
 			
 			if (method == 1)
 				openDoors(side);
-			else
+			else if (method == 2)
 				closeDoors(side);
 			
 		}
