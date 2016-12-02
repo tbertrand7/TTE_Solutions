@@ -99,7 +99,7 @@ public class TrainController {
 		id = uniqueid;
 		
 		speedCommand = 0;
-		authority = 0;
+		authority = 100;
 		inTunnel = false;
 		speedCurrent = 0;
 		power = 0;
@@ -126,8 +126,8 @@ public class TrainController {
 		pc = new PowerCalculator(this);
 		pc.start();
 		
-		stop = true;
-		pc.tempStop(true);
+		stop = false;
+		pc.tempStop(false);
 		
 	}
 	
