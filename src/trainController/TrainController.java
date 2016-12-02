@@ -153,6 +153,9 @@ public class TrainController {
 		if (auth >= 0) authority = auth;
 		inTunnel = under;
 		
+		System.out.println("New speed command: "+speedCommand);
+		System.out.println("New authority: "+authority);
+		
 		if (authority == 0) { //authority is 0, need to stop
 			setStop(true);
 			
@@ -181,7 +184,7 @@ public class TrainController {
 	 */
 	public synchronized void setAuthority(int auth) {
 		
-		/*if (authority == 0 && auth > 0) {
+		if (authority == 0 && auth > 0) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -189,11 +192,12 @@ public class TrainController {
 			if (connectedToUI()) ui.setServiceBrake(false);
 			model.setServiceBrake(false);
 			
-		}*/
+		}
 		
 		if (auth >= 0) authority = auth;
+		System.out.println("New authority: "+authority);
 		
-		/*if (authority == 0) {
+		if (authority == 0) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -203,7 +207,7 @@ public class TrainController {
 			
 			power = 0;
 			
-		}*/
+		}
 		
 	}
 	
@@ -475,6 +479,9 @@ public class TrainController {
 	 * @param dontgo - true if the train needs to stop, otherwise false
 	 */
 	public void setStop(boolean dontgo) {
+		
+		if (dontgo) System.out.println("Stopping!!!");
+		else System.out.println("Returning to normal function.");
 		
 		stop = dontgo;
 		
