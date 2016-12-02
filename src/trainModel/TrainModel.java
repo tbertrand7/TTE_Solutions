@@ -110,17 +110,25 @@ public class TrainModel extends TrainState implements Runnable{
 		trainID = id;
 		trainLine = line;
 		
+		curBlockNum = -1; //initialize train to the YARD (-1)
+		
 		if(trainLine.compareToIgnoreCase("Green") == 0)
 		{
 			nextBlockNum = 152;
+			trackBlock = tm.getBlock(trainLine, nextBlockNum);
 		}
 		else
 		{
 			nextBlockNum = 77;
+			trackBlock = tm.getBlock(trainLine, nextBlockNum);
 		}
 		
-		endOfBlock = 0;
 		currentPos = 0;
+		
+		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
+		elevation = trackBlock.elevation;
+		grade = trackBlock.blockGrade;
+		speedLimit = trackBlock.speedLimit;		
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -133,7 +141,10 @@ public class TrainModel extends TrainState implements Runnable{
 		elevation = 0;
 		
 		power = 0.0;
-		velocity = 0.0;					
+		velocity = 0.0;			
+		
+		start();
+		
 	}
 	
 	public void setServiceBrake(boolean sBrake){
@@ -228,32 +239,38 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				/*
 				 *Update the block we're leaving 
-				 */
-				trackBlock.status = BlockStatus.UNOCCUPIED; //set the block we are leaving to be unoccupied
-				trackBlock.trainID = -1; //set the train ID -1					
-				tm.setBlock(trackBlock);
+				 */		
+				if(trackBlock != null){
+					trackBlock.status = BlockStatus.UNOCCUPIED; //set the block we are leaving to be unoccupied
+					trackBlock.trainID = -1; //set the train ID -1					
+					tm.setBlock(trackBlock);
+				}
 			
 				/*
 				 * Get the next block
 				 */
-				trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
-				trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
-				trackBlock.trainID = trainID; //set the train ID to the train ID	
-				tm.setBlock(trackBlock); //update the Track DB with new trackBlock info
+				if(trackBlock != null){
+					trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
+					trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
+					trackBlock.trainID = trainID; //set the train ID to the train ID	
+					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info
+				}
 				
 				
 				/*
 				 * Update position tracking info	
 				 */
-				curBlockNum = nextBlockNum;
-				nextBlockNum = trackBlock.blockNumber + 1; //set the next block equal to the nextBlock in trackBlock
-				currentPos = 0; //reset current position to zero (start of new block)
-				deltaTime = 0; //reset delta time
-				endOfBlock = trackBlock.blockLength * .3048; //set the new end of block
-				elevation = trackBlock.elevation;
-				grade = trackBlock.blockGrade;
-				speedLimit = trackBlock.speedLimit;
-				trainLine = trackBlock.line;
+				if(trackBlock != null){
+					curBlockNum = nextBlockNum;
+					nextBlockNum = trackBlock.blockNumber + 1; //set the next block equal to the nextBlock in trackBlock
+					currentPos = 0; //reset current position to zero (start of new block)
+					deltaTime = 0; //reset delta time
+					endOfBlock = trackBlock.blockLength * .3048; //set the new end of block
+					elevation = trackBlock.elevation;
+					grade = trackBlock.blockGrade;
+					speedLimit = trackBlock.speedLimit;
+					trainLine = trackBlock.line;
+				}
 				
 				if(trackBlock.infrastructure.compareToIgnoreCase("underground") == 0){
 					underground = true;
