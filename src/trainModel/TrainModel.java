@@ -255,29 +255,28 @@ public class TrainModel extends TrainState implements Runnable{
 					underground = false;
 				}
 				
-				
-				/*
-				 * Pass info to train controller
-				 */
-				if(trainCon != null){
-					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground); //pass the train controller the new block info
-				}
 			}
 			
-			
-			
+				
 				//calc new V every 1 second (for now)
 	
 				if(trainCon != null){
 					setPower(trainCon.getPower());
 				}
+				
+				/*
+				 * Pass block info to train controller
+				 */
+				if(trainCon != null){
+					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground); //pass the train controller the new block info
+				}
 			
-				mass = this.emptyTrainMass + (this.personMass * this.passengerCount); //calculate the mass of the train plus load of passengers
+				mass = emptyTrainMass + (personMass * passengerCount); //calculate the mass of the train plus load of passengers
 				
 				normalForce = 9.8 * mass;
 				friction = MU * normalForce *-1;
 				
-				brakingDistance = (velocity * velocity) / (2 * this.serviceBrakeRate); //calculate braking distance
+				brakingDistance = (velocity * velocity) / (2 * serviceBrakeRate); //calculate braking distance
 				
 	
 				time1 = time2;
