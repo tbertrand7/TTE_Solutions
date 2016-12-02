@@ -40,6 +40,7 @@ public class TrainModel extends TrainState implements Runnable{
 	 * Not for System Prototype
 	 * */
 	boolean underground;
+	boolean newBlock;
 	
 	
 	boolean stop;
@@ -223,6 +224,8 @@ public class TrainModel extends TrainState implements Runnable{
 			if(currentPos >= endOfBlock){ 
 			//end of block reached by train	
 				
+				newBlock = true;
+				
 				/*
 				 *Update the block we're leaving 
 				 */
@@ -272,8 +275,10 @@ public class TrainModel extends TrainState implements Runnable{
 				 * Pass block info to train controller
 				 */
 				if(trainCon != null){
-					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground); //pass the train controller the new block info
+					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground, newBlock); //pass the train controller the new block info
 				}
+				
+				newBlock = false;
 			
 				mass = emptyTrainMass + (personMass * passengerCount); //calculate the mass of the train plus load of passengers
 				
@@ -324,8 +329,7 @@ public class TrainModel extends TrainState implements Runnable{
 					ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
 				}
 			
-				
-				
+								
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
