@@ -327,6 +327,8 @@ public class OfficeUI extends JFrame {
 			} else {
 				lblTrainNumInfo.setText(selectedBlock.trainID + "");
 				lblSpeedInfo.setText(selectedBlock.speed + " mph");
+				lblDestInfo.setText(""); //TODO: Display destination block name for train
+				lblAuthInfo.setText(selectedBlock.authority + " blocks");
 				setHasTrain(true);
 			}
 		}
