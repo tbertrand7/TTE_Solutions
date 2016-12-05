@@ -114,7 +114,8 @@ public class TrainController {
 		eBrakeOn = false;
 		
 		/* @Matt: This TrainModel constructor needs to be added to the TrainModel class! */
-		model = new TrainModel((TrainController)this, id, line);
+		//model = new TrainModel((TrainController)this, id, line);
+		model = new TrainModel((TrainController)this);
 		//Trains.add(id, model);???
 		
 		//model = new TrainModel(this);
@@ -140,16 +141,19 @@ public class TrainController {
 	 * @param under - true if underground, false otherwise
 	 * @param newblock - true if this is the first time this block's info is being passed, false otherwise
 	 */
-	public void passInfo(double speed, double auth, boolean under, String nextstation, boolean newblock) {
+	public void passInfo(double speed, double auth, boolean under, boolean newblock) {
 		
-		if (newblock) station = nextstation;
+		station = "NULL";
 		
 		if (authority > 0 && newblock) {
 			authority -= 1; //decrement authority
 			System.out.println("Decrementing auth");
 		}
 		
-		if (authority == 0 && auth > 0 && stop == true) { //authority is being changed from 0 to something valid
+		if (auth >= 0) authority = auth;
+		
+		//TODO need to change this to account for failures
+		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -159,13 +163,60 @@ public class TrainController {
 			
 		}
 		
-		//speedCommand = speed; //FOR TEST PURPOSES
-		if (auth >= 0 && newblock) authority = auth;
+		if (speed >= 0) speedCommand = speed;
 		inTunnel = under;
 		
 		if (newblock) System.out.println("New authority: "+authority);
 		
 		if (authority == 0 && stop == false) { //authority is 0, need to stop
+			
+			setStop(true);
+			
+			sBrakeOn = true;
+			if (connectedToUI()) ui.setServiceBrake(true);
+			model.setServiceBrake(true);
+			
+			power = 0;
+		}
+		
+	}
+	
+	/**
+	 * Sets commanded speed and authority, and whether the track is underground.
+	 * @param speed - speed passed from the wayside controller
+	 * @param auth - authority passed from the wayside controller
+	 * @param under - true if underground, false otherwise
+	 * @param newblock - true if this is the first time this block's info is being passed, false otherwise
+	 */
+	public void passInfo(double speed, double auth, boolean under, String nextstation, boolean newblock) {
+		
+		if (newblock) station = nextstation;
+		
+		if (authority > 0 && newblock) {
+			authority -= 1; //decrement authority
+			System.out.println("Decrementing auth");
+		}
+		
+		if (auth >= 0 && newblock) authority = auth;
+		
+		//TODO need to change this to account for failures
+		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
+			
+			setStop(false);
+			
+			sBrakeOn = false;
+			if (connectedToUI()) ui.setServiceBrake(false);
+			model.setServiceBrake(false);
+			
+		}
+		
+		if (speed >= 0) speedCommand = speed;
+		inTunnel = under;
+		
+		if (newblock) System.out.println("New authority: "+authority);
+		
+		if (authority == 0 && stop == false) { //authority is 0, need to stop
+			
 			setStop(true);
 			
 			sBrakeOn = true;
@@ -183,7 +234,7 @@ public class TrainController {
 	 */
 	public synchronized void setSpeedCommand(double speed) {
 		
-		speedCommand = speed;
+		if (speed >= 0) speedCommand = speed;
 		
 	}
 	
@@ -193,7 +244,13 @@ public class TrainController {
 	 */
 	public synchronized void setAuthority(int auth) {
 		
-		if (authority == 0 && auth > 0 && stop == true) { //authority is being changed from 0 to something valid
+		if (auth >= 0) {
+			authority = auth;
+			System.out.println("New authority: "+authority);
+		}
+		
+		//TODO change this to account for failures
+		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -201,11 +258,6 @@ public class TrainController {
 			if (connectedToUI()) ui.setServiceBrake(false);
 			model.setServiceBrake(false);
 			
-		}
-		
-		if (auth >= 0) {
-			authority = auth;
-			System.out.println("New authority: "+authority);
 		}
 		
 		if (authority == 0 && stop == false) { //authority is 0, need to stop

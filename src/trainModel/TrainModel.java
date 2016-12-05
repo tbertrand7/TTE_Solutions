@@ -67,7 +67,7 @@ public class TrainModel extends TrainState implements Runnable{
 		currentPos=0;
 		
 		trackBlock = tm.getBlock("Green",102);
-		nextBlockNum = trackBlock.blockNumber + 1;
+		nextBlockNum = trackBlock.nextBlock;
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
@@ -233,7 +233,7 @@ public class TrainModel extends TrainState implements Runnable{
 				}
 			}
 			
-			if(currentPos >= endOfBlock){ 
+			if(currentPos >= endOfBlock){
 			//end of block reached by train	
 				
 				newBlock = true;

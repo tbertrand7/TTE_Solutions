@@ -100,7 +100,7 @@ public class TTEHomeGUI {
 		frmTteTrainHome.getContentPane().add(btnWaysideController);
 		
 		TrainControllerInstances tci = new TrainControllerInstances();
-		TrainModel usethis = tci.createTrain(1, "green");
+		TrainModel usethis = tci.createTrain(12, "green");
 		
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {
