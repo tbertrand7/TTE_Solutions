@@ -63,7 +63,7 @@ public class trainModelGUI {
 	private TrainModel train;
 	
 	DecimalFormat dc = new DecimalFormat("#0.00");
-	private JTextField textField;
+	private JTextField IDinput;
 
 	public void displayVelocity(double v){
 		currentSpeed.setText(dc.format(v* 2.23694) +" mph");
@@ -837,12 +837,18 @@ public class trainModelGUI {
 		canvas_5.setBounds(362, 110, 346, 5);
 		frame.getContentPane().add(canvas_5);
 		
-		textField = new JTextField();
-		textField.setBounds(603, 64, 104, 40);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		IDinput = new JTextField();
+		IDinput.setBounds(603, 64, 104, 40);
+		frame.getContentPane().add(IDinput);
+		IDinput.setColumns(10);
 		
 		JButton uiConnectButton = new JButton("Connect");
+		uiConnectButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
 		uiConnectButton.setFont(new Font("Courier New", Font.BOLD, 16));
 		uiConnectButton.setBounds(489, 64, 104, 40);
 		frame.getContentPane().add(uiConnectButton);
