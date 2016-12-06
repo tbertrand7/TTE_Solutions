@@ -132,35 +132,14 @@ public class OfficeUI extends JFrame {
 			}
 		}, 0, 10, TimeUnit.MILLISECONDS);
 	}
-	
-	/**
-	 * Set Manual Mode
-	 */
-	private void rdbtnManualClick()
-	{
-		ctcOffice.setMode(Mode.MANUAL);
-		logNotification("Manual Mode Set");
-	}
-	
-	/**
-	 * Set Automatic Mode
-	 */
-	private void rdbtnAutoClick()
-	{
-		ctcOffice.setMode(Mode.AUTOMATIC);
-		logNotification("Auto Mode Set");
-	}
-	
+
 	/**
 	 * Change simulation speed
 	 */
 	private void simulationSpeedChanged()
 	{
 		if (!simulationSpeed.getValueIsAdjusting() && simulationSpeed.getValue() != ctcOffice.getSimulationSpeed())
-		{
 			ctcOffice.setSimulationSpeed(simulationSpeed.getValue());
-			logNotification("New Simulation Speed is " + simulationSpeed.getValue() +"X wall clock speed");
-		}
 	}
 
 	private void loadScheduleClick()
@@ -222,7 +201,6 @@ public class OfficeUI extends JFrame {
 			selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
 
 		destBlock = (TrackBlock)cmbDestinations.getSelectedItem();
-
 		ctcOffice.suggestDestination(destBlock, selectedBlock.trainID);
 		logNotification("Train " + selectedBlock.trainID + " dispatched to " + destBlock.toString());
 	}
@@ -356,6 +334,22 @@ public class OfficeUI extends JFrame {
 		cmbDestinations.setEnabled(x);
 		btnSetSpeed.setEnabled(x);
 		btnSetDestination.setEnabled(x);
+	}
+
+	/**
+	 * Set Manual Mode
+	 */
+	private void rdbtnManualClick()
+	{
+		ctcOffice.setMode(Mode.MANUAL);
+	}
+
+	/**
+	 * Set Automatic Mode
+	 */
+	private void rdbtnAutoClick()
+	{
+		ctcOffice.setMode(Mode.AUTOMATIC);
 	}
 
 	/**

@@ -71,6 +71,11 @@ public class CTCOffice
 	public void setMode(Mode newMode)
 	{
 		mode = newMode;
+
+		if (newMode == Mode.AUTOMATIC)
+			officeUI.logNotification("Auto Mode Set");
+		else
+			officeUI.logNotification("Manual Mode Set");
 	}
 	
 	/** Set new simulation speed */
@@ -78,6 +83,7 @@ public class CTCOffice
 	public void setSimulationSpeed(int newSpeed)
 	{
 		simulationSpeed = newSpeed;
+		officeUI.logNotification("New Simulation Speed is " + newSpeed + "X wall clock speed");
 	}
 
 	public void suggestSpeed(double newTrainSpeed, int train)
