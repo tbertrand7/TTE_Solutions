@@ -47,6 +47,7 @@ public class TrainModel extends TrainState implements Runnable{
 	boolean proceed = true;
 		
 	double brakingDistance;
+	double distanceLeftInBlock;
 	
 	double endOfBlock;
 	double currentPos;
@@ -57,24 +58,25 @@ public class TrainModel extends TrainState implements Runnable{
 	
 	double accRate;
 	
-	//TODO: @Matt Fix and add gui as parameter
+	//TODO: @Matt 
 	public TrainModel(TrainController tc){
 		
-		
+	/*	
 		//DATA FOR SYSTEM PROTOTYPE ONLY
 		curBlockNum = 102; //starting on block 102 of green line for demo
 		currentPos=0;
 		
 		trackBlock = tm.getBlock("Green",102);
-		nextBlockNum = trackBlock.blockNumber + 1;
+		nextBlockNum = trackBlock.nextBlock;
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
 		speedLimit = trackBlock.speedLimit;
+	*/
 		
 		trainCon = tc;
 		trainID = 1;
-		trainLine = trackBlock.line;
+		//trainLine = trackBlock.line;
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -90,10 +92,10 @@ public class TrainModel extends TrainState implements Runnable{
 		resistivePower=0.0;
 		velocity = 0.0;		
 		
-		trackBlock.trainID = trainID;
-		trackBlock.status=BlockStatus.OCCUPIED;
+		//trackBlock.trainID = trainID;
+		//trackBlock.status=BlockStatus.OCCUPIED;
 
-		tm.setBlock(trackBlock);
+		//tm.setBlock(trackBlock);
 		
 		start();
 		
@@ -105,6 +107,8 @@ public class TrainModel extends TrainState implements Runnable{
 	 * sets all boolean variables to false and all numerical variables to 0
 	 */
 	public TrainModel(TrainController tc, int id, String line) {	
+		
+		ui = new trainModelGUI(this);
 		
 		trainCon = tc;
 		trainID = id;
@@ -141,11 +145,12 @@ public class TrainModel extends TrainState implements Runnable{
 		elevation = 0;
 		
 		power = 0.0;
-		velocity = 0.0;			
+		velocity = 0.0;		
 		
 		start();
 		
 	}
+
 	
 	public void setServiceBrake(boolean sBrake){
 		this.serviceBrake(sBrake);
@@ -232,7 +237,7 @@ public class TrainModel extends TrainState implements Runnable{
 				}
 			}
 			
-			if(currentPos >= endOfBlock){ 
+			if(currentPos >= endOfBlock){
 			//end of block reached by train	
 				
 				newBlock = true;
@@ -243,24 +248,19 @@ public class TrainModel extends TrainState implements Runnable{
 				if(trackBlock != null){
 					trackBlock.status = BlockStatus.UNOCCUPIED; //set the block we are leaving to be unoccupied
 					trackBlock.trainID = -1; //set the train ID -1					
-					tm.setBlock(trackBlock);
-				}
-			
+					tm.setBlock(trackBlock);							
 				/*
 				 * Get the next block
 				 */
-				if(trackBlock != null){
+
 					trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
 					trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
 					trackBlock.trainID = trainID; //set the train ID to the train ID	
-					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info
-				}
-				
+					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info				
 				
 				/*
 				 * Update position tracking info	
 				 */
-				if(trackBlock != null){
 					curBlockNum = nextBlockNum;
 					nextBlockNum = trackBlock.blockNumber + 1; //set the next block equal to the nextBlock in trackBlock
 					currentPos = 0; //reset current position to zero (start of new block)
@@ -272,7 +272,8 @@ public class TrainModel extends TrainState implements Runnable{
 					trainLine = trackBlock.line;
 				}
 				
-				if(trackBlock.infrastructure.compareToIgnoreCase("underground") == 0){
+				
+				if(trackBlock.infrastructure.contains("UNDERGROUND")){
 					underground = true;
 				}
 				else{
@@ -339,8 +340,18 @@ public class TrainModel extends TrainState implements Runnable{
 					trainCon.setSpeedCurrent(velocity);
 				}
 				
-				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);				
+				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);			
 				
+				distanceLeftInBlock = endOfBlock - currentPos;
+				
+				//Tell Train controller to brake before the station
+				if(distanceLeftInBlock <= brakingDistance){
+					
+				//TODO: uncomment out when Anna modifies method	
+				//	trainCon.approachStation();
+				}
+				
+							
 				if(ui != null){
 					ui.displayVelocity(velocity);
 					ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
@@ -352,8 +363,6 @@ public class TrainModel extends TrainState implements Runnable{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}	
-				
-				
 		}
 	}
 	

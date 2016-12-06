@@ -63,8 +63,7 @@ public class trainModelGUI {
 	private TrainModel train;
 	
 	DecimalFormat dc = new DecimalFormat("#0.00");
-	
-	JComboBox<Integer> trainList = new JComboBox<Integer>();
+	private JTextField IDinput;
 
 	public void displayVelocity(double v){
 		currentSpeed.setText(dc.format(v* 2.23694) +" mph");
@@ -148,7 +147,7 @@ public class trainModelGUI {
 		TrainModel temp = trainModelInstances.connectUI(id, this);
 		
 		if (temp == null) {
-			trainList.setSelectedIndex(0);
+		//	trainList.setSelectedIndex(0);
 		} else {
 			train = temp;
 		}
@@ -162,7 +161,7 @@ public class trainModelGUI {
 			train = null;
 		}
 		
-		trainList.setSelectedIndex(0);
+	//	trainList.setSelectedIndex(0);
 	}
 	
 	
@@ -838,24 +837,21 @@ public class trainModelGUI {
 		canvas_5.setBounds(362, 110, 346, 5);
 		frame.getContentPane().add(canvas_5);
 		
-		trainList.setBounds(575, 61, 133, 40);
-		frame.getContentPane().add(trainList);
-		trainList.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent a) {
-				if (trainList.getSelectedIndex() == 0) {
-					disconnect();
-				} else {
-					int tempid = (int) trainList.getSelectedItem();
-					boolean change = false;
-					
-					if (train == null) change = true;
-					if (train != null)
-						if (train.trainID != tempid)
-							change = true;
-						
-					if (change) changeTrainID(tempid);
-				}
-			}});
+		IDinput = new JTextField();
+		IDinput.setBounds(603, 64, 104, 40);
+		frame.getContentPane().add(IDinput);
+		IDinput.setColumns(10);
+		
+		JButton uiConnectButton = new JButton("Connect");
+		uiConnectButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
+		uiConnectButton.setFont(new Font("Courier New", Font.BOLD, 16));
+		uiConnectButton.setBounds(489, 64, 104, 40);
+		frame.getContentPane().add(uiConnectButton);
 		
 		frame.setVisible(true);
 

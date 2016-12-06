@@ -1,5 +1,6 @@
 package trackModel;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Random;
 
@@ -117,8 +118,33 @@ public class TrackModel {
 		}
 	}
 	
+	public boolean breakRail(String line, int block)
+	{
+		boolean sucess=false;
+		
+			try {
+				db = new TrackDBInteraction();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+					| SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				sucess = db.breakSection(line, block);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+
+		if (!sucess) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 	public boolean cutRail()
-{
+	{
 		
 		String[] lines = { "Red", "Green" };
 		boolean sucess = true; 
@@ -147,6 +173,30 @@ public class TrackModel {
 			return true;
 		} else {
 			JOptionPane.showMessageDialog(parent, "Power was not cut!");
+			return false;
+		}
+	}
+	
+	public boolean cutRail(String line, int block)
+	{
+		boolean sucess=false;
+		
+			try {
+				db = new TrackDBInteraction();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+					| SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				sucess = db.cutSection(line, block);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+
+		if (!sucess) {
+			return true;
+		} else {
 			return false;
 		}
 	}
@@ -183,6 +233,47 @@ public class TrackModel {
 			return false;
 		}
 	}
+	
+	public boolean breakRailCircuit(String line, int block)
+	{
+		boolean sucess=false;
+		
+			try {
+				db = new TrackDBInteraction();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+					| SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				sucess = db.breakSectionCircuit(line, block);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
 
+		if (!sucess) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean resetDB() throws IOException
+	{
+		
+			try {
+				db = new TrackDBInteraction();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+					| SQLException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				 db.resetDB();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				return false;
+			}
+			return true;
+	}
 
 }
