@@ -27,10 +27,26 @@ public class CTCOffice
             redLine = new TrackBlock[77];
             loadTrackData();
             officeUI = new OfficeUI(this);
-            officeUI.setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
+	}
+
+	public void initLogin()
+	{
+		new OfficeLogin(this);
+	}
+
+	public void logout()
+	{
+		new OfficeLogin(this);
+		officeUI.setVisible(false);
+	}
+
+	public void loginSuccess(String username)
+	{
+		officeUI.clearNotifications();
+		officeUI.setVisible(true);
 	}
 
     /**

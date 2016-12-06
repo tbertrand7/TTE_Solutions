@@ -332,10 +332,18 @@ public class OfficeUI extends JFrame {
 	 * Logs notification with the time to the notifications panel
 	 * @param msg message to be displayed
 	 */
-	private void logNotification(String msg)
+	void logNotification(String msg)
 	{
 		String timeStamp = new SimpleDateFormat("hh:mm:ss aa").format(Calendar.getInstance().getTime());
 		notificationArea.append(timeStamp + ": " + msg + "\n");
+	}
+
+	/**
+	 * Resets notification panel
+	 */
+	void clearNotifications()
+	{
+		notificationArea.setText("");
 	}
 
 	/**
@@ -368,8 +376,7 @@ public class OfficeUI extends JFrame {
 		mntmLogout.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mntmLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new OfficeLogin();
-				dispose();
+				ctcOffice.logout();
 			}
 		});
 		mnFile.add(mntmLogout);
