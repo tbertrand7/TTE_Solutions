@@ -134,7 +134,22 @@ public class DispatchNewUI extends JFrame {
 		btnDispatch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ctcOffice.suggestDestination((TrackBlock)cmbDest.getSelectedItem(), 0);
+				try
+				{
+					double speed = Double.parseDouble(txtSpeed.getText());
+
+					if (speed < 1 || speed > 1000)
+						throw new NumberFormatException();
+					else
+					{
+						ctcOffice.dispatchNewTrain((TrackBlock)cmbDest.getSelectedItem(), speed);
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					JOptionPane.showMessageDialog(null, "ERROR: '" + txtSpeed.getText() + "' is not a valid speed", "Invalid Speed", JOptionPane.INFORMATION_MESSAGE);
+					txtSpeed.setText("");
+				}
 			}
 		});
 		bottomPanel.add(btnDispatch);

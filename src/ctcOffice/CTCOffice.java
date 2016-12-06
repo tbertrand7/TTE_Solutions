@@ -60,6 +60,11 @@ public class CTCOffice
 		TTEHome.TTEHomeGUI.wc.suggestAuthority(dest.blockNumber, train);
     }
 
+    public void dispatchNewTrain(TrackBlock dest, double speed)
+	{
+
+	}
+
 	/** Returns the current simulation speed */
 	public int getSimulationSpeed()
 	{
