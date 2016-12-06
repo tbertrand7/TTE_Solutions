@@ -1,7 +1,7 @@
 package waysideController;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -28,8 +28,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import javax.swing.JList;
+import javax.swing.JScrollBar;
+import javax.swing.border.LineBorder;
+import TTEHome.TTEHomeGUI;
 
-public class TC_UI_main extends JFrame {
+public class WaysideControllerUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtOn;
@@ -43,7 +47,7 @@ public class TC_UI_main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TC_UI_main frame = new TC_UI_main();
+					WaysideControllerUI frame = new WaysideControllerUI();
 					frame.setVisible(true);
 					//TC_UI_startup popup = new TC_UI_startup();
 					//popup.setTitle("PLC Startup");
@@ -54,11 +58,16 @@ public class TC_UI_main extends JFrame {
 			}
 		});
 	}
+	
+	public void accessSystem(TTEHome.TTEHomeGUI sys)
+	{
+		//system = sys;
+	}
 
 	/**
 	 * Create the frame.
 	 */
-	public TC_UI_main() {
+	public WaysideControllerUI() {
 		setTitle("Wayside Controller");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 507, 338);
@@ -67,69 +76,107 @@ public class TC_UI_main extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		Choice waysideIDChoice = new Choice();
+		waysideIDChoice.setBounds(6, 43, 97, 34);
+		contentPane.add(waysideIDChoice);
+		waysideIDChoice.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent ie)
+			{
+				//TO DO
+				switch(waysideIDChoice.getSelectedItem())
+				{
+					case "Red 1":
+						//wayside = TTEHome.TTEHomeGUI.redWC1;
+						break;
+					case "Red 2":
+						//wayside = TTEHome.TTEHomeGUI.redWC2;
+						break;
+					case "Green 1":
+						//wayside = TTEHome.TTEHomeGUI.greenWC1;
+						break;
+					case "Green 2":
+						//wayside = TTEHome.TTEHomeGUI.greenWC2;
+						break;
+				}
+				
+			}
+		});
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(121, 9, 350, 242);
 		contentPane.add(tabbedPane);
 		
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Track Occupancy", null, panel, null);
-		panel.setLayout(null);
+		JPanel trackOccupancy = new JPanel();
+		trackOccupancy.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		tabbedPane.addTab("Track Occupancy", null, trackOccupancy, null);
+		trackOccupancy.setLayout(null);
 		
 		JLabel lblTrain = new JLabel("Train:");
 		lblTrain.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblTrain.setBounds(20, 13, 46, 14);
-		panel.add(lblTrain);
+		trackOccupancy.add(lblTrain);
 		
+		//Train Choice
+		Choice trainIDChoice = new Choice();
+		trainIDChoice.setBounds(20, 33, 214, 50);
+		trackOccupancy.add(trainIDChoice);
+		
+		//Display for the current block of the train
 		JLabel lblBlockNumber = new JLabel("Block Number:");
 		lblBlockNumber.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblBlockNumber.setBounds(20, 83, 122, 14);
-		panel.add(lblBlockNumber);
-		
-		Choice choice = new Choice();
-		choice.setBounds(20, 33, 214, 50);
-		panel.add(choice);
+		trackOccupancy.add(lblBlockNumber);
 		
 		TextField textField = new TextField();
 		textField.setFont(new Font("Dialog", Font.PLAIN, 26));
 		textField.setBackground(Color.WHITE);
 		textField.setEditable(false);
 		textField.setBounds(20, 108, 179, 40);
-		panel.add(textField);
-
-		choice.addItemListener(new ItemListener(){
-	        public void itemStateChanged(ItemEvent ie)
-	        {
-	        		textField.setText(""+TTEHome.TTEHomeGUI.wc.trains.get(Integer.parseInt(choice.getSelectedItem())));
-	        }
-	    });
+		trackOccupancy.add(textField);
 		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Switch Positions", null, panel_1, null);
-		panel_1.setLayout(null);
+		//Update the block field when a train is selected
+		trainIDChoice.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent ie)
+			{
+				//TO DO
+			}
+		});
+		
+		//switch position panel
+		JPanel switchPositionPanel = new JPanel();
+		switchPositionPanel.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+		tabbedPane.addTab("Switch Positions", null, switchPositionPanel, null);
+		switchPositionPanel.setLayout(null);
+		
+		//choose which switch you want to see the position of
+		Choice switchPositionChoice = new Choice();
+		switchPositionChoice.setBounds(12, 47, 181, 22);
+		switchPositionPanel.add(switchPositionChoice);
 		
 		JLabel lblSwitchNumber = new JLabel("Switch Number:");
 		lblSwitchNumber.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		lblSwitchNumber.setBounds(12, 13, 181, 28);
-		panel_1.add(lblSwitchNumber);
-		
-		Choice choice_1 = new Choice();
-		choice_1.setBounds(12, 47, 181, 22);
-		panel_1.add(choice_1);
+		switchPositionPanel.add(lblSwitchNumber);
 		
 		JLabel lblSwitchPosition = new JLabel("Switch Position:");
 		lblSwitchPosition.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		lblSwitchPosition.setBounds(12, 111, 181, 28);
-		panel_1.add(lblSwitchPosition);
+		switchPositionPanel.add(lblSwitchPosition);
 		
 		textField_1 = new JTextField();
 		textField_1.setBackground(Color.WHITE);
 		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		textField_1.setEditable(false);
 		textField_1.setBounds(12, 144, 181, 35);
-		panel_1.add(textField_1);
+		switchPositionPanel.add(textField_1);
 		textField_1.setColumns(10);
 		
+		JButton btnSetPosition = new JButton("Set Position");
+		btnSetPosition.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnSetPosition.setBounds(205, 144, 128, 35);
+		switchPositionPanel.add(btnSetPosition);
+		
 		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		tabbedPane.addTab("Railway Status", null, panel_2, null);
 		panel_2.setLayout(null);
 		
@@ -147,12 +194,11 @@ public class TC_UI_main extends JFrame {
 		txtOn.setBackground(Color.WHITE);
 		txtOn.setEditable(false);
 		txtOn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtOn.setText("Red");
-		txtOn.setBounds(111, 64, 40, 26);
+		txtOn.setBounds(111, 64, 56, 26);
 		panel_2.add(txtOn);
 		txtOn.setColumns(10);
 		
-		JLabel lblCrossbar = new JLabel("CrossBar:");
+		JLabel lblCrossbar = new JLabel("Crossbar:");
 		lblCrossbar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCrossbar.setBounds(33, 107, 68, 14);
 		panel_2.add(lblCrossbar);
@@ -160,10 +206,9 @@ public class TC_UI_main extends JFrame {
 		txtUp = new JTextField();
 		txtUp.setBackground(Color.WHITE);
 		txtUp.setEditable(false);
-		txtUp.setText("Up");
 		txtUp.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtUp.setColumns(10);
-		txtUp.setBounds(111, 101, 40, 26);
+		txtUp.setBounds(111, 101, 56, 30);
 		panel_2.add(txtUp);
 		
 		JLabel lblTrackIssues = new JLabel("Broken Rails:");
@@ -178,14 +223,15 @@ public class TC_UI_main extends JFrame {
 		
 		JLabel lblCrossingStatus = new JLabel("Crossing Number:");
 		lblCrossingStatus.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblCrossingStatus.setBounds(20, 38, 184, 26);
+		lblCrossingStatus.setBounds(20, 38, 165, 26);
 		panel_2.add(lblCrossingStatus);
 		
 		Choice choice_2 = new Choice();
-		choice_2.setBounds(176, 42, 135, 22);
+		choice_2.setBounds(191, 43, 135, 22);
 		panel_2.add(choice_2);
 		
 		JButton btnLoadPlcProgram = new JButton("Load PLC Program");
+		btnLoadPlcProgram.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnLoadPlcProgram.setBounds(156, 262, 198, 23);
 		contentPane.add(btnLoadPlcProgram);
 		
@@ -199,18 +245,10 @@ public class TC_UI_main extends JFrame {
 		contentPane.add(btnUpdate);
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				choice.removeAll();
-				TTEHome.TTEHomeGUI.wc.updateLocalTrackInfo();
-				for(Integer i: TTEHome.TTEHomeGUI.wc.trains.keySet())
-				{
-					choice.add(""+i);
-				}
+				//TO DO
 			}
 		});
 		
-		Choice choice_3 = new Choice();
-		choice_3.setBounds(6, 43, 97, 34);
-		contentPane.add(choice_3);
-		choice_3.add("Green 1");
+		
 	}
 }
