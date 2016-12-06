@@ -174,7 +174,7 @@ public class OfficeUI extends JFrame {
 
 	private void btnCloseTrackClick()
 	{
-		logNotification(ctcOffice.closeBlock(selectedBlockBtn.line, selectedBlockBtn.block));
+		ctcOffice.closeBlock(selectedBlockBtn.line, selectedBlockBtn.block);
 	}
 
 	private void btnToggleSwitchClick()

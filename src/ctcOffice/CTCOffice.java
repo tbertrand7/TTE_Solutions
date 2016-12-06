@@ -117,10 +117,9 @@ public class CTCOffice
 	 * @param block block number
 	 * @return Notification string for block close/open
 	 */
-	public String closeBlock(String line, int block)
+	public void closeBlock(String line, int block)
 	{
 		TrackBlock currBlock;
-		String rtnStr;
 
 		//Get block from appropriate line
 		if (line.equals("Red"))
@@ -131,19 +130,18 @@ public class CTCOffice
 		//If closed set to unoccupied, otherwise set to closed
 		if (currBlock.status == BlockStatus.CLOSED) {
 			currBlock.status = BlockStatus.UNOCCUPIED;
-			rtnStr = line + " Line: Block " + block + " opened";
+			officeUI.logNotification(line + " Line: Block " + block + " opened");
 		}
 		else {
 			if (currBlock.trainID > 0) {
-				rtnStr = "ERROR: Block " + block + " cannot be closed because it is occupied by a train";
+				officeUI.logNotification("ERROR: Block " + block + " cannot be closed because it is occupied by a train");
 			} else {
 				currBlock.status = BlockStatus.CLOSED;
-				rtnStr = line + " Line: Block " + block + " closed for maintenance";
+				officeUI.logNotification(line + " Line: Block " + block + " closed for maintenance");
 			}
 		}
 
 		track.setBlock(currBlock); //Update block in DB
-		return rtnStr;
 	}
 
 	public void loadSchedule(File file)
