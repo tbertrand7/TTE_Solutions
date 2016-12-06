@@ -16,6 +16,7 @@ public class CTCOffice
 	private int simulationSpeed;
 	private Mode mode = Mode.MANUAL;
 	private ScheduleItem[] schedule;
+	private String loggedInUser;
 
 	public TrackBlock[] greenLine, redLine;
 	
@@ -27,6 +28,7 @@ public class CTCOffice
             redLine = new TrackBlock[77];
             loadTrackData();
             officeUI = new OfficeUI(this);
+            loggedInUser = "";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,13 +41,16 @@ public class CTCOffice
 
 	public void logout()
 	{
+		loggedInUser = "";
 		new OfficeLogin(this);
 		officeUI.setVisible(false);
 	}
 
 	public void loginSuccess(String username)
 	{
+		loggedInUser = username;
 		officeUI.clearNotifications();
+		officeUI.logNotification("Logged in as " + loggedInUser);
 		officeUI.setVisible(true);
 	}
 
@@ -81,7 +86,7 @@ public class CTCOffice
 
     public void dispatchNewTrain(TrackBlock dest, double speed)
 	{
-
+		//TODO: integrate with wayside controller
 	}
 
 	/** Returns the current simulation speed */

@@ -376,7 +376,8 @@ public class OfficeUI extends JFrame {
 		mntmLogout.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mntmLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctcOffice.logout();
+				if (JOptionPane.showConfirmDialog (null, "Are you sure you want to logout?","Logout", JOptionPane.YES_NO_OPTION) == 0)
+					ctcOffice.logout();
 			}
 		});
 		mnFile.add(mntmLogout);
