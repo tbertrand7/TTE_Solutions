@@ -13,7 +13,7 @@ import trackModel.TrackModelUI;
 import trainController.TrainControllerInstances;
 import trainModel.TrainModel;
 import trainModel.trainModelGUI;
-import waysideController.TC_UI_main;
+import waysideController.WaysideControllerUI;
 import waysideController.TC_UI_startup;
 import waysideController.WaysideController;
 
@@ -93,14 +93,14 @@ public class TTEHomeGUI {
 		JButton btnWaysideController = new JButton("Wayside Controller");
 		btnWaysideController.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TC_UI_main.main(null);
+				WaysideControllerUI.main(null);
 			}
 		});
 		btnWaysideController.setBounds(10, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnWaysideController);
 		
 		TrainControllerInstances tci = new TrainControllerInstances();
-		TrainModel usethis = tci.createTrain(1, "green");
+		TrainModel usethis = tci.createTrain(12, "green");
 		
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {
