@@ -34,18 +34,28 @@ public class CTCOffice
         }
 	}
 
+	/**
+	 * Display login screen
+	 */
 	public void initLogin()
 	{
 		new OfficeLogin(this);
 	}
 
+	/**
+	 * Logout and display login screen
+	 */
 	public void logout()
 	{
 		loggedInUser = "";
-		new OfficeLogin(this);
 		officeUI.setVisible(false);
+		initLogin();
 	}
 
+	/**
+	 * Display office UI on successful login
+	 * @param username logged in username
+	 */
 	public void loginSuccess(String username)
 	{
 		loggedInUser = username;
