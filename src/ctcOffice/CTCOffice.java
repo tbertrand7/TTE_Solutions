@@ -8,6 +8,7 @@ import waysideController.*;
 
 public class CTCOffice
 {
+	private OfficeUI officeUI;
 	private TrackModel track;
 	
 	public enum Mode {MANUAL, AUTOMATIC}
@@ -25,6 +26,8 @@ public class CTCOffice
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
             loadTrackData();
+            officeUI = new OfficeUI(this);
+            officeUI.setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

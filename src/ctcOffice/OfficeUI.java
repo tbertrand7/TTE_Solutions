@@ -38,27 +38,8 @@ public class OfficeUI extends JFrame {
 	private ScheduledExecutorService exec;
 	private ScheduledFuture<?> trackUpdate;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					OfficeUI frame = new OfficeUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public OfficeUI() {
-		ctcOffice = new CTCOffice();
+	public OfficeUI(CTCOffice ctc) {
+		ctcOffice = ctc;
 
 		setFont(new Font("SansSerif", Font.PLAIN, 16));
 		try {
