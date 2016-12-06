@@ -61,7 +61,7 @@ public class TrackBlock {
 
 				if (infr[i].equals("STATION")) {
 					if (i + 1 < infr.length)
-						rtnStr = (infr[i + 1].trim());
+						rtnStr = (infr[i + 1].trim()) + " (" + blockNumber + ")";
 				}
 			}
 		}
