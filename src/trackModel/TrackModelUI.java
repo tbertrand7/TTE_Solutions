@@ -27,6 +27,8 @@ public class TrackModelUI {
 	private JTextField textField;
 	private JPasswordField passwordField;
 	private TrackModel opps = new TrackModel();
+	private UserDBInteraction userDB = null;
+	
 
 	/**
 	 * Launch the application.
@@ -765,9 +767,267 @@ public class TrackModelUI {
 		});
 		resetDB.setBounds(285, 6, 209, 301);
 		adminControls.add(resetDB);
-
-
-
+		
+		JPanel panel = new JPanel();
+		tabbedPane.addTab("Testing Tool", null, panel, null);
+		panel.setLayout(null);
+		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setBounds(6, 191, 488, 39);
+		panel.add(progressBar);
+		
+		JCheckBox chckbxResetDatabase = new JCheckBox("Reset Database");
+		chckbxResetDatabase.setEnabled(false);
+		chckbxResetDatabase.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxResetDatabase.setBounds(6, 6, 200, 25);
+		panel.add(chckbxResetDatabase);
+		
+		JCheckBox chckbxGetTrackBlock = new JCheckBox("Get Track Block");
+		chckbxGetTrackBlock.setEnabled(false);
+		chckbxGetTrackBlock.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxGetTrackBlock.setBounds(6, 43, 200, 25);
+		panel.add(chckbxGetTrackBlock);
+		
+		JCheckBox chckbxGetTrackLine = new JCheckBox("Get Track Line ");
+		chckbxGetTrackLine.setEnabled(false);
+		chckbxGetTrackLine.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxGetTrackLine.setBounds(6, 80, 200, 25);
+		panel.add(chckbxGetTrackLine);
+		
+		JCheckBox chckbxSetTrackBlock = new JCheckBox("Set Track Block");
+		chckbxSetTrackBlock.setEnabled(false);
+		chckbxSetTrackBlock.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxSetTrackBlock.setBounds(6, 117, 200, 25);
+		panel.add(chckbxSetTrackBlock);
+		
+		JCheckBox chckbxBreakRail = new JCheckBox("Break Rail");
+		chckbxBreakRail.setEnabled(false);
+		chckbxBreakRail.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxBreakRail.setBounds(6, 154, 200, 25);
+		panel.add(chckbxBreakRail);
+		
+		JCheckBox chckbxCutPower = new JCheckBox("Cut Power");
+		chckbxCutPower.setEnabled(false);
+		chckbxCutPower.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxCutPower.setBounds(294, 6, 200, 25);
+		panel.add(chckbxCutPower);
+		
+		JCheckBox chckbxBreakRailCircuit = new JCheckBox("Break Rail Circuit");
+		chckbxBreakRailCircuit.setEnabled(false);
+		chckbxBreakRailCircuit.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxBreakRailCircuit.setBounds(294, 43, 200, 25);
+		panel.add(chckbxBreakRailCircuit);
+		
+		JCheckBox chckbxAddUser = new JCheckBox("Add User");
+		chckbxAddUser.setEnabled(false);
+		chckbxAddUser.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxAddUser.setBounds(294, 80, 200, 25);
+		panel.add(chckbxAddUser);
+		
+		JCheckBox chckbxVerifyUser = new JCheckBox("Verify User");
+		chckbxVerifyUser.setEnabled(false);
+		chckbxVerifyUser.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxVerifyUser.setBounds(294, 117, 200, 25);
+		panel.add(chckbxVerifyUser);
+		
+		JCheckBox chckbxAllTestsPassed = new JCheckBox("All Tests Passed");
+		chckbxAllTestsPassed.setEnabled(false);
+		chckbxAllTestsPassed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		chckbxAllTestsPassed.setBounds(294, 154, 200, 25);
+		panel.add(chckbxAllTestsPassed);
+		
+		JButton btnNewButton = new JButton("Run Tests");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO Finish Unit Testing Tool
+				
+				 Runnable runner = new Runnable()
+				    {
+				        public void run() {
+				        //Your original code with the loop here.
+				        	//Beginning of unit testing 
+							boolean failure = false;
+							progressBar.setMaximum(100);
+							btnNewButton.setEnabled(false);
+							//reset db
+							try {
+								opps.resetDB();
+								chckbxResetDatabase.setSelected(true);
+								progressBar.setValue(10);
+								panel.repaint();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							
+							//Get Track Block Info
+							try {
+								opps.resetDB();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							TrackBlock temp = opps.getBlock("Red", 1);
+							if(temp.speed != -1 && temp.authority != -1)
+								failure = true;
+							else{
+								chckbxGetTrackBlock.setSelected(true);
+								progressBar.setValue(20);
+								progressBar.repaint();				
+							}
+							
+							//Get Track Line Info
+							try {
+								opps.resetDB();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							TrackBlock[] tempArray = opps.getBlock("Red");
+							if(tempArray.length != 77 && tempArray[1].blockNumber != 1)
+								failure = true;
+							else{
+									chckbxGetTrackLine.setSelected(true);
+									progressBar.setValue(30);
+									panel.repaint();				
+								}
+								
+							
+							
+							//Set Track Block Data
+							try {
+								opps.resetDB();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							temp = opps.getBlock("Red", 1);
+							temp.authority = 666;
+							temp.speed = 123;
+							opps.setBlock(temp);
+							if(temp.speed != 123 && temp.authority != 666)
+								failure = true;
+							else{
+								chckbxSetTrackBlock.setSelected(true);
+								progressBar.setValue(40);
+								panel.repaint();
+							}
+							
+							//Break Rail Test
+							try {
+								opps.resetDB();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							opps.breakRail("Red",1);
+							temp = opps.getBlock("Red", 1);
+							if(temp.status != BlockStatus.BROKENRAIL)
+								failure = true;
+							else{
+								chckbxBreakRail.setSelected(true);
+								progressBar.setValue(50);
+								panel.repaint();
+							}
+							
+							//Cut Power Test
+							try {
+								opps.resetDB();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							opps.cutRail("Red",1);
+							temp = opps.getBlock("Red", 1);
+							if(temp.status != BlockStatus.CUTRAIL)
+								failure = true;
+							else{
+								chckbxCutPower.setSelected(true);
+								progressBar.setValue(60);
+								panel.repaint();
+							}
+							
+							//Break Rail Circuit Test
+							try {
+								opps.resetDB();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							opps.breakRailCircuit("Red",1);
+							temp = opps.getBlock("Red", 1);
+							if(temp.status != BlockStatus.BROKENCIRCUIT)
+								failure = true;
+							else{
+								chckbxBreakRailCircuit.setSelected(true);
+								progressBar.setValue(70);
+								panel.repaint();
+							}
+							
+							//Add User Test
+							try {
+								userDB = new UserDBInteraction();
+								if(!userDB.addUser("Admin", "password")){
+									chckbxAddUser.setSelected(true);
+									progressBar.setValue(80);
+									panel.repaint();
+								}
+								else
+									failure=true;
+							} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
+							
+							//Verify User Test
+							try {
+								if(userDB.verifyUser("Admin", "password")){
+									chckbxVerifyUser.setSelected(true);
+									progressBar.setValue(90);
+									panel.repaint();
+								}
+								else{
+									failure=true;
+								}
+							} catch (SQLException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
+							
+							
+							//final reset
+							try {
+								opps.resetDB();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							//print results
+							if (failure) {
+								JOptionPane.showMessageDialog(parent, "Tests Failed!");
+								btnNewButton.setEnabled(true);
+							} else {
+								progressBar.setValue(100);
+								chckbxAllTestsPassed.setSelected(true);
+								JOptionPane.showMessageDialog(parent, "Tests Passed!");
+								btnNewButton.setEnabled(true);
+							}
+				        }
+				    };
+				    Thread t = new Thread(runner, "Code Executer");
+				    t.start();				
+			}
+		});
+		btnNewButton.setBounds(6, 230, 488, 77);
+		panel.add(btnNewButton);
 	}
 
 	private void saveOpperation(JComboBox<String> lineComboBox, JComboBox<Integer> railComboBox,
