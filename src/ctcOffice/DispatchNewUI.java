@@ -14,6 +14,7 @@ public class DispatchNewUI extends JFrame {
 	private JComboBox<TrackBlock> cmbDest;
 	private CTCOffice ctcOffice;
 	private JButton btnDispatch;
+	private JTextField txtSpeed;
 
 	public DispatchNewUI(CTCOffice office) {
 		ctcOffice = office;
@@ -32,7 +33,7 @@ public class DispatchNewUI extends JFrame {
 		setFont(new Font("SansSerif", Font.PLAIN, 16));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DispatchNewUI.class.getResource("/shared/TTE.png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 330, 170);
+		setBounds(100, 100, 330, 200);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -52,9 +53,9 @@ public class DispatchNewUI extends JFrame {
 		contentPane.add(topPanel, gbc_topPanel);
 		GridBagLayout gbl_topPanel = new GridBagLayout();
 		gbl_topPanel.columnWidths = new int[]{100, 0, 0};
-		gbl_topPanel.rowHeights = new int[]{30, 30, 0};
+		gbl_topPanel.rowHeights = new int[]{30, 30, 30, 0};
 		gbl_topPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_topPanel.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gbl_topPanel.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
 		topPanel.setLayout(gbl_topPanel);
 		
 		JLabel lblLine = new JLabel("Line:");
@@ -88,7 +89,7 @@ public class DispatchNewUI extends JFrame {
 		JLabel lblDestination = new JLabel("Destination:");
 		lblDestination.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblDestination = new GridBagConstraints();
-		gbc_lblDestination.insets = new Insets(0, 0, 0, 5);
+		gbc_lblDestination.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDestination.gridx = 0;
 		gbc_lblDestination.gridy = 1;
 		topPanel.add(lblDestination, gbc_lblDestination);
@@ -97,10 +98,28 @@ public class DispatchNewUI extends JFrame {
 		cmbDest.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		cmbDest.setEnabled(false);
 		GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
+		gbc_comboBox_1.insets = new Insets(0, 0, 5, 0);
 		gbc_comboBox_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox_1.gridx = 1;
 		gbc_comboBox_1.gridy = 1;
 		topPanel.add(cmbDest, gbc_comboBox_1);
+		
+		JLabel lblSpeed = new JLabel("Speed:");
+		lblSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		GridBagConstraints gbc_lblSpeed = new GridBagConstraints();
+		gbc_lblSpeed.insets = new Insets(0, 0, 0, 5);
+		gbc_lblSpeed.gridx = 0;
+		gbc_lblSpeed.gridy = 2;
+		topPanel.add(lblSpeed, gbc_lblSpeed);
+		
+		txtSpeed = new JTextField();
+		txtSpeed.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		GridBagConstraints gbc_txtFieldSpeed = new GridBagConstraints();
+		gbc_txtFieldSpeed.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtFieldSpeed.gridx = 1;
+		gbc_txtFieldSpeed.gridy = 2;
+		topPanel.add(txtSpeed, gbc_txtFieldSpeed);
+		txtSpeed.setColumns(10);
 		
 		JPanel bottomPanel = new JPanel();
 		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
