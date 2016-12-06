@@ -106,7 +106,7 @@ public class OfficeLoginUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(officeLogin.validateLogin(txtFieldUsername.getText(), passwordField.getText()))
 				{
-					OfficeUI.main(null);
+					new CTCOffice();
 					dispose();
 				}
 				else
