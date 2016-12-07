@@ -27,7 +27,6 @@ public class CTCOffice
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
             loadTrackData();
-            officeUI = new OfficeUI(this);
             loggedInUser = "";
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,7 +47,7 @@ public class CTCOffice
 	public void logout()
 	{
 		loggedInUser = "";
-		officeUI.setVisible(false);
+		officeUI.dispose();
 		initLogin();
 	}
 
@@ -59,7 +58,7 @@ public class CTCOffice
 	public void loginSuccess(String username)
 	{
 		loggedInUser = username;
-		officeUI.clearNotifications();
+		officeUI = new OfficeUI(this);
 		officeUI.logNotification("Logged in as " + loggedInUser);
 		officeUI.setVisible(true);
 	}

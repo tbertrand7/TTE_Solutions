@@ -317,14 +317,6 @@ public class OfficeUI extends JFrame {
 	}
 
 	/**
-	 * Resets notification panel
-	 */
-	void clearNotifications()
-	{
-		notificationArea.setText("");
-	}
-
-	/**
 	 * Enables elements if block is occupied
 	 * @param x is block occupied
 	 */
