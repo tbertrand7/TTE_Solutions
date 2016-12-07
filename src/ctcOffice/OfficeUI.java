@@ -8,21 +8,19 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import ctcOffice.CTCOffice.Mode;
 import trackModel.*;
 import trackModel.TrackBlock.*;
 
-import java.text.*;
-import java.util.*;
-import java.util.concurrent.*;
-
 public class OfficeUI extends JFrame {
 
 	private JPanel contentPane, trackDisplayPanel, topButtonPanel, statusPanel, notificationPanel, schedulePanel;
-	private JTabbedPane mainMenuTabPane;
 	private JTextArea notificationArea;
-	private JTable tblSchedule;
+	private DefaultTableModel tableModel;
 	private JSlider simulationSpeed;
 	private CTCOffice ctcOffice;
 	private JTextField txtFieldSpeed;
@@ -63,43 +61,6 @@ public class OfficeUI extends JFrame {
 		initTrackButtons();
 		setHasTrain(false);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 6, 506, 451);
-		schedulePanel.add(scrollPane);
-
-		tblSchedule = new JTable();
-		tblSchedule.setEnabled(false);
-		tblSchedule.setCellSelectionEnabled(true);
-		tblSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		tblSchedule.setShowVerticalLines(true);
-		tblSchedule.setShowHorizontalLines(true);
-		tblSchedule.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Green", new Integer(1), "Pioneer", new Float(2.3f)},
-				{"Green", new Integer(2), "Edgebrook", new Float(2.3f)},
-				{"Green", new Integer(3), "IngleWood", new Float(2.9f)},
-			},
-			new String[] {
-				"Line", "Train", "Destination", "Time"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, Integer.class, String.class, Float.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		tblSchedule.getColumnModel().getColumn(0).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(55);
-		tblSchedule.getColumnModel().getColumn(1).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(40);
-		tblSchedule.getColumnModel().getColumn(2).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(2).setPreferredWidth(90);
-		tblSchedule.getColumnModel().getColumn(3).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(3).setPreferredWidth(45);
-		scrollPane.setViewportView(tblSchedule);
-
 		//Create Thread to update track info
 		exec = Executors.newSingleThreadScheduledExecutor();
 		trackUpdate = exec.scheduleWithFixedDelay(new Runnable() {
@@ -127,7 +88,7 @@ public class OfficeUI extends JFrame {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".csv", "csv");
 		fc.setFileFilter(filter);
 		fc.showOpenDialog(contentPane);
-		ctcOffice.loadSchedule(fc.getSelectedFile());
+		ctcOffice.loadSchedule(fc.getSelectedFile(), tableModel);
 	}
 
 	private void runScheduleClick()
@@ -409,7 +370,7 @@ public class OfficeUI extends JFrame {
 		contentPane.add(topButtonPanel);
 		topButtonPanel.setLayout(null);
 
-		mainMenuTabPane = new JTabbedPane(JTabbedPane.TOP);
+		JTabbedPane mainMenuTabPane = new JTabbedPane(JTabbedPane.TOP);
 		mainMenuTabPane.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		mainMenuTabPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		mainMenuTabPane.setBounds(0, 297, 520, 500);
@@ -853,6 +814,32 @@ public class OfficeUI extends JFrame {
 		notificationArea.setEditable(false);
 		notificationArea.setLineWrap(true);
 		notificationArea.setWrapStyleWord(true);
+
+		/* Schedule Table */
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(6, 6, 506, 451);
+		schedulePanel.add(scrollPane);
+
+		JTable tblSchedule = new JTable();
+		tblSchedule.setEnabled(false);
+		tblSchedule.setCellSelectionEnabled(true);
+		tblSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		tblSchedule.setShowVerticalLines(true);
+		tblSchedule.setShowHorizontalLines(true);
+		tableModel = new DefaultTableModel(0,0);
+		tableModel.setColumnIdentifiers(new String[] {
+				"Line", "Train", "Destination", "Time"
+		});
+		tblSchedule.setModel(tableModel);
+		tblSchedule.getColumnModel().getColumn(0).setResizable(false);
+		tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(20);
+		tblSchedule.getColumnModel().getColumn(1).setResizable(false);
+		tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(20);
+		tblSchedule.getColumnModel().getColumn(2).setResizable(false);
+		tblSchedule.getColumnModel().getColumn(2).setPreferredWidth(150);
+		tblSchedule.getColumnModel().getColumn(3).setResizable(false);
+		tblSchedule.getColumnModel().getColumn(3).setPreferredWidth(30);
+		scrollPane.setViewportView(tblSchedule);
 	}
 
 	/**
