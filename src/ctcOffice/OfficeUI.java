@@ -78,27 +78,6 @@ public class OfficeUI extends JFrame {
 				{"Green", new Integer(1), "Pioneer", new Float(2.3f)},
 				{"Green", new Integer(2), "Edgebrook", new Float(2.3f)},
 				{"Green", new Integer(3), "IngleWood", new Float(2.9f)},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
 			},
 			new String[] {
 				"Line", "Train", "Destination", "Time"
@@ -149,6 +128,11 @@ public class OfficeUI extends JFrame {
 		fc.setFileFilter(filter);
 		fc.showOpenDialog(contentPane);
 		ctcOffice.loadSchedule(fc.getSelectedFile());
+	}
+
+	private void runScheduleClick()
+	{
+
 	}
 
 	private void btnCloseTrackClick()
@@ -398,6 +382,12 @@ public class OfficeUI extends JFrame {
 
 		JMenuItem mntmRunSchedule = new JMenuItem("Run Schedule");
 		mntmRunSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mntmRunSchedule.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				runScheduleClick();
+			}
+		});
 		mnSchedule.add(mntmRunSchedule);
 
 		/* Panels */

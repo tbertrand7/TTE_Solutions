@@ -1,6 +1,7 @@
 package ctcOffice;
 
 import java.io.*;
+import java.util.*;
 
 import trackModel.*;
 import trackModel.TrackBlock.*;
@@ -150,9 +151,24 @@ public class CTCOffice
 		track.setBlock(currBlock); //Update block in DB
 	}
 
-	public void loadSchedule(File file)
+	public void loadSchedule(File f)
     {
         //TODO: Process loaded csv
+        try {
+            BufferedReader csv = new BufferedReader(new FileReader(f));
+
+            String s;
+            ArrayList<ScheduleItem> sched = new ArrayList<>();
+            while ((s = csv.readLine()) != null)
+            {
+                String[] data = s.split(",");
+                sched.add(new ScheduleItem(data[0], -1, data[1], Double.parseDouble(data[2])));
+            }
+            csv.close();
+            schedule = sched.toArray(new ScheduleItem[10]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 	public int calcThroughput(TrackBlock block)
