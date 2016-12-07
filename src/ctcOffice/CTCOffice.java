@@ -102,6 +102,7 @@ public class CTCOffice
     public void dispatchNewTrain(TrackBlock dest, double speed)
 	{
 		//TODO: integrate with wayside controller
+		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
 	}
 
 	/** Returns the current simulation speed */
