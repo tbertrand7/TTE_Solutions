@@ -14,6 +14,11 @@ public class TrainModel extends TrainState implements Runnable{
 	final double MU = .003;
 	
 	/**
+	 * gravitational constant
+	 */
+	final double G = -9.8;
+	
+	/**
 	 * TrackModel object to get new track blocks
 	 */
 	protected TrackModel tm = new TrackModel();
@@ -164,7 +169,7 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public TrainModel(Trains modelList, TrainController tc, int id, String line) {	
 		
-	//	ui = new trainModelGUI(this);
+		//ui = new trainModelGUI(this);
 		
 		trainCon = tc;
 		trainID = id;
@@ -437,19 +442,44 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				
 				if(power == 0 && velocity == 0 && !serviceBrakeOn && !emergencyBrakeOn){
-					accRate = 0;
+					if(grade == 0){
+						accRate = 0;
+					}
+					else{
+						accRate = G * Math.sin(Math.atan(grade));
+					}
 				}
 				else if(power == 0 && velocity != 0 && !serviceBrakeOn && !emergencyBrakeOn){
-					accRate = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1; //multiply by -1 because resistance is in the opposite direction
+					if(grade == 0){
+						accRate = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1; //multiply by -1 because resistance is in the opposite direction
+					}
+					else{
+						tempAcc = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1; //multiply by -1 because resistance is in the opposite direction
+						accRate = tempAcc + (G * Math.sin(Math.atan(grade)));
+					}
 				}
 				else if(!serviceBrakeOn && !emergencyBrakeOn){
 					
-					if(power + resistivePower < 0){
-						tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
-						accRate = tempAcc * -1;
+					if(grade == 0){
+						if(power + resistivePower < 0){
+							tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+							accRate = tempAcc * -1;
+						}
+						else{
+							accRate = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+						}
 					}
 					else{
-						accRate = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+						if(power + resistivePower < 0){
+							tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+							tempAcc = tempAcc * -1;
+							accRate = tempAcc + (G * Math.sin(Math.atan(grade)));
+						}
+						else{
+							tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+							accRate = tempAcc + (G * Math.sin(Math.atan(grade)));
+						}
+						
 					}
 				}
 

@@ -3,7 +3,6 @@ package trainModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import trainController.TrainControllerUI;
 
 public class Trains {
 	
