@@ -117,9 +117,21 @@ public class CTCOffice
 		TTEHome.TTEHomeGUI.wc.suggestAuthority(dest.blockNumber, train);
     }
 
+    /**
+     * Dispatch new train from yard
+     * @param dest destination block of new train
+     * @param speed speed for new train
+     */
     public void dispatchNewTrain(TrackBlock dest, double speed)
 	{
 		//TODO: integrate with wayside controller
+        //Create new train and get ID for wayside
+        int newTrainID = trainCont.createTrain(dest.line);
+
+        //Send destination and speed requests for new train
+        suggestDestination(dest, newTrainID);
+        suggestSpeed(speed, newTrainID);
+
 		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
 	}
 	
