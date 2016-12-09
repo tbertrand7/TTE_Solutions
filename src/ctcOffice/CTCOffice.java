@@ -11,7 +11,7 @@ import waysideController.*;
 
 public class CTCOffice
 {
-	private SystemClock sysClock;
+	public SystemClock sysClock;
 	private OfficeUI officeUI;
 	private TrackModel track;
 	
@@ -81,12 +81,14 @@ public class CTCOffice
 		else
 			officeUI.logNotification("Manual Mode Set");
 	}
-	
-	/** Set new simulation speed */
-	//TODO: Replace method with global system clock
+
+	/**
+	 * Change global system clock
+	 * @param newSpeed new simulation speed
+	 */
 	public void setSimulationSpeed(int newSpeed)
 	{
-		simulationSpeed = newSpeed;
+		sysClock.clock = newSpeed;
 		officeUI.logNotification("New Simulation Speed is " + newSpeed + "X wall clock speed");
 	}
 

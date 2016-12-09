@@ -633,6 +633,7 @@ public class OfficeUI extends JFrame {
         simulationSpeed.setMinimum(1);
         simulationSpeed.setMinorTickSpacing(1);
         simulationSpeed.setMaximum(10);
+        simulationSpeed.setValue(ctcOffice.sysClock.clock);
         simulationSpeed.setBounds(1071, 20, 175, 42);
         simulationSpeed.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
