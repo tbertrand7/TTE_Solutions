@@ -1,6 +1,8 @@
 package ctcOffice;
 
 import java.io.*;
+import java.util.*;
+import javax.swing.table.*;
 
 import trackModel.*;
 import trackModel.TrackBlock.*;
@@ -16,6 +18,7 @@ public class CTCOffice
 	private int simulationSpeed;
 	private Mode mode = Mode.MANUAL;
 	private ScheduleItem[] schedule;
+	private String loggedInUser;
 
 	public TrackBlock[] greenLine, redLine;
 	
@@ -26,11 +29,40 @@ public class CTCOffice
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
             loadTrackData();
-            officeUI = new OfficeUI(this);
-            officeUI.setVisible(true);
+            loggedInUser = "";
         } catch (Exception e) {
             e.printStackTrace();
         }
+	}
+
+	/**
+	 * Display login screen
+	 */
+	public void initLogin()
+	{
+		new OfficeLogin(this);
+	}
+
+	/**
+	 * Logout and display login screen
+	 */
+	public void logout()
+	{
+		loggedInUser = "";
+		officeUI.dispose();
+		initLogin();
+	}
+
+	/**
+	 * Display office UI on successful login
+	 * @param username logged in username
+	 */
+	public void loginSuccess(String username)
+	{
+		loggedInUser = username;
+		officeUI = new OfficeUI(this);
+		officeUI.logNotification("Logged in as " + loggedInUser);
+		officeUI.setVisible(true);
 	}
 
     /**
@@ -40,6 +72,11 @@ public class CTCOffice
 	public void setMode(Mode newMode)
 	{
 		mode = newMode;
+
+		if (newMode == Mode.AUTOMATIC)
+			officeUI.logNotification("Auto Mode Set");
+		else
+			officeUI.logNotification("Manual Mode Set");
 	}
 	
 	/** Set new simulation speed */
@@ -47,6 +84,7 @@ public class CTCOffice
 	public void setSimulationSpeed(int newSpeed)
 	{
 		simulationSpeed = newSpeed;
+		officeUI.logNotification("New Simulation Speed is " + newSpeed + "X wall clock speed");
 	}
 
 	public void suggestSpeed(double newTrainSpeed, int train)
@@ -65,7 +103,8 @@ public class CTCOffice
 
     public void dispatchNewTrain(TrackBlock dest, double speed)
 	{
-
+		//TODO: integrate with wayside controller
+		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
 	}
 
 	/** Returns the current simulation speed */
@@ -86,10 +125,9 @@ public class CTCOffice
 	 * @param block block number
 	 * @return Notification string for block close/open
 	 */
-	public String closeBlock(String line, int block)
+	public void closeBlock(String line, int block)
 	{
 		TrackBlock currBlock;
-		String rtnStr;
 
 		//Get block from appropriate line
 		if (line.equals("Red"))
@@ -100,24 +138,56 @@ public class CTCOffice
 		//If closed set to unoccupied, otherwise set to closed
 		if (currBlock.status == BlockStatus.CLOSED) {
 			currBlock.status = BlockStatus.UNOCCUPIED;
-			rtnStr = line + " Line: Block " + block + " opened";
+			officeUI.logNotification(line + " Line: Block " + block + " opened");
 		}
 		else {
 			if (currBlock.trainID > 0) {
-				rtnStr = "ERROR: Block " + block + " cannot be closed because it is occupied by a train";
+				officeUI.logNotification("ERROR: Block " + block + " cannot be closed because it is occupied by a train");
 			} else {
 				currBlock.status = BlockStatus.CLOSED;
-				rtnStr = line + " Line: Block " + block + " closed for maintenance";
+				officeUI.logNotification(line + " Line: Block " + block + " closed for maintenance");
 			}
 		}
 
 		track.setBlock(currBlock); //Update block in DB
-		return rtnStr;
 	}
 
-	public void loadSchedule(File file)
+	public void loadSchedule(File f, DefaultTableModel tbl)
     {
-        //TODO: Process loaded csv
+        try {
+            BufferedReader csv = new BufferedReader(new FileReader(f));
+
+            String s;
+            ArrayList<ScheduleItem> sched = new ArrayList<>();
+            while ((s = csv.readLine()) != null)
+            {
+                String[] data = s.split(",");
+                String[] infr = data[1].split(";");
+                String dest = "";
+                if (infr.length > 1)
+                	dest = infr[1];
+                else
+                	dest = "Unnamed";
+
+                sched.add(new ScheduleItem(data[0], -1, dest, Double.parseDouble(data[2])));
+            }
+            csv.close();
+            schedule = sched.toArray(new ScheduleItem[10]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Clear table
+        while (tbl.getRowCount() != 0)
+		{
+			tbl.removeRow(0);
+		}
+
+		//Add new schedule to table
+        for (int i=0; i < schedule.length; i++)
+		{
+			tbl.addRow(new Object[] {schedule[i].line, schedule[i].train, schedule[i].destination, schedule[i].time});
+		}
     }
 
 	public int calcThroughput(TrackBlock block)

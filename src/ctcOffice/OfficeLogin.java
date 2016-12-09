@@ -7,17 +7,27 @@ import java.sql.SQLException;
 public class OfficeLogin
 {
 	private OfficeLoginUI loginUI;
+	private CTCOffice ctcOffice;
 	private UserDBInteraction userDB;
 
-	public OfficeLogin()
+	public OfficeLogin(CTCOffice ctc)
 	{
 		try {
+			ctcOffice = ctc;
 			userDB = new UserDBInteraction();
 			loginUI = new OfficeLoginUI(this);
 			loginUI.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Shows OfficeUI upon successful login
+	 */
+	public void loginSuccess(String username)
+	{
+		ctcOffice.loginSuccess(username);
 	}
 
 	/** Checks for valid username and password */

@@ -26,6 +26,7 @@ public class TTEHomeGUI {
 
 	private JFrame frmTteTrainHome;
 	public static WaysideController wc;
+	public CTCOffice ctc;
 	/**
 	 * Launch the application.
 	 */
@@ -75,11 +76,13 @@ public class TTEHomeGUI {
 		frmTteTrainHome.setBounds(100, 100, 450, 300);
 		frmTteTrainHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTteTrainHome.getContentPane().setLayout(null);
-		
+
+		ctc = new CTCOffice();
+
 		JButton btnNewButton = new JButton("The Office");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new OfficeLogin();
+				ctc.initLogin();
 			}
 		});
 		btnNewButton.setBounds(10, 11, 135, 109);
@@ -133,7 +136,5 @@ public class TTEHomeGUI {
 		});
 		btnTrackModel.setBounds(150, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnTrackModel);
-		
-		
 	}
 }
