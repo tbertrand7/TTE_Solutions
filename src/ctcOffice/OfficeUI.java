@@ -249,8 +249,15 @@ public class OfficeUI extends JFrame {
         for (int i=0; i < greenLine.length; i++)
         {
             greenLine[i].setStatus(ctcOffice.greenLine[i]);
-            if (i < redLine.length)
-                redLine[i].setStatus(ctcOffice.redLine[i]);
+            if (greenLine[i].checkWarning(ctcOffice.greenLine[i])) {
+            	logNotification("WARNING: " + greenLine[i].toString() + " may be broken!");
+			}
+            if (i < redLine.length) {
+				redLine[i].setStatus(ctcOffice.redLine[i]);
+				if (redLine[i].checkWarning(ctcOffice.redLine[i])) {
+					logNotification("WARNING: " + redLine[i].toString() + " may be broken!");
+				}
+			}
         }
 	}
 
