@@ -10,7 +10,7 @@ import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class TC_UI_startup extends JDialog {
+public class LoadPLCUI extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
@@ -20,7 +20,7 @@ public class TC_UI_startup extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			TC_UI_startup dialog = new TC_UI_startup();
+			LoadPLCUI dialog = new LoadPLCUI();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -31,7 +31,7 @@ public class TC_UI_startup extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public TC_UI_startup() {
+	public LoadPLCUI() {
 		setTitle("PLC Startup");
 		setBounds(100, 100, 363, 119);
 		getContentPane().setLayout(new BorderLayout());

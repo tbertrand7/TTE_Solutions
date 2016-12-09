@@ -14,7 +14,7 @@ import trainController.TrainControllerInstances;
 import trainModel.TrainModel;
 import trainModel.trainModelGUI;
 import waysideController.WaysideControllerUI;
-import waysideController.TC_UI_startup;
+import waysideController.LoadPLCUI;
 import waysideController.WaysideController;
 
 import javax.swing.ImageIcon;
