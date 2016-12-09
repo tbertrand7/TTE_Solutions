@@ -27,6 +27,7 @@ public class TTEHomeGUI {
 	private JFrame frmTteTrainHome;
 	public static WaysideController wc;
 	public CTCOffice ctc;
+	public SystemClock sysClock;
 	/**
 	 * Launch the application.
 	 */
@@ -77,6 +78,7 @@ public class TTEHomeGUI {
 		frmTteTrainHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTteTrainHome.getContentPane().setLayout(null);
 
+		sysClock = new SystemClock();
 		ctc = new CTCOffice();
 
 		JButton btnNewButton = new JButton("The Office");
