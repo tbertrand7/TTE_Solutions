@@ -2,6 +2,10 @@ package waysideController;
 
 //IMPORTS
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import trackModel.*;
 
 public class WaysideController 
@@ -10,7 +14,6 @@ public class WaysideController
 	//private PLC plc = new PLC();
 	protected String line;
 	protected int[] blocks;
-	protected Hashtable<Integer,Integer> direction;
 	protected trackModel.TrackBlock[] trackBlocks;
 	protected Hashtable<Integer,Integer[]> controlledSwitches;
 	protected Hashtable<Integer, Integer> trains;
@@ -20,29 +23,32 @@ public class WaysideController
 		blocks = new int[b.length];
 		trackBlocks = new trackModel.TrackBlock[b.length];
 		controlledSwitches = new Hashtable<Integer,Integer[]>();
-		direction = new Hashtable<Integer,Integer>();
 		trains = new Hashtable<Integer, Integer>();
 		
 		for(int i = 0; i < b.length; i++)
 		{
 			String[] split = b[i].split("-");
 			blocks[i] = Integer.parseInt(split[0]);
-			direction.put(blocks[i], Integer.parseInt(split[1]));
 		}
 		
 		if(s != null)
 		{
-		for(String sw: s)
-		{
-			String[] split = sw.split("-");
-			String[] switchInfo = split[1].split(":");
-			
-			controlledSwitches.put(Integer.parseInt(split[0]),new Integer[]{Integer.parseInt(switchInfo[0]),Integer.parseInt(switchInfo[1]),Integer.parseInt(switchInfo[2]),Integer.parseInt(switchInfo[3])});
-		}
+			for(String sw: s)
+			{
+				String[] split = sw.split("-");
+				String[] switchInfo = split[1].split(":");
+				controlledSwitches.put(Integer.parseInt(split[0]),new Integer[]{Integer.parseInt(switchInfo[0]),Integer.parseInt(switchInfo[1]),Integer.parseInt(switchInfo[2]),Integer.parseInt(switchInfo[3])});
+			}
 		}
 		this.line = line;
 		
-		updateLocalTrackInfo();
+		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+		exec.scheduleAtFixedRate(new Runnable() {
+		  @Override
+		  public void run() {
+			  updateLocalTrackInfo();
+		  }
+		}, 0, 1, TimeUnit.SECONDS);
 	}
 	
 	
@@ -55,15 +61,19 @@ public class WaysideController
 			
 		for(int i = 0; i < blocks.length; i++)
 		{
-			if(!trackBlocks[i].switchBlock.id.equals(""))
+			if(!trackBlocks[i].switchBlock.id.equals("") && trackBlocks[i].infrastructure.contains("SWITCH"))
 			{
-				String id = trackBlocks[i].switchBlock.getID().substring(trackBlocks[i].switchBlock.getID().length()-2).trim();
+				String id = trackBlocks[i].switchBlock.getID().replace("Switch ","");
 				String position = trackBlocks[i].switchBlock.getPosition();
 				updateLocalSwitchInfo(Integer.parseInt( id ) , Integer.parseInt(position));
 			}
 			
 			if(trackBlocks[i].status == trackModel.TrackBlock.BlockStatus.OCCUPIED)
 			{
+				if(trains.contains(trackBlocks[i].trainID))
+				{
+					trains.remove(trackBlocks[i].trainID);
+				}
 				trains.put(trackBlocks[i].trainID, trackBlocks[i].blockNumber);
 			}
 		}
@@ -73,6 +83,7 @@ public class WaysideController
 	{
 		Integer[] current = controlledSwitches.get(switchNum);
 		current[0] = position;
+		controlledSwitches.remove(switchNum);
 		controlledSwitches.put(switchNum, current);
 	}
 	
@@ -164,16 +175,17 @@ public class WaysideController
 	}
 	
 	//------------------------COMMS TO TRACK------------------------------------
-	public void setSwitch(int switchBlock, String position)
+	protected void setSwitch(int switchNumber)
 	{
+		int switchBlock = controlledSwitches.get(switchNumber)[1];
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrackBlock temp = track.getBlock(line, switchBlock);
 		String newPosition = changeSwitchPosition(switchBlock, temp.switchBlock.position);
-		trackBlocks[switchBlock].switchBlock.position = newPosition;
-		track.setBlock(trackBlocks[switchBlock]);
+		temp.switchBlock.position = newPosition;
+		track.setBlock(temp);
 	}
 	
-	public String changeSwitchPosition(int switchNum, String Position)
+	protected String changeSwitchPosition(int switchNum, String Position)
 	{
 		if(Position.equals("0"))
 			return "1";
@@ -182,9 +194,13 @@ public class WaysideController
 	}
 	
 	//set traffic lights, cross bar and its lights
-	public void setInfrastructure()
+	public void setInfrastructure(int trackBlock)
 	{
-		//TO DO
+		String finalInfrastructure = "";
+		trackModel.TrackModel track = new trackModel.TrackModel();
+		TrackBlock temp = track.getBlock(line, trackBlock);
+		finalInfrastructure = temp.infrastructure;
+		
 	}
 	
 	public static void main(String[] args)

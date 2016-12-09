@@ -155,12 +155,15 @@ public class WaysideControllerUI extends JFrame {
 		//Update the block field when a train is selected
 		trainIDChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String selected = trainIDChoice.getSelectedItem().toString();
-				if(!selected.equals("No trains to display"))
+				if(trainIDChoice.getItemCount() > 0)
 				{
-					selected = selected.replaceAll("Train ", "");
-					int trainNum = Integer.parseInt(selected);
-					trainBlock.setText(""+wc.trains.get(trainNum));
+					String selected = trainIDChoice.getSelectedItem().toString();
+					if(!selected.equals("No trains to display"))
+					{
+						selected = selected.replaceAll("Train ", "");
+						int trainNum = Integer.parseInt(selected);
+						trainBlock.setText(""+wc.trains.get(trainNum));
+					}
 				}
 			}
 		});
@@ -197,29 +200,42 @@ public class WaysideControllerUI extends JFrame {
 		
 		switchPositionChoice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String sw = switchPositionChoice.getSelectedItem().toString();
-				if(!sw.equals("No Switches to Display"))
+				if(switchPositionChoice.getItemCount() > 0)
 				{
-					sw = sw.replaceAll("Switch ", "");
-					Integer[] position = wc.controlledSwitches.get(Integer.parseInt(sw));
-					Integer connectBlock;
-					if(position.equals(1))
+					String sw = switchPositionChoice.getSelectedItem().toString();
+					if(!sw.equals("No Switches to Display"))
 					{
-						connectBlock = position[3];
+						sw = sw.replaceAll("Switch ", "");
+						Integer[] position = wc.controlledSwitches.get(Integer.parseInt(sw));
+						Integer connectBlock;
+						if(position[0] == 1)
+						{
+							connectBlock = position[3];
+						}
+						else
+						{
+							connectBlock = position[2];
+						}
+						switchPos.setText(position[1] + " connects to " + connectBlock);
 					}
-					else
-					{
-						connectBlock = position[2];
-					}
-					switchPos.setText(position[1] + " connects to " + connectBlock);
 				}
 			}
 		});
 		
-		JButton btnSetPosition = new JButton("Set Position");
+		JButton btnSetPosition = new JButton("Change Position");
 		btnSetPosition.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnSetPosition.setBounds(205, 144, 128, 35);
 		switchPositionPanel.add(btnSetPosition);
+		btnSetPosition.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String sw = switchPositionChoice.getSelectedItem().toString();
+				if(!sw.equals("No Switches to Display"))
+				{
+					sw = sw.replaceAll("Switch ", "");
+					wc.setSwitch(Integer.parseInt(sw));
+				}
+			}
+		});
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 2));
@@ -288,6 +304,7 @@ public class WaysideControllerUI extends JFrame {
 		
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//wc.updateLocalTrackInfo();
 				switchPositionChoice.removeAllItems();
 				if(wc.controlledSwitches.size() == 0)
 				{
@@ -314,6 +331,7 @@ public class WaysideControllerUI extends JFrame {
 					{
 						trainIDChoice.addItem("Train "+i);
 					}
+					trainIDChoice.setEnabled(true);
 				}
 			}
 		});
