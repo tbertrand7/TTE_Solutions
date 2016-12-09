@@ -82,6 +82,9 @@ public class OfficeUI extends JFrame {
 			ctcOffice.setSimulationSpeed(simulationSpeed.getValue());
 	}
 
+	/**
+	 * Launch JFileChooser to select csv schedule file
+	 */
 	private void loadScheduleClick()
 	{
 		JFileChooser fc = new JFileChooser();
@@ -93,7 +96,7 @@ public class OfficeUI extends JFrame {
 
 	private void runScheduleClick()
 	{
-
+		//TODO: Implement run schedule
 	}
 
 	private void btnCloseTrackClick()
@@ -103,7 +106,7 @@ public class OfficeUI extends JFrame {
 
 	private void btnToggleSwitchClick()
 	{
-
+		//TODO: Enable switch toggling once class is properly implemented
 	}
 
 	private void btnSetSpeedClick()

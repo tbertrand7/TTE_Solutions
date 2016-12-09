@@ -159,6 +159,16 @@ public class CTCOffice
 		track.setBlock(currBlock); //Update block in DB
 	}
 
+	public void toggleSwitch()
+	{
+		//TODO: implement switch toggling
+	}
+
+	/**
+	 * Loads in schedule file and updates schedule grid
+	 * @param f Schedule file to load in
+	 * @param tbl Table reference
+	 */
 	public void loadSchedule(File f, DefaultTableModel tbl)
     {
         try {
@@ -196,6 +206,11 @@ public class CTCOffice
 			tbl.addRow(new Object[] {schedule[i].line, schedule[i].train, schedule[i].destination, schedule[i].time});
 		}
     }
+
+    public void runSchedule()
+	{
+		//TODO: Implement run schedule
+	}
 
 	public int calcThroughput(TrackBlock block)
 	{
