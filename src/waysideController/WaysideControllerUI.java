@@ -11,11 +11,13 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JSeparator;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -32,14 +34,15 @@ import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.border.LineBorder;
 import TTEHome.TTEHomeGUI;
+import javax.swing.JComboBox;
 
 public class WaysideControllerUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtOn;
 	private JTextField txtUp;
-	private JTextField textField_1;
-
+	private WaysideController wc;
+	private static WaysideControllerInterface WCI;
 	/**
 	 * Launch the application.
 	 */
@@ -47,6 +50,7 @@ public class WaysideControllerUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					WCI = WaysideControllerInterface.getInstance();
 					WaysideControllerUI frame = new WaysideControllerUI();
 					frame.setVisible(true);
 					//TC_UI_startup popup = new TC_UI_startup();
@@ -58,16 +62,22 @@ public class WaysideControllerUI extends JFrame {
 			}
 		});
 	}
-	
-	public void accessSystem(TTEHome.TTEHomeGUI sys)
-	{
-		//system = sys;
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public WaysideControllerUI() {
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
+		
 		setTitle("Wayside Controller");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 507, 338);
@@ -76,31 +86,38 @@ public class WaysideControllerUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		Choice waysideIDChoice = new Choice();
+		JButton btnUpdate = new JButton("Update");
+		btnUpdate.setBounds(6, 261, 97, 25);
+		contentPane.add(btnUpdate);
+				
+		JComboBox<String> waysideIDChoice = new JComboBox<String>();
+		waysideIDChoice.setBackground(Color.WHITE);
 		waysideIDChoice.setBounds(6, 43, 97, 34);
 		contentPane.add(waysideIDChoice);
-		waysideIDChoice.addItemListener(new ItemListener(){
-			public void itemStateChanged(ItemEvent ie)
-			{
-				//TO DO
-				switch(waysideIDChoice.getSelectedItem())
-				{
-					case "Red 1":
-						//wayside = TTEHome.TTEHomeGUI.redWC1;
-						break;
-					case "Red 2":
-						//wayside = TTEHome.TTEHomeGUI.redWC2;
-						break;
-					case "Green 1":
-						//wayside = TTEHome.TTEHomeGUI.greenWC1;
-						break;
-					case "Green 2":
-						//wayside = TTEHome.TTEHomeGUI.greenWC2;
-						break;
+		//waysideIDChoice.addItem("Red 1");
+		waysideIDChoice.addItem("Red 2");
+		
+		waysideIDChoice.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					switch(waysideIDChoice.getSelectedItem().toString())
+					{
+						case "Red 1":
+							wc = WCI.WC[0];
+							break;
+						case "Red 2":
+							wc = WCI.WC[1];
+							break;
+						case "Green 1":
+							wc = WCI.WC[2];
+							break;
+						case "Green 2":
+							wc = WCI.WC[3];
+							break;
+					}
+					btnUpdate.doClick();
 				}
-				
-			}
 		});
+		
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(121, 9, 350, 242);
@@ -117,8 +134,9 @@ public class WaysideControllerUI extends JFrame {
 		trackOccupancy.add(lblTrain);
 		
 		//Train Choice
-		Choice trainIDChoice = new Choice();
-		trainIDChoice.setBounds(20, 33, 214, 50);
+		JComboBox<String> trainIDChoice = new JComboBox<String>();
+		trainIDChoice.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		trainIDChoice.setBounds(20, 33, 179, 37);
 		trackOccupancy.add(trainIDChoice);
 		
 		//Display for the current block of the train
@@ -127,18 +145,23 @@ public class WaysideControllerUI extends JFrame {
 		lblBlockNumber.setBounds(20, 83, 122, 14);
 		trackOccupancy.add(lblBlockNumber);
 		
-		TextField textField = new TextField();
-		textField.setFont(new Font("Dialog", Font.PLAIN, 26));
-		textField.setBackground(Color.WHITE);
-		textField.setEditable(false);
-		textField.setBounds(20, 108, 179, 40);
-		trackOccupancy.add(textField);
+		TextField trainBlock = new TextField();
+		trainBlock.setFont(new Font("Dialog", Font.PLAIN, 26));
+		trainBlock.setBackground(Color.WHITE);
+		trainBlock.setEditable(false);
+		trainBlock.setBounds(20, 108, 179, 40);
+		trackOccupancy.add(trainBlock);
 		
 		//Update the block field when a train is selected
-		trainIDChoice.addItemListener(new ItemListener(){
-			public void itemStateChanged(ItemEvent ie)
-			{
-				//TO DO
+		trainIDChoice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String selected = trainIDChoice.getSelectedItem().toString();
+				if(!selected.equals("No trains to display"))
+				{
+					selected = selected.replaceAll("Train ", "");
+					int trainNum = Integer.parseInt(selected);
+					trainBlock.setText(""+wc.trains.get(trainNum));
+				}
 			}
 		});
 		
@@ -149,9 +172,11 @@ public class WaysideControllerUI extends JFrame {
 		switchPositionPanel.setLayout(null);
 		
 		//choose which switch you want to see the position of
-		Choice switchPositionChoice = new Choice();
-		switchPositionChoice.setBounds(12, 47, 181, 22);
+		JComboBox<String> switchPositionChoice = new JComboBox<String>();
+		switchPositionChoice.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		switchPositionChoice.setBounds(12, 47, 181, 35);
 		switchPositionPanel.add(switchPositionChoice);
+		
 		
 		JLabel lblSwitchNumber = new JLabel("Switch Number:");
 		lblSwitchNumber.setFont(new Font("Tahoma", Font.PLAIN, 19));
@@ -163,12 +188,33 @@ public class WaysideControllerUI extends JFrame {
 		lblSwitchPosition.setBounds(12, 111, 181, 28);
 		switchPositionPanel.add(lblSwitchPosition);
 		
-		textField_1 = new JTextField();
-		textField_1.setBackground(Color.WHITE);
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		textField_1.setBounds(12, 144, 181, 35);
-		switchPositionPanel.add(textField_1);
-		textField_1.setColumns(10);
+		JTextField switchPos = new JTextField();
+		switchPos.setBackground(Color.WHITE);
+		switchPos.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		switchPos.setBounds(12, 144, 181, 35);
+		switchPositionPanel.add(switchPos);
+		switchPos.setColumns(10);
+		
+		switchPositionChoice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String sw = switchPositionChoice.getSelectedItem().toString();
+				if(!sw.equals("No Switches to Display"))
+				{
+					sw = sw.replaceAll("Switch ", "");
+					Integer[] position = wc.controlledSwitches.get(Integer.parseInt(sw));
+					Integer connectBlock;
+					if(position.equals(1))
+					{
+						connectBlock = position[3];
+					}
+					else
+					{
+						connectBlock = position[2];
+					}
+					switchPos.setText(position[1] + " connects to " + connectBlock);
+				}
+			}
+		});
 		
 		JButton btnSetPosition = new JButton("Set Position");
 		btnSetPosition.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -240,15 +286,36 @@ public class WaysideControllerUI extends JFrame {
 		lblController.setBounds(6, 13, 77, 14);
 		contentPane.add(lblController);
 		
-		JButton btnUpdate = new JButton("Update");
-		btnUpdate.setBounds(6, 261, 97, 25);
-		contentPane.add(btnUpdate);
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TO DO
+				switchPositionChoice.removeAllItems();
+				if(wc.controlledSwitches.size() == 0)
+				{
+					switchPositionChoice.addItem("No Switches to Display");
+					switchPositionChoice.setEnabled(false);
+				}
+				else
+				{
+					for(Integer i : wc.controlledSwitches.keySet())
+					{
+						switchPositionChoice.addItem("Switch "+i);
+					}
+				}
+				
+				trainIDChoice.removeAllItems();
+				if(wc.trains.size() == 0)
+				{
+					trainIDChoice.addItem("No trains to display");
+					trainIDChoice.setEnabled(false);
+				}
+				else
+				{
+					for(Integer i : wc.trains.keySet())
+					{
+						trainIDChoice.addItem("Train "+i);
+					}
+				}
 			}
 		});
-		
-		
 	}
 }

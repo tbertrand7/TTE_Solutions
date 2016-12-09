@@ -8,13 +8,12 @@ public class WaysideController
 {
 	//GLOBAL VARIABLES:
 	//private PLC plc = new PLC();
-	private String line;
-	
-	private int[] blocks;
-	private Hashtable<Integer,Integer> direction;
-	private trackModel.TrackBlock[] trackBlocks;
-	private Hashtable<Integer,Integer[]> controlledSwitches;
-	public Hashtable<Integer, Integer> trains;
+	protected String line;
+	protected int[] blocks;
+	protected Hashtable<Integer,Integer> direction;
+	protected trackModel.TrackBlock[] trackBlocks;
+	protected Hashtable<Integer,Integer[]> controlledSwitches;
+	protected Hashtable<Integer, Integer> trains;
 	
 	public WaysideController(String line, String[] b, String[] s)
 	{
@@ -51,13 +50,14 @@ public class WaysideController
 	public void updateLocalTrackInfo()
 	{
 		trackModel.TrackModel track = new trackModel.TrackModel();
+
+		trackBlocks = track.getBlock(line, blocks);
+			
 		for(int i = 0; i < blocks.length; i++)
 		{
-			trackBlocks[i] = track.getBlock(line, blocks[i]);
-			
 			if(!trackBlocks[i].switchBlock.id.equals(""))
 			{
-				String id = trackBlocks[i].switchBlock.getID().substring(trackBlocks[i].switchBlock.getID().length()-1);
+				String id = trackBlocks[i].switchBlock.getID().substring(trackBlocks[i].switchBlock.getID().length()-2).trim();
 				String position = trackBlocks[i].switchBlock.getPosition();
 				updateLocalSwitchInfo(Integer.parseInt( id ) , Integer.parseInt(position));
 			}
@@ -121,6 +121,7 @@ public class WaysideController
 		{
 			if(blocks[i] == currentBlock)
 			{
+				System.out.println(trackBlocks[i].authority);
 				trackBlocks[i].authority = path.size() - 2; //end at start of end block, therefore not in authority
 			}
 			else if(blocks[i] == currentBlock+1)
@@ -144,6 +145,7 @@ public class WaysideController
 	{
 		//TO DO
 		//get the start track block
+		System.out.println("START: "+start+" , END: "+end);
 		ArrayList<Integer> j = new ArrayList<Integer>();
 		
 		for(int i = 0; i < blocks.length; i++)
@@ -188,10 +190,10 @@ public class WaysideController
 	public static void main(String[] args)
 	{
 		//TEST CODE
-		String[] demoBlocks = new String[]{"102-0","103-0","104-0","105-0","106-0","107-0","108-0","108-0","109-0","110-0","111-0","112-0","113-0",
-				"114-0","115-0","116-0","117-0","118-0","119-0","120-0","121-0","122-0","123-0","124-0","125-0",
-				"126-0","127-0","128-0","129-0","130-0","131-0","132-0","133-0","134-0","135-0","136-0","137-0",
-				"138-0","139-0","140-0","141-0","142-0","143-0","144-0","145-0","146-0","147-0","148-0","149-0"};
-		WaysideController wc = new WaysideController("Green",demoBlocks,null);
+		//String[] demoBlocks = new String[]{"102-0","103-0","104-0","105-0","106-0","107-0","108-0","108-0","109-0","110-0","111-0","112-0","113-0",
+		//		"114-0","115-0","116-0","117-0","118-0","119-0","120-0","121-0","122-0","123-0","124-0","125-0",
+		//		"126-0","127-0","128-0","129-0","130-0","131-0","132-0","133-0","134-0","135-0","136-0","137-0",
+		//		"138-0","139-0","140-0","141-0","142-0","143-0","144-0","145-0","146-0","147-0","148-0","149-0"};
+		//WaysideController wc = new WaysideController("Green",demoBlocks,null);
 	}
 }
