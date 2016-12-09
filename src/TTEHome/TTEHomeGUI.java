@@ -79,7 +79,7 @@ public class TTEHomeGUI {
 		frmTteTrainHome.getContentPane().setLayout(null);
 
 		sysClock = new SystemClock();
-		ctc = new CTCOffice();
+		ctc = new CTCOffice(sysClock);
 
 		JButton btnNewButton = new JButton("The Office");
 		btnNewButton.addActionListener(new ActionListener() {

@@ -4,12 +4,14 @@ import java.io.*;
 import java.util.*;
 import javax.swing.table.*;
 
+import TTEHome.SystemClock;
 import trackModel.*;
 import trackModel.TrackBlock.*;
 import waysideController.*;
 
 public class CTCOffice
 {
+	private SystemClock sysClock;
 	private OfficeUI officeUI;
 	private TrackModel track;
 	
@@ -22,9 +24,10 @@ public class CTCOffice
 
 	public TrackBlock[] greenLine, redLine;
 	
-	public CTCOffice()
+	public CTCOffice(SystemClock clk)
 	{
         try {
+        	sysClock = clk;
 			track = new TrackModel();
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
