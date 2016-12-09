@@ -28,6 +28,7 @@ public class TTEHomeGUI {
 	private JFrame frmTteTrainHome;
 	public static WaysideController wc;
 	public CTCOffice ctc;
+	public TrainControllerInstances tci;
 	public SystemClock sysClock;
 	/**
 	 * Launch the application.
@@ -79,8 +80,9 @@ public class TTEHomeGUI {
 		frmTteTrainHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTteTrainHome.getContentPane().setLayout(null);
 
+		tci = new TrainControllerInstances();
 		sysClock = new SystemClock();
-		ctc = new CTCOffice(sysClock);
+		ctc = new CTCOffice(sysClock, tci);
 
 		JButton btnNewButton = new JButton("The Office");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -104,8 +106,7 @@ public class TTEHomeGUI {
 		});
 		btnWaysideController.setBounds(10, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnWaysideController);
-		
-		TrainControllerInstances tci = new TrainControllerInstances();
+
 		TrainModel usethis = tci.createTrain(12, "green");
 		
 		JButton btnTrainController = new JButton("Train Controller");

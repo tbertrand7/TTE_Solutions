@@ -8,12 +8,14 @@ import TTEHome.SystemClock;
 import trackModel.*;
 import trackModel.TrackBlock.*;
 import waysideController.*;
+import trainController.*;
 
 public class CTCOffice
 {
 	private SystemClock sysClock;
 	private OfficeUI officeUI;
 	private TrackModel track;
+	private TrainControllerInstances trainCont;
 	
 	public enum Mode {MANUAL, AUTOMATIC}
 
@@ -23,10 +25,11 @@ public class CTCOffice
 
 	public TrackBlock[] greenLine, redLine;
 	
-	public CTCOffice(SystemClock clk)
+	public CTCOffice(SystemClock clk, TrainControllerInstances tci)
 	{
         try {
         	sysClock = clk;
+        	trainCont = tci;
 			track = new TrackModel();
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
