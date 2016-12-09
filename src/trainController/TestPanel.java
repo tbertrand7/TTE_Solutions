@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import trainController.TrainController.Side;
+import trainController.TrainController.Signal;
 
 public class TestPanel extends JFrame {
 	
@@ -267,14 +268,15 @@ public class TestPanel extends JFrame {
 		btnSendSignal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (parent.controller != null) {
-					boolean repair = false;
-					
-					if (txtSignal.getText().compareToIgnoreCase("repair") == 0)
-						repair = true;
-					
-					if (!repair) {
-						parent.controller.signal();
-					} else {
+					if (txtSignal.getText().compareToIgnoreCase("engine") == 0) {
+						parent.controller.signal(Signal.ENGINE_FAILURE);
+					} else if (txtSignal.getText().compareToIgnoreCase("rail") == 0) {
+						parent.controller.signal(Signal.RAIL_FAILURE);
+					} else if (txtSignal.getText().compareToIgnoreCase("signal pickup") == 0) {
+						parent.controller.signal(Signal.SIGNAL_PICKUP_FAILURE);
+					} else if (txtSignal.getText().compareToIgnoreCase("brake") == 0) {
+						parent.controller.signal(Signal.BRAKE_FAILURE);
+					} else if (txtSignal.getText().compareToIgnoreCase("repair") == 0) {
 						parent.controller.repair();
 					}
 				}

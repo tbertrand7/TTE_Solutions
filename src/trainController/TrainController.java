@@ -5,6 +5,18 @@ import trainModel.TrainModel;
 public class TrainController {
 	
 	/**
+	 * All error signals that can occur.
+	 * @author anna
+	 *
+	 */
+	public enum Signal {
+		ENGINE_FAILURE,
+		RAIL_FAILURE,
+		SIGNAL_PICKUP_FAILURE,
+		BRAKE_FAILURE
+	}
+	
+	/**
 	 * Door sides, because I believe this is the cleanest way
 	 * @author anna
 	 *
@@ -293,11 +305,25 @@ public class TrainController {
 	
 	/**
 	 * Signals that an error has occurred.
+	 * @param signaltype - a Signal describing the error
 	 */
-	public synchronized void signal() {
+	public synchronized void signal(Signal signaltype) {
 		
 		if (connectedToUI()) {
-			ui.message("ERROR: FAILURE\n");
+			String message = null;
+			
+			switch (signaltype) {
+			case ENGINE_FAILURE:
+				message = "ERROR: ENGINE FAILURE\n"; break;
+			case RAIL_FAILURE:
+				message = "ERROR: RAIL FAILURE\n"; break;
+			case SIGNAL_PICKUP_FAILURE:
+				message = "ERROR: SIGNAL PICKUP FAILURE\n"; break;
+			case BRAKE_FAILURE:
+				message = "ERROR: BRAKE FAILURE\n"; break;
+			}
+			
+			if (message != null) ui.message(message);
 		}
 		
 		failure = true;
