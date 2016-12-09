@@ -23,11 +23,16 @@ public class TrainControllerInstances {
 	 */
 	private int instanceID;
 	
+	/**
+	 * The next unique train ID to assign to a train (starts at 1).
+	 */
+	private int nextID;
+	
 	public TrainControllerInstances() {
 		trainList = new HashMap<Integer, TrainController>();
 		uiList = new HashMap<Integer, TrainControllerUI>();
 		
-		//nextID = 1;
+		nextID = 1;
 		instanceID = 0;
 		
 		UpdateThread ut = new UpdateThread();
@@ -40,10 +45,7 @@ public class TrainControllerInstances {
 	}
 	
 	/**
-	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
-	 * then a new train is created.
-	 * @param newid - the id of the new train
-	 * @param line - "green" or "red" (case doesn't matter)
+	 * Quick fix to connecting Train Models to train model UI, needs to go away
 	 */
 	public TrainModel createTrain(int newid, String line) {
 		
@@ -62,6 +64,27 @@ public class TrainControllerInstances {
 		}
 		
 		return tm;
+	}
+	
+	/**
+	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
+	 * then a new train is created.
+	 * @param line - "green" or "red" (case doesn't matter)
+	 * @return 
+	 */
+	public int createTrain(String line) {
+		
+		if (!trainList.containsKey(nextID)) {
+			trainList.put(nextID, new TrainController(this, nextID, line));
+			
+			for (TrainControllerUI ui : uiList.values()) {
+				ui.addTrainID(nextID);
+			}
+		}
+		
+		++nextID;
+		
+		return (nextID - 1);
 		
 	}
 	
