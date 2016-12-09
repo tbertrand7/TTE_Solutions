@@ -17,6 +17,8 @@ public class TrainSpecs {
 	
 	final double maxAccRate = 0.5; //in m/s^2
 	
+	final double maxPower = 120000 * 2; //120kW *2 cars
+	
 	final double serviceBrakeRate = -1.2; //m/s^2
 	final double emergencyBrakeRate = -2.73;// m/s^2
 	
