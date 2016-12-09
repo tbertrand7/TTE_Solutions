@@ -529,7 +529,10 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public void setPower(double powerSetPoint){
 			pause();
-			if(powerSetPoint > 0){
+			if(powerSetPoint > maxPower){
+				power = maxPower;
+			}
+			else if(powerSetPoint > 0){
 				power = powerSetPoint;
 			}
 			else{
