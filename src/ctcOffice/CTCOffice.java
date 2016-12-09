@@ -11,13 +11,12 @@ import waysideController.*;
 
 public class CTCOffice
 {
-	public SystemClock sysClock;
+	private SystemClock sysClock;
 	private OfficeUI officeUI;
 	private TrackModel track;
 	
 	public enum Mode {MANUAL, AUTOMATIC}
-	
-	private int simulationSpeed;
+
 	private Mode mode = Mode.MANUAL;
 	private ScheduleItem[] schedule;
 	private String loggedInUser;
@@ -92,6 +91,15 @@ public class CTCOffice
 		officeUI.logNotification("New Simulation Speed is " + newSpeed + "X wall clock speed");
 	}
 
+	/**
+	 * Get current simulation speed from sysClock
+	 * @return Current simulation speed
+	 */
+	public int getSimulationSpeed()
+	{
+		return sysClock.clock;
+	}
+
 	public void suggestSpeed(double newTrainSpeed, int train)
 	{
 		//TODO: suggest speed for a train to wayside controller
@@ -110,12 +118,6 @@ public class CTCOffice
 	{
 		//TODO: integrate with wayside controller
 		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
-	}
-
-	/** Returns the current simulation speed */
-	public int getSimulationSpeed()
-	{
-		return simulationSpeed;
 	}
 	
 	/** Returns if system is in Manual or Auto mode */
