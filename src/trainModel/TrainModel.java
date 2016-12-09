@@ -3,6 +3,7 @@ package trainModel;
 import trackModel.*; //for track block manipulation
 import trackModel.TrackBlock.BlockStatus;
 import trainController.*; //for train controller
+import trainController.TrainController.Signal;
 
 
 public class TrainModel extends TrainState implements Runnable{
@@ -107,7 +108,7 @@ public class TrainModel extends TrainState implements Runnable{
 	 * 
 	 * @param tc
 	 */
-	public TrainModel(TrainController tc){
+	public TrainModel(){
 		
 	/*	
 		//DATA FOR SYSTEM PROTOTYPE ONLY
@@ -120,11 +121,12 @@ public class TrainModel extends TrainState implements Runnable{
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
 		speedLimit = trackBlock.speedLimit;
-	*/
+	
 		
 		trainCon = tc;
 		trainID = 1;
-		//trainLine = trackBlock.line;
+		trainLine = trackBlock.line;
+		 */
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -145,21 +147,24 @@ public class TrainModel extends TrainState implements Runnable{
 
 		//tm.setBlock(trackBlock);
 		
-		start();
+		//start();
 		
 		
 	}
 	
+	
+	
 	/**
-	 * constructor
+	 * CONSTRUCTOR
 	 * sets all boolean variables to false and all numerical variables to 0
+	 * @param modelList - Trains class that contains all active trains
 	 * @param tc - train controller associated with Train Model
 	 * @param id - unique train id
 	 * @param line - the line the train is on (green or red)
 	 */
-	public TrainModel(TrainController tc, int id, String line) {	
+	public TrainModel(Trains modelList, TrainController tc, int id, String line) {	
 		
-		ui = new trainModelGUI(this);
+	//	ui = new trainModelGUI(this);
 		
 		trainCon = tc;
 		trainID = id;
@@ -291,16 +296,33 @@ public class TrainModel extends TrainState implements Runnable{
 		}
 	}
 	
+	
+	/**
+	 * sets a brake failure
+	 * @param bFail - true if brakes fail
+	 */
 	public void setBrakeFailure(boolean bFail){
 		brakeFail = bFail;
+		trainCon.signal(Signal.BRAKE_FAILURE);
 	}
 	
+	
+	/**
+	 * sets engine failure
+	 * @param eFail - true if engine failure
+	 */
 	public void setEngineFailure(boolean eFail){
 		engineFail = eFail;
+		trainCon.signal(Signal.ENGINE_FAILURE);
 	}
 	
+	/**
+	 * sets signal pickup failure
+	 * @param sFail - true if signal pickup failure
+	 */
 	public void setSignalPickupFailure(boolean sFail){
 		signalFail = sFail;
+		trainCon.signal(Signal.SIGNAL_PICKUP_FAILURE);
 	}
 	
 	/**
@@ -409,6 +431,11 @@ public class TrainModel extends TrainState implements Runnable{
 				time2 = System.currentTimeMillis()/1000;
 				deltaTime = deltaTime + (time2 - time1);
 				
+				
+				//set power level to 0 if engine fails
+				if(engineFail) power = 0;
+				
+				
 				if(power == 0 && velocity == 0 && !serviceBrakeOn && !emergencyBrakeOn){
 					accRate = 0;
 				}
@@ -445,12 +472,10 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//Tell Train controller to brake before the station
 				if(distanceLeftInBlock <= brakingDistance){
-					
-				//TODO: uncomment out when Anna modifies method	
-				//	trainCon.approachStation();
+					trainCon.approachStation();
 				}
 				
-							
+				//Display info to UI			
 				if(ui != null){
 					ui.displayVelocity(velocity);
 					ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);

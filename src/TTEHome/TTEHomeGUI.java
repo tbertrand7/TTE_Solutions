@@ -13,6 +13,7 @@ import trackModel.TrackModelUI;
 import trainController.TrainControllerInstances;
 import trainModel.TrainModel;
 import trainModel.trainModelGUI;
+import trainModel.Trains;
 import waysideController.WaysideControllerUI;
 import waysideController.LoadPLCUI;
 import waysideController.WaysideController;
@@ -116,6 +117,8 @@ public class TTEHomeGUI {
 		btnTrainController.setBounds(289, 11, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnTrainController);
 		
+		
+		Trains modelList = new Trains();
 
 		JButton btnTrainModel = new JButton("Train Model");
 		btnTrainModel.addActionListener(new ActionListener() {
@@ -123,8 +126,11 @@ public class TTEHomeGUI {
 				//TODO: @Matt revisit after fixing Trains class
 				//trainModelInstances.newUI();
 				
-				trainModelGUI tmg = new trainModelGUI(usethis);
-				tci.connectModelToUI(1, tmg);
+				//trainModelGUI tmg = new trainModelGUI(usethis);
+				//tci.connectModelToUI(1, tmg);
+				
+				modelList.newUI();
+				
 			}
 		});
 		btnTrainModel.setBounds(289, 141, 135, 109);

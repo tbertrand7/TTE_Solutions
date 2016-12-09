@@ -57,8 +57,7 @@ public class trainModelGUI {
 	private Canvas canvas_4;
 	private Canvas canvas_5;
 	final JFrame parent = new JFrame();
-
-	private Trains trainModelInstances;
+	
 	
 	private TrainModel train;
 	
@@ -136,46 +135,15 @@ public class trainModelGUI {
 	}
 	
 	
-	
-	
-	
-	public void changeTrainID(int id){
-		if(train != null){
-			disconnect();
-		}
-		
-		TrainModel temp = trainModelInstances.connectUI(id, this);
-		
-		if (temp == null) {
-		//	trainList.setSelectedIndex(0);
-		} else {
-			train = temp;
-		}
-		
-	}
-	
-	
-	public void disconnect() {
-		if (train != null) {
-			train.disconnectFromUI();
-			train = null;
-		}
-		
-	//	trainList.setSelectedIndex(0);
-	}
-	
-	
 	public static void main(String[] args){
-		trainModelGUI tmg = new trainModelGUI( new TrainModel(null));
+		trainModelGUI tmg = new trainModelGUI(new Trains());
 	}
 	
 	
 	/**
 	 * Create the contents of the frame.
 	 */
-	public trainModelGUI(TrainModel tm) {
-		
-		train = tm;
+	public trainModelGUI(Trains modelList) {
 		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -521,7 +489,7 @@ public class trainModelGUI {
 				if(testModeButton.isSelected()){
 					if(train != null){
 						JOptionPane.showMessageDialog(parent, "Danger!! Engine Failure!!");	
-						train.initFailureProtocol();
+						train.setEngineFailure(true);
 						emergencyBrakeControl.setSelected(true);
 						lightsControl.setSelected(true);
 					}
@@ -546,7 +514,7 @@ public class trainModelGUI {
 				if(testModeButton.isSelected()){
 					if(train != null){	
 						JOptionPane.showMessageDialog(parent, "Danger!! Brake Failure!!");
-						train.initFailureProtocol();
+						train.setBrakeFailure(true);
 						emergencyBrakeControl.setSelected(true);
 						lightsControl.setSelected(true);					
 					}
@@ -571,7 +539,7 @@ public class trainModelGUI {
 				if(testModeButton.isSelected()){	 
 					if(train != null){
 						JOptionPane.showMessageDialog(parent, "Danger!! Signal Pickup Failure!!");
-						train.initFailureProtocol();
+						train.setSignalPickupFailure(true);
 						emergencyBrakeControl.setSelected(true);
 						lightsControl.setSelected(true);
 					}				
@@ -842,10 +810,21 @@ public class trainModelGUI {
 		frame.getContentPane().add(IDinput);
 		IDinput.setColumns(10);
 		
+		
+		trainModelGUI tmg = this;
 		JButton uiConnectButton = new JButton("Connect");
 		uiConnectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String tempID = IDinput.getText();
+				int tempIDNum = Integer.parseInt(tempID);
 				
+				TrainModel tempModel;
+				
+				tempModel = modelList.connectGUI(tempIDNum, tmg);	
+				
+				if(tempModel != null){
+					train = tempModel;
+				}	
 				
 			}
 		});

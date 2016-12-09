@@ -29,7 +29,7 @@ public class Trains {
 	 */
 	public void newUI() {
 		
-		//uiList.add(new trainModelGUI(this));
+		uiList.add(new trainModelGUI(this));
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class Trains {
 	 * @param tmui - the TrainModelGUI class to connect to the train
 	 * @return valid TrainModel if connection was successful, null otherwise
 	 */
-	public TrainModel connectUI(int id, trainModelGUI tmui) {
+	public TrainModel connectGUI(int id, trainModelGUI tmui) {
 		
 		if (trainList.containsKey(id)) {				//check that train ID exists
 			if (trainList.get(id).connectedToUI()) {	//check that train is not connected to a UI
