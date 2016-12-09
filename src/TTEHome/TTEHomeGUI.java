@@ -120,13 +120,11 @@ public class TTEHomeGUI {
 		
 		
 		Trains modelList = new Trains();
-
 		JButton btnTrainModel = new JButton("Train Model");
 		btnTrainModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO: @Matt revisit after fixing Trains class
 				//trainModelInstances.newUI();
-				
 				//trainModelGUI tmg = new trainModelGUI(usethis);
 				//tci.connectModelToUI(1, tmg);
 				

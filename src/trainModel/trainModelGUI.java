@@ -1,5 +1,4 @@
 package trainModel;
-import java.awt.EventQueue;
 
 import java.text.DecimalFormat;
 
@@ -19,8 +18,6 @@ import javax.swing.JTable;
 import javax.swing.JTextPane;
 import java.awt.Canvas;
 import javax.swing.UIManager;
-
-import javax.swing.JComboBox;
 
 public class trainModelGUI {
 
@@ -136,7 +133,7 @@ public class trainModelGUI {
 	
 	
 	public static void main(String[] args){
-		trainModelGUI tmg = new trainModelGUI(new Trains());
+		new trainModelGUI(new Trains());
 	}
 	
 	
@@ -551,6 +548,10 @@ public class trainModelGUI {
 		signalPickupFailure.setBounds(41, 360, 260, 30);
 		frame.getContentPane().add(signalPickupFailure);
 		
+		
+		/*
+		 * Label for TrainID
+		 */
 		JLabel trainIDLabel = new JLabel("TRAIN ID:");
 		trainIDLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		trainIDLabel.setFont(new Font("Courier New", Font.BOLD, 20));
@@ -570,6 +571,10 @@ public class trainModelGUI {
 		textPane.setBounds(511, 233, -213, 120);
 		frame.getContentPane().add(textPane);
 		
+		
+		/*
+		 * Crew Count Display
+		 */
 		CrewDisp = new JTextField();
 		CrewDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		CrewDisp.setFont(new Font("Courier New", Font.BOLD, 20));
@@ -581,6 +586,10 @@ public class trainModelGUI {
 		frame.getContentPane().add(CrewDisp);
 		CrewDisp.setColumns(10);
 		
+		
+		/*
+		 *speed Limit display 
+		 */
 		speedLimitDisp = new JTextField();
 		speedLimitDisp.setEditable(false);
 		if(train != null){
@@ -592,6 +601,10 @@ public class trainModelGUI {
 		frame.getContentPane().add(speedLimitDisp);
 		speedLimitDisp.setColumns(10);
 		
+		
+		/*
+		 * Passenger Display
+		 */
 		PassengerDisp = new JTextField();
 		PassengerDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		PassengerDisp.setHorizontalAlignment(SwingConstants.CENTER);
@@ -603,6 +616,10 @@ public class trainModelGUI {
 		frame.getContentPane().add(PassengerDisp);
 		PassengerDisp.setColumns(10);
 		
+		
+		/*
+		 * Temperature display
+		 */
 		TempDisp = new JTextField();
 		TempDisp.setFont(new Font("Courier New", Font.BOLD, 20));
 		TempDisp.setHorizontalAlignment(SwingConstants.CENTER);
@@ -614,6 +631,10 @@ public class trainModelGUI {
 		frame.getContentPane().add(TempDisp);
 		TempDisp.setColumns(10);
 		
+		
+		/*
+		 * Next Block Num Display
+		 */
 		NextBlockDisp = new JTextField();
 		NextBlockDisp.setHorizontalAlignment(SwingConstants.CENTER);
 		NextBlockDisp.setFont(new Font("Courier New", Font.BOLD, 20));
@@ -636,6 +657,10 @@ public class trainModelGUI {
 		frame.getContentPane().add(NextBlockStatusDisp);
 		NextBlockStatusDisp.setColumns(10);
 		
+		
+		/*
+		 * speed limit label
+		 */
 		txtSpeedLimit = new JTextField();
 		txtSpeedLimit.setFont(new Font("Courier New", Font.BOLD, 18));
 		txtSpeedLimit.setText("Speed Limit:");
@@ -645,6 +670,9 @@ public class trainModelGUI {
 		frame.getContentPane().add(txtSpeedLimit);
 		txtSpeedLimit.setColumns(10);
 		
+		/*
+		 * crew label
+		 */
 		txtCrewCount = new JTextField();
 		txtCrewCount.setFont(new Font("Courier New", Font.BOLD, 18));
 		txtCrewCount.setText("Crew:");
@@ -663,6 +691,9 @@ public class trainModelGUI {
 		txtPassengers.setBounds(362, 309, 174, 40);
 		frame.getContentPane().add(txtPassengers);
 		
+		/*
+		 * temperature label
+		 */
 		txtTemperature = new JTextField();
 		txtTemperature.setFont(new Font("Courier New", Font.BOLD, 18));
 		txtTemperature.setText("Temperature:");
@@ -672,6 +703,9 @@ public class trainModelGUI {
 		txtTemperature.setBounds(362, 349, 174, 40);
 		frame.getContentPane().add(txtTemperature);
 		
+		/*
+		 * current speed limit
+		 */
 		txtCurrentSpeed = new JTextField();
 		txtCurrentSpeed.setEditable(false);
 		txtCurrentSpeed.setFont(new Font("Courier New", Font.BOLD, 18));
