@@ -71,9 +71,14 @@ public class TrainController {
 	protected String station;
 	
 	/**
-	 * Used if the train needs to stop for a station or because of a failure.
+	 * Used if the train needs to stop.
 	 */
 	protected boolean stop;
+	
+	/**
+	 * Used to indicate a current failure.
+	 */
+	protected boolean failure;
 	
 	/**
 	 * If true, train is in automatic mode. Otherwise, it's in manual mode.
@@ -112,6 +117,7 @@ public class TrainController {
 		temperature = 68;
 		sBrakeOn = false;
 		eBrakeOn = false;
+		failure = false;
 		
 		/* @Matt: This TrainModel constructor needs to be added to the TrainModel class! */
 		//model = new TrainModel((TrainController)this, id, line);
@@ -152,8 +158,7 @@ public class TrainController {
 		
 		if (auth >= 0) authority = auth;
 		
-		//TODO need to change this to account for failures
-		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
+		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -168,7 +173,7 @@ public class TrainController {
 		
 		if (newblock) System.out.println("New authority: "+authority);
 		
-		if (authority == 0 && stop == false) { //authority is 0, need to stop
+		if (authority == 0 && !stop) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -199,8 +204,7 @@ public class TrainController {
 		
 		if (auth >= 0 && newblock) authority = auth;
 		
-		//TODO need to change this to account for failures
-		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
+		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -215,7 +219,7 @@ public class TrainController {
 		
 		if (newblock) System.out.println("New authority: "+authority);
 		
-		if (authority == 0 && stop == false) { //authority is 0, need to stop
+		if (authority == 0 && !stop) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -249,8 +253,7 @@ public class TrainController {
 			System.out.println("New authority: "+authority);
 		}
 		
-		//TODO change this to account for failures
-		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
+		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -260,7 +263,7 @@ public class TrainController {
 			
 		}
 		
-		if (authority == 0 && stop == false) { //authority is 0, need to stop
+		if (authority == 0 && !stop) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -297,6 +300,8 @@ public class TrainController {
 			ui.message("ERROR: FAILURE\n");
 		}
 		
+		failure = true;
+		
 		setStop(true);
 		
 		eBrakeOn = true;
@@ -308,6 +313,12 @@ public class TrainController {
 	 * Signals that an error has been repaired.
 	 */
 	public synchronized void repair() {
+		
+		if (connectedToUI()) {
+			ui.message("Failure has been repaired.\n");
+		}
+		
+		failure = false;
 		
 		setStop(false);
 		
@@ -389,7 +400,7 @@ public class TrainController {
 		
 		speedCurrent = speed;
 		
-		if (ui != null) ui.setSpeedCurrent(speedCurrent);
+		if (connectedToUI()) ui.setSpeedCurrent(speedCurrent);
 		
 	}
 	
@@ -410,6 +421,8 @@ public class TrainController {
 	public synchronized void setSpeedLimit(double speed) {
 		
 		speedLimit = speed;
+		
+		if (connectedToUI()) ui.setSpeedLimit(speed);
 		
 	}
 	
