@@ -6,12 +6,12 @@ public class TrainSpecs {
 	
 	final int maxPassengers = 444; 	
 	
-			final int maxCrew = 1; //don't know where to find this, "5" is dummy data for now
+			final int maxCrew = 1; 
 	
 	final double personMass = 71.17; // in Kg	
 	final double emptyTrainMass = 40900.0 * 2; //in kg         //40.9T (metric) * 2cars
 	
-	final double length = 32.2; //dimensions in meters
+	final double length = 32.2 * 2; //dimensions in meters
 	final double height = 3.42;
 	final double width = 2.65;
 	
