@@ -7,58 +7,106 @@ import trainController.*; //for train controller
 
 public class TrainModel extends TrainState implements Runnable{
 	
+	/**
+	 * coefficient of friction for steel wheels on steel rails
+	 */
 	final double MU = .003;
 	
+	/**
+	 * TrackModel object to get new track blocks
+	 */
 	protected TrackModel tm = new TrackModel();
+	
+	/**
+	 * TrackBlock object to read in new track blocks to
+	 */
 	TrackBlock trackBlock = new TrackBlock(); //= tm.getBlock("Green", 102); //First block for Demo
 	
+	/**
+	 * unique train info
+	 */
 	int trainID; //unique train ID
 	String trainLine;
 	
+	/**
+	 * TrainController associated with train model
+	 */
 	protected TrainController trainCon;
+	
+	/**
+	 * GUI associated with train Model
+	 */
 	public trainModelGUI ui;
 	
+	/**
+	 * Info from trackBlock
+	 */
 	double speedLimit;
 	double elevation;
-	double grade;
-	double power; 
-	double velocity; 
-	double mass = 40900.0;
+	double grade; 
+	double endOfBlock;
+	int curBlockNum;
+	int nextBlockNum;	
 	
-	double tempAcc;
-	
-	double normalForce;
-	double friction;
-	double resistivePower;
-	
+	/**
+	 * info for velocity calculation 
+	 */
+	double power;
 	long time1;
 	long time2;
 	long deltaTime;
+	double velocity; 
+	double currentPos;
+	double tempPos;
+	double accRate;
+	double tempAcc;	
+	double normalForce;
+	double friction;
+	double resistivePower;
+	double mass;
+
 	
 	/* Look at TrainControllerUI for thread to run in background to update speed and authority
 	 * 
 	 * Not for System Prototype
 	 * */
+	
+	/**
+	 * true if underground
+	 */
 	boolean underground;
+	
+	/**
+	 * true if entering new block
+	 */
 	boolean newBlock;
 	
-	
+	/**
+	 * variables for thread pause/resume
+	 */
 	boolean stop;
 	boolean proceed = true;
 		
+	/**
+	 * for calculating stopping distance
+	 */
 	double brakingDistance;
 	double distanceLeftInBlock;
+
 	
-	double endOfBlock;
-	double currentPos;
-	double tempPos;
+	/**
+	 * Failure status variables
+	 */
+	boolean brakeFail = false;
+	boolean signalFail = false;
+	boolean engineFail = false;
+
+
 	
-	int curBlockNum;
-	int nextBlockNum;
-	
-	double accRate;
-	
-	//TODO: @Matt 
+	/**
+	 * 
+	 * @param tc
+	 */
 	public TrainModel(TrainController tc){
 		
 	/*	
@@ -105,6 +153,9 @@ public class TrainModel extends TrainState implements Runnable{
 	/**
 	 * constructor
 	 * sets all boolean variables to false and all numerical variables to 0
+	 * @param tc - train controller associated with Train Model
+	 * @param id - unique train id
+	 * @param line - the line the train is on (green or red)
 	 */
 	public TrainModel(TrainController tc, int id, String line) {	
 		
@@ -151,7 +202,10 @@ public class TrainModel extends TrainState implements Runnable{
 		
 	}
 
-	
+	/**
+	 * Sets the status of the service brake
+	 * @param sBrake - true if service brake is to be set on
+	 */
 	public void setServiceBrake(boolean sBrake){
 		this.serviceBrake(sBrake);
 		if(ui != null){
@@ -168,6 +222,11 @@ public class TrainModel extends TrainState implements Runnable{
 		resume();
 	}
 	
+	
+	/**
+	 * Sets the status of the emergency brake
+	 * @param eBrake - true if the emergency brake is to be set on
+	 */
 	public void setEmergencyBrake(boolean eBrake){
 		this.eBrake(eBrake);
 		if(ui != null){
@@ -185,6 +244,11 @@ public class TrainModel extends TrainState implements Runnable{
 		resume();
 	}
 	
+	
+	/**
+	 * Sets the temperature of the train
+	 * @param temp - the set point temperature of the train
+	 */
 	public void setTemperature (int temp){
 		this.setTemp(temp);
 		if(ui != null){
@@ -192,6 +256,11 @@ public class TrainModel extends TrainState implements Runnable{
 		}
 	}
 	
+	
+	/**
+	 * Opens and closes left doors
+	 * @param lDoors - true if left doors open
+	 */
 	public void setLeftDoorsOpen(boolean lDoors){
 		this.setLeftDoors(lDoors);
 		if(ui != null){
@@ -199,6 +268,11 @@ public class TrainModel extends TrainState implements Runnable{
 		}
 	}
 	
+	
+	/**
+	 * opens and closes right doors
+	 * @param rDoors - true if right doors open
+	 */
 	public void setRightDoorsOpen(boolean rDoors){
 		this.setRightDoors(rDoors);
 		if(ui != null){
@@ -206,6 +280,10 @@ public class TrainModel extends TrainState implements Runnable{
 		}
 	}
 	
+	/**
+	 * sets lights on and off
+	 * @param lights - true if lights on 
+	 */
 	public void changeLightsStatus(boolean lights){
 		this.changeLights(lights);
 		if(ui != null){
@@ -213,15 +291,36 @@ public class TrainModel extends TrainState implements Runnable{
 		}
 	}
 	
+	public void setBrakeFailure(boolean bFail){
+		brakeFail = bFail;
+	}
+	
+	public void setEngineFailure(boolean eFail){
+		engineFail = eFail;
+	}
+	
+	public void setSignalPickupFailure(boolean sFail){
+		signalFail = sFail;
+	}
+	
+	/**
+	 * pauses thread
+	 */
 	public void pause(){
 		stop = true;
 	}
 	
+	
+	/**
+	 * resumes thread
+	 */
 	public void resume(){
 		stop = false;
 	}
 	
-	
+	/**
+	 * Main thread for velocity calculation
+	 */
 	public void run(){		
 		resume(); //set stop to false to allow while loop to proceed	
 		
@@ -371,7 +470,6 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	private Thread t;
 	public void start () {
-		 //System.out.println("Starting train");
 		      if (t == null) {
 		         t = new Thread (this, "train");
 		         t.start ();
@@ -386,7 +484,6 @@ public class TrainModel extends TrainState implements Runnable{
 	public void initFailureProtocol(){
 		initFailurePrivate();
 	}
-	
 	
 			/**
 			 * failure protocol

@@ -114,7 +114,7 @@ public class TTEHomeGUI {
 		btnTrainController.setBounds(289, 11, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnTrainController);
 		
-		//Trains trainModelInstances = new Trains();
+
 		JButton btnTrainModel = new JButton("Train Model");
 		btnTrainModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
