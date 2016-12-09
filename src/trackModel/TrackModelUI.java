@@ -887,7 +887,7 @@ public class TrackModelUI {
 							}
 							
 							TrackBlock[] tempArray = opps.getBlock("Red");
-							if(tempArray.length != 77 && tempArray[1].blockNumber != 1)
+							if(tempArray.length != 77 && !tempArray[1].equals(opps.getBlock("Red", 1)) && !tempArray[10].equals(opps.getBlock("Red", 10)))
 								failure = true;
 							else{
 									chckbxGetTrackLine.setSelected(true);
@@ -909,7 +909,7 @@ public class TrackModelUI {
 							temp.authority = 666;
 							temp.speed = 123;
 							opps.setBlock(temp);
-							if(temp.speed != 123 && temp.authority != 666)
+							if(!temp.equals(opps.getBlock("Red", 1)))
 								failure = true;
 							else{
 								chckbxSetTrackBlock.setSelected(true);
@@ -1065,7 +1065,7 @@ public class TrackModelUI {
 		theBlock.temp = (int) label_25.getValue();
 		theBlock.status = BlockStatus.valueOf(label_19.getText());
 		theBlock.trainID = Integer.parseInt(textField_2.getText());
-		if(theBlock.trainID >= 0)
+		if(theBlock.trainID > 0)
 			theBlock.status = BlockStatus.OCCUPIED;
 
 		opps.setBlock(theBlock);

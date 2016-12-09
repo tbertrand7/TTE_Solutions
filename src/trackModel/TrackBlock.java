@@ -67,4 +67,16 @@ public class TrackBlock {
 		}
 		return rtnStr;
 	}
+	
+	//This is kind of ugly but it is 100% functional
+	//There were issues with using the Object.equals so this was created
+	public boolean equals(TrackBlock temp){
+		
+		return (this.arrowDirection.equals(temp.arrowDirection) && this.authority == temp.authority && this.blockGrade == temp.blockGrade && this.blockLength == temp.blockLength
+				&& this.blockNumber == temp.blockNumber && this.cumualativeElevation == temp.cumualativeElevation && this.elevation == temp.elevation && this.infrastructure.equals(temp.infrastructure)
+				&& this.line.equals(temp.line) && this.nextBlock == temp.nextBlock && this.numPass == temp.numPass && this.numPass == temp.numPass && this.occupied.equals(temp.occupied)
+				&& this.pk == temp.pk && this.section.equals(temp.section) && this.speed == temp.speed && this.speedLimit == temp.speedLimit && this.temp == temp.temp && this.trainID == temp.trainID
+				&& this.status.toString().equals(temp.status.toString()) && this.switchBlock.id.equals(temp.switchBlock.id) && this.switchBlock.position.equals(temp.switchBlock.position));
+		
+	}
 }
