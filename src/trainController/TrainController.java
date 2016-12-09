@@ -133,7 +133,7 @@ public class TrainController {
 		
 		/* @Matt: This TrainModel constructor needs to be added to the TrainModel class! */
 		//model = new TrainModel((TrainController)this, id, line);
-		model = new TrainModel((TrainController)this);
+		model = new TrainModel();
 		//Trains.add(id, model);???
 		
 		//model = new TrainModel(this);
