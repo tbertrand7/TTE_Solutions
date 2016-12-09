@@ -110,8 +110,7 @@ public class TrainModel extends TrainState implements Runnable{
 
 	
 	/**
-	 * 
-	 * @param tc
+	 * Null constructor for Train Model (used only for testing purposes)
 	 */
 	public TrainModel(){
 		
@@ -131,7 +130,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trainCon = tc;
 		trainID = 1;
 		trainLine = trackBlock.line;
-		 */
+	 */
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -210,6 +209,14 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		start();
 		
+	}
+	
+	/**
+	 * adds (or subtracts if negative value) passengers to train
+	 * @param numPass - the number of passengers to add (or subtract)
+	 */
+	public void addPassengers(int numPass){
+		passengerCount = passengerCount + numPass;
 	}
 
 	/**
