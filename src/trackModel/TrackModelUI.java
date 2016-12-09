@@ -1035,6 +1035,8 @@ public class TrackModelUI {
 			JTextField label_19, JTextField label_23, JTextField label_24, JSpinner label_25, JSpinner label_27,
 			JSpinner label_29, JCheckBox chckbxNewCheckBox, JTextField spinner, JCheckBox checkBox,
 			JTextField checkBox_1) {
+		
+		try{
 		TrackModel db = new TrackModel();
 		TrackBlock theBlock = db.getBlock((String) lineComboBox.getSelectedItem(), (Integer) railComboBox.getSelectedItem());
 		
@@ -1067,5 +1069,11 @@ public class TrackModelUI {
 			theBlock.status = BlockStatus.OCCUPIED;
 
 		opps.setBlock(theBlock);
+		}
+		//check for empty strings if the user did not check live data first!
+		catch(NumberFormatException n){
+			JFrame parent = new JFrame();
+			JOptionPane.showMessageDialog(parent,"Please click the Check Live button before saving to the database","TRACK MODEL ERROR", JOptionPane.ERROR_MESSAGE);	
+		}
 	}
 }

@@ -136,7 +136,5 @@ public class TTEHomeGUI {
 		});
 		btnTrackModel.setBounds(150, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnTrackModel);
-		
-		
 	}
 }
