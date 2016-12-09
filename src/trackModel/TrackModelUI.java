@@ -1065,7 +1065,7 @@ public class TrackModelUI {
 		theBlock.temp = (int) label_25.getValue();
 		theBlock.status = BlockStatus.valueOf(label_19.getText());
 		theBlock.trainID = Integer.parseInt(textField_2.getText());
-		if(theBlock.trainID >= 0)
+		if(theBlock.trainID > 0)
 			theBlock.status = BlockStatus.OCCUPIED;
 
 		opps.setBlock(theBlock);
