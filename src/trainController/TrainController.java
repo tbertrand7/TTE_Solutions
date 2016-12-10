@@ -5,6 +5,18 @@ import trainModel.TrainModel;
 public class TrainController {
 	
 	/**
+	 * All error signals that can occur.
+	 * @author anna
+	 *
+	 */
+	public enum Signal {
+		ENGINE_FAILURE,
+		RAIL_FAILURE,
+		SIGNAL_PICKUP_FAILURE,
+		BRAKE_FAILURE
+	}
+	
+	/**
 	 * Door sides, because I believe this is the cleanest way
 	 * @author anna
 	 *
@@ -71,9 +83,14 @@ public class TrainController {
 	protected String station;
 	
 	/**
-	 * Used if the train needs to stop for a station or because of a failure.
+	 * Used if the train needs to stop.
 	 */
 	protected boolean stop;
+	
+	/**
+	 * Used to indicate a current failure.
+	 */
+	protected boolean failure;
 	
 	/**
 	 * If true, train is in automatic mode. Otherwise, it's in manual mode.
@@ -112,10 +129,11 @@ public class TrainController {
 		temperature = 68;
 		sBrakeOn = false;
 		eBrakeOn = false;
+		failure = false;
 		
 		/* @Matt: This TrainModel constructor needs to be added to the TrainModel class! */
 		//model = new TrainModel((TrainController)this, id, line);
-		model = new TrainModel((TrainController)this);
+		model = new TrainModel();
 		//Trains.add(id, model);???
 		
 		//model = new TrainModel(this);
@@ -152,8 +170,7 @@ public class TrainController {
 		
 		if (auth >= 0) authority = auth;
 		
-		//TODO need to change this to account for failures
-		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
+		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -168,7 +185,7 @@ public class TrainController {
 		
 		if (newblock) System.out.println("New authority: "+authority);
 		
-		if (authority == 0 && stop == false) { //authority is 0, need to stop
+		if (authority == 0 && !stop) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -199,8 +216,7 @@ public class TrainController {
 		
 		if (auth >= 0 && newblock) authority = auth;
 		
-		//TODO need to change this to account for failures
-		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
+		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -215,7 +231,7 @@ public class TrainController {
 		
 		if (newblock) System.out.println("New authority: "+authority);
 		
-		if (authority == 0 && stop == false) { //authority is 0, need to stop
+		if (authority == 0 && !stop) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -249,8 +265,7 @@ public class TrainController {
 			System.out.println("New authority: "+authority);
 		}
 		
-		//TODO change this to account for failures
-		if (authority > 0 && stop == true) { //authority is being changed from 0 to something valid
+		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
 			
 			setStop(false);
 			
@@ -260,7 +275,7 @@ public class TrainController {
 			
 		}
 		
-		if (authority == 0 && stop == false) { //authority is 0, need to stop
+		if (authority == 0 && !stop) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -290,12 +305,28 @@ public class TrainController {
 	
 	/**
 	 * Signals that an error has occurred.
+	 * @param signaltype - a Signal describing the error
 	 */
-	public synchronized void signal() {
+	public synchronized void signal(Signal signaltype) {
 		
 		if (connectedToUI()) {
-			ui.message("ERROR: FAILURE\n");
+			String message = null;
+			
+			switch (signaltype) {
+			case ENGINE_FAILURE:
+				message = "ERROR: ENGINE FAILURE\n"; break;
+			case RAIL_FAILURE:
+				message = "ERROR: RAIL FAILURE\n"; break;
+			case SIGNAL_PICKUP_FAILURE:
+				message = "ERROR: SIGNAL PICKUP FAILURE\n"; break;
+			case BRAKE_FAILURE:
+				message = "ERROR: BRAKE FAILURE\n"; break;
+			}
+			
+			if (message != null) ui.message(message);
 		}
+		
+		failure = true;
 		
 		setStop(true);
 		
@@ -308,6 +339,12 @@ public class TrainController {
 	 * Signals that an error has been repaired.
 	 */
 	public synchronized void repair() {
+		
+		if (connectedToUI()) {
+			ui.message("Failure has been repaired.\n");
+		}
+		
+		failure = false;
 		
 		setStop(false);
 		
@@ -389,7 +426,7 @@ public class TrainController {
 		
 		speedCurrent = speed;
 		
-		if (ui != null) ui.setSpeedCurrent(speedCurrent);
+		if (connectedToUI()) ui.setSpeedCurrent(speedCurrent);
 		
 	}
 	
@@ -410,6 +447,8 @@ public class TrainController {
 	public synchronized void setSpeedLimit(double speed) {
 		
 		speedLimit = speed;
+		
+		if (connectedToUI()) ui.setSpeedLimit(speed);
 		
 	}
 	

@@ -4,27 +4,32 @@ import java.io.*;
 import java.util.*;
 import javax.swing.table.*;
 
+import TTEHome.SystemClock;
 import trackModel.*;
 import trackModel.TrackBlock.*;
 import waysideController.*;
+import trainController.*;
 
 public class CTCOffice
 {
+	private SystemClock sysClock;
 	private OfficeUI officeUI;
 	private TrackModel track;
+	private TrainControllerInstances trainCont;
 	
 	public enum Mode {MANUAL, AUTOMATIC}
-	
-	private int simulationSpeed;
+
 	private Mode mode = Mode.MANUAL;
 	private ScheduleItem[] schedule;
 	private String loggedInUser;
 
 	public TrackBlock[] greenLine, redLine;
 	
-	public CTCOffice()
+	public CTCOffice(SystemClock clk, TrainControllerInstances tci)
 	{
         try {
+        	sysClock = clk;
+        	trainCont = tci;
 			track = new TrackModel();
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
@@ -78,13 +83,24 @@ public class CTCOffice
 		else
 			officeUI.logNotification("Manual Mode Set");
 	}
-	
-	/** Set new simulation speed */
-	//TODO: Replace method with global system clock
+
+	/**
+	 * Change global system clock
+	 * @param newSpeed new simulation speed
+	 */
 	public void setSimulationSpeed(int newSpeed)
 	{
-		simulationSpeed = newSpeed;
+		sysClock.clock = newSpeed;
 		officeUI.logNotification("New Simulation Speed is " + newSpeed + "X wall clock speed");
+	}
+
+	/**
+	 * Get current simulation speed from sysClock
+	 * @return Current simulation speed
+	 */
+	public int getSimulationSpeed()
+	{
+		return sysClock.clock;
 	}
 
 	public void suggestSpeed(double newTrainSpeed, int train)
@@ -101,16 +117,22 @@ public class CTCOffice
 		TTEHome.TTEHomeGUI.wc.suggestAuthority(dest.blockNumber, train);
     }
 
+    /**
+     * Dispatch new train from yard
+     * @param dest destination block of new train
+     * @param speed speed for new train
+     */
     public void dispatchNewTrain(TrackBlock dest, double speed)
 	{
 		//TODO: integrate with wayside controller
-		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
-	}
+        //Create new train and get ID for wayside
+        int newTrainID = trainCont.createTrain(dest.line);
 
-	/** Returns the current simulation speed */
-	public int getSimulationSpeed()
-	{
-		return simulationSpeed;
+        //Send destination and speed requests for new train
+        suggestDestination(dest, newTrainID);
+        suggestSpeed(speed, newTrainID);
+
+		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
 	}
 	
 	/** Returns if system is in Manual or Auto mode */
@@ -152,6 +174,16 @@ public class CTCOffice
 		track.setBlock(currBlock); //Update block in DB
 	}
 
+	public void toggleSwitch()
+	{
+		//TODO: implement switch toggling
+	}
+
+	/**
+	 * Loads in schedule file and updates schedule grid
+	 * @param f Schedule file to load in
+	 * @param tbl Table reference
+	 */
 	public void loadSchedule(File f, DefaultTableModel tbl)
     {
         try {
@@ -189,6 +221,11 @@ public class CTCOffice
 			tbl.addRow(new Object[] {schedule[i].line, schedule[i].train, schedule[i].destination, schedule[i].time});
 		}
     }
+
+    public void runSchedule()
+	{
+		//TODO: Implement run schedule
+	}
 
 	public int calcThroughput(TrackBlock block)
 	{

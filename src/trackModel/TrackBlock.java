@@ -20,7 +20,7 @@ public class TrackBlock {
 	public int numPass;
 	public int temp;
 	public BlockStatus status;
-	public String occupied; //why is this here?
+	public String occupied; //why is this here? <3 Matt
 	public int trainID;
 	public double speed;
 	public int authority;
@@ -74,7 +74,7 @@ public class TrackBlock {
 		
 		return (this.arrowDirection.equals(temp.arrowDirection) && this.authority == temp.authority && this.blockGrade == temp.blockGrade && this.blockLength == temp.blockLength
 				&& this.blockNumber == temp.blockNumber && this.cumualativeElevation == temp.cumualativeElevation && this.elevation == temp.elevation && this.infrastructure.equals(temp.infrastructure)
-				&& this.line.equals(temp.line) && this.nextBlock == temp.nextBlock && this.numPass == temp.numPass && this.numPass == temp.numPass && this.occupied.equals(temp.occupied)
+				&& this.line.equals(temp.line) && this.nextBlock == temp.nextBlock && this.numPass == temp.numPass && this.occupied.equals(temp.occupied)
 				&& this.pk == temp.pk && this.section.equals(temp.section) && this.speed == temp.speed && this.speedLimit == temp.speedLimit && this.temp == temp.temp && this.trainID == temp.trainID
 				&& this.status.toString().equals(temp.status.toString()) && this.switchBlock.id.equals(temp.switchBlock.id) && this.switchBlock.position.equals(temp.switchBlock.position));
 		
