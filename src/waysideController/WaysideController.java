@@ -11,24 +11,62 @@ import trackModel.*;
 public class WaysideController 
 {
 	//GLOBAL VARIABLES:
-	//private PLC plc = new PLC();
-	protected String line;
-	protected int[] blocks;
-	protected trackModel.TrackBlock[] trackBlocks;
-	protected Hashtable<Integer,Integer[]> controlledSwitches;
-	protected Hashtable<Integer, Integer> trains;
 	
-	public WaysideController(String line, String[] b, String[] s)
+	protected String line; //needed in order to fetch 
+	protected int[] blocks; //used for fetching all the blocks from the track model
+	protected trackModel.TrackBlock[] trackBlocks; //all the track blocks from the track model
+	protected Hashtable<Integer, blockPosition> trackSetup; //used for finding the route -- shows all the connections between blocks
+	protected Hashtable<Integer,String[]> switches; 
+	protected Hashtable<Integer, Integer> trains;
+	protected Hashtable<Integer, String> brokenRails;
+	protected Hashtable<Integer, String[]> crossing;
+	
+	public WaysideController(String line, String[] b, String[] s, int[] c, String plcPath)
 	{
 		blocks = new int[b.length];
 		trackBlocks = new trackModel.TrackBlock[b.length];
-		controlledSwitches = new Hashtable<Integer,Integer[]>();
+		switches = new Hashtable<Integer,String[]>();
 		trains = new Hashtable<Integer, Integer>();
+		trackSetup = new Hashtable<Integer,blockPosition>();
+		brokenRails = new Hashtable<Integer,String>();
+		crossing = new Hashtable<Integer, String[]>();
 		
 		for(int i = 0; i < b.length; i++)
 		{
 			String[] split = b[i].split("-");
-			blocks[i] = Integer.parseInt(split[0]);
+			
+			Integer currentBlock;
+			int[] next = new int[2];
+			int[] previous = new int[2];
+			
+			currentBlock = Integer.parseInt(split[0]);
+			blocks[i] = currentBlock;
+			
+			String[] blockSplit = split[1].split(":");
+			if(blockSplit.length < 2)
+			{
+				if(!blockSplit[0].equals(".") && !blockSplit[0].equals("y"))
+					next[0] = Integer.parseInt(blockSplit[0]);
+			}
+			else
+			{
+				next[0] = Integer.parseInt(blockSplit[0]);
+				next[1] = Integer.parseInt(blockSplit[1]);
+			}
+			
+			blockSplit = split[2].split(":");
+			if(blockSplit.length < 2)
+			{
+				if(!blockSplit[0].equals(".") && !blockSplit[0].equals("y"))
+					previous[0] = Integer.parseInt(blockSplit[0]);
+			}
+			else
+			{
+				previous[0] = Integer.parseInt(blockSplit[0]);
+				previous[1] = Integer.parseInt(blockSplit[1]);
+			}
+			blockPosition block = new blockPosition(next, previous);
+			trackSetup.put(currentBlock,block);
 		}
 		
 		if(s != null)
@@ -37,9 +75,10 @@ public class WaysideController
 			{
 				String[] split = sw.split("-");
 				String[] switchInfo = split[1].split(":");
-				controlledSwitches.put(Integer.parseInt(split[0]),new Integer[]{Integer.parseInt(switchInfo[0]),Integer.parseInt(switchInfo[1]),Integer.parseInt(switchInfo[2]),Integer.parseInt(switchInfo[3])});
+				switches.put(Integer.parseInt(split[0]),new String[]{"0",switchInfo[0],switchInfo[1],switchInfo[2]});
 			}
 		}
+		
 		this.line = line;
 		
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
@@ -48,7 +87,15 @@ public class WaysideController
 		  public void run() {
 			  updateLocalTrackInfo();
 		  }
-		}, 0, 1, TimeUnit.SECONDS);
+		}, 0, 50, TimeUnit.MILLISECONDS);
+		
+		if(c != null)
+		{
+			for(int i = 0; i < c.length; i++)
+			{
+				setInfrastructure(c[i],'g');
+			}
+		}
 	}
 	
 	
@@ -59,55 +106,64 @@ public class WaysideController
 
 		trackBlocks = track.getBlock(line, blocks);
 			
-		for(int i = 0; i < blocks.length; i++)
+		for(int i = 0; i < trackBlocks.length; i++)
 		{
 			if(!trackBlocks[i].switchBlock.id.equals("") && trackBlocks[i].infrastructure.contains("SWITCH"))
 			{
 				String id = trackBlocks[i].switchBlock.getID().replace("Switch ","");
 				String position = trackBlocks[i].switchBlock.getPosition();
-				updateLocalSwitchInfo(Integer.parseInt( id ) , Integer.parseInt(position));
+				updateLocalSwitchInfo(Integer.parseInt( id ) , position);
 			}
 			
 			if(trackBlocks[i].status == trackModel.TrackBlock.BlockStatus.OCCUPIED)
 			{
-				if(trains.contains(trackBlocks[i].trainID))
-				{
-					trains.remove(trackBlocks[i].trainID);
-				}
+				trains.remove(trackBlocks[i].trainID);
 				trains.put(trackBlocks[i].trainID, trackBlocks[i].blockNumber);
+			}
+			
+			if(trackBlocks[i].status != trackModel.TrackBlock.BlockStatus.OCCUPIED && trackBlocks[i].status != trackModel.TrackBlock.BlockStatus.UNOCCUPIED)
+			{
+				brokenRails.remove(trackBlocks[i].blockNumber);
+				brokenRails.put(trackBlocks[i].blockNumber, trackBlocks[i].status.toString());
+			}
+			
+			if(trackBlocks[i].infrastructure.contains("RAILWAY CROSSING"))
+			{
+				crossing.remove(trackBlocks[i].blockNumber);
+				String[] s = trackBlocks[i].infrastructure.split(":");
+				if(s.length > 1)
+					crossing.put(trackBlocks[i].blockNumber, new String[] {s[1],s[2]});
 			}
 		}
 	}
 	
-	public void updateLocalSwitchInfo(int switchNum, int position)
+	public void updateLocalSwitchInfo(int switchNum, String position)
 	{
-		Integer[] current = controlledSwitches.get(switchNum);
+		String[] current = switches.get(switchNum);
 		current[0] = position;
-		controlledSwitches.remove(switchNum);
-		controlledSwitches.put(switchNum, current);
+		switches.remove(switchNum);
+		switches.put(switchNum, current);
 	}
 	
 	//------------------------COMMS FROM CTC OFFICE ---------------------------
 	public void suggestSpeed(double speed, int train)
 	{
-		updateLocalTrackInfo();
-		
 		int block = trains.get(train);
-		int tblock=0;
-		for(int i = 0; i < blocks.length;i++)
+		int tblock = -1;
+		for(int i = 0; i < blocks.length; i++)
 		{
 			if(blocks[i] == block)
 				tblock = i;
 		}
 		
-		trackModel.TrackModel track = new trackModel.TrackModel();
-		//System.out.println(speed);
-		//System.out.println(trackBlocks[tblock].speedLimit);
-		if(checkSpeed(speed,trackBlocks[tblock].speedLimit))
+		if(tblock != -1)
 		{
-			//System.out.println("here");
-			trackBlocks[tblock].speed = speed;
-			track.setBlock(trackBlocks[tblock]);
+			trackModel.TrackModel track = new trackModel.TrackModel();
+			if(checkSpeed(speed,trackBlocks[tblock].speedLimit))
+			{
+				trackBlocks[tblock].speed = speed;
+				track.setBlock(trackBlocks[tblock]);
+			}
 		}
 	}
 	
@@ -155,29 +211,13 @@ public class WaysideController
 	public ArrayList<Integer> calculateRoute(int start, int end)
 	{
 		//TO DO
-		//get the start track block
-		System.out.println("START: "+start+" , END: "+end);
-		ArrayList<Integer> j = new ArrayList<Integer>();
-		
-		for(int i = 0; i < blocks.length; i++)
-		{
-			if(blocks[i] >= start)
-			{
-				if(blocks[i] == end)
-				{
-					j.add(i);
-					break;
-				}
-				j.add(i);
-			}
-		}
-		return j;
+		return new ArrayList<Integer>();
 	}
 	
 	//------------------------COMMS TO TRACK------------------------------------
 	protected void setSwitch(int switchNumber)
 	{
-		int switchBlock = controlledSwitches.get(switchNumber)[1];
+		int switchBlock = Integer.parseInt(switches.get(switchNumber)[1]);
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrackBlock temp = track.getBlock(line, switchBlock);
 		String newPosition = changeSwitchPosition(switchBlock, temp.switchBlock.position);
@@ -194,13 +234,26 @@ public class WaysideController
 	}
 	
 	//set traffic lights, cross bar and its lights
-	public void setInfrastructure(int trackBlock)
+	public void setInfrastructure(int trackBlock, char lights)
 	{
 		String finalInfrastructure = "";
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrackBlock temp = track.getBlock(line, trackBlock);
 		finalInfrastructure = temp.infrastructure;
-		
+		if(lights == 'r')
+		{
+			finalInfrastructure = finalInfrastructure+":r:d";
+		}
+		else if(lights == 'y') 
+		{
+			finalInfrastructure = finalInfrastructure+":y:d";
+		}
+		else
+		{
+			finalInfrastructure = finalInfrastructure+":g:u";
+		}
+		temp.infrastructure = finalInfrastructure;
+		track.setBlock(temp);
 	}
 	
 	public static void main(String[] args)
@@ -211,5 +264,17 @@ public class WaysideController
 		//		"126-0","127-0","128-0","129-0","130-0","131-0","132-0","133-0","134-0","135-0","136-0","137-0",
 		//		"138-0","139-0","140-0","141-0","142-0","143-0","144-0","145-0","146-0","147-0","148-0","149-0"};
 		//WaysideController wc = new WaysideController("Green",demoBlocks,null);
+	}
+}
+
+class blockPosition
+{
+	public int[] nextBlock;
+	public int[] previousBlock;
+	
+	public blockPosition(int[] nB, int[] pB)
+	{
+		nextBlock = nB;
+		previousBlock = pB;
 	}
 }

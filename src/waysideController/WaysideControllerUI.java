@@ -30,6 +30,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.border.LineBorder;
@@ -39,10 +44,13 @@ import javax.swing.JComboBox;
 public class WaysideControllerUI extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtOn;
-	private JTextField txtUp;
+	private JTextField txtLightStatus;
+	private JTextField txtCrossbarPos;
+	private static JButton btnUpdate;
 	private WaysideController wc;
 	private static WaysideControllerInterface WCI;
+	private JTextField txtBroken;
+
 	/**
 	 * Launch the application.
 	 */
@@ -56,6 +64,7 @@ public class WaysideControllerUI extends JFrame {
 					//TC_UI_startup popup = new TC_UI_startup();
 					//popup.setTitle("PLC Startup");
 					//popup.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -80,22 +89,26 @@ public class WaysideControllerUI extends JFrame {
 		
 		setTitle("Wayside Controller");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 507, 338);
+		setBounds(100, 100, 616, 416);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnUpdate = new JButton("Update");
-		btnUpdate.setBounds(6, 261, 97, 25);
+		btnUpdate = new JButton("Update");
+		btnUpdate.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnUpdate.setBounds(6, 310, 97, 48);
 		contentPane.add(btnUpdate);
 				
 		JComboBox<String> waysideIDChoice = new JComboBox<String>();
+		waysideIDChoice.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		waysideIDChoice.setBackground(Color.WHITE);
-		waysideIDChoice.setBounds(6, 43, 97, 34);
+		waysideIDChoice.setBounds(6, 43, 103, 34);
 		contentPane.add(waysideIDChoice);
-		//waysideIDChoice.addItem("Red 1");
+		waysideIDChoice.addItem("Red 1");
 		waysideIDChoice.addItem("Red 2");
+		waysideIDChoice.addItem("Green 1");
+		waysideIDChoice.addItem("Green 2");
 		
 		waysideIDChoice.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -120,7 +133,8 @@ public class WaysideControllerUI extends JFrame {
 		
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(121, 9, 350, 242);
+		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tabbedPane.setBounds(121, 9, 465, 311);
 		contentPane.add(tabbedPane);
 		
 		JPanel trackOccupancy = new JPanel();
@@ -130,26 +144,26 @@ public class WaysideControllerUI extends JFrame {
 		
 		JLabel lblTrain = new JLabel("Train:");
 		lblTrain.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTrain.setBounds(20, 13, 46, 14);
+		lblTrain.setBounds(20, 31, 46, 14);
 		trackOccupancy.add(lblTrain);
 		
 		//Train Choice
 		JComboBox<String> trainIDChoice = new JComboBox<String>();
 		trainIDChoice.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		trainIDChoice.setBounds(20, 33, 179, 37);
+		trainIDChoice.setBounds(20, 58, 179, 37);
 		trackOccupancy.add(trainIDChoice);
 		
 		//Display for the current block of the train
 		JLabel lblBlockNumber = new JLabel("Block Number:");
 		lblBlockNumber.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblBlockNumber.setBounds(20, 83, 122, 14);
+		lblBlockNumber.setBounds(20, 130, 122, 14);
 		trackOccupancy.add(lblBlockNumber);
 		
 		TextField trainBlock = new TextField();
 		trainBlock.setFont(new Font("Dialog", Font.PLAIN, 26));
 		trainBlock.setBackground(Color.WHITE);
 		trainBlock.setEditable(false);
-		trainBlock.setBounds(20, 108, 179, 40);
+		trainBlock.setBounds(20, 157, 179, 40);
 		trackOccupancy.add(trainBlock);
 		
 		//Update the block field when a train is selected
@@ -163,6 +177,10 @@ public class WaysideControllerUI extends JFrame {
 						selected = selected.replaceAll("Train ", "");
 						int trainNum = Integer.parseInt(selected);
 						trainBlock.setText(""+wc.trains.get(trainNum));
+					}
+					else
+					{
+						trainBlock.setText("");
 					}
 				}
 			}
@@ -206,17 +224,17 @@ public class WaysideControllerUI extends JFrame {
 					if(!sw.equals("No Switches to Display"))
 					{
 						sw = sw.replaceAll("Switch ", "");
-						Integer[] position = wc.controlledSwitches.get(Integer.parseInt(sw));
+						String[] position = wc.switches.get(Integer.parseInt(sw));
 						Integer connectBlock;
-						if(position[0] == 1)
+						if(position[0].equals("1"))
 						{
-							connectBlock = position[3];
+							switchPos.setText(position[3]);
 						}
 						else
 						{
-							connectBlock = position[2];
+							switchPos.setText(position[2]);
 						}
-						switchPos.setText(position[1] + " connects to " + connectBlock);
+						
 					}
 				}
 			}
@@ -224,7 +242,7 @@ public class WaysideControllerUI extends JFrame {
 		
 		JButton btnSetPosition = new JButton("Change Position");
 		btnSetPosition.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnSetPosition.setBounds(205, 144, 128, 35);
+		btnSetPosition.setBounds(205, 146, 156, 35);
 		switchPositionPanel.add(btnSetPosition);
 		btnSetPosition.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -249,71 +267,124 @@ public class WaysideControllerUI extends JFrame {
 		
 		JLabel lblLights = new JLabel("Lights:");
 		lblLights.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblLights.setBounds(53, 67, 48, 20);
+		lblLights.setBounds(20, 96, 48, 20);
 		panel_2.add(lblLights);
 		
-		txtOn = new JTextField();
-		txtOn.setBackground(Color.WHITE);
-		txtOn.setEditable(false);
-		txtOn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtOn.setBounds(111, 64, 56, 26);
-		panel_2.add(txtOn);
-		txtOn.setColumns(10);
+		txtLightStatus = new JTextField();
+		txtLightStatus.setBackground(Color.WHITE);
+		txtLightStatus.setEditable(false);
+		txtLightStatus.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtLightStatus.setBounds(80, 93, 96, 26);
+		panel_2.add(txtLightStatus);
+		txtLightStatus.setColumns(10);
 		
 		JLabel lblCrossbar = new JLabel("Crossbar:");
 		lblCrossbar.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblCrossbar.setBounds(33, 107, 68, 14);
+		lblCrossbar.setBounds(20, 146, 68, 14);
 		panel_2.add(lblCrossbar);
 		
-		txtUp = new JTextField();
-		txtUp.setBackground(Color.WHITE);
-		txtUp.setEditable(false);
-		txtUp.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtUp.setColumns(10);
-		txtUp.setBounds(111, 101, 56, 30);
-		panel_2.add(txtUp);
+		txtCrossbarPos = new JTextField();
+		txtCrossbarPos.setBackground(Color.WHITE);
+		txtCrossbarPos.setEditable(false);
+		txtCrossbarPos.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtCrossbarPos.setColumns(10);
+		txtCrossbarPos.setBounds(100, 132, 76, 30);
+		panel_2.add(txtCrossbarPos);
 		
 		JLabel lblTrackIssues = new JLabel("Broken Rails:");
-		lblTrackIssues.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblTrackIssues.setBounds(10, 144, 118, 14);
+		lblTrackIssues.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblTrackIssues.setBounds(10, 173, 166, 20);
 		panel_2.add(lblTrackIssues);
-		
-		JLabel lblBrokenRails = new JLabel("No Broken Rails Detected");
-		lblBrokenRails.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblBrokenRails.setBounds(20, 170, 199, 20);
-		panel_2.add(lblBrokenRails);
 		
 		JLabel lblCrossingStatus = new JLabel("Crossing Number:");
 		lblCrossingStatus.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblCrossingStatus.setBounds(20, 38, 165, 26);
+		lblCrossingStatus.setBounds(20, 45, 165, 26);
 		panel_2.add(lblCrossingStatus);
 		
-		Choice choice_2 = new Choice();
-		choice_2.setBounds(191, 43, 135, 22);
-		panel_2.add(choice_2);
+		JComboBox<String> railwayCrossingChoice = new JComboBox<String>();
+		railwayCrossingChoice.setBounds(188, 45, 142, 27);
+		panel_2.add(railwayCrossingChoice);
+		railwayCrossingChoice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(railwayCrossingChoice.getItemCount() > 0 && !railwayCrossingChoice.getSelectedItem().equals("No crossings to display"))
+				{
+					int crossingBlock = Integer.parseInt(railwayCrossingChoice.getSelectedItem().toString().replace("Block ",""));
+					String[] status = wc.crossing.get(crossingBlock);
+				
+					switch(status[0])
+					{
+						case "r":
+							txtLightStatus.setText("Red");
+							break;
+						case "g":
+							txtLightStatus.setText("Green");
+							break;
+						case "y":
+							txtLightStatus.setText("Yellow");
+							break;
+					}
+					
+					if(status[1].equals("u"))
+						txtCrossbarPos.setText("Up");
+					else
+						txtCrossbarPos.setText("Down");
+				}
+			}
+		});
 		
+		//-------BROKEN RAILS-----------
+		JComboBox<String> brokenRailChoice = new JComboBox<String>();
+		brokenRailChoice.setBounds(34, 216, 142, 31);
+		panel_2.add(brokenRailChoice);
+		
+		txtBroken = new JTextField();
+		txtBroken.setBackground(Color.WHITE);
+		txtBroken.setEditable(false);
+		txtBroken.setBounds(188, 216, 152, 31);
+		panel_2.add(txtBroken);
+		txtBroken.setColumns(10);
+		brokenRailChoice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(brokenRailChoice.getItemCount() > 0)
+				{
+					String selected = brokenRailChoice.getSelectedItem().toString();
+					if(!selected.equals("No broken rails"))
+					{
+						selected = selected.replaceAll("Block ", "");
+						int blockNum = Integer.parseInt(selected);
+						txtBroken.setText(""+wc.brokenRails.get(blockNum));
+					}
+					else
+					{
+						txtBroken.setText("");
+					}
+				}
+			}
+		});
+		
+		//--------LOAD PLC--------------
 		JButton btnLoadPlcProgram = new JButton("Load PLC Program");
-		btnLoadPlcProgram.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnLoadPlcProgram.setBounds(156, 262, 198, 23);
+		btnLoadPlcProgram.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnLoadPlcProgram.setBounds(227, 322, 231, 36);
 		contentPane.add(btnLoadPlcProgram);
 		
 		JLabel lblController = new JLabel("Controller:");
-		lblController.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblController.setBounds(6, 13, 77, 14);
+		lblController.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblController.setBounds(6, 13, 103, 17);
 		contentPane.add(lblController);
 		
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//wc.updateLocalTrackInfo();
 				switchPositionChoice.removeAllItems();
-				if(wc.controlledSwitches.size() == 0)
+				if(wc.switches.size() == 0)
 				{
 					switchPositionChoice.addItem("No Switches to Display");
 					switchPositionChoice.setEnabled(false);
 				}
 				else
 				{
-					for(Integer i : wc.controlledSwitches.keySet())
+					for(Integer i : wc.switches.keySet())
 					{
 						switchPositionChoice.addItem("Switch "+i);
 					}
@@ -332,6 +403,39 @@ public class WaysideControllerUI extends JFrame {
 						trainIDChoice.addItem("Train "+i);
 					}
 					trainIDChoice.setEnabled(true);
+				}
+				
+				brokenRailChoice.removeAllItems();
+				if(wc.brokenRails.size() == 0)
+				{
+					brokenRailChoice.addItem("No broken rails");
+					brokenRailChoice.setEnabled(false);
+					txtBroken.setText("");
+				}
+				else
+				{
+					for(Integer i: wc.brokenRails.keySet())
+					{
+						brokenRailChoice.addItem("Block "+i);
+					}
+					brokenRailChoice.setEnabled(true);
+				}
+				
+				railwayCrossingChoice.removeAllItems();
+				if(wc.crossing.size() == 0)
+				{
+					railwayCrossingChoice.addItem("No crossings to display");
+					railwayCrossingChoice.setEnabled(false);
+					txtLightStatus.setText("");
+					txtCrossbarPos.setText("");
+				}
+				else
+				{
+					for(Integer i: wc.crossing.keySet())
+					{
+						railwayCrossingChoice.addItem("Block "+i);
+					}
+					railwayCrossingChoice.setEnabled(true);
 				}
 			}
 		});
