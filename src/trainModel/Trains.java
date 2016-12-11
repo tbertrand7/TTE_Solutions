@@ -14,12 +14,12 @@ public class Trains {
 	/**
 	 * Maps instance IDs to their UIs (only lists existing UIs)
 	 */
-	protected ArrayList<trainModelGUI> uiList;
+	protected ArrayList<TrainModelGUI> uiList;
 
 	
 	public Trains() {
 		trainList = new HashMap<Integer, TrainModel>();
-		uiList = new ArrayList<trainModelGUI>();
+		uiList = new ArrayList<TrainModelGUI>();
 	}
 	
 	
@@ -28,13 +28,13 @@ public class Trains {
 	 */
 	public void newUI() {
 		
-		uiList.add(new trainModelGUI(this));
+		uiList.add(new TrainModelGUI(this));
 	}
 	
 	/**
 	 * Removes a TrainModelUI from the list.
 	 */
-	public void deleteUI(trainModelGUI t) {
+	public void deleteUI(TrainModelGUI t) {
 		if (uiList.contains(t))
 			uiList.remove(t);
 	}
@@ -45,7 +45,7 @@ public class Trains {
 	 * @param tmui - the TrainModelGUI class to connect to the train
 	 * @return valid TrainModel if connection was successful, null otherwise
 	 */
-	public TrainModel connectGUI(int id, trainModelGUI tmui) {
+	public TrainModel connectGUI(int id, TrainModelGUI tmui) {
 		
 		if (trainList.containsKey(id)) {				//check that train ID exists
 			if (trainList.get(id).connectedToUI()) {	//check that train is not connected to a UI

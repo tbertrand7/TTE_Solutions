@@ -19,7 +19,7 @@ import javax.swing.JTextPane;
 import java.awt.Canvas;
 import javax.swing.UIManager;
 
-public class trainModelGUI {
+public class TrainModelGUI {
 
 	private JFrame frame;
 	private JTextField leftDoorStatus;
@@ -185,14 +185,14 @@ public class trainModelGUI {
 	
 	
 	public static void main(String[] args){
-		new trainModelGUI(new Trains());
+		new TrainModelGUI(new Trains());
 	}
 	
 	
 	/**
 	 * Create the contents of the frame.
 	 */
-	public trainModelGUI(Trains modelList) {
+	public TrainModelGUI(Trains modelList) {
 		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -934,7 +934,7 @@ public class trainModelGUI {
 		/*
 		 * connect UI button
 		 */
-		trainModelGUI tmg = this;
+		TrainModelGUI tmg = this;
 		JButton uiConnectButton = new JButton("Connect");
 		uiConnectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

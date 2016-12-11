@@ -12,7 +12,7 @@ import ctcOffice.*;
 import trackModel.TrackModelUI;
 import trainController.TrainControllerInstances;
 import trainModel.TrainModel;
-import trainModel.trainModelGUI;
+import trainModel.TrainModelGUI;
 import trainModel.Trains;
 import waysideController.WaysideControllerUI;
 import waysideController.LoadPLCUI;

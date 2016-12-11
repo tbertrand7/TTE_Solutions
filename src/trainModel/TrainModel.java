@@ -42,7 +42,7 @@ public class TrainModel extends TrainState implements Runnable{
 	/**
 	 * GUI associated with train Model
 	 */
-	public trainModelGUI ui;
+	public TrainModelGUI ui;
 	
 	/**
 	 * Info from trackBlock
@@ -586,7 +586,7 @@ public class TrainModel extends TrainState implements Runnable{
 	 * Connects the train to the specified UI and initialize its display.
 	 * @param tcui - the TrainControllerUI to connect to the train
 	 */
-	public void connectToUI(trainModelGUI gui) {
+	public void connectToUI(TrainModelGUI gui) {
 		
 		ui = gui;	
 		
