@@ -24,9 +24,8 @@ public class NewUserUI extends JFrame {
 	public NewUserUI(OfficeLogin login) {
 		setTitle("Create New User");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NewUserUI.class.getResource("/shared/TTE.png")));
-		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 350, 200);
+		setBounds(100, 100, 350, 220);
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 		        if ("Nimbus".equals(info.getName())) {
@@ -43,66 +42,114 @@ public class NewUserUI extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblUsername.setBounds(37, 29, 148, 16);
-		contentPane.add(lblUsername);
-		
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblPassword.setBounds(37, 57, 148, 16);
-		contentPane.add(lblPassword);
-		
-		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
-		lblConfirmPassword.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblConfirmPassword.setBounds(37, 85, 148, 16);
-		contentPane.add(lblConfirmPassword);
-		
-		txtFieldUsername = new JTextField();
-		txtFieldUsername.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		txtFieldUsername.setBounds(192, 25, 122, 28);
-		contentPane.add(txtFieldUsername);
-		txtFieldUsername.setColumns(10);
-		
-		passwordField = new JPasswordField();
-		passwordField.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		passwordField.setBounds(192, 53, 122, 28);
-		contentPane.add(passwordField);
-		
-		passwordFieldConfirm = new JPasswordField();
-		passwordFieldConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		passwordFieldConfirm.setBounds(192, 81, 122, 28);
-		contentPane.add(passwordFieldConfirm);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{350, 0};
+		gbl_contentPane.rowHeights = new int[]{12, 110, 0};
+		gbl_contentPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		contentPane.setLayout(gbl_contentPane);
 		
 		lblErrorMsg = new JLabel("");
+		GridBagConstraints gbc_lblErrorMsg = new GridBagConstraints();
+		gbc_lblErrorMsg.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblErrorMsg.insets = new Insets(0, 0, 5, 0);
+		gbc_lblErrorMsg.gridx = 0;
+		gbc_lblErrorMsg.gridy = 0;
+		contentPane.add(lblErrorMsg, gbc_lblErrorMsg);
 		lblErrorMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		lblErrorMsg.setForeground(Color.RED);
 		lblErrorMsg.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		lblErrorMsg.setBounds(6, 4, 332, 16);
 		lblErrorMsg.setVisible(false);
-		contentPane.add(lblErrorMsg);
+		
+		JPanel inputPanel = new JPanel();
+		GridBagConstraints gbc_inputPanel = new GridBagConstraints();
+		gbc_inputPanel.fill = GridBagConstraints.BOTH;
+		gbc_inputPanel.gridx = 0;
+		gbc_inputPanel.gridy = 1;
+		contentPane.add(inputPanel, gbc_inputPanel);
+		GridBagLayout gbl_inputPanel = new GridBagLayout();
+		gbl_inputPanel.columnWidths = new int[]{160, 0, 0};
+		gbl_inputPanel.rowHeights = new int[]{28, 28, 28, 0, 0};
+		gbl_inputPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_inputPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		inputPanel.setLayout(gbl_inputPanel);
+		
+		JLabel lblUsername = new JLabel("Username:");
+		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
+		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUsername.gridx = 0;
+		gbc_lblUsername.gridy = 0;
+		inputPanel.add(lblUsername, gbc_lblUsername);
+		lblUsername.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		
+		txtFieldUsername = new JTextField();
+		GridBagConstraints gbc_txtFieldUsername = new GridBagConstraints();
+		gbc_txtFieldUsername.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtFieldUsername.insets = new Insets(0, 0, 5, 0);
+		gbc_txtFieldUsername.gridx = 1;
+		gbc_txtFieldUsername.gridy = 0;
+		inputPanel.add(txtFieldUsername, gbc_txtFieldUsername);
+		txtFieldUsername.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		txtFieldUsername.setColumns(10);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPassword.gridx = 0;
+		gbc_lblPassword.gridy = 1;
+		inputPanel.add(lblPassword, gbc_lblPassword);
+		lblPassword.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		
+		passwordField = new JPasswordField();
+		GridBagConstraints gbc_passwordField = new GridBagConstraints();
+		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_passwordField.insets = new Insets(0, 0, 5, 0);
+		gbc_passwordField.gridx = 1;
+		gbc_passwordField.gridy = 1;
+		inputPanel.add(passwordField, gbc_passwordField);
+		passwordField.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		
+		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
+		GridBagConstraints gbc_lblConfirmPassword = new GridBagConstraints();
+		gbc_lblConfirmPassword.insets = new Insets(0, 0, 5, 5);
+		gbc_lblConfirmPassword.gridx = 0;
+		gbc_lblConfirmPassword.gridy = 2;
+		inputPanel.add(lblConfirmPassword, gbc_lblConfirmPassword);
+		lblConfirmPassword.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		
+		passwordFieldConfirm = new JPasswordField();
+		GridBagConstraints gbc_passwordFieldConfirm = new GridBagConstraints();
+		gbc_passwordFieldConfirm.insets = new Insets(0, 0, 5, 0);
+		gbc_passwordFieldConfirm.fill = GridBagConstraints.HORIZONTAL;
+		gbc_passwordFieldConfirm.gridx = 1;
+		gbc_passwordFieldConfirm.gridy = 2;
+		inputPanel.add(passwordFieldConfirm, gbc_passwordFieldConfirm);
+		passwordFieldConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		
 		JButton btnConfirm = new JButton("Confirm");
+		GridBagConstraints gbc_btnConfirm = new GridBagConstraints();
+		gbc_btnConfirm.insets = new Insets(0, 0, 0, 5);
+		gbc_btnConfirm.gridx = 0;
+		gbc_btnConfirm.gridy = 3;
+		inputPanel.add(btnConfirm, gbc_btnConfirm);
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnConfirmClick();
 			}
 		});
-		btnConfirm.setBounds(50, 122, 84, 33);
 		btnConfirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		contentPane.add(btnConfirm);
 		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(204, 122, 84, 33);
+		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
+		gbc_btnCancel.gridx = 1;
+		gbc_btnCancel.gridy = 3;
+		inputPanel.add(btnCancel, gbc_btnCancel);
 		btnCancel.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
-		contentPane.add(btnCancel);
 	}
 	
 	private void btnConfirmClick()
