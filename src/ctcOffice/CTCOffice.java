@@ -192,12 +192,31 @@ public class CTCOffice
                 String[] data = s.split(",");
                 String[] infr = data[1].split(";");
                 String dest = "";
+				TrackBlock tempBlock = null;
+				TrackBlock[] line;
+
+				//TODO: This conditional won't be needed when infrastructure format is finalized
                 if (infr.length > 1)
                 	dest = infr[1];
                 else
                 	dest = "Unnamed";
 
-                sched.add(new ScheduleItem(data[0], -1, dest, Double.parseDouble(data[2])));
+                //Match dest string to appropriate track block
+				if (data[0].toLowerCase().equals("red"))
+					line = redLine;
+				else
+					line = greenLine;
+
+				for (int i=0; i < line.length; i++)
+				{
+					if (line[i].infrastructure.toUpperCase().contains(dest.toUpperCase()))
+						tempBlock = line[i];
+				}
+
+				if (tempBlock != null)
+                	sched.add(new ScheduleItem(data[0], -1, tempBlock, Double.parseDouble(data[2])));
+				else
+					officeUI.logNotification("Destination: " + dest + " does not exist, schedule item not added");
             }
             csv.close();
             schedule = sched.toArray(new ScheduleItem[10]);
@@ -214,7 +233,7 @@ public class CTCOffice
 		//Add new schedule to table
         for (int i=0; i < schedule.length; i++)
 		{
-			tbl.addRow(new Object[] {schedule[i].line, schedule[i].train, schedule[i].destination, schedule[i].time});
+			tbl.addRow(new Object[] {schedule[i].line, schedule[i].train, schedule[i].destination.toString(), schedule[i].time});
 		}
     }
 
