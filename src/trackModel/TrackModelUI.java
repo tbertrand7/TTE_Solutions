@@ -594,7 +594,7 @@ public class TrackModelUI {
 					lblOn.setText("OFF");
 
 				if (block.infrastructure.contains("STATION"))
-					label_9.setText(block.infrastructure.substring(9));
+					label_9.setText(block.infrastructure.split(";")[1]);
 				else
 					label_9.setText("FALSE");
 
@@ -660,7 +660,7 @@ public class TrackModelUI {
 					chckbxOn.setSelected(false);
 
 				if (block.infrastructure.contains("STATION"))
-					checkBox_1.setText(block.infrastructure.substring(9));
+					checkBox_1.setText(block.infrastructure.split(";")[1]);
 				else
 					checkBox_1.setText("");
 
@@ -1046,15 +1046,22 @@ public class TrackModelUI {
 		theBlock.blockLength = Double.parseDouble(spinner.getText());
 		theBlock.blockGrade = Double.parseDouble(lblNewLabel_1.getText());
 		theBlock.speedLimit = Double.parseDouble(label_1.getText());
+		
+		theBlock.infrastructure = "";
+		
 		if (!checkBox_1.getText().equals("") && !checkBox_1.getText().equals("FALSE"))
-			theBlock.infrastructure += "STATION; " + checkBox_1.getText() + " ";
+			theBlock.infrastructure += "STATION;" + checkBox_1.getText() + ";";
 		if (chckbxNewCheckBox.isSelected())
-			theBlock.infrastructure += "UNDERGROUND ";
+			theBlock.infrastructure += "UNDERGROUND;";
 		if (checkBox.isSelected())
-			theBlock.infrastructure += "RAILWAY CROSSING ";
+			theBlock.infrastructure += "RAILWAY CROSSING;";
 		if (!comboBox_2.getText().equals("") && !comboBox_2.getText().equals("FALSE")) {
-			theBlock.infrastructure += "SWITCH ";
+			theBlock.infrastructure += "SWITCH;";
 			theBlock.switchBlock.id = comboBox_2.getText();
+		}
+		else
+		{
+			theBlock.switchBlock.id = "";
 		}
 
 		theBlock.elevation = Double.parseDouble(label.getText());
