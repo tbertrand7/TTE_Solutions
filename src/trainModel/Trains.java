@@ -3,6 +3,8 @@ package trainModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import trainController.TrainController;
+
 
 public class Trains {
 	
@@ -22,6 +24,32 @@ public class Trains {
 		uiList = new ArrayList<TrainModelGUI>();
 	}
 	
+	public TrainModel addTrain(TrainController tc,int id ,String line){
+		
+		TrainModel tempModel = new TrainModel(this,tc, id, line);
+		
+		trainList.put(id, tempModel);
+		
+		//TODO: @anna change constructor in TrainController.java
+		return tempModel;
+	}
+	
+	
+	public TrainModel addTestTrain(String line, int id){
+		
+		
+		TrainModel tempModel = new TrainModel(line,id);
+		
+		trainList.put(id, tempModel);
+		
+		return tempModel;
+	}
+	
+	
+	public void deleteTrain(){
+		
+		
+	}
 	
 	/**
 	 * Creates a new instance of TrainModelUI.
@@ -54,7 +82,8 @@ public class Trains {
 				trainList.get(id).connectToUI(tmui);
 				return trainList.get(id);
 			}
-		} else {
+		} 
+		else {
 			return null;
 		}
 		

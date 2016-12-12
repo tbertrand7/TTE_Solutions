@@ -106,31 +106,45 @@ public class TrainModel extends TrainState implements Runnable{
 	boolean brakeFail = false;
 	boolean signalFail = false;
 	boolean engineFail = false;
+	
+	/**
+	 * 
+	 */
 
+	int passengerPassFail;
 
 	
 	/**
-	 * Null constructor for Train Model (used only for testing purposes)
+	 * Constructor for testing purposes
 	 */
-	public TrainModel(){
+	public TrainModel(String line, int id){
+
+		trainCon = null;
+		trainID = id;
+		trainLine = line;
 		
-	/*	
-		//DATA FOR SYSTEM PROTOTYPE ONLY
-		curBlockNum = 102; //starting on block 102 of green line for demo
+		
+		if(trainLine.compareToIgnoreCase("Green") == 0)
+		{
+			nextBlockNum = 152;
+			trackBlock = tm.getBlock(trainLine, nextBlockNum);
+		}
+		else
+		{
+			nextBlockNum = 77;
+			trackBlock = tm.getBlock(trainLine, nextBlockNum);
+		}
+	
+		
 		currentPos=0;
 		
-		trackBlock = tm.getBlock("Green",102);
-		nextBlockNum = trackBlock.nextBlock;
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
 		speedLimit = trackBlock.speedLimit;
-	
 		
-		trainCon = tc;
-		trainID = 1;
-		trainLine = trackBlock.line;
-	 */
+		
+		System.out.println("End of Block = "+endOfBlock);
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -139,20 +153,20 @@ public class TrainModel extends TrainState implements Runnable{
 		emergencyBrakeOn = false;
 		crewCount = 1;
 		passengerCount = 0;
-		temperature = 68;
+		temperature = 70;
 
 		
 		power = 0.0;
 		resistivePower=0.0;
 		velocity = 0.0;		
 		
-		//trackBlock.trainID = trainID;
-		//trackBlock.status=BlockStatus.OCCUPIED;
+		trackBlock.trainID = trainID;
+		trackBlock.status=BlockStatus.OCCUPIED;
 
-		//tm.setBlock(trackBlock);
+		tm.setBlock(trackBlock);
 		
-		//start();
 		
+		start();
 		
 	}
 	
@@ -167,27 +181,27 @@ public class TrainModel extends TrainState implements Runnable{
 	 * @param line - the line the train is on (green or red)
 	 */
 	public TrainModel(Trains modelList, TrainController tc, int id, String line) {	
-		
-		//ui = new trainModelGUI(this);
-		
+			
 		trainCon = tc;
 		trainID = id;
 		trainLine = line;
 		
-		curBlockNum = -1; //initialize train to the YARD (-1)
+		//curBlockNum = -1; //initialize train to the YARD (-1)
 		
 		if(trainLine.compareToIgnoreCase("Green") == 0)
 		{
-			nextBlockNum = 152;
-			trackBlock = tm.getBlock(trainLine, nextBlockNum);
+			curBlockNum = 152;
+			trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
 		else
 		{
-			nextBlockNum = 77;
-			trackBlock = tm.getBlock(trainLine, nextBlockNum);
+			curBlockNum = 77;
+			trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
 		
 		currentPos = 0;
+		
+		nextBlockNum = trackBlock.nextBlock;
 		
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
@@ -205,6 +219,7 @@ public class TrainModel extends TrainState implements Runnable{
 		elevation = 0;
 		
 		power = 0.0;
+		resistivePower = 0.0;
 		velocity = 0.0;		
 		
 		start();
@@ -215,8 +230,14 @@ public class TrainModel extends TrainState implements Runnable{
 	 * adds (or subtracts if negative value) passengers to train
 	 * @param numPass - the number of passengers to add (or subtract)
 	 */
-	public void addPassengers(int numPass){
-		passengerCount = passengerCount + numPass;
+	public int addPassengers(int numPass){
+		if(leftDoorsOpen || rightDoorsOpen){
+
+			return changePassengerCount(numPass);
+		}
+		else{
+			return -1000;
+		}
 	}
 
 	/**
@@ -370,10 +391,15 @@ public class TrainModel extends TrainState implements Runnable{
 				}
 			}
 			
+			
+			System.out.println("Top of thread");
+			
 			if(currentPos >= endOfBlock){
 			//end of block reached by train	
 				
 				newBlock = true;
+				
+				System.out.println("NewBlock just set to True");
 				
 				/*
 				 *Update the block we're leaving 
@@ -381,15 +407,33 @@ public class TrainModel extends TrainState implements Runnable{
 				if(trackBlock != null){
 					trackBlock.status = BlockStatus.UNOCCUPIED; //set the block we are leaving to be unoccupied
 					trackBlock.trainID = -1; //set the train ID -1					
-					tm.setBlock(trackBlock);							
+					tm.setBlock(trackBlock);		
+					
+					System.out.println("Set Track Block we are leaving....");
+					
 				/*
 				 * Get the next block
 				 */
 
 					trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
+					
+					System.out.println("Just got the new block......");
+					
+					System.out.println("Track Block Status should equal Unoccupied:     "+trackBlock.status);
+					
 					trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
+					
+					
+					System.out.println("Track Block Status should equal occupied:     "+trackBlock.status);
+
+					
 					trackBlock.trainID = trainID; //set the train ID to the train ID	
-					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info				
+					
+					// vvvvvvvvv SQL exception being thrown here vvvvvvvv
+					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info	
+					
+					
+					System.out.println("Set the new block with new info.");
 				
 				/*
 				 * Update position tracking info	
@@ -504,18 +548,40 @@ public class TrainModel extends TrainState implements Runnable{
 				}
 				
 				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);			
-				
+			
 				distanceLeftInBlock = endOfBlock - currentPos;
+			
+				System.out.println("\nCurrent Position = "+currentPos);
+				System.out.println("Distance left in block = "+distanceLeftInBlock+"\n");
+				
+				
+				//TODO: @matt if at a station add/remove passengers
+				if(trackBlock.infrastructure.contains("station") ){
+					
+					passengerPassFail = addPassengers(trackBlock.numPass);
+					
+					if(passengerPassFail != 0  &&  passengerPassFail != -1000 ){
+						trackBlock.numPass = passengerPassFail; //leave excess passengers at the station
+					}
+					else if(passengerPassFail != -1000){
+						trackBlock.numPass = 0; //all passengers picked up from the station
+					}
+					/*
+					 * if passengerPassFail == -1000 do nothing, no passengers added/subtracted
+					 */
+				}
+				
 				
 				//Tell Train controller to brake before the station
-				if(distanceLeftInBlock <= brakingDistance){
+				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station") )   ){
 					trainCon.approachStation();
 				}
 				
 				//Display info to UI			
 				if(ui != null){
+					ui.displayPower(power);
 					ui.displayVelocity(velocity);
-					ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
+					ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature, crewCount, passengerCount);
 				}
 			
 								
@@ -576,7 +642,7 @@ public class TrainModel extends TrainState implements Runnable{
 				power = 0;
 			}
 			if(ui != null){
-				ui.displayPower();
+				ui.displayPower(power);
 			}
 			resume();
 		}
@@ -596,8 +662,8 @@ public class TrainModel extends TrainState implements Runnable{
 		ui.rDoors(rightDoorsOpen);
 		ui.lDoors(leftDoorsOpen);
 		
-		ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature);
-		ui.displayPower();
+		ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature, crewCount, passengerCount);
+		ui.displayPower(power);
 		ui.displayVelocity(velocity);
 	}
 	
