@@ -12,7 +12,7 @@ import ctcOffice.*;
 import trackModel.TrackModelUI;
 import trainController.TrainControllerInstances;
 import trainModel.TrainModel;
-import trainModel.trainModelGUI;
+import trainModel.TrainModelGUI;
 import trainModel.Trains;
 import waysideController.WaysideControllerUI;
 import waysideController.LoadPLCUI;
@@ -101,7 +101,6 @@ public class TTEHomeGUI {
 		btnWaysideController.setBounds(10, 141, 135, 109);
 		frmTteTrainHome.getContentPane().add(btnWaysideController);
 
-		TrainModel usethis = tci.createTrain(12, "green");
 		
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {

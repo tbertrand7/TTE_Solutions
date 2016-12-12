@@ -19,7 +19,7 @@ import javax.swing.JTextPane;
 import java.awt.Canvas;
 import javax.swing.UIManager;
 
-public class trainModelGUI {
+public class TrainModelGUI {
 
 	private JFrame frame;
 	private JTextField leftDoorStatus;
@@ -55,6 +55,9 @@ public class trainModelGUI {
 	private Canvas canvas_5;
 	final JFrame parent = new JFrame();
 	
+	
+	private int testIDCounter = 1;
+	
 	/**
 	 * the train model associated with the GUI
 	 */
@@ -66,6 +69,7 @@ public class trainModelGUI {
 	DecimalFormat dc = new DecimalFormat("#0.00");
 	private JTextField IDinput;
 	private JTextField passAmount;
+	private JButton btnTrainList;
 
 	
 	/**
@@ -85,21 +89,23 @@ public class trainModelGUI {
 	 * @param spLimit - speed limit of track
 	 * @param temp - interior temp of train
 	 */
-	public void displayBlockInfo(int curBlock, int nextBlock, double elevation, String line,double spLimit ,int temp){
+	public void displayBlockInfo(int curBlock, int nextBlock, double elevation, String line,double spLimit ,int temp, int crew, int pass){
 		ElevationDisp.setText(Double.toString(elevation) + " ft");
 		CurrBlockDisp.setText(Double.toString(curBlock));
 		NextBlockDisp.setText(Double.toString(nextBlock));
 		NextBlockStatusDisp.setText(line);
 		speedLimitDisp.setText(Double.toString(spLimit) + " mph");
 		TempDisp.setText(Integer.toString(temp) + " *F");
+		CrewDisp.setText(Integer.toString(crew));
+		PassengerDisp.setText(Integer.toString(pass));
 	}
 	
 	
 	/**
 	 * displays the current train power to the GUI
 	 */
-	public void displayPower(){
-		currentTrainPower.setText(Double.toString(train.power / 1000));
+	public void displayPower(double p){
+		currentTrainPower.setText(Double.toString(p / 1000));
 	}
 
 	
@@ -185,14 +191,14 @@ public class trainModelGUI {
 	
 	
 	public static void main(String[] args){
-		new trainModelGUI(new Trains());
+		new TrainModelGUI(new Trains());
 	}
 	
 	
 	/**
 	 * Create the contents of the frame.
 	 */
-	public trainModelGUI(Trains modelList) {
+	public TrainModelGUI(Trains modelList) {
 		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -207,7 +213,7 @@ public class trainModelGUI {
 		lblTrainModel.setForeground(Color.BLUE);
 		lblTrainModel.setFont(new Font("Courier New", Font.BOLD, 36));
 		lblTrainModel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTrainModel.setBounds(219, 28, 260, 40);
+		lblTrainModel.setBounds(219, 13, 260, 23);
 		frame.getContentPane().add(lblTrainModel);
 		
 		
@@ -927,14 +933,14 @@ public class trainModelGUI {
 		IDinput = new JTextField();
 		IDinput.setHorizontalAlignment(SwingConstants.CENTER);
 		IDinput.setFont(new Font("Courier New", Font.BOLD, 20));
-		IDinput.setBounds(10, 64, 104, 40);
+		IDinput.setBounds(10, 64, 60, 40);
 		frame.getContentPane().add(IDinput);
 		IDinput.setColumns(10);
 		
 		/*
 		 * connect UI button
 		 */
-		trainModelGUI tmg = this;
+		TrainModelGUI tmg = this;
 		JButton uiConnectButton = new JButton("Connect");
 		uiConnectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -955,7 +961,7 @@ public class trainModelGUI {
 			}
 		});
 		uiConnectButton.setFont(new Font("Courier New", Font.BOLD, 16));
-		uiConnectButton.setBounds(120, 64, 104, 40);
+		uiConnectButton.setBounds(75, 64, 104, 40);
 		frame.getContentPane().add(uiConnectButton);
 		
 		/*
@@ -964,7 +970,7 @@ public class trainModelGUI {
 		passAmount = new JTextField();
 		passAmount.setHorizontalAlignment(SwingConstants.CENTER);
 		passAmount.setFont(new Font("Courier New", Font.BOLD, 20));
-		passAmount.setBounds(622, 64, 86, 40);
+		passAmount.setBounds(648, 64, 60, 40);
 		frame.getContentPane().add(passAmount);
 		passAmount.setColumns(10);
 		
@@ -973,26 +979,21 @@ public class trainModelGUI {
 			public void actionPerformed(ActionEvent e) {
 				if(testModeButton.isSelected()){
 				
-					int deltaPass = Integer.parseInt(passAmount.getText());
-					int passCount = train.getPassengerCount();
+					int deltaPass = Integer.parseInt(passAmount.getText());				
+					int boardingPassFail = train.addPassengers(deltaPass);
 					
-					passCount = passCount + deltaPass;
-					
-					if(passCount < train.maxPassengers && passCount > 0){
-						train.addPassengers(deltaPass);
-					}
-					else if(passCount < 0){
-						train.passengerCount = 0; //cannot have negative passengers, set to 0 if negative
-					}
-					else{
-						train.passengerCount = train.maxPassengers; //cannot exceed max passengers, set to max and notify user that not all passengers boarded
+					if(boardingPassFail != 0 && boardingPassFail != -1000){ 
 						JOptionPane.showMessageDialog(parent, "Warning! Maximum passenger count reached. Not all passengers were able to board.");
-					}
+						
+					}	
+					
+					displayBlockInfo(train.curBlockNum, train.nextBlockNum, train.elevation, train.trainLine, train.speedLimit, train.temperature, train.crewCount, train.passengerCount);
+					
 				}
 			}
 		});
 		passengerButton.setFont(new Font("Courier New", Font.BOLD, 16));
-		passengerButton.setBounds(519, 64, 93, 40);
+		passengerButton.setBounds(545, 64, 100, 40);
 		frame.getContentPane().add(passengerButton);
 		
 		JLabel lblAddremovePassengers = new JLabel("Add Passengers:");
@@ -1000,6 +1001,61 @@ public class trainModelGUI {
 		lblAddremovePassengers.setFont(new Font("Courier New", Font.BOLD, 20));
 		lblAddremovePassengers.setBounds(519, 34, 189, 30);
 		frame.getContentPane().add(lblAddremovePassengers);
+		
+		JButton addTrainRedButton = new JButton("Add Red Train");
+		addTrainRedButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(testModeButton.isSelected()){
+					modelList.addTestTrain("Red", testIDCounter);
+					testIDCounter++;	
+				}
+				
+			}
+		});
+		addTrainRedButton.setFont(new Font("Courier New", Font.BOLD, 18));
+		addTrainRedButton.setBounds(190, 47, 210, 25);
+		frame.getContentPane().add(addTrainRedButton);
+		
+		JButton addTrainGreen = new JButton("Add Green Train");
+		addTrainGreen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(testModeButton.isSelected()){
+					
+					modelList.addTestTrain("Green", testIDCounter);
+					testIDCounter++;
+				}
+				
+				
+			}
+		});
+		addTrainGreen.setFont(new Font("Courier New", Font.BOLD, 18));
+		addTrainGreen.setBounds(190, 79, 210, 25);
+		frame.getContentPane().add(addTrainGreen);
+		
+		btnTrainList = new JButton("Train List");
+		btnTrainList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(testModeButton.isSelected()){
+					
+					//Print train list
+					System.out.println("***List of Trains***");
+					
+					for(int key : modelList.trainList.keySet()){
+						System.out.println(""+key);
+					}
+					
+				}
+				
+				
+				
+			}
+		});
+		btnTrainList.setFont(new Font("Courier New", Font.PLAIN, 16));
+		btnTrainList.setBounds(405, 64, 135, 23);
+		frame.getContentPane().add(btnTrainList);
 		
 		frame.setVisible(true);
 

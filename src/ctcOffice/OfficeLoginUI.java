@@ -1,13 +1,10 @@
 package ctcOffice;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.border.*;
+import javax.swing.UIManager.*;
 
 public class OfficeLoginUI extends JFrame {
 

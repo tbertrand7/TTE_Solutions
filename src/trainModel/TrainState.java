@@ -30,19 +30,22 @@ public class TrainState extends TrainSpecs {
 	 * @param delta - the number of passengers entering/exiting the train
 	 * @return true if passenger count change is valid
 	 */
-	boolean changePassengerCount(int delta){
+	int changePassengerCount(int delta){
 		
-		int tempCount = passengerCount;
-		tempCount = tempCount + delta;
-		passengerCount = tempCount;
-	
+		int tempCount = passengerCount + delta;	
 		
-		if(tempCount > maxPassengers || tempCount < 0){
-			return false;
+		if(tempCount > maxPassengers){
+			int extraPassengers = tempCount - maxPassengers;
+			passengerCount = maxPassengers;
+			return extraPassengers;
+		}
+		else if(tempCount < 0){
+			passengerCount = 0;
+			return 0;
 		}
 		else{
 			passengerCount = passengerCount + delta;
-			return true;
+			return 0;
 		}
 		
 		
@@ -95,7 +98,7 @@ public class TrainState extends TrainSpecs {
 	/**
 	 * Changes status of Service Brakes (on -> off OR off -> on)
 	 */
-	void serviceBrake(boolean sBrake){ //REVISIT!!
+	void serviceBrake(boolean sBrake){ 
 		serviceBrakeOn = sBrake;
 	}
 	
@@ -104,7 +107,7 @@ public class TrainState extends TrainSpecs {
 	/**
 	 * Changes status of Emergency Brakes (on -> off OR off -> on)
 	 */
-	void eBrake(boolean eBrake){ //REVIST!!!!!!
+	void eBrake(boolean eBrake){
 		emergencyBrakeOn = eBrake;
 	}
 	
