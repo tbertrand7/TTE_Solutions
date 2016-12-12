@@ -40,6 +40,7 @@ import javax.swing.JScrollBar;
 import javax.swing.border.LineBorder;
 import TTEHome.TTEHomeGUI;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 
 public class WaysideControllerUI extends JFrame {
 
@@ -367,6 +368,13 @@ public class WaysideControllerUI extends JFrame {
 		btnLoadPlcProgram.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnLoadPlcProgram.setBounds(227, 322, 231, 36);
 		contentPane.add(btnLoadPlcProgram);
+		btnLoadPlcProgram.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				LoadPLCUI dialog = new LoadPLCUI();
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
+			}
+		});
 		
 		JLabel lblController = new JLabel("Controller:");
 		lblController.setFont(new Font("Tahoma", Font.BOLD, 16));

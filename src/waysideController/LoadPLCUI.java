@@ -110,6 +110,7 @@ public class LoadPLCUI extends JDialog {
 						boolean pass = WaysideControllerInterface.getInstance().loadPLC(textField.getText(), comboBox.getSelectedItem().toString());
 						if(!pass)
 							JOptionPane.showMessageDialog(getParent(), "Failed to Load PLC");
+						dispose();
 					}
 				});
 			}
