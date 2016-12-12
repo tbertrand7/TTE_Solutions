@@ -287,9 +287,11 @@ public class WaysideController
 			blockPosition bp = trackSetup.get(currentBlock);
 			if(currentDirection == 1) // the next block the train is going to is the previous block in the track setup
 			{
-				//System.out.println(currentBlock);
-				//System.out.println(bp.nextBlock[0] );
-				if(bp.previousBlock[0] == -2 && currentBlock == end)
+				if(path.size() > 0 && (bp.previousBlock[0] == path.get(path.size()-1) || bp.previousBlock[1] == path.get(path.size()-1))) //change the direction
+				{
+					currentDirection = 0;
+				}
+				else if(bp.previousBlock[0] == -2 && currentBlock == end)
 				{
 					path.add(currentBlock);
 					return path; //right now we can't send trains to the yard
@@ -300,8 +302,6 @@ public class WaysideController
 				}
 				else if(bp.switchNum == -1 || bp.previousBlock[0] == -1 || (bp.switchNum != trackSetup.get(bp.previousBlock[0]).switchNum))
 				{
-					//System.out.println("Here");
-					//System.out.println(bp.nextBlock[0]);
 					if(bp.previousBlock[0] == -1) //border block or yard
 					{
 						path.add(currentBlock);
@@ -324,14 +324,10 @@ public class WaysideController
 				else //switch block
 				{
 					String[] switchInfo = switches.get(bp.switchNum);
-					//System.out.println(switchInfo[0]);
-					//System.out.println(switchInfo[2]);
-					//System.out.println(switchInfo[3]);
 					if(switchInfo[0].equals("0")) //switch position 0
 					{
 						if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+bp.previousBlock[0])) //switch is connected to current block
 						{
-							//System.out.println(""+currentBlock);
 							path.add(currentBlock);
 							currentBlock = bp.previousBlock[0];
 						}
@@ -342,19 +338,14 @@ public class WaysideController
 						}
 						else //switch is not connected, safe to stop at switch
 						{
-							//System.out.println(""+currentBlock);
 							path.add(currentBlock);
 							return path;
 						}
 					}
 					else //switch position 1
 					{
-						//System.out.println(""+currentBlock);
-						//System.out.println(""+bp.nextBlock[1]);
-						//System.out.println(switchInfo[1]);
 						if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+bp.previousBlock[1])) //switch is connected to current block
 						{
-							//System.out.println(""+currentBlock);
 							path.add(currentBlock);
 							currentBlock = bp.previousBlock[1];
 						}
@@ -365,18 +356,18 @@ public class WaysideController
 						}
 						else //switch is not connected, safe to stop at switch
 						{
-							//System.out.println(""+currentBlock);
-							System.out.println(currentBlock);
 							path.add(currentBlock);
 							return path;
 						}
 					}
 				}
 			}
-			else //next block
+			else //direction = next block
 			{
-				//System.out.println(currentBlock);
-				//System.out.println(bp.nextBlock[0] );
+				if(path.size() > 0 && (bp.nextBlock[0] == path.get(path.size()-1) || bp.nextBlock[1] == path.get(path.size()-1))) //change the direction
+				{
+					currentDirection = 1;
+				}
 				if(bp.nextBlock[0] == -2 && currentBlock == end)
 				{
 					path.add(currentBlock);
@@ -388,8 +379,6 @@ public class WaysideController
 				}
 				else if(bp.switchNum == -1 || bp.nextBlock[0] == -1 || (bp.switchNum != trackSetup.get(bp.nextBlock[0]).switchNum))
 				{
-					//System.out.println("Here");
-					//System.out.println(bp.nextBlock[0]);
 					if(bp.nextBlock[0] == -1) //border block or yard
 					{
 						path.add(currentBlock);
@@ -412,14 +401,10 @@ public class WaysideController
 				else //switch block
 				{
 					String[] switchInfo = switches.get(bp.switchNum);
-					//System.out.println(switchInfo[0]);
-					//System.out.println(switchInfo[2]);
-					//System.out.println(switchInfo[3]);
 					if(switchInfo[0].equals("0")) //switch position 0
 					{
 						if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+bp.nextBlock[0])) //switch is connected to current block
 						{
-							//System.out.println(""+currentBlock);
 							path.add(currentBlock);
 							currentBlock = bp.nextBlock[0];
 						}
@@ -430,19 +415,14 @@ public class WaysideController
 						}
 						else //switch is not connected, safe to stop at switch
 						{
-							//System.out.println(""+currentBlock);
 							path.add(currentBlock);
 							return path;
 						}
 					}
 					else //switch position 1
 					{
-						//System.out.println(""+currentBlock);
-						//System.out.println(""+bp.nextBlock[1]);
-						//System.out.println(switchInfo[1]);
 						if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+bp.nextBlock[1])) //switch is connected to current block
 						{
-							//System.out.println(""+currentBlock);
 							path.add(currentBlock);
 							currentBlock = bp.nextBlock[1];
 						}
@@ -453,8 +433,6 @@ public class WaysideController
 						}
 						else //switch is not connected, safe to stop at switch
 						{
-							//System.out.println(""+currentBlock);
-							System.out.println(currentBlock);
 							path.add(currentBlock);
 							return path;
 						}
@@ -528,7 +506,7 @@ public class WaysideController
 		String[] switches = new String[]{"6-15:15,16:1,16","12-9:9,10:9,77","7-27:27,28:27,76","8-32:32,33:72,33"};
 		WaysideController WC = new WaysideController("Red",blocks,switches, null,"red1.txt");
 		//System.out.println(WC.calculateRoute(2, 6, 0));
-		//System.out.println(WC.calculateRoute(10,36, 0));
+		System.out.println(WC.calculateRoute(1,20, 1));
 		
 	}
 }
