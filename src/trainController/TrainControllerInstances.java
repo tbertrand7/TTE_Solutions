@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import trainController.TrainController.Side;
 import trainModel.TrainModel;
-import trainModel.trainModelGUI;
+import trainModel.TrainModelGUI;
 
 public class TrainControllerInstances {
 	
@@ -40,7 +40,7 @@ public class TrainControllerInstances {
 		
 	}
 	
-	public void connectModelToUI(int newid, trainModelGUI gui) {
+	public void connectModelToUI(int newid, TrainModelGUI gui) {
 		trainList.get(newid).model.ui = gui;
 	}
 	
