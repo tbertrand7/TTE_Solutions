@@ -163,6 +163,7 @@ public class TrackDBInteraction {
 			section.speed = rs.getDouble(19);
 			section.authority = rs.getInt(20);
 			section.nextBlock = rs.getInt(21);
+			section.destination = rs.getInt(22);
 		}
 		return section;
 	}
@@ -192,6 +193,7 @@ public class TrackDBInteraction {
 			section.speed = rs.getDouble(19);
 			section.authority = rs.getInt(20);
 			section.nextBlock = rs.getInt(21);
+			section.destination = rs.getInt(22);
 
 			line[i] = section;
 			section = new TrackBlock();

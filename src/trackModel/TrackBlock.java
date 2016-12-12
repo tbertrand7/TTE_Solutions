@@ -25,6 +25,7 @@ public class TrackBlock {
 	public double speed;
 	public int authority;
 	public int nextBlock;
+	public int destination;
 	
 	public TrackBlock(){
 		pk = 0;
@@ -47,6 +48,7 @@ public class TrackBlock {
 		speed = 0;
 		authority = 0;
 		nextBlock = 0;
+		destination =0;
 	}
 
 	public String toString()
@@ -76,7 +78,8 @@ public class TrackBlock {
 				&& this.blockNumber == temp.blockNumber && this.cumualativeElevation == temp.cumualativeElevation && this.elevation == temp.elevation && this.infrastructure.equals(temp.infrastructure)
 				&& this.line.equals(temp.line) && this.nextBlock == temp.nextBlock && this.numPass == temp.numPass && this.occupied.equals(temp.occupied)
 				&& this.pk == temp.pk && this.section.equals(temp.section) && this.speed == temp.speed && this.speedLimit == temp.speedLimit && this.temp == temp.temp && this.trainID == temp.trainID
-				&& this.status.toString().equals(temp.status.toString()) && this.switchBlock.id.equals(temp.switchBlock.id) && this.switchBlock.position.equals(temp.switchBlock.position));
+				&& this.status.toString().equals(temp.status.toString()) && this.switchBlock.id.equals(temp.switchBlock.id) && this.switchBlock.position.equals(temp.switchBlock.position)
+				&& this.destination == temp.destination);
 		
 	}
 }
