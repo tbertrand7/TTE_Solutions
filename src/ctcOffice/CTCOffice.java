@@ -220,8 +220,10 @@ public class CTCOffice
             }
             csv.close();
             schedule = sched.toArray(new ScheduleItem[10]);
+			officeUI.logNotification("Schedule " + f.getName() + " successfully loaded");
         } catch (IOException e) {
             e.printStackTrace();
+            officeUI.logNotification("Schedule " + f.getName() + " failed to load");
         }
 
         //Clear table
