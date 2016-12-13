@@ -189,6 +189,10 @@ public class CTCOffice
             ArrayList<ScheduleItem> sched = new ArrayList<>();
             while ((s = csv.readLine()) != null)
             {
+                //Fix for first line of file not being properly parsed
+                if (s.charAt(0) == '\uFEFF')
+                    s = s.substring(1);
+
                 String[] data = s.split(",");
                 String[] infr = data[1].split(";");
                 String dest = "";
@@ -221,9 +225,9 @@ public class CTCOffice
             csv.close();
             schedule = sched.toArray(new ScheduleItem[10]);
 			officeUI.logNotification("Schedule " + f.getName() + " successfully loaded");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            officeUI.logNotification("Schedule " + f.getName() + " failed to load");
+            officeUI.logNotification("Error loading schedule " + f.getName());
         }
 
         //Clear table
