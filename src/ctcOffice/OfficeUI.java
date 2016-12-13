@@ -31,6 +31,7 @@ public class OfficeUI extends JFrame {
 	private JLabel lblLineInfo, lblSectionInfo, lblBlockInfo, lblStatusInfo;
 	private JLabel lblElevationInfo, lblSpeedLimitInfo, lblGradeInfo, lblLengthInfo;
 	private JLabel lblSwitchInfo, lblUnderInfo, lblCrossingInfo, lblThroughputInfo, lblSwPosInfo, lblStationInfo;
+	private JMenuItem mntmDispatchNewTrain;
 
     private TrackButton selectedBlockBtn = null;
 	private ScheduledExecutorService exec;
@@ -217,7 +218,8 @@ public class OfficeUI extends JFrame {
 				if (infr[i].equals("SWITCH")) {
 					lblSwitchInfo.setText(selectedBlock.switchBlock.getID());
 					lblSwPosInfo.setText(selectedBlock.switchBlock.getPosition());
-					btnToggleSwitch.setEnabled(true);
+					if (ctcOffice.getMode() == Mode.MANUAL)
+						btnToggleSwitch.setEnabled(true);
 				}
 
 				if (infr[i].equals("RAILWAY CROSSING"))
@@ -236,7 +238,8 @@ public class OfficeUI extends JFrame {
 				lblSpeedInfo.setText(selectedBlock.speed + " mph");
 				lblDestInfo.setText(""); //TODO: Display destination block name for train
 				lblAuthInfo.setText(selectedBlock.authority + " blocks");
-				setHasTrain(true);
+				if (ctcOffice.getMode() == Mode.MANUAL)
+					setHasTrain(true);
 			}
 		}
     }
@@ -289,6 +292,21 @@ public class OfficeUI extends JFrame {
 	private void rdbtnManualClick()
 	{
 		ctcOffice.setMode(Mode.MANUAL);
+
+		TrackBlock selectedBlock;
+		if (selectedBlockBtn.line.equals("Green"))
+			selectedBlock = ctcOffice.greenLine[selectedBlockBtn.block - 1];
+		else
+			selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
+
+		btnCloseTrack.setEnabled(true);
+		mntmDispatchNewTrain.setEnabled(true);
+
+		if (selectedBlock.infrastructure.contains("SWITCH"))
+			btnToggleSwitch.setEnabled(true);
+
+		if (selectedBlock.trainID > 0)
+			setHasTrain(true);
 	}
 
 	/**
@@ -297,6 +315,10 @@ public class OfficeUI extends JFrame {
 	private void rdbtnAutoClick()
 	{
 		ctcOffice.setMode(Mode.AUTOMATIC);
+		btnCloseTrack.setEnabled(false);
+		btnToggleSwitch.setEnabled(false);
+		setHasTrain(false);
+		mntmDispatchNewTrain.setEnabled(false);
 	}
 
 	/**
@@ -327,7 +349,7 @@ public class OfficeUI extends JFrame {
 		mnDispatch.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		menuBar.add(mnDispatch);
 		
-		JMenuItem mntmDispatchNewTrain = new JMenuItem("Dispatch New Train");
+		mntmDispatchNewTrain = new JMenuItem("Dispatch New Train");
 		mntmDispatchNewTrain.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mntmDispatchNewTrain.addActionListener(new ActionListener() {
 			@Override
@@ -839,17 +861,15 @@ public class OfficeUI extends JFrame {
 		tblSchedule.setShowHorizontalLines(true);
 		tableModel = new DefaultTableModel(0,0);
 		tableModel.setColumnIdentifiers(new String[] {
-				"Line", "Train", "Destination", "Time"
+				"Line", "Destination", "Time"
 		});
 		tblSchedule.setModel(tableModel);
 		tblSchedule.getColumnModel().getColumn(0).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(20);
+		tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(25);
 		tblSchedule.getColumnModel().getColumn(1).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(20);
+		tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(160);
 		tblSchedule.getColumnModel().getColumn(2).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(2).setPreferredWidth(150);
-		tblSchedule.getColumnModel().getColumn(3).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(3).setPreferredWidth(30);
+		tblSchedule.getColumnModel().getColumn(2).setPreferredWidth(35);
 		scrollPane.setViewportView(tblSchedule);
 	}
 

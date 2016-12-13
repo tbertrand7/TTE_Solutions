@@ -20,7 +20,7 @@ public class CTCOffice
 	public enum Mode {MANUAL, AUTOMATIC}
 
 	private Mode mode = Mode.MANUAL;
-	private ScheduleItem[] schedule;
+	private ScheduleItem[] redSchedule, greenSchedule;
 	private String loggedInUser;
 
 	public TrackBlock[] greenLine, redLine;
@@ -141,7 +141,6 @@ public class CTCOffice
 	 * Closes/Opens a selected block
 	 * @param line line the block is on
 	 * @param block block number
-	 * @return Notification string for block close/open
 	 */
 	public void closeBlock(String line, int block)
 	{
@@ -186,9 +185,14 @@ public class CTCOffice
             BufferedReader csv = new BufferedReader(new FileReader(f));
 
             String s;
-            ArrayList<ScheduleItem> sched = new ArrayList<>();
-            while ((s = csv.readLine()) != null)
+            ArrayList<ScheduleItem> greenSched = new ArrayList<>();
+			ArrayList<ScheduleItem> redSched = new ArrayList<>();
+			while ((s = csv.readLine()) != null)
             {
+                //Fix for first line of file not being properly parsed
+                if (s.charAt(0) == '\uFEFF')
+                    s = s.substring(1);
+
                 String[] data = s.split(",");
                 String[] infr = data[1].split(";");
                 String dest = "";
@@ -213,17 +217,22 @@ public class CTCOffice
 						tempBlock = line[i];
 				}
 
-				if (tempBlock != null)
-                	sched.add(new ScheduleItem(data[0], -1, tempBlock, Double.parseDouble(data[2])));
+				if (tempBlock != null) {
+					if (data[0].toLowerCase().equals("red"))
+						redSched.add(new ScheduleItem(data[0], tempBlock, Double.parseDouble(data[2])));
+					else
+						greenSched.add(new ScheduleItem(data[0], tempBlock, Double.parseDouble(data[2])));
+				}
 				else
 					officeUI.logNotification("Destination: " + dest + " does not exist, schedule item not added");
             }
             csv.close();
-            schedule = sched.toArray(new ScheduleItem[10]);
+			greenSchedule = greenSched.toArray(new ScheduleItem[1]);
+            redSchedule = redSched.toArray(new ScheduleItem[1]);
 			officeUI.logNotification("Schedule " + f.getName() + " successfully loaded");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            officeUI.logNotification("Schedule " + f.getName() + " failed to load");
+            officeUI.logNotification("Error loading schedule " + f.getName());
         }
 
         //Clear table
@@ -233,9 +242,13 @@ public class CTCOffice
 		}
 
 		//Add new schedule to table
-        for (int i=0; i < schedule.length; i++)
+        for (int i=0; i < redSchedule.length; i++)
 		{
-			tbl.addRow(new Object[] {schedule[i].line, schedule[i].train, schedule[i].destination.toString(), schedule[i].time});
+			tbl.addRow(new Object[] {redSchedule[i].line, redSchedule[i].destination.toString(), redSchedule[i].time});
+		}
+		for (int i=0; i < greenSchedule.length; i++)
+		{
+			tbl.addRow(new Object[] {greenSchedule[i].line, greenSchedule[i].destination.toString(), greenSchedule[i].time});
 		}
     }
 
