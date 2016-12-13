@@ -8,9 +8,8 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
-
+import java.lang.Object;
 import trackModel.TrackBlock.BlockStatus;
-
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.sql.SQLException;
@@ -65,14 +64,19 @@ public class TrackModelUI {
 		        }
 		    }
 		} catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
+		
+		//***************************************************************************************************************************
+		//All code for the construction of the Track Model UI
+		//In here there is some functionality for populating the UI as well as testing the different components of the DB
+		//This file is rather large and Java does not have #region functionality similar to c# my apologies 
+		//***************************************************************************************************************************
 		frmTrackModelGui = new JFrame();
 		frmTrackModelGui.setIconImage(Toolkit.getDefaultToolkit().getImage(TrackModelUI.class.getResource("/shared/TTE.png")));
 		frmTrackModelGui.setFont(new Font("Arial", Font.PLAIN, 14));
 		frmTrackModelGui.getContentPane().setFont(new Font("Arial", Font.PLAIN, 11));
 		frmTrackModelGui.setTitle("Track Model");
-		frmTrackModelGui.setBounds(100, 100, 500, 362);
+		frmTrackModelGui.setBounds(100, 100, 515, 380);
 		frmTrackModelGui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		final JFrame parent = new JFrame();
 
@@ -141,7 +145,7 @@ public class TrackModelUI {
 		blockComboBoxView.setFont(new Font("Arial", Font.PLAIN, 11));
 		blockComboBoxView.setBounds(138, 42, 55, 20);
 		overview.add(blockComboBoxView);
-		for (int i = 1; i < 250; i++) {
+		for (int i = 1; i < 152; i++) {
 			blockComboBoxView.addItem(i);
 		}
 
@@ -285,7 +289,7 @@ public class TrackModelUI {
 		JComboBox<Integer> railComboBox = new JComboBox<Integer>();
 		railComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
 		railComboBox.setBounds(138, 37, 55, 20);
-		for (int i = 1; i <= 250; i++) {
+		for (int i = 1; i <= 152; i++) {
 			railComboBox.addItem(i);
 		}
 		config.add(railComboBox);
@@ -475,6 +479,9 @@ public class TrackModelUI {
 		JPanel failurePanel = new JPanel();
 		tabbedPane.addTab("Murphy's Failures", null, failurePanel, null);
 
+		//*********************************************************************
+		//This is the logic for breaking the rail which executes in Track Model
+		//*********************************************************************
 		JButton breakRail = new JButton("Break Rail");
 		breakRail.setFont(new Font("Arial", Font.PLAIN, 11));
 		breakRail.setBounds(1, 0, 159, 307);
@@ -486,6 +493,9 @@ public class TrackModelUI {
 		failurePanel.setLayout(null);
 		failurePanel.add(breakRail);
 
+		//*********************************************************************
+		//This is the logic for cutting the rail which executes in Track Model
+		//*********************************************************************
 		JButton powerFailure = new JButton("Cut Power");
 		powerFailure.setFont(new Font("Arial", Font.PLAIN, 11));
 		powerFailure.setBounds(172, 0, 159, 307);
@@ -496,6 +506,9 @@ public class TrackModelUI {
 		});
 		failurePanel.add(powerFailure);
 
+		//************************************************************************
+		//This is the logic for breaking the circuit which executes in Track Model
+		//************************************************************************
 		JButton circuitFailure = new JButton("Break Circuit");
 		circuitFailure.setBounds(335, 0, 159, 307);
 		circuitFailure.setFont(new Font("Arial", Font.PLAIN, 11));
@@ -563,7 +576,10 @@ public class TrackModelUI {
 		label_35.setFont(new Font("Arial", Font.PLAIN, 11));
 		label_35.setBounds(404, 257, 72, 14);
 		overview.add(label_35);
-		
+
+		//*****************************************************************************
+		//This is the logic for populating the UI with returned information from the DB
+		//*****************************************************************************
 		JButton getData = new JButton("Get Data");
 		getData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -632,8 +648,10 @@ public class TrackModelUI {
 		getData.setBounds(6, 276, 488, 31);
 		overview.add(getData);
 		
-
-		// Button to get live data for the config panel
+		
+		//**************************************************************************
+		//This is the logic for checking live information in the database for the UI
+		//**************************************************************************		
 		JButton btnCheckLive = new JButton("Check Live");
 		btnCheckLive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -698,7 +716,10 @@ public class TrackModelUI {
 		btnCheckLive.setBounds(10, 244, 246, 63);
 		config.add(btnCheckLive);
 
-		// SAVE BUTTON FUNCTIONALITY
+
+		//**********************************************************
+		//This is action the save button performs in the config tool 
+		//**********************************************************
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -735,11 +756,14 @@ public class TrackModelUI {
 		passwordField.setText("ttesolutions");
 		adminControls.add(passwordField);
 
+
+		//****************************************************************************
+		//This is the logic for reseting the database
+		//If the username is not "tteuser" & pw is not "ttesolutions" this will not run
+		//*****************************************************************************
 		JButton resetDB = new JButton("Reset Database");
 		resetDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
-
 
 				if (textField.getText().equals("tteuser")
 						&& String.valueOf(passwordField.getPassword()).equals("ttesolutions")) {
@@ -748,13 +772,11 @@ public class TrackModelUI {
 						db = new TrackDBInteraction();
 					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
 							| SQLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					try {
 						db.resetDB();
 					} catch (SQLException | IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					JOptionPane.showMessageDialog(parent, "Database was reset!");
@@ -836,6 +858,12 @@ public class TrackModelUI {
 		chckbxAllTestsPassed.setBounds(294, 154, 200, 25);
 		panel.add(chckbxAllTestsPassed);
 		
+		
+
+		//*****************************************************************************
+		//This is the logic for testing the database
+		//This logic is included in this file due to the interaction it has with the UI
+		//*****************************************************************************
 		JButton btnNewButton = new JButton("Run Tests");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -844,33 +872,36 @@ public class TrackModelUI {
 				 Runnable runner = new Runnable()
 				    {
 				        public void run() {
-				        //Your original code with the loop here.
 				        	//Beginning of unit testing 
 							boolean failure = false;
 							progressBar.setMaximum(100);
 							btnNewButton.setEnabled(false);
-							//reset db
+							
+							//Test 1: 
+							//Reset the Database
 							try {
-								opps.resetDB();
-								chckbxResetDatabase.setSelected(true);
-								progressBar.setValue(10);
-								panel.repaint();
+								failure = !opps.resetDB();
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 							
-							
+							if(!failure){
+								chckbxResetDatabase.setSelected(true);
+								progressBar.setValue(10);
+								panel.repaint();
+							}
+								
+													
+							//Test 2: 
 							//Get Track Block Info
 							try {
 								opps.resetDB();
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 							
 							TrackBlock temp = opps.getBlock("Red", 1);
-							if(temp.speed != -1 && temp.authority != -1)
+							if(temp.speed != -1 && temp.authority != -1 && temp.blockLength != 164 && temp.cumualativeElevation != 2.69 && !temp.arrowDirection.equals("Head") && !temp.switchBlock.id.equals("Switch 6"))
 								failure = true;
 							else{
 								chckbxGetTrackBlock.setSelected(true);
@@ -878,7 +909,10 @@ public class TrackModelUI {
 								progressBar.repaint();				
 							}
 							
-							//Get Track Line Info
+							
+							//Test 3: 
+							//Get Track Line Info 
+							//This test checks both Red and Green lines
 							try {
 								opps.resetDB();
 							} catch (IOException e1) {
@@ -886,8 +920,10 @@ public class TrackModelUI {
 								e1.printStackTrace();
 							}
 							
-							TrackBlock[] tempArray = opps.getBlock("Red");
-							if(tempArray.length != 77 && !tempArray[1].equals(opps.getBlock("Red", 1)) && !tempArray[10].equals(opps.getBlock("Red", 10)))
+							TrackBlock[] tempArrayRed = opps.getBlock("Red");
+							TrackBlock[] tempArrayGreen = opps.getBlock("Green");
+							if(tempArrayRed.length != 77 && !tempArrayRed[1].equals(opps.getBlock("Red", 1)) && !tempArrayRed[10].equals(opps.getBlock("Red", 10))
+									&& tempArrayGreen.length != 152 && !tempArrayGreen[1].equals(opps.getBlock("Green", 1)) && !tempArrayGreen[10].equals(opps.getBlock("Green", 10)))
 								failure = true;
 							else{
 									chckbxGetTrackLine.setSelected(true);
@@ -896,20 +932,54 @@ public class TrackModelUI {
 								}
 								
 							
-							
-							//Set Track Block Data
+							//Test 4:
+							//Set Track Block Data 
 							try {
 								opps.resetDB();
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 							
-							temp = opps.getBlock("Red", 1);
-							temp.authority = 666;
-							temp.speed = 123;
-							opps.setBlock(temp);
-							if(!temp.equals(opps.getBlock("Red", 1)))
+							TrackBlock testGreen = new TrackBlock();
+							testGreen = opps.getBlock("Green", 1);
+							testGreen.authority = 666;
+							testGreen.speed = 123;
+							testGreen.arrowDirection = "TestGreen";
+							testGreen.infrastructure = "TestGreen";
+							testGreen.blockGrade = 12345;
+							testGreen.destination = 123;
+							testGreen.blockLength = 123;
+							testGreen.cumualativeElevation = 555;
+							testGreen.elevation = 2.5;
+							testGreen.nextBlock = 54321;
+							testGreen.numPass = 100;
+							testGreen.section = "ZZ";
+							testGreen.speed = 123.456;
+							testGreen.speedLimit = 456;
+							testGreen.temp = 72;
+							testGreen.trainID = 1005;
+							opps.setBlock(testGreen);
+							
+							TrackBlock testRed = new TrackBlock();
+							testRed = opps.getBlock("Red", 1);
+							testRed.authority = 666;
+							testRed.speed = 123;
+							testRed.arrowDirection = "TestGreen";
+							testRed.infrastructure = "TestGreen";
+							testRed.blockGrade = 12345;
+							testRed.destination = 123;
+							testRed.blockLength = 123;
+							testRed.cumualativeElevation = 555;
+							testRed.elevation = 2.5;
+							testRed.nextBlock = 54321;
+							testRed.numPass = 100;
+							testRed.section = "ZZ";
+							testRed.speed = 123.456;
+							testRed.speedLimit = 456;
+							testRed.temp = 72;
+							testRed.trainID = 1005;
+							opps.setBlock(testRed);
+							if(!testRed.equals(opps.getBlock("Red", 1)) && !testGreen.equals(opps.getBlock("Green", 1)))
 								failure = true;
 							else{
 								chckbxSetTrackBlock.setSelected(true);
@@ -917,11 +987,13 @@ public class TrackModelUI {
 								panel.repaint();
 							}
 							
+
+							
+							//Test 5:
 							//Break Rail Test
 							try {
 								opps.resetDB();
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 							
@@ -935,6 +1007,8 @@ public class TrackModelUI {
 								panel.repaint();
 							}
 							
+							
+							//Test: 6
 							//Cut Power Test
 							try {
 								opps.resetDB();
@@ -953,6 +1027,8 @@ public class TrackModelUI {
 								panel.repaint();
 							}
 							
+							
+							//Test: 7
 							//Break Rail Circuit Test
 							try {
 								opps.resetDB();
@@ -971,6 +1047,8 @@ public class TrackModelUI {
 								panel.repaint();
 							}
 							
+							
+							//Test: 8
 							//Add User Test
 							try {
 								userDB = new UserDBInteraction();
@@ -986,6 +1064,8 @@ public class TrackModelUI {
 								e2.printStackTrace();
 							}
 							
+							
+							//Test: 9
 							//Verify User Test
 							try {
 								if(userDB.verifyUser("Admin", "password")){
@@ -1001,8 +1081,8 @@ public class TrackModelUI {
 								e2.printStackTrace();
 							}
 							
-							
-							//final reset
+							//Clean up
+							//Final reset of the database to revert all changes made
 							try {
 								opps.resetDB();
 							} catch (IOException e1) {
@@ -1010,7 +1090,7 @@ public class TrackModelUI {
 								e1.printStackTrace();
 							}
 							
-							//print results
+							//Print results to the user 
 							if (failure) {
 								JOptionPane.showMessageDialog(parent, "Tests Failed!");
 								btnNewButton.setEnabled(true);
@@ -1030,6 +1110,11 @@ public class TrackModelUI {
 		panel.add(btnNewButton);
 	}
 
+	
+	//*************************************************************************************
+	//This method takes all of the UI input and converts it into a actual TrackBlock object
+	//This object is then passed to the DB
+	//*************************************************************************************
 	private void saveOpperation(JComboBox<String> lineComboBox, JComboBox<Integer> railComboBox,
 			JTextField lblNewLabel_1, JTextField label, JTextField label_1, JTextField label_4, JTextField comboBox_2,
 			JTextField label_19, JTextField label_23, JTextField label_24, JSpinner label_25, JSpinner label_27,
@@ -1077,7 +1162,7 @@ public class TrackModelUI {
 
 		opps.setBlock(theBlock);
 		}
-		//check for empty strings if the user did not check live data first!
+		//Check for empty strings if the user did not check live data first!
 		catch(NumberFormatException n){
 			JFrame parent = new JFrame();
 			JOptionPane.showMessageDialog(parent,"Please click the Check Live button before saving to the database","TRACK MODEL ERROR", JOptionPane.ERROR_MESSAGE);	
