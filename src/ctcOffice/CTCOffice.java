@@ -141,7 +141,6 @@ public class CTCOffice
 	 * Closes/Opens a selected block
 	 * @param line line the block is on
 	 * @param block block number
-	 * @return Notification string for block close/open
 	 */
 	public void closeBlock(String line, int block)
 	{
