@@ -861,17 +861,15 @@ public class OfficeUI extends JFrame {
 		tblSchedule.setShowHorizontalLines(true);
 		tableModel = new DefaultTableModel(0,0);
 		tableModel.setColumnIdentifiers(new String[] {
-				"Line", "Train", "Destination", "Time"
+				"Line", "Destination", "Time"
 		});
 		tblSchedule.setModel(tableModel);
 		tblSchedule.getColumnModel().getColumn(0).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(20);
+		tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(25);
 		tblSchedule.getColumnModel().getColumn(1).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(20);
+		tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(160);
 		tblSchedule.getColumnModel().getColumn(2).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(2).setPreferredWidth(150);
-		tblSchedule.getColumnModel().getColumn(3).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(3).setPreferredWidth(30);
+		tblSchedule.getColumnModel().getColumn(2).setPreferredWidth(35);
 		scrollPane.setViewportView(tblSchedule);
 	}
 

@@ -9,14 +9,12 @@ import trackModel.TrackBlock;
 public class ScheduleItem
 {
     public String line;
-    public int train;
     public TrackBlock destination;
     public double time;
 
-    public ScheduleItem(String line, int train, TrackBlock destination, double time)
+    public ScheduleItem(String line, TrackBlock destination, double time)
     {
         this.line = line;
-        this.train = train;
         this.destination = destination;
         this.time = time;
     }

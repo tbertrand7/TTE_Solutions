@@ -217,7 +217,7 @@ public class CTCOffice
 				}
 
 				if (tempBlock != null)
-                	sched.add(new ScheduleItem(data[0], -1, tempBlock, Double.parseDouble(data[2])));
+                	sched.add(new ScheduleItem(data[0], tempBlock, Double.parseDouble(data[2])));
 				else
 					officeUI.logNotification("Destination: " + dest + " does not exist, schedule item not added");
             }
@@ -238,7 +238,7 @@ public class CTCOffice
 		//Add new schedule to table
         for (int i=0; i < schedule.length; i++)
 		{
-			tbl.addRow(new Object[] {schedule[i].line, schedule[i].train, schedule[i].destination.toString(), schedule[i].time});
+			tbl.addRow(new Object[] {schedule[i].line, schedule[i].destination.toString(), schedule[i].time});
 		}
     }
 
