@@ -383,7 +383,6 @@ public class WaysideControllerUI extends JFrame {
 		
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//wc.updateLocalTrackInfo();
 				switchPositionChoice.removeAllItems();
 				if(wc.switches.size() == 0)
 				{
@@ -447,5 +446,9 @@ public class WaysideControllerUI extends JFrame {
 				}
 			}
 		});
+		
+		//So the wayside starts with Red 1 selected and data populated
+		waysideIDChoice.setSelectedItem("Red 1");
+		btnUpdate.doClick();
 	}
 }
