@@ -177,7 +177,7 @@ public class WaysideControllerUI extends JFrame {
 					{
 						selected = selected.replaceAll("Train ", "");
 						int trainNum = Integer.parseInt(selected);
-						trainBlock.setText(""+wc.trains.get(trainNum));
+						trainBlock.setText(""+wc.trains.get(trainNum).currentBlock);
 					}
 					else
 					{
