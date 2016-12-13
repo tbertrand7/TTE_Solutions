@@ -20,7 +20,7 @@ public class CTCOffice
 	public enum Mode {MANUAL, AUTOMATIC}
 
 	private Mode mode = Mode.MANUAL;
-	private ScheduleItem[] schedule;
+	private ScheduleItem[] redSchedule, greenSchedule;
 	private String loggedInUser;
 
 	public TrackBlock[] greenLine, redLine;
@@ -185,8 +185,9 @@ public class CTCOffice
             BufferedReader csv = new BufferedReader(new FileReader(f));
 
             String s;
-            ArrayList<ScheduleItem> sched = new ArrayList<>();
-            while ((s = csv.readLine()) != null)
+            ArrayList<ScheduleItem> greenSched = new ArrayList<>();
+			ArrayList<ScheduleItem> redSched = new ArrayList<>();
+			while ((s = csv.readLine()) != null)
             {
                 //Fix for first line of file not being properly parsed
                 if (s.charAt(0) == '\uFEFF')
@@ -216,13 +217,18 @@ public class CTCOffice
 						tempBlock = line[i];
 				}
 
-				if (tempBlock != null)
-                	sched.add(new ScheduleItem(data[0], tempBlock, Double.parseDouble(data[2])));
+				if (tempBlock != null) {
+					if (data[0].toLowerCase().equals("red"))
+						redSched.add(new ScheduleItem(data[0], tempBlock, Double.parseDouble(data[2])));
+					else
+						greenSched.add(new ScheduleItem(data[0], tempBlock, Double.parseDouble(data[2])));
+				}
 				else
 					officeUI.logNotification("Destination: " + dest + " does not exist, schedule item not added");
             }
             csv.close();
-            schedule = sched.toArray(new ScheduleItem[10]);
+			greenSchedule = greenSched.toArray(new ScheduleItem[1]);
+            redSchedule = redSched.toArray(new ScheduleItem[1]);
 			officeUI.logNotification("Schedule " + f.getName() + " successfully loaded");
         } catch (Exception e) {
             e.printStackTrace();
@@ -236,9 +242,13 @@ public class CTCOffice
 		}
 
 		//Add new schedule to table
-        for (int i=0; i < schedule.length; i++)
+        for (int i=0; i < redSchedule.length; i++)
 		{
-			tbl.addRow(new Object[] {schedule[i].line, schedule[i].destination.toString(), schedule[i].time});
+			tbl.addRow(new Object[] {redSchedule[i].line, redSchedule[i].destination.toString(), redSchedule[i].time});
+		}
+		for (int i=0; i < greenSchedule.length; i++)
+		{
+			tbl.addRow(new Object[] {greenSchedule[i].line, greenSchedule[i].destination.toString(), greenSchedule[i].time});
 		}
     }
 
