@@ -76,7 +76,7 @@ public class TrackModelUI {
 		frmTrackModelGui.setFont(new Font("Arial", Font.PLAIN, 14));
 		frmTrackModelGui.getContentPane().setFont(new Font("Arial", Font.PLAIN, 11));
 		frmTrackModelGui.setTitle("Track Model");
-		frmTrackModelGui.setBounds(100, 100, 515, 380);
+		frmTrackModelGui.setBounds(100, 100, 515, 385);
 		frmTrackModelGui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		final JFrame parent = new JFrame();
 
