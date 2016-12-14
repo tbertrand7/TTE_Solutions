@@ -74,7 +74,7 @@ public class TTEHomeGUI {
 		frmTteTrainHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTteTrainHome.getContentPane().setLayout(null);
 
-		tci = new TrainControllerInstances();
+		tci = new TrainControllerInstances(false);
 		sysClock = new SystemClock();
 		ctc = new CTCOffice(sysClock, tci);
 
