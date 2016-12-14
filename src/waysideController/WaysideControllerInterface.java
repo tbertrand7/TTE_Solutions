@@ -116,7 +116,6 @@ public class WaysideControllerInterface {
 		switch(waysideID)
 		{
 			case "Red 1":
-				System.out.println("HERE");
 				WC[0].suggestAuthority(destination, trainID);
 				break;
 			case "Red 2":
@@ -131,17 +130,73 @@ public class WaysideControllerInterface {
 		}
 	}
 	
-	public boolean loadPLC(String path, String waysideID)
+	/**
+	 * Toggle a switch by entering the wayside and switch number
+	 * Used by CTC Office
+	 * @param switchNumber
+	 * @param waysideID 
+	 */
+	public void toggleSwitch(int switchNumber, String waysideID)
 	{
-		//TO DO
-		return false;
+		switch(waysideID)
+		{
+			case "Red 1":
+				WC[0].setSwitch(switchNumber);
+				break;
+			case "Red 2":
+				WC[1].setSwitch(switchNumber);
+				break;
+			case "Green 1":
+				WC[2].setSwitch(switchNumber);
+				break;
+			case "Green 2":
+				WC[3].setSwitch(switchNumber);
+				break;
+		}
 	}
 	
-	public boolean dispatchFromYard(double speed, int destination, String line)
+	/**
+	 * Get the current switch position by entering the wayside and switch number
+	 * Used by CTC Office
+	 * @param switchNumber
+	 * @param waysideID 
+	 */
+	public String getSwitchPosition(int switchNumber, String waysideID)
 	{
-		//TO DO:
-		//	switch the switch to the yard so that nothing can go into the yard
-		//	set dispatching = true
-		return true;
+		switch(waysideID)
+		{
+			case "Red 1":
+				return (WC[0].switches.get(switchNumber))[0];
+			case "Red 2":
+				return (WC[1].switches.get(switchNumber))[0];
+			case "Green 1":
+				return (WC[2].switches.get(switchNumber))[0];
+			case "Green 2":
+				return (WC[3].switches.get(switchNumber))[0];
+		}
+		return null;
+	}
+	
+	/**
+	 * Given a wayside ID and path to the PLC, the interface calls load plc for the specified wayside
+	 * Used by LoadPLCUI
+	 * @param path
+	 * @param waysideID
+	 * @return boolean that indicates whether the plc was successfully loaded
+	 */
+	public boolean loadPLC(String path, String waysideID)
+	{
+		switch(waysideID)
+		{
+			case "Red 1":
+				return WC[0].plc.load_plc(path);
+			case "Red 2":
+				return WC[1].plc.load_plc(path);
+			case "Green 1":
+				return WC[2].plc.load_plc(path);
+			case "Green 2":
+				return WC[3].plc.load_plc(path);
+		}
+		return false;
 	}
 }

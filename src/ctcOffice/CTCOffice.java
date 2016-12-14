@@ -205,9 +205,15 @@ public class CTCOffice
 		track.setBlock(currBlock); //Update block in DB
 	}
 
-	public void toggleSwitch()
+	/**
+	 * Toggles position of switch located on selected block
+	 * @param block block with switch to toggle
+	 */
+	public void toggleSwitch(TrackBlock block)
 	{
-		//TODO: implement switch toggling
+		String wayside = routeWaysideSuggestion(block.line, block.blockNumber);
+		int switchNum = Integer.parseInt(block.switchBlock.id.split(" ")[1]);
+		WaysideControllerInterface.getInstance().toggleSwitch(switchNum, wayside);
 	}
 
 	/**
