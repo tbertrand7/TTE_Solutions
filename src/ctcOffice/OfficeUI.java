@@ -92,7 +92,7 @@ public class OfficeUI extends JFrame {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".csv", "csv");
 		fc.setFileFilter(filter);
 		fc.showOpenDialog(contentPane);
-		ctcOffice.loadSchedule(fc.getSelectedFile(), tblModelRedLine);
+		ctcOffice.loadSchedule(fc.getSelectedFile(), tblModelRedLine, tblModelGreenLine);
 	}
 
 	private void runScheduleClick()

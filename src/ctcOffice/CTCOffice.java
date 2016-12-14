@@ -177,9 +177,10 @@ public class CTCOffice
 	/**
 	 * Loads in schedule file and updates schedule grid
 	 * @param f Schedule file to load in
-	 * @param tbl Table reference
+	 * @param tblRedLine Red line table reference
+     * @param tblGreenLine Green line table reference
 	 */
-	public void loadSchedule(File f, DefaultTableModel tbl)
+	public void loadSchedule(File f, DefaultTableModel tblRedLine, DefaultTableModel tblGreenLine)
 	{
 		try {
 			BufferedReader csv = new BufferedReader(new FileReader(f));
@@ -200,7 +201,6 @@ public class CTCOffice
 				TrackBlock tempBlock = null;
 				TrackBlock[] line;
 
-				//TODO: This conditional won't be needed when infrastructure format is finalized
 				if (infr.length > 1)
 					dest = infr[1];
 				else
@@ -247,20 +247,24 @@ public class CTCOffice
 			officeUI.logNotification("Error loading schedule " + f.getName());
 		}
 
-		//Clear table
-		while (tbl.getRowCount() != 0)
+		//Clear tables
+		while (tblRedLine.getRowCount() != 0)
 		{
-			tbl.removeRow(0);
+			tblRedLine.removeRow(0);
 		}
+        while (tblGreenLine.getRowCount() != 0)
+        {
+            tblGreenLine.removeRow(0);
+        }
 
 		//Add new schedule to table
 		for (int i=0; i < redSchedule.length; i++)
 		{
-			tbl.addRow(new Object[] {redSchedule[i].destination.toString(), redSchedule[i].time});
+			tblRedLine.addRow(new Object[] {redSchedule[i].destination.toString(), redSchedule[i].time});
 		}
 		for (int i=0; i < greenSchedule.length; i++)
 		{
-			tbl.addRow(new Object[] {greenSchedule[i].destination.toString(), greenSchedule[i].time});
+			tblGreenLine.addRow(new Object[] {greenSchedule[i].destination.toString(), greenSchedule[i].time});
 		}
 	}
 
