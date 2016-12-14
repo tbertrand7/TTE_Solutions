@@ -197,26 +197,22 @@ public class WaysideController
 					{
 						train.currentBlock = trackBlocks[i].blockNumber;
 						trains.put(trackBlocks[i].trainID, train);
-						
-						//SET THE NEXT BLOCK FIELD --> So the train knows where to go
-						if(trackSetup.get(train.currentBlock).switchNum == -1)
-							trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), null);
-						else
-							trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), switches.get(trackSetup.get(train.currentBlock).switchNum));
-						track.setBlock(trackBlocks[i]);
 					}
 				}
 				else
 				{
 					trains.put(trackBlocks[i].trainID, new TrainInfo(trackBlocks[i].blockNumber));
 					train = trains.get(trackBlocks[i].trainID);
-					//SET THE NEXT BLOCK FIELD --> So the train knows where to go
-					if(trackSetup.get(train.currentBlock).switchNum == -1)
-						trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), null);
-					else
-						trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), switches.get(trackSetup.get(train.currentBlock).switchNum));
-					track.setBlock(trackBlocks[i]);
 				}
+				
+				//SET THE NEXT BLOCK FIELD --> So the train knows where to go
+				if(trackSetup.get(train.currentBlock).switchNum == -1)
+					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), null);
+				else
+					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), switches.get(trackSetup.get(train.currentBlock).switchNum));
+				System.out.println(trackBlocks[i].nextBlock);
+				track.setBlock(trackBlocks[i]);
+				System.out.println("Next: "+track.getBlock("Red", trackBlocks[i].blockNumber).nextBlock);
 			}
 			
 			//update broken rail info
@@ -230,6 +226,7 @@ public class WaysideController
 	//determines what the next block should be based on the train's direction and the current block information
 	public int findNextBlock(int direction, BlockPosition current, String[] switchInformation)
 	{
+		//System.out.println("Here, finding next Block");
 		if(direction == 0)
 		{
 			if(current.nextBlock[1] == -1)
