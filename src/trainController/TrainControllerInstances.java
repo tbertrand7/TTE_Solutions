@@ -5,6 +5,7 @@ import java.util.HashMap;
 import trainController.TrainController.Side;
 import trainModel.TrainModel;
 import trainModel.TrainModelGUI;
+import trainModel.Trains;
 
 public class TrainControllerInstances {
 	
@@ -17,25 +18,24 @@ public class TrainControllerInstances {
 	 */
 	protected HashMap<Integer, TrainControllerUI> uiList;
 	
+	protected Trains trainmodels;
+	
 	/**
 	 * The next unique instance id to assign to a UI (starts at 0).
 	 * (Don't pay attention to this variable if you're not implementing the TrainController.)
 	 */
 	private int instanceID;
 	
-	//Test?
-	boolean test;
-	
 	/**
 	 * The next unique train ID to assign to a train (starts at 1).
 	 */
 	private int nextID;
 	
-	public TrainControllerInstances(boolean yestest) {
-		test = yestest;
+	public TrainControllerInstances(Trains trains) {
 		
 		trainList = new HashMap<Integer, TrainController>();
 		uiList = new HashMap<Integer, TrainControllerUI>();
+		trainmodels = trains;
 		
 		nextID = 1;
 		instanceID = 0;
@@ -50,38 +50,21 @@ public class TrainControllerInstances {
 	}
 	
 	/**
-	 * Quick fix to connecting Train Models to train model UI, needs to go away
-	 */
-	public TrainModel createTrain(int newid, String line) {
-		
-		TrainModel tm = null;
-		
-		if (!trainList.containsKey(newid)) {
-			TrainController tc = new TrainController(this, newid, line, test);
-			trainList.put(newid, tc);
-			tm = tc.getTrainModel();
-			
-			//trainList.put(newid, new TrainController(this, newid, line));
-			
-			for (TrainControllerUI ui : uiList.values()) {
-				ui.addTrainID(newid);
-			}
-		}
-		
-		return tm;
-	}
-	
-	/**
 	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
 	 * then a new train is created.
 	 * @param line - "green" or "red" (case doesn't matter)
-	 * @param test - true if this is being called from the test program, false otherwise
 	 * @return id of train created
 	 */
 	public int createTrain(String line) {
 		
 		if (!trainList.containsKey(nextID)) {
-			trainList.put(nextID, new TrainController(this, nextID, line, test));
+			TrainModel passtm = null;
+			TrainController passtc = new TrainController(this, nextID);
+			
+			trainList.put(nextID, passtc);
+			if (trainmodels != null) passtm = trainmodels.addTrain(passtc, nextID, line);
+			
+			passtc.connectToModel(passtm);
 			
 			for (TrainControllerUI ui : uiList.values()) {
 				ui.addTrainID(nextID);
@@ -108,6 +91,8 @@ public class TrainControllerInstances {
 			trainList.get(id).delete();
 			trainList.remove(id);
 		}
+		
+		trainmodels.deleteTrain(id);
 	
 	}
 	
@@ -133,12 +118,10 @@ public class TrainControllerInstances {
 	
 	/**
 	 * Creates a new instance of TrainControllerUI.
-	 * @param test - true if this is being called from the test program, false otherwise
-	 * (IF YOU ARE READING THIS THEN YOU SHOULD SET 'test' TO FALSE WHEN YOU CALL THIS METHOD.)
 	 */
 	public void newUI() {
 		
-		TrainControllerUI temp = new TrainControllerUI(instanceID, this, test);
+		TrainControllerUI temp = new TrainControllerUI(instanceID, this, (trainmodels == null));
 		uiList.put(instanceID, temp);
 		
 		++instanceID;

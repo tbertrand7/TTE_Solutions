@@ -76,10 +76,10 @@ public class TTEHomeGUI {
 		frmTteTrainHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTteTrainHome.getContentPane().setLayout(null);
 
-		tci = new TrainControllerInstances(false);
+		modelList = new Trains();
+		tci = new TrainControllerInstances(modelList);
 		sysClock = new SystemClock();
 		ctc = new CTCOffice(sysClock, tci);
-		modelList = new Trains();	
 		
 		JButton btnNewButton = new JButton("The Office");
 		btnNewButton.addActionListener(new ActionListener() {

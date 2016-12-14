@@ -20,7 +20,7 @@ public class TestTrainController extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		tci = new TrainControllerInstances(true);
+		tci = new TrainControllerInstances(null);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
