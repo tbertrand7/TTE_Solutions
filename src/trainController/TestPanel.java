@@ -153,7 +153,8 @@ public class TestPanel extends JFrame {
 		JButton btnSendCurrentSpeed = new JButton("Send");
 		btnSendCurrentSpeed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				setCurrentSpeed(Double.parseDouble(txtCurrentSpeed.getText()));
+				double americanspeed = Double.parseDouble(txtCurrentSpeed.getText());
+				setCurrentSpeed(americanspeed * 1609.34 / 3600);
 			}
 		});
 		btnSendCurrentSpeed.setFont(new Font("Arial Unicode MS", Font.PLAIN, 14));
