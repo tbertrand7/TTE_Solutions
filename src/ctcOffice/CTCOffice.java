@@ -103,15 +103,40 @@ public class CTCOffice
 		return sysClock.clock;
 	}
 
-	public void suggestSpeed(double newTrainSpeed, int train)
+	public void suggestSpeed(double newTrainSpeed, int train, TrackBlock currBlock)
 	{
 		//TODO: suggest speed for a train to wayside controller
+		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
 	}
 
-	public void suggestDestination(TrackBlock dest, int train)
+	public void suggestDestination(TrackBlock dest, int train, TrackBlock currBlock)
     {
         //TODO: suggest new destination for a train to wayside controller
+		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
     }
+
+	/**
+	 * Routes suggestion to proper wayside controller
+	 * @param line Line train is on
+	 * @param block Block train is on
+	 * @return String for wayside controller
+	 */
+    private String routeWaysideSuggestion(String line, int block)
+	{
+		String wayside = "";
+		if (line.equals("Red")) {
+			if (block >= 36 && block <= 71)
+				wayside = "Red 2";
+			else
+				wayside = "Red 1";
+		} else {
+			if (block >= 66 && block <= 133)
+				wayside = "Green 2";
+			else
+				wayside = "Green 1";
+		}
+		return wayside;
+	}
 
     /**
      * Dispatch new train from yard
@@ -124,9 +149,16 @@ public class CTCOffice
         //Create new train and get ID for wayside
         int newTrainID = trainCont.createTrain(dest.line);
 
+        //Get starting block from yard for correct line
+		TrackBlock currBlock;
+		if (dest.line.equals("Red"))
+			currBlock = redLine[76]; //Red Line is block 77
+		else
+			currBlock = greenLine[151]; //Green Line is block 152
+
         //Send destination and speed requests for new train
-        suggestDestination(dest, newTrainID);
-        suggestSpeed(speed, newTrainID);
+        suggestDestination(dest, newTrainID, currBlock);
+        suggestSpeed(speed, newTrainID, currBlock);
 
 		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
 	}
