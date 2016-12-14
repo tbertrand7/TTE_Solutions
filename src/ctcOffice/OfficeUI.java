@@ -127,7 +127,7 @@ public class OfficeUI extends JFrame {
 				else
 					selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
 				
-				ctcOffice.suggestSpeed(newTrainSpeed,selectedBlock.trainID);
+				ctcOffice.suggestSpeed(newTrainSpeed, selectedBlock.trainID, selectedBlock);
 				logNotification("Speed of " + newTrainSpeed + " mph suggested for Train " + selectedBlock.trainID);
 				txtFieldSpeed.setText("");
 				lblSpeedInfo.setText(newTrainSpeed + " mph");
@@ -150,7 +150,7 @@ public class OfficeUI extends JFrame {
 			selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
 
 		destBlock = (TrackBlock)cmbDestinations.getSelectedItem();
-		ctcOffice.suggestDestination(destBlock, selectedBlock.trainID);
+		ctcOffice.suggestDestination(destBlock, selectedBlock.trainID, selectedBlock);
 		logNotification("Train " + selectedBlock.trainID + " dispatched to " + destBlock.toString());
 	}
 
@@ -189,7 +189,7 @@ public class OfficeUI extends JFrame {
 			else
 				btnCloseTrack.setText("Close Block");
 
-			lblThroughputInfo.setText(ctcOffice.calcThroughput(selectedBlock) + " trains/hr");
+			lblThroughputInfo.setText(selectedBlockBtn.calcThroughput(ctcOffice.startTime) + " trains/hr");
 
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");
