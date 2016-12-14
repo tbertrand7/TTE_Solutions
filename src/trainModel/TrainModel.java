@@ -392,14 +392,14 @@ public class TrainModel extends TrainState implements Runnable{
 			}
 			
 			
-			System.out.println("Top of thread");
+			//System.out.println("Top of thread");
 			
 			if(currentPos >= endOfBlock){
 			//end of block reached by train	
 				
 				newBlock = true;
 				
-				System.out.println("NewBlock just set to True");
+				//System.out.println("NewBlock just set to True");
 				
 				/*
 				 *Update the block we're leaving 
@@ -409,7 +409,7 @@ public class TrainModel extends TrainState implements Runnable{
 					trackBlock.trainID = -1; //set the train ID -1					
 					tm.setBlock(trackBlock);		
 					
-					System.out.println("Set Track Block we are leaving....");
+					//System.out.println("Set Track Block we are leaving....");
 					
 				/*
 				 * Get the next block
@@ -417,14 +417,14 @@ public class TrainModel extends TrainState implements Runnable{
 
 					trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
 					
-					System.out.println("Just got the new block......");
+					//System.out.println("Just got the new block......");
 					
-					System.out.println("Track Block Status should equal Unoccupied:     "+trackBlock.status);
+					//System.out.println("Track Block Status should equal Unoccupied:     "+trackBlock.status);
 					
 					trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
 					
 					
-					System.out.println("Track Block Status should equal occupied:     "+trackBlock.status);
+					//System.out.println("Track Block Status should equal occupied:     "+trackBlock.status);
 
 					
 					trackBlock.trainID = trainID; //set the train ID to the train ID	
@@ -433,7 +433,7 @@ public class TrainModel extends TrainState implements Runnable{
 					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info	
 					
 					
-					System.out.println("Set the new block with new info.");
+					//System.out.println("Set the new block with new info.");
 				
 				/*
 				 * Update position tracking info	
@@ -480,7 +480,7 @@ public class TrainModel extends TrainState implements Runnable{
 				normalForce = 9.8 * mass;
 				friction = MU * normalForce *-1;
 				
-				brakingDistance = (velocity * velocity) / (2 * serviceBrakeRate); //calculate braking distance
+				brakingDistance = (velocity * velocity) / (2 * serviceBrakeRate *-1); //calculate braking distance
 				
 	
 				time1 = time2;
@@ -555,8 +555,16 @@ public class TrainModel extends TrainState implements Runnable{
 				System.out.println("Distance left in block = "+distanceLeftInBlock+"\n");
 				
 				
+				//Tell Train controller to brake before the station
+				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station") ) ){
+					trainCon.approachStation();
+				}
+				
 				//TODO: @matt if at a station add/remove passengers
-				if(trackBlock.infrastructure.contains("station") ){
+				/*
+				 *Only allow passengers to enter/exit if the train is stopped at a station 
+				 */
+				if(trackBlock.infrastructure.contains("station") && velocity == 0){
 					
 					passengerPassFail = addPassengers(trackBlock.numPass);
 					
@@ -570,12 +578,7 @@ public class TrainModel extends TrainState implements Runnable{
 					 * if passengerPassFail == -1000 do nothing, no passengers added/subtracted
 					 */
 				}
-				
-				
-				//Tell Train controller to brake before the station
-				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station") )   ){
-					trainCon.approachStation();
-				}
+								
 				
 				//Display info to UI			
 				if(ui != null){
@@ -584,7 +587,8 @@ public class TrainModel extends TrainState implements Runnable{
 					ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature, crewCount, passengerCount);
 				}
 			
-								
+				
+				//Sleep for a second
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
