@@ -3,11 +3,12 @@ package waysideController;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class PLC 
 {
-	private ArrayList<ArrayList<String>> conditions;
-	private ArrayList<String> results;
+	private static ArrayList<ArrayList<String>> conditions;
+	private static ArrayList<String> results;
     
 	public PLC()
 	{
@@ -51,8 +52,10 @@ public class PLC
 				line = br.readLine().split("THEN");
 				String condition[] = line[0].split(" ");
 				ArrayList<String> conditions = new ArrayList<String>();
+				
 				for(int i = 0; i < condition.length; i++)
 				{
+					//System.out.println(condition[i]);
 					switch(condition[i])
 					{
 						case "IF":
@@ -76,24 +79,26 @@ public class PLC
 							{
 								throw new Exception("Did not provide switch block number in plc code");
 							}
-							conditions.add("s"+condition[i+1]); //switch in position 0
+							conditions.add("s"+condition[i+1]+","+condition[i+2]); //switch in position 0
+							i += 2;
 							break;
 						case "!switch":
 							if(i+1 > condition.length)
 							{
-								throw new Exception("Did not provide switch block in plc code");
+								throw new Exception("Did not provide switch block number in plc code");
 							}
-							conditions.add("!s"+condition[i+1]); //switch is position 1
+							conditions.add("!s"+condition[i+1]+","+condition[i+2]); //switch is position 1
+							i += 2;
 							break;
 						case "AND":
 							conditions.add("AND");
 							break;
 						case "OR":
 							conditions.add("OR");
-							
 					}
 				}
 				temp_conditions.add(conditions);
+				//System.out.println("I AM HERE HELLLLOOOOO");
 				
 				if(line[1].toLowerCase().contains("red"))
 				{
@@ -107,13 +112,10 @@ public class PLC
 				{
 					temp_results.add("g");
 				}
-				else if(line[1].toLowerCase().contains("!throw"))
+				else if(line[1].toLowerCase().contains("switch"))
 				{
-					temp_results.add("!t");
-				}
-				else if(line[1].toLowerCase().contains("throw"))
-				{
-					temp_results.add("t");
+					String[] switchInfo = line[1].trim().split(" ");
+					temp_results.add("s:"+switchInfo[1]+","+switchInfo[2]);
 				}
 				else
 				{
@@ -128,15 +130,22 @@ public class PLC
 		}
 		catch(Exception e)
 		{
-			System.out.println(e);
 			return false;
 		}
 	}
 	
-	public void run_plc()
+	public static void main(String[] args)
 	{
-		/*ArrayList<ArrayList<String>> conditions = plc.getConditions();
-		ArrayList<String> results = plc.getResults();
+		PLC p = new PLC();
+		p.load_plc("C:\\Users\\Alisha\\git\\TTE_Solutions\\bin\\waysideController\\red1.txt");
+		System.out.println(conditions);
+		System.out.println(results);
+	}
+	
+	public void run_plc(ArrayList<Integer> occupancies, Hashtable<Integer, Integer> switchPositions)
+	{
+		ArrayList<ArrayList<String>> conditions = this.getConditions();
+		ArrayList<String> results = this.getResults();
 		
 		
 		for(int i = 0; i < conditions.size(); i++)
@@ -152,20 +161,23 @@ public class PLC
 				
 				if(s.contains("!b"))
 				{
-					
-					temp = !blocks[Character.getNumericValue(s.charAt(2))];
+					if(!occupancies.contains(Integer.parseInt(s.replace("!b", ""))))
+						satisfied = true;		
 				}
 				else if(s.contains("!s"))
 				{
-					temp = controlledSwitches.get(Character.getNumericValue(s.charAt(2)));
+					//if()
+							satisfied = true;
 				}
 				else if(s.contains("b"))
 				{
-					temp = blocks[Character.getNumericValue(s.charAt(1))];
+					if(occupancies.contains(Integer.parseInt(s.replace("b", ""))))
+							satisfied = true;
 				}
 				else if(s.contains("s"))
 				{
-					temp = switch_position;
+					if(occupancies.contains(Integer.parseInt(s.replace("b", ""))))
+						satisfied = true;
 				}
 				else
 				{
@@ -229,23 +241,23 @@ public class PLC
 				switch(results.get(i))
 				{
 					case "r":
-						lights.put("red");
+						//lights.put("red");
 						System.out.println("RESULT: turn lights RED");
 						break;
 					case "y":
-						lights = "yellow";
+						//lights = "yellow";
 						System.out.println("RESULT: turn lights YELLOW");
 						break;
 					case "g":
-						lights = "green";
+						//lights = "green";
 						System.out.println("RESULT: turn lights GREEN");
 						break;
 					case "!t":
-						switch_position = false;
+						//switch_position = false;
 						System.out.println("RESULT: switch is not thrown");
 						break;
 					case "t":
-						switch_position = true;
+						//switch_position = true;
 						System.out.println("RESULT: switch is thrown");
 						break;
 				}
@@ -254,7 +266,7 @@ public class PLC
 				System.out.println("CONDITION is NOT SATISFIED");
 			
 			satisfied = false;
-		}*/
+		}
 	}
 }
 
