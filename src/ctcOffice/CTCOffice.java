@@ -180,41 +180,53 @@ public class CTCOffice
 	 * @param tbl Table reference
 	 */
 	public void loadSchedule(File f, DefaultTableModel tbl)
-    {
-        try {
-            BufferedReader csv = new BufferedReader(new FileReader(f));
+	{
+		try {
+			BufferedReader csv = new BufferedReader(new FileReader(f));
 
-            String s;
-            ArrayList<ScheduleItem> greenSched = new ArrayList<>();
+			String s;
+			ArrayList<ScheduleItem> greenSched = new ArrayList<>();
 			ArrayList<ScheduleItem> redSched = new ArrayList<>();
+			int lastRed = 0, lastGreen = 0; //Needed to ensure schedules are in order
 			while ((s = csv.readLine()) != null)
-            {
-                //Fix for first line of file not being properly parsed
-                if (s.charAt(0) == '\uFEFF')
-                    s = s.substring(1);
+			{
+				//Fix for first line of file not being properly parsed
+				if (s.charAt(0) == '\uFEFF')
+					s = s.substring(1);
 
-                String[] data = s.split(",");
-                String[] infr = data[1].split(";");
-                String dest = "";
+				String[] data = s.split(",");
+				String[] infr = data[1].split(";");
+				String dest = "";
 				TrackBlock tempBlock = null;
 				TrackBlock[] line;
 
 				//TODO: This conditional won't be needed when infrastructure format is finalized
-                if (infr.length > 1)
-                	dest = infr[1];
-                else
-                	dest = "Unnamed";
-
-                //Match dest string to appropriate track block
-				if (data[0].toLowerCase().equals("red"))
-					line = redLine;
+				if (infr.length > 1)
+					dest = infr[1];
 				else
-					line = greenLine;
+					dest = infr[0];
 
-				for (int i=0; i < line.length; i++)
+				//Match dest string to appropriate track block
+				int i;
+				if (data[0].toLowerCase().equals("red")) {
+					line = redLine;
+					i = lastRed;
+				}
+				else {
+					line = greenLine;
+					i = lastGreen;
+				}
+
+				for ( ; i < line.length; i++)
 				{
-					if (line[i].infrastructure.toUpperCase().contains(dest.toUpperCase()))
+					if (line[i].infrastructure.toUpperCase().contains(dest.toUpperCase())) {
 						tempBlock = line[i];
+						if (tempBlock.line.equals("Red"))
+							lastRed = i+1;
+						else
+							lastGreen = i+1;
+						break;
+					}
 				}
 
 				if (tempBlock != null) {
@@ -225,32 +237,32 @@ public class CTCOffice
 				}
 				else
 					officeUI.logNotification("Destination: " + dest + " does not exist, schedule item not added");
-            }
-            csv.close();
+			}
+			csv.close();
 			greenSchedule = greenSched.toArray(new ScheduleItem[1]);
-            redSchedule = redSched.toArray(new ScheduleItem[1]);
+			redSchedule = redSched.toArray(new ScheduleItem[1]);
 			officeUI.logNotification("Schedule " + f.getName() + " successfully loaded");
-        } catch (Exception e) {
-            e.printStackTrace();
-            officeUI.logNotification("Error loading schedule " + f.getName());
-        }
+		} catch (Exception e) {
+			e.printStackTrace();
+			officeUI.logNotification("Error loading schedule " + f.getName());
+		}
 
-        //Clear table
-        while (tbl.getRowCount() != 0)
+		//Clear table
+		while (tbl.getRowCount() != 0)
 		{
 			tbl.removeRow(0);
 		}
 
 		//Add new schedule to table
-        for (int i=0; i < redSchedule.length; i++)
+		for (int i=0; i < redSchedule.length; i++)
 		{
-			tbl.addRow(new Object[] {redSchedule[i].line, redSchedule[i].destination.toString(), redSchedule[i].time});
+			tbl.addRow(new Object[] {redSchedule[i].destination.toString(), redSchedule[i].time});
 		}
 		for (int i=0; i < greenSchedule.length; i++)
 		{
-			tbl.addRow(new Object[] {greenSchedule[i].line, greenSchedule[i].destination.toString(), greenSchedule[i].time});
+			tbl.addRow(new Object[] {greenSchedule[i].destination.toString(), greenSchedule[i].time});
 		}
-    }
+	}
 
     public void runSchedule()
 	{
