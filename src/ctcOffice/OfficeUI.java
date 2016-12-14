@@ -108,7 +108,14 @@ public class OfficeUI extends JFrame {
 
 	private void btnToggleSwitchClick()
 	{
-		//TODO: Enable switch toggling once class is properly implemented
+        TrackBlock selectedBlock;
+
+        if (selectedBlockBtn.line.equals("Green"))
+            selectedBlock = ctcOffice.greenLine[selectedBlockBtn.block - 1];
+        else
+            selectedBlock = ctcOffice.redLine[selectedBlockBtn.block - 1];
+
+        ctcOffice.toggleSwitch(selectedBlock);
 	}
 
 	private void btnSetSpeedClick()
