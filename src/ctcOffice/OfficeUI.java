@@ -20,7 +20,7 @@ public class OfficeUI extends JFrame {
 
 	private JPanel contentPane, trackDisplayPanel, topButtonPanel, statusPanel, notificationPanel, schedulePanel;
 	private JTextArea notificationArea;
-	private DefaultTableModel tableModel;
+	private DefaultTableModel tblModelGreenLine, tblModelRedLine;
 	private JSlider simulationSpeed;
 	private CTCOffice ctcOffice;
 	private JTextField txtFieldSpeed;
@@ -61,7 +61,7 @@ public class OfficeUI extends JFrame {
         initDynamicElements();
 		initTrackButtons();
 		setHasTrain(false);
-
+		
 		//Create Thread to update track info
 		exec = Executors.newSingleThreadScheduledExecutor();
 		trackUpdate = exec.scheduleWithFixedDelay(new Runnable() {
@@ -92,7 +92,7 @@ public class OfficeUI extends JFrame {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".csv", "csv");
 		fc.setFileFilter(filter);
 		fc.showOpenDialog(contentPane);
-		ctcOffice.loadSchedule(fc.getSelectedFile(), tableModel);
+		ctcOffice.loadSchedule(fc.getSelectedFile(), tblModelRedLine);
 	}
 
 	private void runScheduleClick()
@@ -422,7 +422,6 @@ public class OfficeUI extends JFrame {
 		schedulePanel = new JPanel();
 		schedulePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		mainMenuTabPane.addTab("Schedule", null, schedulePanel, null);
-		schedulePanel.setLayout(null);
 
 		/* Legend */
 		JPanel legendPanel = new JPanel();
@@ -849,28 +848,78 @@ public class OfficeUI extends JFrame {
 		notificationArea.setWrapStyleWord(true);
 
 		/* Schedule Table */
+		GridBagLayout gbl_schedulePanel = new GridBagLayout();
+		gbl_schedulePanel.columnWidths = new int[]{0, 0, 0};
+		gbl_schedulePanel.rowHeights = new int[]{0, 451, 0};
+		gbl_schedulePanel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gbl_schedulePanel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		schedulePanel.setLayout(gbl_schedulePanel);
+		
+		JLabel lblRedLine = new JLabel("Red Line");
+		lblRedLine.setFont(new Font("SansSerif", Font.BOLD, 16));
+		GridBagConstraints gbc_lblRedLine = new GridBagConstraints();
+		gbc_lblRedLine.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRedLine.gridx = 0;
+		gbc_lblRedLine.gridy = 0;
+		schedulePanel.add(lblRedLine, gbc_lblRedLine);
+		
+		JLabel lblGreenLine = new JLabel("Green Line");
+		lblGreenLine.setFont(new Font("SansSerif", Font.BOLD, 16));
+		GridBagConstraints gbc_lblGreenLine = new GridBagConstraints();
+		gbc_lblGreenLine.insets = new Insets(0, 0, 5, 0);
+		gbc_lblGreenLine.gridx = 1;
+		gbc_lblGreenLine.gridy = 0;
+		schedulePanel.add(lblGreenLine, gbc_lblGreenLine);
+		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 6, 506, 451);
-		schedulePanel.add(scrollPane);
-
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 0;
+		gbc_scrollPane.gridy = 1;
+		schedulePanel.add(scrollPane, gbc_scrollPane);
+		
+		tblModelRedLine = new DefaultTableModel(0,0);
+		tblModelRedLine.setColumnIdentifiers(new String[] {
+				"Destination", "Time"
+		});
+		tblModelGreenLine = new DefaultTableModel(0,0);
+		tblModelGreenLine.setColumnIdentifiers(new String[] {
+				"Destination", "Time"
+		});
+		
 		JTable tblSchedule = new JTable();
 		tblSchedule.setEnabled(false);
 		tblSchedule.setCellSelectionEnabled(true);
 		tblSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		tblSchedule.setShowVerticalLines(true);
 		tblSchedule.setShowHorizontalLines(true);
-		tableModel = new DefaultTableModel(0,0);
-		tableModel.setColumnIdentifiers(new String[] {
-				"Line", "Destination", "Time"
-		});
-		tblSchedule.setModel(tableModel);
+		tblSchedule.setModel(tblModelRedLine);
 		tblSchedule.getColumnModel().getColumn(0).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(25);
+		tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(190);
 		tblSchedule.getColumnModel().getColumn(1).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(160);
-		tblSchedule.getColumnModel().getColumn(2).setResizable(false);
-		tblSchedule.getColumnModel().getColumn(2).setPreferredWidth(35);
+		tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(25);
 		scrollPane.setViewportView(tblSchedule);
+				
+		JScrollPane scrollPane_2 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
+		gbc_scrollPane_2.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_2.gridx = 1;
+		gbc_scrollPane_2.gridy = 1;
+		schedulePanel.add(scrollPane_2, gbc_scrollPane_2);
+		
+		JTable tblSchedule2 = new JTable();
+		tblSchedule2.setEnabled(false);
+		tblSchedule2.setCellSelectionEnabled(true);
+		tblSchedule2.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		tblSchedule2.setShowVerticalLines(true);
+		tblSchedule2.setShowHorizontalLines(true);
+		tblSchedule2.setModel(tblModelGreenLine);
+		tblSchedule2.getColumnModel().getColumn(0).setResizable(false);
+		tblSchedule2.getColumnModel().getColumn(0).setPreferredWidth(190);
+		tblSchedule2.getColumnModel().getColumn(1).setResizable(false);
+		tblSchedule2.getColumnModel().getColumn(1).setPreferredWidth(25);
+		scrollPane_2.setViewportView(tblSchedule2);
 	}
 
 	/**
