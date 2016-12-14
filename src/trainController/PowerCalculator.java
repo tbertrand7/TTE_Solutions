@@ -1,5 +1,7 @@
 package trainController;
 
+import TTEHome.SystemClock;
+
 public class PowerCalculator extends Thread {
 	
 	private TrainController controller;
@@ -19,8 +21,11 @@ public class PowerCalculator extends Thread {
 	private boolean proceed;
 	private boolean stop;
 	
+	private SystemClock sysClock;
+	
 	public PowerCalculator(TrainController tc) {
 		controller = tc;
+		sysClock = controller.parent.sysClock;
 		
 		Ek = 0;
 		Ek1 = 0;
@@ -59,7 +64,7 @@ public class PowerCalculator extends Thread {
 			while (stop) {
 				controller.setPower(0); //just in case
 				try {
-					sleep(1000); //busy waiting if train is temporarily stopped
+					sleep(1000*sysClock.clock); //busy waiting if train is temporarily stopped
 				} catch (InterruptedException e1) {
 					//don't need to do anything
 				}
@@ -106,7 +111,7 @@ public class PowerCalculator extends Thread {
 			
 			//Sleep for one second (not perfect - there's a bit of drift)
 			try {
-				sleep(1000 - (System.currentTimeMillis()-timestart));
+				sleep(1000 - ((System.currentTimeMillis()*sysClock.clock)-timestart));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

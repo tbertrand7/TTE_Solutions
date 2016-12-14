@@ -77,8 +77,8 @@ public class TTEHomeGUI {
 		frmTteTrainHome.getContentPane().setLayout(null);
 
 		modelList = new Trains();
-		tci = new TrainControllerInstances(modelList);
 		sysClock = new SystemClock();
+		tci = new TrainControllerInstances(sysClock, modelList);
 		ctc = new CTCOffice(sysClock, tci);
 		
 		JButton btnNewButton = new JButton("The Office");
