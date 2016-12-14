@@ -29,6 +29,8 @@ public class TTEHomeGUI {
 	public CTCOffice ctc;
 	public TrainControllerInstances tci;
 	public SystemClock sysClock;
+	public Trains modelList; 
+	
 	/**
 	 * Launch the application.
 	 */
@@ -77,7 +79,8 @@ public class TTEHomeGUI {
 		tci = new TrainControllerInstances(false);
 		sysClock = new SystemClock();
 		ctc = new CTCOffice(sysClock, tci);
-
+		modelList = new Trains();	
+		
 		JButton btnNewButton = new JButton("The Office");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -112,17 +115,18 @@ public class TTEHomeGUI {
 		frmTteTrainHome.getContentPane().add(btnTrainController);
 		
 		
-		Trains modelList = new Trains();
+
 		JButton btnTrainModel = new JButton("Train Model");
 		btnTrainModel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				//TODO: @Matt revisit after fixing Trains class
+				
 				//trainModelInstances.newUI();
 				//trainModelGUI tmg = new trainModelGUI(usethis);
 				//tci.connectModelToUI(1, tmg);
 				
-				modelList.newUI();
-				
+				modelList.newUI();	
 			}
 		});
 		btnTrainModel.setBounds(289, 141, 135, 109);

@@ -46,9 +46,9 @@ public class Trains {
 	}
 	
 	
-	public void deleteTrain(){
+	public void deleteTrain(int id){
 		
-		
+		trainList.remove(id);
 	}
 	
 	/**

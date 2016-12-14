@@ -190,9 +190,9 @@ public class TrainModelGUI {
 	}
 	
 	
-	public static void main(String[] args){
-		new TrainModelGUI(new Trains());
-	}
+	//public static void main(String[] args){
+		//new TrainModelGUI(new Trains());
+	//}
 	
 	
 	/**
