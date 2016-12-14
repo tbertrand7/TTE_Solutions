@@ -214,6 +214,7 @@ public class CTCOffice
 		String wayside = routeWaysideSuggestion(block.line, block.blockNumber);
 		int switchNum = Integer.parseInt(block.switchBlock.id.split(" ")[1]);
 		WaysideControllerInterface.getInstance().toggleSwitch(switchNum, wayside);
+		officeUI.logNotification(block.switchBlock.getID() + " position toggled");
 	}
 
 	/**
