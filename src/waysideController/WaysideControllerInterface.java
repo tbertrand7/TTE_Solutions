@@ -82,7 +82,7 @@ public class WaysideControllerInterface {
 	 * @param trainID
 	 * @param waysideID
 	 */
-	public void setSpeed(double speed, int trainID, String waysideID)
+	public void suggestSpeed(double speed, int trainID, String waysideID)
 	{
 		switch(waysideID)
 		{
@@ -110,11 +110,12 @@ public class WaysideControllerInterface {
 	 * @param trainID
 	 * @param waysideID 
 	 */
-	public void setAuthority(int destination, int trainID, String waysideID)
+	public void suggestAuthority(int destination, int trainID, String waysideID)
 	{
 		switch(waysideID)
 		{
 			case "Red 1":
+				System.out.println("HERE");
 				WC[0].suggestAuthority(destination, trainID);
 				break;
 			case "Red 2":
@@ -131,7 +132,7 @@ public class WaysideControllerInterface {
 	
 	public boolean loadPLC(String path, String waysideID)
 	{
-		System.out.println("Hello World");
+		//TO DO
 		return false;
 	}
 	
