@@ -236,7 +236,15 @@ public class OfficeUI extends JFrame {
 			} else {
 				lblTrainNumInfo.setText(selectedBlock.trainID + "");
 				lblSpeedInfo.setText(selectedBlock.speed + " mph");
-				lblDestInfo.setText(""); //TODO: Display destination block name for train
+				//Set destination text
+				if (selectedBlock.destination < 1) {
+					lblDestInfo.setText("");
+				} else {
+					if (selectedBlock.line.equals("Red"))
+						lblDestInfo.setText(ctcOffice.redLine[selectedBlock.destination].toString());
+					else
+						lblDestInfo.setText(ctcOffice.greenLine[selectedBlock.destination].toString());
+				}
 				lblAuthInfo.setText(selectedBlock.authority + " blocks");
 				if (ctcOffice.getMode() == Mode.MANUAL)
 					setHasTrain(true);
