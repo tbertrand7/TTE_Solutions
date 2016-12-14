@@ -53,6 +53,7 @@ public class TrainModelGUI {
 	private JTextField currentTrainPower;
 	private Canvas canvas_4;
 	private Canvas canvas_5;
+	
 	final JFrame parent = new JFrame();
 	
 	
@@ -202,9 +203,12 @@ public class TrainModelGUI {
 		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
-		frame.setBounds(100, 100, 749, 680);
+		frame.setBounds(100, 100, 793, 728);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		JRadioButton testPassengerButton = new JRadioButton("Passengers");
+		JRadioButton testTempButton = new JRadioButton("Temp");
 		
 		/*
 		 * Label for GUI Window
@@ -977,30 +981,43 @@ public class TrainModelGUI {
 		JButton passengerButton = new JButton("Submit");
 		passengerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(testModeButton.isSelected()){
 				
-					int deltaPass = Integer.parseInt(passAmount.getText());				
-					int boardingPassFail = train.addPassengers(deltaPass);
+				if(train != null){	
+					if(testModeButton.isSelected() && testPassengerButton.isSelected()){
 					
-					if(boardingPassFail != 0 && boardingPassFail != -1000){ 
-						JOptionPane.showMessageDialog(parent, "Warning! Maximum passenger count reached. Not all passengers were able to board.");
+						int deltaPass = Integer.parseInt(passAmount.getText());				
+						int boardingPassFail = train.addPassengers(deltaPass);
 						
-					}	
-					
-					displayBlockInfo(train.curBlockNum, train.nextBlockNum, train.elevation, train.trainLine, train.speedLimit, train.temperature, train.crewCount, train.passengerCount);
-					
+						if(boardingPassFail != 0 && boardingPassFail != -1000){ 
+							JOptionPane.showMessageDialog(parent, "Warning! Maximum passenger count reached. Not all passengers were able to board.");
+							
+						}	
+						
+						displayBlockInfo(train.curBlockNum, train.nextBlockNum, train.elevation, train.trainLine, train.speedLimit, train.temperature, train.crewCount, train.passengerCount);		
+					}
+					else if(testModeButton.isSelected()  &&  testTempButton.isSelected()){
+						int temp = Integer.parseInt(passAmount.getText());
+						
+						train.setTemperature(temp);
+						
+						displayBlockInfo(train.curBlockNum, train.nextBlockNum, train.elevation, train.trainLine, train.speedLimit, train.temperature, train.crewCount, train.passengerCount);
+					}
+					else if(testModeButton.isSelected() && !testPassengerButton.isSelected()){
+						JOptionPane.showMessageDialog(parent, "Select test input mode");
+					}
+					else if(testModeButton.isSelected()  &&  !testTempButton.isSelected()){
+						JOptionPane.showMessageDialog(parent, "Select test input mode");
+					}		
 				}
+				else{
+					JOptionPane.showMessageDialog(parent, "Connect to a Train Model first");
+				}
+				
 			}
 		});
 		passengerButton.setFont(new Font("Courier New", Font.BOLD, 16));
 		passengerButton.setBounds(545, 64, 100, 40);
 		frame.getContentPane().add(passengerButton);
-		
-		JLabel lblAddremovePassengers = new JLabel("Add Passengers:");
-		lblAddremovePassengers.setHorizontalAlignment(SwingConstants.LEFT);
-		lblAddremovePassengers.setFont(new Font("Courier New", Font.BOLD, 20));
-		lblAddremovePassengers.setBounds(519, 34, 189, 30);
-		frame.getContentPane().add(lblAddremovePassengers);
 		
 		JButton addTrainRedButton = new JButton("Add Red Train");
 		addTrainRedButton.addActionListener(new ActionListener() {
@@ -1056,6 +1073,16 @@ public class TrainModelGUI {
 		btnTrainList.setFont(new Font("Courier New", Font.PLAIN, 16));
 		btnTrainList.setBounds(405, 64, 135, 23);
 		frame.getContentPane().add(btnTrainList);
+
+		testTempButton.setBackground(Color.LIGHT_GRAY);
+		testTempButton.setFont(new Font("Courier New", Font.BOLD, 18));
+		testTempButton.setBounds(603, 5, 92, 29);
+		frame.getContentPane().add(testTempButton);
+		
+		testPassengerButton.setBackground(Color.LIGHT_GRAY);
+		testPassengerButton.setFont(new Font("Courier New", Font.BOLD, 18));
+		testPassengerButton.setBounds(603, 35, 157, 29);
+		frame.getContentPane().add(testPassengerButton);
 		
 		frame.setVisible(true);
 

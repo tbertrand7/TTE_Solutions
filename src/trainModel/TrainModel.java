@@ -4,9 +4,16 @@ import trackModel.*; //for track block manipulation
 import trackModel.TrackBlock.BlockStatus;
 import trainController.*; //for train controller
 import trainController.TrainController.Signal;
-import java.lang.*;
+import java.util.*;
+
+import TTEHome.SystemClock;
 
 public class TrainModel extends TrainState implements Runnable{
+	
+	/**
+	 * Clock factor
+	 */
+	SystemClock clockFactor;
 	
 	/**
 	 * coefficient of friction for steel wheels on steel rails
@@ -113,6 +120,8 @@ public class TrainModel extends TrainState implements Runnable{
 
 	int passengerPassFail;
 	boolean passengersAccepted;
+	
+	Random rand = new Random();
 
 	
 	/**
@@ -123,6 +132,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trainCon = null;
 		trainID = id;
 		trainLine = line;
+		clockFactor.clock = 1;
 		
 		
 		if(trainLine.compareToIgnoreCase("Green") == 0)
@@ -181,11 +191,12 @@ public class TrainModel extends TrainState implements Runnable{
 	 * @param id - unique train id
 	 * @param line - the line the train is on (green or red)
 	 */
-	public TrainModel(Trains modelList, TrainController tc, int id, String line) {	
+	public TrainModel(Trains modelList, TrainController tc, int id, String line, SystemClock sysClock) {	
 			
 		trainCon = tc;
 		trainID = id;
 		trainLine = line;
+		clockFactor = sysClock;
 		
 		//curBlockNum = -1; //initialize train to the YARD (-1)
 		
@@ -374,6 +385,18 @@ public class TrainModel extends TrainState implements Runnable{
 		stop = false;
 	}
 	
+	
+	/**
+	 * Used to start a thread for the train model
+	 */
+	private Thread t;
+	public void start () {
+		      if (t == null) {
+		         t = new Thread (this, "train");
+		         t.start ();
+		      }
+		   }
+	
 	/**
 	 * Main thread for velocity calculation
 	 */
@@ -472,7 +495,7 @@ public class TrainModel extends TrainState implements Runnable{
 				 * Pass block info to train controller
 				 */
 				if(trainCon != null){
-					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground, newBlock); //pass the train controller the new block info
+					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground, trackBlock.infrastructure ,newBlock); //pass the train controller the new block info
 				}
 				
 				newBlock = false;
@@ -487,7 +510,7 @@ public class TrainModel extends TrainState implements Runnable{
 	
 				time1 = time2;
 				time2 = System.currentTimeMillis()/1000;
-				deltaTime = deltaTime + (time2 - time1);
+				deltaTime =  clockFactor.clock * (deltaTime + (time2 - time1) );
 				
 				
 				//set power level to 0 if engine fails
@@ -566,7 +589,8 @@ public class TrainModel extends TrainState implements Runnable{
 					trainCon.approachStation();
 				}
 				
-				//TODO: @matt if at a station add/remove passengers
+
+				
 				/*
 				 *Only allow passengers to enter/exit if the train is stopped at a station and doors are open
 				 */
@@ -585,6 +609,9 @@ public class TrainModel extends TrainState implements Runnable{
 					 */
 					
 					passengersAccepted = true;
+					
+					
+					//TODO: @matt let random number of passengers off at each station / leave random num at station
 					
 				}
 								
@@ -606,16 +633,7 @@ public class TrainModel extends TrainState implements Runnable{
 		}
 	}
 	
-	/**
-	 * Used to start a thread for the train model
-	 */
-	private Thread t;
-	public void start () {
-		      if (t == null) {
-		         t = new Thread (this, "train");
-		         t.start ();
-		      }
-		   }
+
 	
 
 	
@@ -684,9 +702,9 @@ public class TrainModel extends TrainState implements Runnable{
 	 * Disconnects the train from its UI.
 	 */
 	public void disconnectFromUI() {
-		
-		ui = null;
-		
+		if(ui != null){
+			ui = null;
+		}
 	}	
 	
 	/**
@@ -697,6 +715,15 @@ public class TrainModel extends TrainState implements Runnable{
 	
 		return !(ui == null);
 		
+	}
+	
+	/**
+	 * Stops PowerCalculators, and disconnects from its train model and UI.
+	 */
+	public void delete() {
+
+		pause();
+		disconnectFromUI();		
 	}
 	
 	
