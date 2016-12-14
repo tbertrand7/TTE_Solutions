@@ -4,7 +4,7 @@ import trackModel.*; //for track block manipulation
 import trackModel.TrackBlock.BlockStatus;
 import trainController.*; //for train controller
 import trainController.TrainController.Signal;
-
+import java.lang.*;
 
 public class TrainModel extends TrainState implements Runnable{
 	
@@ -108,10 +108,11 @@ public class TrainModel extends TrainState implements Runnable{
 	boolean engineFail = false;
 	
 	/**
-	 * 
+	 * Passengers board/exit variables
 	 */
 
 	int passengerPassFail;
+	boolean passengersAccepted;
 
 	
 	/**
@@ -432,6 +433,7 @@ public class TrainModel extends TrainState implements Runnable{
 					// vvvvvvvvv SQL exception being thrown here vvvvvvvv
 					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info	
 					
+					passengersAccepted = false;
 					
 					//System.out.println("Set the new block with new info.");
 				
@@ -492,47 +494,51 @@ public class TrainModel extends TrainState implements Runnable{
 				if(engineFail) power = 0;
 				
 				
-				if(power == 0 && velocity == 0 && !serviceBrakeOn && !emergencyBrakeOn){
-					if(grade == 0){
-						accRate = 0;
-					}
-					else{
-						accRate = G * Math.sin(Math.atan(grade));
-					}
-				}
-				else if(power == 0 && velocity != 0 && !serviceBrakeOn && !emergencyBrakeOn){
-					if(grade == 0){
-						accRate = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1; //multiply by -1 because resistance is in the opposite direction
-					}
-					else{
-						tempAcc = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1; //multiply by -1 because resistance is in the opposite direction
-						accRate = tempAcc + (G * Math.sin(Math.atan(grade)));
-					}
-				}
-				else if(!serviceBrakeOn && !emergencyBrakeOn){
-					
-					if(grade == 0){
-						if(power + resistivePower < 0){
-							tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
-							accRate = tempAcc * -1;
+				
+				/*
+				 * Acceleration calculation below
+				 */
+				
+					if(power == 0 && velocity == 0 && !serviceBrakeOn && !emergencyBrakeOn){
+						if(grade == 0){
+							accRate = 0;
 						}
 						else{
-							accRate = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+							accRate = G * Math.cos(Math.atan(grade));
 						}
 					}
-					else{
-						if(power + resistivePower < 0){
-							tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
-							tempAcc = tempAcc * -1;
-							accRate = tempAcc + (G * Math.sin(Math.atan(grade)));
+					else if(power == 0 && velocity != 0 && !serviceBrakeOn && !emergencyBrakeOn){
+						if(grade == 0){
+							accRate = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1; //multiply by -1 because resistance is in the opposite direction
 						}
 						else{
-							tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
-							accRate = tempAcc + (G * Math.sin(Math.atan(grade)));
+							tempAcc = Math.sqrt(Math.abs((resistivePower) / (2 * mass *deltaTime))) * -1; //multiply by -1 because resistance is in the opposite direction
+							accRate = tempAcc + (G * Math.cos(Math.atan(grade)));
 						}
+					}
+					else if(!serviceBrakeOn && !emergencyBrakeOn){
 						
-					}
-				}
+						if(grade == 0){
+							if(power + resistivePower < 0){
+								tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+								accRate = tempAcc * -1;
+							}
+							else{
+								accRate = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+							}
+						}
+						else{
+							if(power + resistivePower < 0){
+								tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+								tempAcc = tempAcc * -1;
+								accRate = tempAcc + (G * Math.cos(Math.atan(grade)));
+							}
+							else{
+								tempAcc = Math.sqrt( Math.abs((power + resistivePower) / (2 * mass *deltaTime)));
+								accRate = tempAcc + (G * Math.cos(Math.atan(grade)));
+							}					
+						}
+					}//end acc calc
 
 				
 				velocity = velocity + (accRate*deltaTime);	
@@ -551,8 +557,8 @@ public class TrainModel extends TrainState implements Runnable{
 			
 				distanceLeftInBlock = endOfBlock - currentPos;
 			
-				System.out.println("\nCurrent Position = "+currentPos);
-				System.out.println("Distance left in block = "+distanceLeftInBlock+"\n");
+				//System.out.println("\nCurrent Position = "+currentPos);
+				//System.out.println("Distance left in block = "+distanceLeftInBlock+"\n");
 				
 				
 				//Tell Train controller to brake before the station
@@ -562,9 +568,9 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//TODO: @matt if at a station add/remove passengers
 				/*
-				 *Only allow passengers to enter/exit if the train is stopped at a station 
+				 *Only allow passengers to enter/exit if the train is stopped at a station and doors are open
 				 */
-				if(trackBlock.infrastructure.contains("station") && velocity == 0){
+				if(trackBlock.infrastructure.contains("station") && !passengersAccepted && velocity == 0 && (rightDoorsOpen || leftDoorsOpen)){
 					
 					passengerPassFail = addPassengers(trackBlock.numPass);
 					
@@ -577,6 +583,9 @@ public class TrainModel extends TrainState implements Runnable{
 					/*
 					 * if passengerPassFail == -1000 do nothing, no passengers added/subtracted
 					 */
+					
+					passengersAccepted = true;
+					
 				}
 								
 				
