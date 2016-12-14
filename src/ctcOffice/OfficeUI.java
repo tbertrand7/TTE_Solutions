@@ -98,6 +98,7 @@ public class OfficeUI extends JFrame {
 	private void runScheduleClick()
 	{
 		//TODO: Implement run schedule
+		ctcOffice.runSchedule();
 	}
 
 	private void btnCloseTrackClick()
@@ -189,7 +190,7 @@ public class OfficeUI extends JFrame {
 			else
 				btnCloseTrack.setText("Close Block");
 
-			lblThroughputInfo.setText(selectedBlockBtn.calcThroughput(ctcOffice.startTime) + " trains/hr");
+			lblThroughputInfo.setText(selectedBlockBtn.calcThroughput(ctcOffice.startTime, ctcOffice.getSimulationSpeed()) + " trains/hr");
 
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");

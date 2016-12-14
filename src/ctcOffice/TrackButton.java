@@ -74,14 +74,14 @@ public class TrackButton extends JToggleButton
     }
 
     /**
-     * Calculates throughput based on how much time has passed since program launch
+     * Calculates throughput based on how much time has passed since program launch and simulation speed multiplier
      * @param startTime Time program was launched. Retrieved from ctc.
      * @return Number of trains per hour formatted to a String with the pattern #.###
      */
-    public String calcThroughput(long startTime)
+    public String calcThroughput(long startTime, int sysClock)
     {
         long timePassed = System.currentTimeMillis() - startTime;
-        double hoursPassed = (timePassed/360000.0);
+        double hoursPassed = (timePassed/360000.0) * sysClock;
         return new DecimalFormat("#.###").format(trains/hoursPassed);
     }
 }
