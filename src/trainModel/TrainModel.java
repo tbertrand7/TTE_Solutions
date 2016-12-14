@@ -119,8 +119,8 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 
 	int passengerPassFail;
+	int passengersLeaving;
 	boolean passengersAccepted;
-	
 	Random rand = new Random();
 
 	
@@ -132,9 +132,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trainCon = null;
 		trainID = id;
 		trainLine = line;
-
-		
-		
+	
 		if(trainLine.compareToIgnoreCase("Green") == 0)
 		{
 			nextBlockNum = 152;
@@ -592,6 +590,7 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//Tell Train controller to brake before the station
 				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station") ) ){
+					trackBlock = tm.getBlock(trainLine, curBlockNum); //pull track block one more time before stopping for station
 					trainCon.approachStation();
 				}
 				
@@ -617,7 +616,10 @@ public class TrainModel extends TrainState implements Runnable{
 					passengersAccepted = true;
 					
 					
-					//TODO: @matt let random number of passengers off at each station / leave random num at station
+					//random number of passengers get off the train at the station
+					passengersLeaving = rand.nextInt(passengerCount);
+					trackBlock.numPass = trackBlock.numPass + passengersLeaving;
+					tm.setBlock(trackBlock);
 					
 				}
 								
