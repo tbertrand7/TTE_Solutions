@@ -148,59 +148,14 @@ public class TrainController {
 	 * @param under - true if underground, false otherwise
 	 * @param newblock - true if this is the first time this block's info is being passed, false otherwise
 	 */
-	public void passInfo(double speed, double auth, boolean under, boolean newblock) {
-		
-		station = "NULL";
-		
-		if (authority > 0 && newblock) {
-			authority -= 1; //decrement authority
-			System.out.println("Decrementing auth");
-		}
-		
-		if (auth >= 0) authority = auth;
-		
-		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
-			
-			setStop(false);
-			
-			sBrakeOn = false;
-			if (connectedToUI()) ui.setServiceBrake(false);
-			if (connectedToModel()) model.setServiceBrake(false);
-			
-		}
-		
-		if (speed >= 0) speedCommand = speed;
-		inTunnel = under;
-		
-		if (newblock) System.out.println("New authority: "+authority);
-		
-		if (authority == 0 && !stop) { //authority is 0, need to stop
-			
-			setStop(true);
-			
-			sBrakeOn = true;
-			if (connectedToUI()) ui.setServiceBrake(true);
-			if (connectedToModel()) model.setServiceBrake(true);
-			
-			power = 0;
-		}
-		
-	}
-	
-	/**
-	 * Sets commanded speed and authority, and whether the track is underground.
-	 * @param speed - speed passed from the wayside controller
-	 * @param auth - authority passed from the wayside controller
-	 * @param under - true if underground, false otherwise
-	 * @param newblock - true if this is the first time this block's info is being passed, false otherwise
-	 */
 	public void passInfo(double speed, double auth, boolean under, String nextstation, boolean newblock) {
 		
-		if (newblock) station = nextstation;
+		if (nextstation != null)
+			if (newblock && nextstation.contains("STATION"))
+				station = nextstation.split(";")[1].trim();
 		
 		if (authority > 0 && newblock) {
 			authority -= 1; //decrement authority
-			System.out.println("Decrementing auth");
 		}
 		
 		if (auth >= 0 && newblock) authority = auth;
@@ -217,8 +172,6 @@ public class TrainController {
 		
 		if (speed >= 0) speedCommand = speed;
 		inTunnel = under;
-		
-		if (newblock) System.out.println("New authority: "+authority);
 		
 		if (authority == 0 && !stop) { //authority is 0, need to stop
 			
@@ -251,7 +204,6 @@ public class TrainController {
 		
 		if (auth >= 0) {
 			authority = auth;
-			System.out.println("New authority: "+authority);
 		}
 		
 		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
