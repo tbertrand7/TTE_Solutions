@@ -116,7 +116,6 @@ public class WaysideControllerInterface {
 		switch(waysideID)
 		{
 			case "Red 1":
-				System.out.println("HERE");
 				WC[0].suggestAuthority(destination, trainID);
 				break;
 			case "Red 2":
@@ -143,5 +142,42 @@ public class WaysideControllerInterface {
 		//	switch the switch to the yard so that nothing can go into the yard
 		//	set dispatching = true
 		return true;
+	}
+	
+	//changes the current switch position
+	public void toggleSwitch(int switchNumber, String waysideID)
+	{
+		switch(waysideID)
+		{
+			case "Red 1":
+				WC[0].setSwitch(switchNumber);
+				break;
+			case "Red 2":
+				WC[1].setSwitch(switchNumber);
+				break;
+			case "Green 1":
+				WC[2].setSwitch(switchNumber);
+				break;
+			case "Green 2":
+				WC[3].setSwitch(switchNumber);
+				break;
+		}
+	}
+	
+	//returns the current switch position
+	public String getSwitchPosition(int switchNumber, String waysideID)
+	{
+		switch(waysideID)
+		{
+			case "Red 1":
+				return (WC[0].switches.get(switchNumber))[0];
+			case "Red 2":
+				return (WC[1].switches.get(switchNumber))[0];
+			case "Green 1":
+				return (WC[2].switches.get(switchNumber))[0];
+			case "Green 2":
+				return (WC[3].switches.get(switchNumber))[0];
+		}
+		return null;
 	}
 }
