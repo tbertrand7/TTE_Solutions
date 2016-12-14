@@ -109,12 +109,14 @@ public class CTCOffice
 	{
 		//TODO: suggest speed for a train to wayside controller
 		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
+		WaysideControllerInterface.getInstance().suggestSpeed(newTrainSpeed, train, wayside);
 	}
 
 	public void suggestDestination(TrackBlock dest, int train, TrackBlock currBlock)
     {
         //TODO: suggest new destination for a train to wayside controller
 		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
+		WaysideControllerInterface.getInstance().suggestAuthority(dest.blockNumber, train, wayside);
     }
 
 	/**
