@@ -17,12 +17,12 @@ import java.sql.SQLException;
 public class TrackModelUI {
 
 	private JFrame frmTrackModelGui;
-	private JLabel textField_4;
-	private JLabel textField_5;
-	private JLabel textField_6;
-	private JLabel textField_7;
+	private JLabel gradeDispOverview;
+	private JLabel elevationDispOverview;
+	private JLabel speedlimitDispOverview;
+	private JLabel elevation2DispOverview;
 	private TrackBlock block = new TrackBlock();
-	private JTextField textField_2;
+	private JTextField occupiedConfigInput;
 	private JTextField textField;
 	private JPasswordField passwordField;
 	private TrackModel opps = new TrackModel();
@@ -101,45 +101,45 @@ public class TrackModelUI {
 		lineComboBoxView.addItem("Red");
 		lineComboBoxView.addItem("Green");
 
-		JLabel label_5 = new JLabel("Grade:");
-		label_5.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_5.setBounds(203, 14, 48, 14);
-		overview.add(label_5);
+		JLabel gradeOverview = new JLabel("Grade:");
+		gradeOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		gradeOverview.setBounds(203, 14, 48, 14);
+		overview.add(gradeOverview);
 
-		textField_4 = new JLabel("-----");
-		textField_4.setFont(new Font("Arial", Font.PLAIN, 11));
-		textField_4.setBounds(261, 14, 65, 20);
-		overview.add(textField_4);
+		gradeDispOverview = new JLabel("-----");
+		gradeDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		gradeDispOverview.setBounds(261, 14, 65, 20);
+		overview.add(gradeDispOverview);
 
-		JLabel lblCumulativeElevation = new JLabel("Elevation total:");
-		lblCumulativeElevation.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblCumulativeElevation.setBounds(317, 14, 77, 14);
-		overview.add(lblCumulativeElevation);
+		JLabel elevationOverview = new JLabel("Elevation total:");
+		elevationOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		elevationOverview.setBounds(317, 14, 77, 14);
+		overview.add(elevationOverview);
 
-		textField_5 = new JLabel("-----");
-		textField_5.setFont(new Font("Arial", Font.PLAIN, 11));
-		textField_5.setBounds(404, 11, 65, 20);
-		overview.add(textField_5);
+		elevationDispOverview = new JLabel("-----");
+		elevationDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		elevationDispOverview.setBounds(404, 11, 65, 20);
+		overview.add(elevationDispOverview);
 
-		textField_6 = new JLabel("-----");
-		textField_6.setFont(new Font("Arial", Font.PLAIN, 11));
-		textField_6.setBounds(404, 44, 65, 20);
-		overview.add(textField_6);
+		speedlimitDispOverview = new JLabel("-----");
+		speedlimitDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		speedlimitDispOverview.setBounds(404, 44, 65, 20);
+		overview.add(speedlimitDispOverview);
 
-		JLabel label_7 = new JLabel("Speed Limit:");
-		label_7.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_7.setBounds(317, 46, 77, 14);
-		overview.add(label_7);
+		JLabel speedlimitOverview = new JLabel("Speed Limit:");
+		speedlimitOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		speedlimitOverview.setBounds(317, 46, 77, 14);
+		overview.add(speedlimitOverview);
 
-		textField_7 = new JLabel("-----");
-		textField_7.setFont(new Font("Arial", Font.PLAIN, 11));
-		textField_7.setBounds(261, 44, 65, 20);
-		overview.add(textField_7);
+		elevation2DispOverview = new JLabel("-----");
+		elevation2DispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		elevation2DispOverview.setBounds(261, 44, 65, 20);
+		overview.add(elevation2DispOverview);
 
-		JLabel label_8 = new JLabel("Elevation:");
-		label_8.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_8.setBounds(203, 47, 63, 14);
-		overview.add(label_8);
+		JLabel elevation2Overview = new JLabel("Elevation:");
+		elevation2Overview.setFont(new Font("Arial", Font.PLAIN, 11));
+		elevation2Overview.setBounds(203, 47, 63, 14);
+		overview.add(elevation2Overview);
 
 		JComboBox<Integer> blockComboBoxView = new JComboBox<Integer>();
 		blockComboBoxView.setFont(new Font("Arial", Font.PLAIN, 11));
@@ -154,125 +154,126 @@ public class TrackModelUI {
 		lblSelectBlockTo_1.setBounds(10, 47, 118, 14);
 		overview.add(lblSelectBlockTo_1);
 
-		JLabel lblBlockSize = new JLabel("Block Size:");
-		lblBlockSize.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblBlockSize.setBounds(10, 87, 90, 14);
-		overview.add(lblBlockSize);
+		JLabel blockSizeOverview = new JLabel("Block Size:");
+		blockSizeOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		blockSizeOverview.setBounds(10, 87, 90, 14);
+		overview.add(blockSizeOverview);
 
-		JLabel lblNewLabel_2 = new JLabel("-----");
-		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblNewLabel_2.setBounds(138, 86, 113, 14);
-		overview.add(lblNewLabel_2);
+		JLabel sizeDispOverview = new JLabel("-----");
+		sizeDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		sizeDispOverview.setBounds(138, 86, 113, 14);
+		overview.add(sizeDispOverview);
 
-		JLabel lblBlockOccupied = new JLabel("Block Status:");
-		lblBlockOccupied.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblBlockOccupied.setBounds(10, 111, 90, 14);
-		overview.add(lblBlockOccupied);
+		JLabel blockStatusOverview = new JLabel("Block Status:");
+		blockStatusOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		blockStatusOverview.setBounds(10, 111, 90, 14);
+		overview.add(blockStatusOverview);
 
-		JLabel lblFalse = new JLabel("-----");
-		lblFalse.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblFalse.setBounds(138, 111, 113, 14);
-		overview.add(lblFalse);
+		JLabel statusDispOverview = new JLabel("-----");
+		statusDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		statusDispOverview.setBounds(138, 111, 113, 14);
+		overview.add(statusDispOverview);
 
-		JLabel lblRailCrossing = new JLabel("Rail Crossing:");
-		lblRailCrossing.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblRailCrossing.setBounds(10, 136, 90, 14);
-		overview.add(lblRailCrossing);
+		JLabel railCrossingOverview = new JLabel("Rail Crossing:");
+		railCrossingOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		railCrossingOverview.setBounds(10, 136, 90, 14);
+		overview.add(railCrossingOverview);
 
-		JLabel label_3 = new JLabel("-----");
-		label_3.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_3.setBounds(138, 136, 113, 14);
-		overview.add(label_3);
+		JLabel crossingDispOverview = new JLabel("-----");
+		crossingDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		crossingDispOverview.setBounds(138, 136, 113, 14);
+		overview.add(crossingDispOverview);
 
-		JLabel lblStationBlock = new JLabel("Station Block:");
-		lblStationBlock.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblStationBlock.setBounds(10, 161, 90, 14);
-		overview.add(lblStationBlock);
+		JLabel stationOverview = new JLabel("Station Block:");
+		stationOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		stationOverview.setBounds(10, 161, 90, 14);
+		overview.add(stationOverview);
 
-		JLabel label_9 = new JLabel("-----");
-		label_9.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_9.setBounds(138, 161, 113, 14);
-		overview.add(label_9);
+		JLabel stationDispOverview = new JLabel("-----");
+		stationDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		stationDispOverview.setBounds(138, 161, 113, 14);
+		overview.add(stationDispOverview);
 
-		JLabel lblCurrentSignal = new JLabel("Current Signal:");
-		lblCurrentSignal.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblCurrentSignal.setBounds(10, 186, 90, 14);
-		overview.add(lblCurrentSignal);
+		JLabel signalOverview = new JLabel("Current Signal:");
+		signalOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		signalOverview.setBounds(10, 186, 90, 14);
+		overview.add(signalOverview);
 
-		JLabel lblSwitchBlock = new JLabel("Switch Block:");
-		lblSwitchBlock.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblSwitchBlock.setBounds(10, 211, 90, 14);
-		overview.add(lblSwitchBlock);
+		JLabel switchOverview = new JLabel("Switch Block:");
+		switchOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		switchOverview.setBounds(10, 211, 90, 14);
+		overview.add(switchOverview);
 
-		JLabel lblHeaterStatus = new JLabel("Heater Status:");
-		lblHeaterStatus.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblHeaterStatus.setBounds(268, 86, 126, 23);
-		overview.add(lblHeaterStatus);
+		JLabel heaterOverview = new JLabel("Heater Status:");
+		heaterOverview.setToolTipText("Heaters will turn on when system temp is < 32 F");
+		heaterOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		heaterOverview.setBounds(268, 86, 126, 23);
+		overview.add(heaterOverview);
 
-		JLabel lblOn = new JLabel("-----");
-		lblOn.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblOn.setBounds(404, 89, 65, 14);
-		overview.add(lblOn);
+		JLabel heaterDispOverview = new JLabel("-----");
+		heaterDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		heaterDispOverview.setBounds(404, 89, 65, 14);
+		overview.add(heaterDispOverview);
 
-		JLabel lblCurrentTemp = new JLabel("Current Temp:");
-		lblCurrentTemp.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblCurrentTemp.setBounds(268, 111, 126, 23);
-		overview.add(lblCurrentTemp);
+		JLabel tempOverview = new JLabel("Current Temp:");
+		tempOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		tempOverview.setBounds(268, 111, 126, 23);
+		overview.add(tempOverview);
 
-		JLabel lblF = new JLabel("-----");
-		lblF.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblF.setBounds(404, 114, 65, 14);
-		overview.add(lblF);
+		JLabel tempDispOverview = new JLabel("-----");
+		tempDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		tempDispOverview.setBounds(404, 114, 65, 14);
+		overview.add(tempDispOverview);
 
-		JLabel lblArrowDirection = new JLabel("Arrow Direction:");
-		lblArrowDirection.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblArrowDirection.setBounds(268, 136, 126, 23);
-		overview.add(lblArrowDirection);
+		JLabel directionOverview = new JLabel("Arrow Direction:");
+		directionOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		directionOverview.setBounds(268, 136, 126, 23);
+		overview.add(directionOverview);
 
-		JLabel lblHead = new JLabel("-----");
-		lblHead.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblHead.setBounds(404, 139, 65, 14);
-		overview.add(lblHead);
+		JLabel directionDispOverview = new JLabel("-----");
+		directionDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		directionDispOverview.setBounds(404, 139, 65, 14);
+		overview.add(directionDispOverview);
 
-		JLabel lblA = new JLabel("-----");
-		lblA.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblA.setBounds(404, 164, 65, 14);
-		overview.add(lblA);
+		JLabel sectionDispOverview = new JLabel("-----");
+		sectionDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		sectionDispOverview.setBounds(404, 164, 65, 14);
+		overview.add(sectionDispOverview);
 
-		JLabel lblTrackSection = new JLabel("Track Section:");
-		lblTrackSection.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblTrackSection.setBounds(268, 161, 126, 23);
-		overview.add(lblTrackSection);
+		JLabel sectionOverview = new JLabel("Track Section:");
+		sectionOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		sectionOverview.setBounds(268, 161, 126, 23);
+		overview.add(sectionOverview);
 
-		JLabel lblNumberOfPassengers = new JLabel("Number of Passengers:");
-		lblNumberOfPassengers.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblNumberOfPassengers.setBounds(268, 186, 126, 23);
-		overview.add(lblNumberOfPassengers);
+		JLabel passengersOverview = new JLabel("Number of Passengers:");
+		passengersOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		passengersOverview.setBounds(268, 186, 126, 23);
+		overview.add(passengersOverview);
 
-		JLabel lblSwitchPosition = new JLabel("Switch Position:");
-		lblSwitchPosition.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblSwitchPosition.setBounds(268, 211, 126, 23);
-		overview.add(lblSwitchPosition);
+		JLabel switchPositionOverview = new JLabel("Switch Position:");
+		switchPositionOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		switchPositionOverview.setBounds(268, 211, 126, 23);
+		overview.add(switchPositionOverview);
 
-		JLabel lblNotAtSwitch = new JLabel("-----");
-		lblNotAtSwitch.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblNotAtSwitch.setBounds(404, 214, 65, 14);
-		overview.add(lblNotAtSwitch);
+		JLabel positionDispOverview = new JLabel("-----");
+		positionDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		positionDispOverview.setBounds(404, 214, 65, 14);
+		overview.add(positionDispOverview);
 
-		JLabel label_30 = new JLabel("-----");
-		label_30.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_30.setBounds(404, 189, 65, 14);
-		overview.add(label_30);
+		JLabel passengersDispOverview = new JLabel("-----");
+		passengersDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		passengersDispOverview.setBounds(404, 189, 65, 14);
+		overview.add(passengersDispOverview);
 
 		JPanel config = new JPanel();
 		config.setBackground(new Color(240, 240, 240));
 		tabbedPane.addTab("Config Tool", null, config, null);
 		config.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("Select Line To Modify:");
-		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblNewLabel.setBounds(10, 10, 129, 14);
-		config.add(lblNewLabel);
+		JLabel lineConfig = new JLabel("Select Line To Modify:");
+		lineConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		lineConfig.setBounds(10, 10, 129, 14);
+		config.add(lineConfig);
 
 		JComboBox<String> lineComboBox = new JComboBox<String>();
 		lineComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
@@ -281,10 +282,10 @@ public class TrackModelUI {
 		lineComboBox.addItem("Green");
 		config.add(lineComboBox);
 
-		JLabel lblSelectBlockTo = new JLabel("Select Block To Modify:");
-		lblSelectBlockTo.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblSelectBlockTo.setBounds(10, 40, 129, 14);
-		config.add(lblSelectBlockTo);
+		JLabel blockConfig = new JLabel("Select Block To Modify:");
+		blockConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		blockConfig.setBounds(10, 40, 129, 14);
+		config.add(blockConfig);
 
 		JComboBox<Integer> railComboBox = new JComboBox<Integer>();
 		railComboBox.setFont(new Font("Arial", Font.PLAIN, 11));
@@ -294,87 +295,87 @@ public class TrackModelUI {
 		}
 		config.add(railComboBox);
 
-		JLabel lblGrade = new JLabel("Grade:");
-		lblGrade.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblGrade.setBounds(208, 10, 33, 14);
-		config.add(lblGrade);
+		JLabel gradeConfig = new JLabel("Grade:");
+		gradeConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		gradeConfig.setBounds(208, 10, 48, 14);
+		config.add(gradeConfig);
 
-		JLabel lblElevation = new JLabel("Elevation:");
-		lblElevation.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblElevation.setBounds(208, 43, 48, 14);
-		config.add(lblElevation);
+		JLabel elevationConfig = new JLabel("Elevation:");
+		elevationConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		elevationConfig.setBounds(208, 43, 48, 14);
+		config.add(elevationConfig);
 
-		JTextField lblNewLabel_1 = new JTextField("");
-		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblNewLabel_1.setBounds(261, 10, 65, 20);
-		config.add(lblNewLabel_1);
+		JTextField gradeConfigInput = new JTextField("");
+		gradeConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		gradeConfigInput.setBounds(261, 10, 65, 20);
+		config.add(gradeConfigInput);
 
-		JTextField label = new JTextField("");
-		label.setFont(new Font("Arial", Font.PLAIN, 11));
-		label.setBounds(261, 40, 65, 20);
-		config.add(label);
+		JTextField elevationConfigInput = new JTextField("");
+		elevationConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		elevationConfigInput.setBounds(261, 40, 65, 20);
+		config.add(elevationConfigInput);
 
-		JTextField label_1 = new JTextField("");
-		label_1.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_1.setBounds(404, 40, 65, 20);
-		config.add(label_1);
+		JTextField speedlimitConfigInput = new JTextField("");
+		speedlimitConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		speedlimitConfigInput.setBounds(404, 40, 65, 20);
+		config.add(speedlimitConfigInput);
 
-		JLabel lblSpeedLimit = new JLabel("Speed Limit:");
-		lblSpeedLimit.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblSpeedLimit.setBounds(333, 43, 67, 14);
-		config.add(lblSpeedLimit);
+		JLabel speedlimitConfig = new JLabel("Speed Limit:");
+		speedlimitConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		speedlimitConfig.setBounds(333, 43, 67, 14);
+		config.add(speedlimitConfig);
 
-		JLabel lblDirection = new JLabel("Elevation Total:");
-		lblDirection.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblDirection.setBounds(328, 10, 72, 14);
-		config.add(lblDirection);
+		JLabel elevationTotalConfig = new JLabel("Elevation Total:");
+		elevationTotalConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		elevationTotalConfig.setBounds(328, 10, 72, 14);
+		config.add(elevationTotalConfig);
 
-		JTextField label_4 = new JTextField("");
-		label_4.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_4.setBounds(404, 7, 65, 20);
-		config.add(label_4);
+		JTextField elevationTotalConfigInput = new JTextField("");
+		elevationTotalConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		elevationTotalConfigInput.setBounds(404, 7, 65, 20);
+		config.add(elevationTotalConfigInput);
 
-		JLabel label_2 = new JLabel("Block Size:");
-		label_2.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_2.setBounds(10, 68, 90, 14);
-		config.add(label_2);
+		JLabel sizeConfig = new JLabel("Block Size:");
+		sizeConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		sizeConfig.setBounds(10, 68, 90, 14);
+		config.add(sizeConfig);
 
-		JLabel lblBlockStatus = new JLabel("Block Status:");
-		lblBlockStatus.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblBlockStatus.setBounds(10, 93, 90, 14);
-		config.add(lblBlockStatus);
+		JLabel statusConfig = new JLabel("Block Status:");
+		statusConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		statusConfig.setBounds(10, 93, 90, 14);
+		config.add(statusConfig);
 
-		JLabel label_12 = new JLabel("Rail Crossing:");
-		label_12.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_12.setBounds(10, 118, 90, 14);
-		config.add(label_12);
+		JLabel crossingConfig = new JLabel("Rail Crossing:");
+		crossingConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		crossingConfig.setBounds(10, 118, 90, 14);
+		config.add(crossingConfig);
 
-		JLabel label_13 = new JLabel("Station Block:");
-		label_13.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_13.setBounds(10, 143, 90, 14);
-		config.add(label_13);
+		JLabel stationConfig = new JLabel("Station Block:");
+		stationConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		stationConfig.setBounds(10, 143, 90, 14);
+		config.add(stationConfig);
 
-		JLabel label_14 = new JLabel("Current Signal:");
-		label_14.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_14.setBounds(10, 168, 90, 14);
-		config.add(label_14);
+		JLabel signalConfig = new JLabel("Current Signal:");
+		signalConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		signalConfig.setBounds(10, 168, 90, 14);
+		config.add(signalConfig);
 
-		JLabel lblSwitchBlock_1 = new JLabel("Switch Block:");
-		lblSwitchBlock_1.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblSwitchBlock_1.setBounds(10, 193, 90, 14);
-		config.add(lblSwitchBlock_1);
+		JLabel switchConfig = new JLabel("Switch Block:");
+		switchConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		switchConfig.setBounds(10, 193, 90, 14);
+		config.add(switchConfig);
 
-		JTextField comboBox_2 = new JTextField();
-		comboBox_2.setFont(new Font("Arial", Font.PLAIN, 11));
-		comboBox_2.setEditable(true);
-		comboBox_2.setBounds(138, 190, 103, 20);
-		config.add(comboBox_2);
+		JTextField switchConfigInput = new JTextField();
+		switchConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		switchConfigInput.setEditable(true);
+		switchConfigInput.setBounds(138, 190, 103, 20);
+		config.add(switchConfigInput);
 
-		JTextField comboBox_3 = new JTextField();
-		comboBox_3.setFont(new Font("Arial", Font.PLAIN, 11));
-		comboBox_3.setEditable(true);
-		comboBox_3.setBounds(138, 165, 103, 20);
-		config.add(comboBox_3);
+		JTextField signalConfigInput = new JTextField();
+		signalConfigInput.setEnabled(false);
+		signalConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		signalConfigInput.setBounds(138, 165, 103, 20);
+		config.add(signalConfigInput);
 
 		JTextField label_17 = new JTextField("False");
 		label_17.setFont(new Font("Arial", Font.PLAIN, 11));
@@ -386,95 +387,95 @@ public class TrackModelUI {
 		label_18.setBounds(138, 93, 55, -9);
 		config.add(label_18);
 
-		JTextField label_19 = new JTextField("");
-		label_19.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_19.setBounds(138, 90, 103, 20);
-		config.add(label_19);
+		JTextField statusConfigInput = new JTextField("");
+		statusConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		statusConfigInput.setBounds(138, 90, 103, 20);
+		config.add(statusConfigInput);
 
-		JLabel label_11 = new JLabel("Heater Status:");
-		label_11.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_11.setBounds(249, 68, 90, 23);
-		config.add(label_11);
+		JLabel heaterConfig = new JLabel("Heater Status:");
+		heaterConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		heaterConfig.setBounds(249, 68, 90, 23);
+		config.add(heaterConfig);
 
-		JLabel label_20 = new JLabel("Current Temp:");
-		label_20.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_20.setBounds(249, 93, 112, 23);
-		config.add(label_20);
+		JLabel tempConfig = new JLabel("Current Temp:");
+		tempConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		tempConfig.setBounds(249, 93, 112, 23);
+		config.add(tempConfig);
 
-		JLabel label_21 = new JLabel("Arrow Direction:");
-		label_21.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_21.setBounds(249, 118, 126, 23);
-		config.add(label_21);
+		JLabel directionConfig = new JLabel("Arrow Direction:");
+		directionConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		directionConfig.setBounds(249, 118, 126, 23);
+		config.add(directionConfig);
 
-		JLabel label_22 = new JLabel("Track Section:");
-		label_22.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_22.setBounds(249, 143, 126, 23);
-		config.add(label_22);
+		JLabel sectionConfig = new JLabel("Track Section:");
+		sectionConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		sectionConfig.setBounds(249, 143, 126, 23);
+		config.add(sectionConfig);
 
-		JTextField label_23 = new JTextField("");
-		label_23.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_23.setBounds(385, 143, 84, 23);
-		config.add(label_23);
+		JTextField sectionConfigInput = new JTextField("");
+		sectionConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		sectionConfigInput.setBounds(385, 143, 84, 23);
+		config.add(sectionConfigInput);
 
-		JTextField label_24 = new JTextField("");
-		label_24.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_24.setBounds(385, 118, 84, 23);
-		config.add(label_24);
+		JTextField directionConfigInput = new JTextField("");
+		directionConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		directionConfigInput.setBounds(385, 118, 84, 23);
+		config.add(directionConfigInput);
 
-		JSpinner label_25 = new JSpinner();
-		label_25.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_25.setBounds(385, 93, 84, 23);
-		config.add(label_25);
+		JSpinner tempConfigInput = new JSpinner();
+		tempConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		tempConfigInput.setBounds(385, 93, 84, 23);
+		config.add(tempConfigInput);
 
-		JSpinner label_27 = new JSpinner();
-		label_27.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_27.setBounds(385, 191, 84, 26);
-		config.add(label_27);
+		JSpinner positionConfigInput = new JSpinner();
+		positionConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		positionConfigInput.setBounds(385, 191, 84, 26);
+		config.add(positionConfigInput);
 
-		JLabel label_28 = new JLabel("Number of Passengers:");
-		label_28.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_28.setBounds(249, 168, 126, 23);
-		config.add(label_28);
+		JLabel passengersConfig = new JLabel("Number of Passengers:");
+		passengersConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		passengersConfig.setBounds(249, 168, 126, 23);
+		config.add(passengersConfig);
 
-		JSpinner label_29 = new JSpinner();
-		label_29.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_29.setBounds(385, 168, 84, 22);
-		config.add(label_29);
+		JSpinner passengerConfigInput = new JSpinner();
+		passengerConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		passengerConfigInput.setBounds(385, 168, 84, 22);
+		config.add(passengerConfigInput);
 
-		JLabel label_31 = new JLabel("Switch Position:");
-		label_31.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_31.setBounds(249, 193, 126, 23);
-		config.add(label_31);
+		JLabel positionConfig = new JLabel("Switch Position:");
+		positionConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		positionConfig.setBounds(249, 193, 126, 23);
+		config.add(positionConfig);
 
-		JLabel label_6 = new JLabel("Occupied By:");
-		label_6.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_6.setBounds(8, 218, 90, 14);
-		config.add(label_6);
+		JLabel occupiedConfig = new JLabel("Occupied By:");
+		occupiedConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		occupiedConfig.setBounds(8, 218, 90, 14);
+		config.add(occupiedConfig);
 
-		JLabel label_36 = new JLabel("Underground:");
-		label_36.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_36.setBounds(250, 219, 90, 14);
-		config.add(label_36);
+		JLabel undergroundConfig = new JLabel("Underground:");
+		undergroundConfig.setFont(new Font("Arial", Font.PLAIN, 11));
+		undergroundConfig.setBounds(250, 219, 90, 14);
+		config.add(undergroundConfig);
 
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Arial", Font.PLAIN, 11));
-		textField_2.setEditable(true);
-		textField_2.setBounds(138, 215, 103, 20);
-		config.add(textField_2);
+		occupiedConfigInput = new JTextField();
+		occupiedConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		occupiedConfigInput.setEditable(true);
+		occupiedConfigInput.setBounds(138, 215, 103, 20);
+		config.add(occupiedConfigInput);
 
-		JCheckBox chckbxNewCheckBox = new JCheckBox("TRUE");
-		chckbxNewCheckBox.setBounds(385, 219, 77, 23);
-		config.add(chckbxNewCheckBox);
+		JCheckBox undergroundConfigInput = new JCheckBox("TRUE");
+		undergroundConfigInput.setBounds(385, 219, 77, 23);
+		config.add(undergroundConfigInput);
 
-		JCheckBox chckbxOn = new JCheckBox("ON");
-		chckbxOn.setEnabled(false);
-		chckbxOn.setBounds(385, 67, 65, 23);
-		config.add(chckbxOn);
+		JCheckBox heaterConfigInput = new JCheckBox("ON");
+		heaterConfigInput.setEnabled(false);
+		heaterConfigInput.setBounds(385, 67, 65, 23);
+		config.add(heaterConfigInput);
 
-		JTextField spinner = new JTextField();
-		spinner.setFont(new Font("Arial", Font.PLAIN, 11));
-		spinner.setBounds(138, 65, 103, 22);
-		config.add(spinner);
+		JTextField sizeConfigInput = new JTextField();
+		sizeConfigInput.setFont(new Font("Arial", Font.PLAIN, 11));
+		sizeConfigInput.setBounds(138, 65, 103, 22);
+		config.add(sizeConfigInput);
 
 		JPanel failurePanel = new JPanel();
 		tabbedPane.addTab("Murphy's Failures", null, failurePanel, null);
@@ -498,7 +499,7 @@ public class TrackModelUI {
 		//*********************************************************************
 		JButton powerFailure = new JButton("Cut Power");
 		powerFailure.setFont(new Font("Arial", Font.PLAIN, 11));
-		powerFailure.setBounds(172, 0, 159, 307);
+		powerFailure.setBounds(158, 0, 173, 307);
 		powerFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				opps.cutRail();
@@ -510,7 +511,7 @@ public class TrackModelUI {
 		//This is the logic for breaking the circuit which executes in Track Model
 		//************************************************************************
 		JButton circuitFailure = new JButton("Break Circuit");
-		circuitFailure.setBounds(335, 0, 159, 307);
+		circuitFailure.setBounds(329, 0, 165, 307);
 		circuitFailure.setFont(new Font("Arial", Font.PLAIN, 11));
 		circuitFailure.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -519,63 +520,63 @@ public class TrackModelUI {
 		});
 		failurePanel.add(circuitFailure);
 
-		JLabel label_33 = new JLabel("-----");
-		label_33.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_33.setBounds(138, 186, 113, 14);
-		overview.add(label_33);
+		JLabel signalDispOverview = new JLabel("-----");
+		signalDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		signalDispOverview.setBounds(138, 186, 113, 14);
+		overview.add(signalDispOverview);
 
-		JLabel label_32 = new JLabel("-----");
-		label_32.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_32.setBounds(138, 211, 113, 14);
-		overview.add(label_32);
+		JLabel switchDispOverview = new JLabel("-----");
+		switchDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		switchDispOverview.setBounds(138, 211, 113, 14);
+		overview.add(switchDispOverview);
 
-		JLabel lblOccupiedBy = new JLabel("Occupied By:");
-		lblOccupiedBy.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblOccupiedBy.setBounds(10, 236, 90, 14);
-		overview.add(lblOccupiedBy);
+		JLabel occupiedByOverview = new JLabel("Occupied By:");
+		occupiedByOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		occupiedByOverview.setBounds(10, 236, 90, 14);
+		overview.add(occupiedByOverview);
 
-		JLabel label_15 = new JLabel("-----");
-		label_15.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_15.setBounds(138, 236, 113, 14);
-		overview.add(label_15);
+		JLabel occupiedDispOverview = new JLabel("-----");
+		occupiedDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		occupiedDispOverview.setBounds(138, 236, 113, 14);
+		overview.add(occupiedDispOverview);
 
-		JLabel lblUnderground = new JLabel("Underground:");
-		lblUnderground.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblUnderground.setBounds(269, 236, 90, 14);
-		overview.add(lblUnderground);
+		JLabel undergroundOverview = new JLabel("Underground:");
+		undergroundOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		undergroundOverview.setBounds(269, 236, 90, 14);
+		overview.add(undergroundOverview);
 
-		JLabel label_34 = new JLabel("-----");
-		label_34.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_34.setBounds(404, 239, 72, 14);
-		overview.add(label_34);
+		JLabel undergroundDispOverview = new JLabel("-----");
+		undergroundDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		undergroundDispOverview.setBounds(404, 239, 72, 14);
+		overview.add(undergroundDispOverview);
 
-		JCheckBox checkBox = new JCheckBox("TRUE");
-		checkBox.setBounds(138, 114, 77, 23);
-		config.add(checkBox);
+		JCheckBox railCrossingConfigInput = new JCheckBox("TRUE");
+		railCrossingConfigInput.setBounds(138, 114, 77, 23);
+		config.add(railCrossingConfigInput);
 
-		JTextField checkBox_1 = new JTextField("");
-		checkBox_1.setBounds(138, 139, 103, 23);
-		config.add(checkBox_1);
+		JTextField stationConfigInput = new JTextField("");
+		stationConfigInput.setBounds(138, 139, 103, 23);
+		config.add(stationConfigInput);
 
-		JLabel lblTrainId = new JLabel("Train ID:");
-		lblTrainId.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblTrainId.setBounds(10, 258, 90, 14);
-		overview.add(lblTrainId);
+		JLabel trainIDOverview = new JLabel("Train ID:");
+		trainIDOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		trainIDOverview.setBounds(10, 258, 90, 14);
+		overview.add(trainIDOverview);
 		
-		JLabel lblAuthority = new JLabel("Authority:");
-		lblAuthority.setFont(new Font("Arial", Font.PLAIN, 11));
-		lblAuthority.setBounds(269, 258, 90, 14);
-		overview.add(lblAuthority);
+		JLabel authorityOverview = new JLabel("Authority:");
+		authorityOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		authorityOverview.setBounds(269, 258, 90, 14);
+		overview.add(authorityOverview);
 		
-		JLabel label_26 = new JLabel("-----");
-		label_26.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_26.setBounds(138, 258, 113, 14);
-		overview.add(label_26);
+		JLabel trainIDDispOverview = new JLabel("-----");
+		trainIDDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		trainIDDispOverview.setBounds(138, 258, 113, 14);
+		overview.add(trainIDDispOverview);
 		
-		JLabel label_35 = new JLabel("-----");
-		label_35.setFont(new Font("Arial", Font.PLAIN, 11));
-		label_35.setBounds(404, 257, 72, 14);
-		overview.add(label_35);
+		JLabel authorityDispOverview = new JLabel("-----");
+		authorityDispOverview.setFont(new Font("Arial", Font.PLAIN, 11));
+		authorityDispOverview.setBounds(404, 257, 72, 14);
+		overview.add(authorityDispOverview);
 
 		//*****************************************************************************
 		//This is the logic for populating the UI with returned information from the DB
@@ -587,60 +588,60 @@ public class TrackModelUI {
 				block = opps.getBlock(lineComboBoxView.getSelectedItem().toString(),
 							(Integer) blockComboBoxView.getSelectedItem());
 
-				lblNewLabel_2.setText(String.valueOf(block.blockLength) + " ft");
-				textField_4.setText(String.valueOf(block.blockGrade) + " \u00b0");
-				textField_7.setText(String.valueOf(block.elevation) + " ft");
-				textField_5.setText(String.valueOf(block.cumualativeElevation) + " ft");
-				textField_6.setText(String.valueOf(block.speedLimit) + " mph");
-				label_26.setText(String.valueOf(block.trainID));
-				label_35.setText(String.valueOf(block.authority));
-				lblF.setText(String.valueOf(block.temp) + " \u00b0F");
-				lblHead.setText(block.arrowDirection);
-				lblA.setText(block.section);
-				label_30.setText(String.valueOf(block.numPass));
+				sizeDispOverview.setText(String.valueOf(block.blockLength) + " ft");
+				gradeDispOverview.setText(String.valueOf(block.blockGrade) + " \u00b0");
+				elevation2DispOverview.setText(String.valueOf(block.elevation) + " ft");
+				elevationDispOverview.setText(String.valueOf(block.cumualativeElevation) + " ft");
+				speedlimitDispOverview.setText(String.valueOf(block.speedLimit) + " mph");
+				trainIDDispOverview.setText(String.valueOf(block.trainID));
+				authorityDispOverview.setText(String.valueOf(block.authority));
+				tempDispOverview.setText(String.valueOf(block.temp) + " \u00b0F");
+				directionDispOverview.setText(block.arrowDirection);
+				sectionDispOverview.setText(block.section);
+				passengersDispOverview.setText(String.valueOf(block.numPass));
 
 				if (block.occupied.equals(""))
-					label_15.setText("OPEN BLOCK");
+					occupiedDispOverview.setText("OPEN BLOCK");
 				else
-					label_15.setText(block.occupied);
+					occupiedDispOverview.setText(block.occupied);
 
 				if (block.temp < 32)
-					lblOn.setText("ON");
+					heaterDispOverview.setText("ON");
 				else
-					lblOn.setText("OFF");
+					heaterDispOverview.setText("OFF");
 
 				if (block.infrastructure.contains("STATION"))
-					label_9.setText(block.infrastructure.split(";")[1]);
+					stationDispOverview.setText(block.infrastructure.split(";")[1]);
 				else
-					label_9.setText("FALSE");
+					stationDispOverview.setText("FALSE");
 
 				if (block.infrastructure.contains("RAILWAY CROSSING"))
-					label_3.setText("TRUE");
+					crossingDispOverview.setText("TRUE");
 				else
-					label_3.setText("FALSE");
+					crossingDispOverview.setText("FALSE");
 
 				if (block.switchBlock.getID() != "") {
-					label_32.setText(block.switchBlock.getID());
-					lblNotAtSwitch.setText(String.valueOf(block.switchBlock.getPosition()));
+					switchDispOverview.setText(block.switchBlock.getID());
+					positionDispOverview.setText(String.valueOf(block.switchBlock.getPosition()));
 				} else {
-					label_32.setText("FALSE");
-					lblNotAtSwitch.setText("N/A");
+					switchDispOverview.setText("FALSE");
+					positionDispOverview.setText("N/A");
 				}
 
 				if (block.infrastructure.contains("UNDERGROUND"))
-					label_34.setText("TRUE");
+					undergroundDispOverview.setText("TRUE");
 				else
-					label_34.setText("FALSE");
+					undergroundDispOverview.setText("FALSE");
 
 				if (!block.status.equals(""))
-					lblFalse.setText(block.status.name());
+					statusDispOverview.setText(block.status.name());
 				else
-					lblFalse.setText("OPEN");
+					statusDispOverview.setText("OPEN");
 
-				if (block.occupied.equals(""))
-					label_33.setText("GREEN");
+				if (block.status.toString().equals("UNOCCUPIED"))
+					signalDispOverview.setText("GREEN");
 				else
-					label_33.setText("RED");
+					signalDispOverview.setText("RED");
 
 			}
 		});
@@ -658,57 +659,57 @@ public class TrackModelUI {
 				block = opps.getBlock(lineComboBox.getSelectedItem().toString(),
 						(Integer) railComboBox.getSelectedItem());
 
-				spinner.setText(String.valueOf(block.blockLength));
-				lblNewLabel_1.setText(String.valueOf(block.blockGrade));
-				label.setText(String.valueOf(block.elevation));
-				label_4.setText(String.valueOf(block.cumualativeElevation));
-				label_1.setText(String.valueOf(block.speedLimit));
-				label_25.setValue(block.temp);
-				label_24.setText(block.arrowDirection);
-				label_23.setText(block.section);
-				label_29.setValue(block.numPass);
+				sizeConfigInput.setText(String.valueOf(block.blockLength));
+				gradeConfigInput.setText(String.valueOf(block.blockGrade));
+				elevationConfigInput.setText(String.valueOf(block.elevation));
+				elevationTotalConfigInput.setText(String.valueOf(block.cumualativeElevation));
+				speedlimitConfigInput.setText(String.valueOf(block.speedLimit));
+				tempConfigInput.setValue(block.temp);
+				directionConfigInput.setText(block.arrowDirection);
+				sectionConfigInput.setText(block.section);
+				passengerConfigInput.setValue(block.numPass);
 
 
 
-				textField_2.setText(String.valueOf(block.trainID));
+				occupiedConfigInput.setText(String.valueOf(block.trainID));
 
 				if (block.temp < 32)
-					chckbxOn.setSelected(true);
+					heaterConfigInput.setSelected(true);
 				else
-					chckbxOn.setSelected(false);
+					heaterConfigInput.setSelected(false);
 
 				if (block.infrastructure.contains("STATION"))
-					checkBox_1.setText(block.infrastructure.split(";")[1]);
+					stationConfigInput.setText(block.infrastructure.split(";")[1]);
 				else
-					checkBox_1.setText("");
+					stationConfigInput.setText("");
 
 				if (block.infrastructure.contains("RAILWAY CROSSING"))
-					checkBox.setSelected(true);
+					railCrossingConfigInput.setSelected(true);
 				else
-					checkBox.setSelected(false);
+					railCrossingConfigInput.setSelected(false);
 
 				if (block.switchBlock.getID() != "") {
-					comboBox_2.setText(block.switchBlock.getID());
-					label_27.setValue(Integer.parseInt(block.switchBlock.getPosition()));
+					switchConfigInput.setText(block.switchBlock.getID());
+					positionConfigInput.setValue(Integer.parseInt(block.switchBlock.getPosition()));
 				} else {
-					comboBox_2.setText("");
-					label_27.setValue(0);
+					switchConfigInput.setText("");
+					positionConfigInput.setValue(0);
 				}
 
 				if (block.infrastructure.contains("UNDERGROUND"))
-					chckbxNewCheckBox.setSelected(true);
+					undergroundConfigInput.setSelected(true);
 				else
-					chckbxNewCheckBox.setSelected(false);
+					undergroundConfigInput.setSelected(false);
 
 				if (!block.status.equals(""))
-					label_19.setText(block.status.name());
+					statusConfigInput.setText(block.status.name());
 				else
-					label_19.setText("");
+					statusConfigInput.setText("");
 
-				if (block.occupied.equals(""))
-					comboBox_3.setText("GREEN");
+				if (block.status.toString().equals("UNOCCUPIED"))
+					signalConfigInput.setText("GREEN");
 				else
-					comboBox_3.setText("RED");
+					signalConfigInput.setText("RED");
 
 			}
 		});
@@ -723,9 +724,9 @@ public class TrackModelUI {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				saveOpperation(lineComboBox, railComboBox, lblNewLabel_1, label, label_1, label_4, comboBox_2, label_19,
-						label_23, label_24, label_25, label_27, label_29, chckbxNewCheckBox, spinner, checkBox,
-						checkBox_1);
+				saveOpperation(lineComboBox, railComboBox, gradeConfigInput, elevationConfigInput, speedlimitConfigInput, elevationTotalConfigInput, switchConfigInput, statusConfigInput,
+						sectionConfigInput, directionConfigInput, tempConfigInput, positionConfigInput, passengerConfigInput, undergroundConfigInput, sizeConfigInput, railCrossingConfigInput,
+						stationConfigInput);
 
 			}
 		});
@@ -864,8 +865,8 @@ public class TrackModelUI {
 		//This is the logic for testing the database
 		//This logic is included in this file due to the interaction it has with the UI
 		//*****************************************************************************
-		JButton btnNewButton = new JButton("Run Tests");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton runTests = new JButton("Run Tests");
+		runTests.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO Finish Unit Testing Tool
 				
@@ -875,7 +876,7 @@ public class TrackModelUI {
 				        	//Beginning of unit testing 
 							boolean failure = false;
 							progressBar.setMaximum(100);
-							btnNewButton.setEnabled(false);
+							runTests.setEnabled(false);
 							
 							//Test 1: 
 							//Reset the Database
@@ -1093,12 +1094,12 @@ public class TrackModelUI {
 							//Print results to the user 
 							if (failure) {
 								JOptionPane.showMessageDialog(parent, "Tests Failed!");
-								btnNewButton.setEnabled(true);
+								runTests.setEnabled(true);
 							} else {
 								progressBar.setValue(100);
 								chckbxAllTestsPassed.setSelected(true);
 								JOptionPane.showMessageDialog(parent, "Tests Passed!");
-								btnNewButton.setEnabled(true);
+								runTests.setEnabled(true);
 							}
 				        }
 				    };
@@ -1106,8 +1107,8 @@ public class TrackModelUI {
 				    t.start();				
 			}
 		});
-		btnNewButton.setBounds(6, 230, 488, 77);
-		panel.add(btnNewButton);
+		runTests.setBounds(6, 230, 488, 77);
+		panel.add(runTests);
 	}
 
 	
@@ -1156,7 +1157,7 @@ public class TrackModelUI {
 		theBlock.numPass = (int) label_29.getValue();
 		theBlock.temp = (int) label_25.getValue();
 		theBlock.status = BlockStatus.valueOf(label_19.getText());
-		theBlock.trainID = Integer.parseInt(textField_2.getText());
+		theBlock.trainID = Integer.parseInt(occupiedConfigInput.getText());
 		if(theBlock.trainID > 0)
 			theBlock.status = BlockStatus.OCCUPIED;
 
