@@ -210,9 +210,9 @@ public class WaysideController
 					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), null);
 				else
 					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), switches.get(trackSetup.get(train.currentBlock).switchNum));
-				System.out.println(trackBlocks[i].nextBlock);
+				//System.out.println(trackBlocks[i].nextBlock);
 				track.setBlock(trackBlocks[i]);
-				System.out.println("Next: "+track.getBlock("Red", trackBlocks[i].blockNumber).nextBlock);
+				//System.out.println("Next: "+track.getBlock("Red", trackBlocks[i].blockNumber).nextBlock);
 			}
 			
 			//update broken rail info
@@ -319,7 +319,7 @@ public class WaysideController
 		TrainInfo t = trains.get(train);
 		int currentBlock = t.currentBlock;
 		ArrayList<Integer> path = calculateRoute(currentBlock, destination, t.direction);
-		System.out.println(path);
+		//System.out.println(path);
 		if(path != null)
 		{
 			boolean notBroken = true;
@@ -350,7 +350,11 @@ public class WaysideController
 			BlockPosition bp = trackSetup.get(currentBlock);
 			if(currentDirection == 1) // the next block the train is going to is the previous block in the track setup
 			{
-				if(path.size() > 0 && (bp.previousBlock[0] == path.get(path.size()-1) || bp.previousBlock[1] == path.get(path.size()-1))) //change the direction
+				if(currentBlock == end)
+				{
+					return path;
+				}
+				else if(path.size() > 0 && (bp.previousBlock[0] == path.get(path.size()-1) || bp.previousBlock[1] == path.get(path.size()-1))) //change the direction
 				{
 					currentDirection = 0;
 				}
@@ -427,7 +431,11 @@ public class WaysideController
 			}
 			else //direction = next block
 			{
-				if(path.size() > 0 && (bp.nextBlock[0] == path.get(path.size()-1) || bp.nextBlock[1] == path.get(path.size()-1))) //change the direction
+				if(currentBlock == end)
+				{
+					return path;
+				}
+				else if(path.size() > 0 && (bp.nextBlock[0] == path.get(path.size()-1) || bp.nextBlock[1] == path.get(path.size()-1))) //change the direction
 				{
 					currentDirection = 1;
 				}
@@ -513,9 +521,13 @@ public class WaysideController
 		return path;
 	}
 	
+	//Need to recalculate routes when the switch position changes
 	public void calculateAllRoutes()
 	{
-		//TO DO: recalculate the paths
+		for(Integer i: trains.keySet())
+		{
+			this.suggestAuthority(trains.get(i).destination, i);
+		}
 	}
 	
 	//------------------------COMMS TO TRACK------------------------------------
