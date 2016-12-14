@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Toolkit;
+
 import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import javax.swing.JTextField;
@@ -18,6 +20,8 @@ import javax.swing.JTable;
 import javax.swing.JTextPane;
 import java.awt.Canvas;
 import javax.swing.UIManager;
+
+import trackModel.TrackModelUI;
 
 public class TrainModelGUI {
 
@@ -202,6 +206,7 @@ public class TrainModelGUI {
 	public TrainModelGUI(Trains modelList) {
 		
 		frame = new JFrame();
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(TrainModelGUI.class.getResource("/shared/TTE.png")));
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 		frame.setBounds(100, 100, 793, 728);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
