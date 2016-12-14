@@ -860,7 +860,7 @@ public class TrainControllerUI extends JFrame {
 		});
 		btnTestPanel.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		btnTestPanel.setBounds(652, 610, 170, 33);
-		if (test) btnTestPanel.setEnabled(false);
+		if (!test) btnTestPanel.setEnabled(false);
 		contentPane.add(btnTestPanel);
 		
 		//Initialization for default Automatic mode ************

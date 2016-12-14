@@ -20,7 +20,7 @@ public class TestTrainController extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		tci = new TrainControllerInstances();
+		tci = new TrainControllerInstances(true);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -48,7 +48,7 @@ public class TestTrainController extends JFrame {
 		JButton btnCreateTrain = new JButton("Create Train");
 		btnCreateTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tci.createTrain("green", true);
+				tci.createTrain("green");
 			}
 		});
 		btnCreateTrain.setBounds(10, 11, 146, 36);
@@ -67,7 +67,7 @@ public class TestTrainController extends JFrame {
 		btnNewUI.setBounds(10, 122, 146, 36);
 		btnNewUI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tci.newUI(true);
+				tci.newUI();
 			}
 		});
 		contentPane.add(btnNewUI);

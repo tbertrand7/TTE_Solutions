@@ -23,12 +23,17 @@ public class TrainControllerInstances {
 	 */
 	private int instanceID;
 	
+	//Test?
+	boolean test;
+	
 	/**
 	 * The next unique train ID to assign to a train (starts at 1).
 	 */
 	private int nextID;
 	
-	public TrainControllerInstances() {
+	public TrainControllerInstances(boolean yestest) {
+		test = yestest;
+		
 		trainList = new HashMap<Integer, TrainController>();
 		uiList = new HashMap<Integer, TrainControllerUI>();
 		
@@ -47,7 +52,7 @@ public class TrainControllerInstances {
 	/**
 	 * Quick fix to connecting Train Models to train model UI, needs to go away
 	 */
-	public TrainModel createTrain(int newid, String line, boolean test) {
+	public TrainModel createTrain(int newid, String line) {
 		
 		TrainModel tm = null;
 		
@@ -73,7 +78,7 @@ public class TrainControllerInstances {
 	 * @param test - true if this is being called from the test program, false otherwise
 	 * @return id of train created
 	 */
-	public int createTrain(String line, boolean test) {
+	public int createTrain(String line) {
 		
 		if (!trainList.containsKey(nextID)) {
 			trainList.put(nextID, new TrainController(this, nextID, line, test));
@@ -131,7 +136,7 @@ public class TrainControllerInstances {
 	 * @param test - true if this is being called from the test program, false otherwise
 	 * (IF YOU ARE READING THIS THEN YOU SHOULD SET 'test' TO FALSE WHEN YOU CALL THIS METHOD.)
 	 */
-	public void newUI(boolean test) {
+	public void newUI() {
 		
 		TrainControllerUI temp = new TrainControllerUI(instanceID, this, test);
 		uiList.put(instanceID, temp);

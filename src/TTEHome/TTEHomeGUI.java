@@ -74,7 +74,7 @@ public class TTEHomeGUI {
 		frmTteTrainHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmTteTrainHome.getContentPane().setLayout(null);
 
-		tci = new TrainControllerInstances();
+		tci = new TrainControllerInstances(false);
 		sysClock = new SystemClock();
 		ctc = new CTCOffice(sysClock, tci);
 
@@ -105,7 +105,7 @@ public class TTEHomeGUI {
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tci.newUI(false);
+				tci.newUI();
 			}
 		});
 		btnTrainController.setBounds(289, 11, 135, 109);
