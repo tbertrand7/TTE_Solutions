@@ -2,16 +2,16 @@ package trainModel;
 
 public class TrainState extends TrainSpecs {
 	
-	boolean rightDoorsOpen; 
-	boolean leftDoorsOpen; 
-	boolean lightsOn; 
+	boolean rightDoorsOpen = false; 
+	boolean leftDoorsOpen = false; 
+	boolean lightsOn = false; 
 	
-	boolean serviceBrakeOn;
-	boolean emergencyBrakeOn;
+	boolean serviceBrakeOn = false;
+	boolean emergencyBrakeOn = false;
 	
-	int crewCount; 
-	int passengerCount; 
-	int temperature; 
+	int crewCount = 1; 
+	int passengerCount = 0; 
+	int temperature = 70; 
 	
 		
 	public TrainState(){

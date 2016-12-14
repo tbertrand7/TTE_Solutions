@@ -988,10 +988,15 @@ public class TrainModelGUI {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(train != null){	
-					if(testModeButton.isSelected() && testPassengerButton.isSelected()){
+					if(testModeButton.isSelected() && testPassengerButton.isSelected()  && !train.rightDoorsOpen && !train.leftDoorsOpen){
+						JOptionPane.showMessageDialog(parent, "The doors are closed. Passengers cannot enter/exit.");
+					}
+					else if(testModeButton.isSelected() && testPassengerButton.isSelected()){
 					
 						int deltaPass = Integer.parseInt(passAmount.getText());				
 						int boardingPassFail = train.addPassengers(deltaPass);
+						
+						System.out.println("passengers: "+train.passengerCount);
 						
 						if(boardingPassFail != 0 && boardingPassFail != -1000){ 
 							JOptionPane.showMessageDialog(parent, "Warning! Maximum passenger count reached. Not all passengers were able to board.");
@@ -1007,12 +1012,13 @@ public class TrainModelGUI {
 						
 						displayBlockInfo(train.curBlockNum, train.nextBlockNum, train.elevation, train.trainLine, train.speedLimit, train.temperature, train.crewCount, train.passengerCount);
 					}
-					else if(testModeButton.isSelected() && !testPassengerButton.isSelected()){
-						JOptionPane.showMessageDialog(parent, "Select test input mode");
+					else if(testModeButton.isSelected() && !testPassengerButton.isSelected() 
+							||  (testModeButton.isSelected() &&  !testTempButton.isSelected()) 
+							||  (testModeButton.isSelected() && !testTempButton.isSelected() && !testPassengerButton.isSelected())  ){
+						
+						
+								JOptionPane.showMessageDialog(parent, "Select test input mode");
 					}
-					else if(testModeButton.isSelected()  &&  !testTempButton.isSelected()){
-						JOptionPane.showMessageDialog(parent, "Select test input mode");
-					}		
 				}
 				else{
 					JOptionPane.showMessageDialog(parent, "Connect to a Train Model first");

@@ -132,7 +132,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trainCon = null;
 		trainID = id;
 		trainLine = line;
-		clockFactor.clock = 1;
+
 		
 		
 		if(trainLine.compareToIgnoreCase("Green") == 0)
@@ -510,8 +510,14 @@ public class TrainModel extends TrainState implements Runnable{
 	
 				time1 = time2;
 				time2 = System.currentTimeMillis()/1000;
-				deltaTime =  clockFactor.clock * (deltaTime + (time2 - time1) );
 				
+				if(clockFactor == null){
+					deltaTime =  (deltaTime + (time2 - time1) );
+
+				}
+				else{
+					deltaTime =  clockFactor.clock * (deltaTime + (time2 - time1) );
+				}
 				
 				//set power level to 0 if engine fails
 				if(engineFail) power = 0;
