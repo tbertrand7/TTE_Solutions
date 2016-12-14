@@ -22,12 +22,14 @@ public class CTCOffice
 	private Mode mode = Mode.MANUAL;
 	private ScheduleItem[] redSchedule, greenSchedule;
 	private String loggedInUser;
+	long startTime;
 
 	public TrackBlock[] greenLine, redLine;
 	
 	public CTCOffice(SystemClock clk, TrainControllerInstances tci)
 	{
         try {
+        	startTime = System.currentTimeMillis(); //Get time for start of program, used for throughput calculation
         	sysClock = clk;
         	trainCont = tci;
 			track = new TrackModel();
@@ -303,12 +305,6 @@ public class CTCOffice
     public void runSchedule()
 	{
 		//TODO: Implement run schedule
-	}
-
-	public int calcThroughput(TrackBlock block)
-	{
-		//TODO: Calculate throughput
-		return 0;
 	}
 
 	/**

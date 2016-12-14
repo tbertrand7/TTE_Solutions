@@ -2,6 +2,7 @@ package ctcOffice;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.*;
 
 import trackModel.TrackBlock;
 import trackModel.TrackBlock.*;
@@ -14,11 +15,15 @@ public class TrackButton extends JToggleButton
 {
     public String line;
     public int block;
+    private int trains; //Number of trains that passed block since program start.
+    private BlockStatus lastStatus; //Last status of block. Used for throughput calculation.
     private boolean warningDisplayed = false; //Flag for displaying warning if block is broken
 
     public TrackButton(String s)
     {
         super(s);
+        lastStatus = BlockStatus.UNOCCUPIED;
+        trains = 0;
     }
 
     public String toString()
@@ -39,9 +44,13 @@ public class TrackButton extends JToggleButton
             this.setBackground(Color.BLACK);
         } else {
             this.setBackground(Color.BLUE);
-            if (block.trainID > 0)
-                this.setToolTipText(""+block.trainID);
+            if (block.trainID > 0) {
+                this.setToolTipText("" + block.trainID);
+                if (lastStatus != BlockStatus.OCCUPIED)
+                    trains++;
+            }
         }
+        lastStatus = block.status;
     }
 
     /**
@@ -62,5 +71,17 @@ public class TrackButton extends JToggleButton
           warningDisplayed = false;
           return false;
         }
+    }
+
+    /**
+     * Calculates throughput based on how much time has passed since program launch
+     * @param startTime Time program was launched. Retrieved from ctc.
+     * @return Number of trains per hour formatted to a String with the pattern #.###
+     */
+    public String calcThroughput(long startTime)
+    {
+        long timePassed = System.currentTimeMillis() - startTime;
+        double hoursPassed = (timePassed/360000.0);
+        return new DecimalFormat("#.###").format(trains/hoursPassed);
     }
 }

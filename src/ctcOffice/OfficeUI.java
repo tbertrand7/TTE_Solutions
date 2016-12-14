@@ -189,7 +189,7 @@ public class OfficeUI extends JFrame {
 			else
 				btnCloseTrack.setText("Close Block");
 
-			lblThroughputInfo.setText(ctcOffice.calcThroughput(selectedBlock) + " trains/hr");
+			lblThroughputInfo.setText(selectedBlockBtn.calcThroughput(ctcOffice.startTime) + " trains/hr");
 
 			//Set infrastructure info
 			String[] infr = selectedBlock.infrastructure.split(";");
