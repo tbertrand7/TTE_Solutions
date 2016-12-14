@@ -47,12 +47,12 @@ public class TrainControllerInstances {
 	/**
 	 * Quick fix to connecting Train Models to train model UI, needs to go away
 	 */
-	public TrainModel createTrain(int newid, String line) {
+	public TrainModel createTrain(int newid, String line, boolean test) {
 		
 		TrainModel tm = null;
 		
 		if (!trainList.containsKey(newid)) {
-			TrainController tc = new TrainController(this, newid, line);
+			TrainController tc = new TrainController(this, newid, line, test);
 			trainList.put(newid, tc);
 			tm = tc.getTrainModel();
 			
@@ -70,12 +70,13 @@ public class TrainControllerInstances {
 	 * Checks that there are enough existing trains to dispatch a new train. If there are not,
 	 * then a new train is created.
 	 * @param line - "green" or "red" (case doesn't matter)
-	 * @return 
+	 * @param test - true if this is being called from the test program, false otherwise
+	 * @return id of train created
 	 */
-	public int createTrain(String line) {
+	public int createTrain(String line, boolean test) {
 		
 		if (!trainList.containsKey(nextID)) {
-			trainList.put(nextID, new TrainController(this, nextID, line));
+			trainList.put(nextID, new TrainController(this, nextID, line, test));
 			
 			for (TrainControllerUI ui : uiList.values()) {
 				ui.addTrainID(nextID);
@@ -106,11 +107,33 @@ public class TrainControllerInstances {
 	}
 	
 	/**
-	 * Creates a new instance of TrainControllerUI.
+	 * Deletes an ARBITRARY train. (Used only for test purposes.)
 	 */
-	public void newUI() {
+	public void deleteTrain() {
 		
-		TrainControllerUI temp = new TrainControllerUI(instanceID, this);
+		if (trainList.isEmpty()) return;
+		
+		int id = trainList.keySet().iterator().next(); //I think this is how iterators work?
+		
+		for (TrainControllerUI ui : uiList.values()) {
+			ui.deleteTrainID(id);
+		}
+	
+		if (trainList.containsKey(id)) {
+			trainList.get(id).delete();
+			trainList.remove(id);
+		}
+	
+	}
+	
+	/**
+	 * Creates a new instance of TrainControllerUI.
+	 * @param test - true if this is being called from the test program, false otherwise
+	 * (IF YOU ARE READING THIS THEN YOU SHOULD SET 'test' TO FALSE WHEN YOU CALL THIS METHOD.)
+	 */
+	public void newUI(boolean test) {
+		
+		TrainControllerUI temp = new TrainControllerUI(instanceID, this, test);
 		uiList.put(instanceID, temp);
 		
 		++instanceID;
@@ -172,6 +195,7 @@ private class UpdateThread extends Thread {
 			
 			for (TrainControllerUI ui : uiList.values()) {
 				for (int newid : trainList.keySet()) {
+					ui.deleteTrainID(newid); //just in case
 					ui.addTrainID(newid);
 				}
 			}

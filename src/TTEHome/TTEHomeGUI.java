@@ -105,7 +105,7 @@ public class TTEHomeGUI {
 		JButton btnTrainController = new JButton("Train Controller");
 		btnTrainController.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tci.newUI();
+				tci.newUI(false);
 			}
 		});
 		btnTrainController.setBounds(289, 11, 135, 109);

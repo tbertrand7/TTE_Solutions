@@ -122,7 +122,7 @@ public class CTCOffice
 	{
 		//TODO: integrate with wayside controller
         //Create new train and get ID for wayside
-        int newTrainID = trainCont.createTrain(dest.line);
+        int newTrainID = trainCont.createTrain(dest.line, false);
 
         //Send destination and speed requests for new train
         suggestDestination(dest, newTrainID);

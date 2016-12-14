@@ -114,7 +114,7 @@ public class TrainController {
 	/**
 	 * Assigns train id and creates a TrainModel, assigns id and parent, creates TrainModel, creates PowerCalculators.
 	 */
-	public TrainController(TrainControllerInstances tci, int uniqueid, String line) {
+	public TrainController(TrainControllerInstances tci, int uniqueid, String line, boolean test) {
 		
 		id = uniqueid;
 		
@@ -133,7 +133,7 @@ public class TrainController {
 		
 		/* @Matt: This TrainModel constructor needs to be added to the TrainModel class! */
 		//model = new TrainModel((TrainController)this, id, line);
-		model = new TrainModel(line, uniqueid);
+		if (!test) model = new TrainModel(line, uniqueid);
 		//Trains.add(id, model);???
 		
 		//model = new TrainModel(this);
