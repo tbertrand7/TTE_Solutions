@@ -353,7 +353,8 @@ public class WaysideController
 		
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrainInfo t = trains.get(train);
-		if(t != null && t.destination != -1) //if I can't find the train then I cannot update it
+		System.out.println(t.direction);
+		if(t != null) //if I can't find the train then I cannot update it
 		{
 			int currentBlock = t.currentBlock;
 			ArrayList<Integer> path = calculateRoute(currentBlock, destination, t.direction); //calculate route of train
@@ -533,22 +534,25 @@ public class WaysideController
 	public void setInfrastructure(int trackBlock, char lights)
 	{
 		String[] info = crossing.get(trackBlock);
-		if(lights == 'r') //if the lights are red
+		if(info != null)
 		{
-			info[0] = "r";
-			info[1] = "d";
+			if(lights == 'r') //if the lights are red
+			{
+				info[0] = "r";
+				info[1] = "d";
+			}
+			else if(lights == 'y') //if the lights are yellow
+			{
+				info[0] = "y";
+				info[1] = "d";
+			}
+			else //if the lights are green
+			{
+				info[0] = "g";
+				info[1] = "u";
+			}
+			crossing.put(trackBlock, info);
 		}
-		else if(lights == 'y') //if the lights are yellow
-		{
-			info[0] = "y";
-			info[1] = "d";
-		}
-		else //if the lights are green
-		{
-			info[0] = "g";
-			info[1] = "u";
-		}
-		crossing.put(trackBlock, info);
 	}
 	
 	public synchronized void run_plc(ArrayList<Integer> occupancies, Hashtable<Integer, String[]> switchPositions)
@@ -641,34 +645,34 @@ public class WaysideController
 				}
 			}
 			
-			if(satisfied)
+			if(satisfied) //Result of boolean operations is true
 			{
-				//System.out.println("CONDITION is SATISFIED");
 				String result = results.get(i);
-				if(result.contains("r"))
+				if(result.contains("r")) //set block lights to red
 				{
-					
+					result = result.replace("r","");
+					this.setInfrastructure(Integer.parseInt(result), 'r');
 				}
-				if(result.contains("g"))
+				if(result.contains("g")) //set blocks lights to green
 				{
-					
+					result = result.replace("g","");
+					this.setInfrastructure(Integer.parseInt(result), 'g');
 				}
-				if(result.contains("y"))
+				if(result.contains("y")) //set block lights to yellow
 				{
-					
+					result = result.replace("y","");
+					this.setInfrastructure(Integer.parseInt(result), 'y');
 				}
 				if(result.contains("s"))
 				{
-					//System.out.println("running the plc results");
+					//format of result --> s:<switch number>,<position>
 					String[] con = result.split(":");
 					String[] switchInfo = con[1].split(",");
 					String[] info = switchPositions.get(Integer.parseInt(switchInfo[0]));
 					if(!switchInfo[1].equals(info[0]))
 					{
-						//System.out.println("Bleh "+info[0]);
-						//System.out.println("Bleh2 "+switchInfo[1]);
-						//System.out.println("switch the switch"+switchInfo[0]+" "+switchInfo[1]);
-						this.setSwitch(Integer.parseInt(switchInfo[0]));
+						//If switch is not in that position already, flip switch
+						this.setSwitch(Integer.parseInt(switchInfo[0])); 
 					}
 				}
 			}
