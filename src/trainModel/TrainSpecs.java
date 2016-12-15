@@ -12,7 +12,6 @@ public class TrainSpecs {
 	 */
 	final int maxCrew = 1; 
 	
-	
 	/**
 	 * Average mass of 1 person 
 	 */
@@ -22,8 +21,7 @@ public class TrainSpecs {
 	 * mass of empty train (multiplied by 2 for 2 cars)
 	 */
 	final double emptyTrainMass = 40900.0 * 2; //in kg         //40.9T (metric) * 2cars
-	
-	
+		
 	/**
 	 * dimensions of train
 	 */
@@ -41,11 +39,9 @@ public class TrainSpecs {
 	 */
 	final double maxPower = 120000 * 2; //120kW *2 cars
 	
-	
 	/**
 	 * deceleration rates for brakes
 	 */
 	final double serviceBrakeRate = -1.2; //m/s^2
-	final double emergencyBrakeRate = -2.73;// m/s^2
-	
+	final double emergencyBrakeRate = -2.73;// m/s^2	
 }
