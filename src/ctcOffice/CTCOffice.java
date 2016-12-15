@@ -117,7 +117,6 @@ public class CTCOffice
         //TODO: suggest new destination for a train to wayside controller
 		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
 		currBlock.destination = dest.blockNumber;
-		track.setBlock(currBlock);
 		WaysideControllerInterface.getInstance().suggestAuthority(dest.blockNumber, train, wayside);
     }
 
