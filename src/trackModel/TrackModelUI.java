@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
-import java.lang.Object;
 import trackModel.TrackBlock.BlockStatus;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -777,7 +776,7 @@ public class TrackModelUI {
 					}
 					try {
 						db.resetDB();
-					} catch (SQLException | IOException e) {
+					} catch (SQLException | IOException | InterruptedException e) {
 						e.printStackTrace();
 					}
 					JOptionPane.showMessageDialog(parent, "Database was reset!");
@@ -882,7 +881,7 @@ public class TrackModelUI {
 							//Reset the Database
 							try {
 								failure = !opps.resetDB();
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								e1.printStackTrace();
 							}
 							
@@ -897,7 +896,7 @@ public class TrackModelUI {
 							//Get Track Block Info
 							try {
 								opps.resetDB();
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								e1.printStackTrace();
 							}
 							
@@ -916,7 +915,7 @@ public class TrackModelUI {
 							//This test checks both Red and Green lines
 							try {
 								opps.resetDB();
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
@@ -937,7 +936,7 @@ public class TrackModelUI {
 							//Set Track Block Data 
 							try {
 								opps.resetDB();
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								e1.printStackTrace();
 							}
 							
@@ -1002,7 +1001,7 @@ public class TrackModelUI {
 							//Break Rail Test
 							try {
 								opps.resetDB();
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								e1.printStackTrace();
 							}
 							
@@ -1021,7 +1020,7 @@ public class TrackModelUI {
 							//Cut Power Test
 							try {
 								opps.resetDB();
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
@@ -1041,7 +1040,7 @@ public class TrackModelUI {
 							//Break Rail Circuit Test
 							try {
 								opps.resetDB();
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
@@ -1094,7 +1093,7 @@ public class TrackModelUI {
 							//Final reset of the database to revert all changes made
 							try {
 								opps.resetDB();
-							} catch (IOException e1) {
+							} catch (IOException | InterruptedException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}

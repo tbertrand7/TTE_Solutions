@@ -1,13 +1,15 @@
 package trackModel;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
@@ -177,12 +179,14 @@ public class TrackDBInteraction {
 	//*************************************************************************
 	//This method will access that database and reset it to the initial state
 	//*************************************************************************
-	public void resetDB() throws SQLException, IOException {
+	public void resetDB() throws SQLException, IOException, InterruptedException {
 		Statement stmt = conn.createStatement();
-
-		BufferedReader in = new BufferedReader(new FileReader("src/shared/NEWWIPE.sql"));
+		InputStream in = getClass().getResourceAsStream("/shared/NEWWIPE.sql"); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		//BufferedReader in = new BufferedReader(new FileReader("src/shared/NEWWIPE.sql"));
 		String str;
-		while ((str = in.readLine()) != null) {
+		while ((str = reader.readLine()) != null) {
+
 			stmt.execute(str);
 		}
 		in.close();

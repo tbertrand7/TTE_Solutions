@@ -317,7 +317,7 @@ public class TrackModel {
 	//********************************************************************
 	//Method calls TrackDBInteraction to reset the DB to the initial state
 	//********************************************************************
-	public boolean resetDB() throws IOException
+	public boolean resetDB() throws IOException, InterruptedException
 	{
 		
 			try {
