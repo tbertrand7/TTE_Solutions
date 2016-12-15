@@ -208,7 +208,7 @@ public class TrainModelGUI {
 		frame = new JFrame();
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(TrainModelGUI.class.getResource("/shared/TTE.png")));
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
-		frame.setBounds(100, 100, 793, 728);
+		frame.setBounds(100, 100, 780, 704);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -562,7 +562,7 @@ public class TrainModelGUI {
 		});
 		engineFailureButton.setForeground(Color.RED);
 		engineFailureButton.setFont(new Font("Courier New", Font.BOLD, 16));
-		engineFailureButton.setBounds(41, 298, 260, 30);
+		engineFailureButton.setBounds(36, 298, 270, 30);
 		frame.getContentPane().add(engineFailureButton);
 		
 		
@@ -587,7 +587,7 @@ public class TrainModelGUI {
 		});
 		brakeFailureButton.setForeground(Color.RED);
 		brakeFailureButton.setFont(new Font("Courier New", Font.BOLD, 16));
-		brakeFailureButton.setBounds(41, 329, 260, 30);
+		brakeFailureButton.setBounds(36, 329, 270, 30);
 		frame.getContentPane().add(brakeFailureButton);
 		
 		
@@ -612,7 +612,7 @@ public class TrainModelGUI {
 		});
 		signalPickupFailure.setForeground(Color.RED);
 		signalPickupFailure.setFont(new Font("Courier New", Font.BOLD, 16));
-		signalPickupFailure.setBounds(41, 360, 260, 30);
+		signalPickupFailure.setBounds(36, 360, 270, 30);
 		frame.getContentPane().add(signalPickupFailure);
 		
 		
@@ -1059,7 +1059,7 @@ public class TrainModelGUI {
 			}
 		});
 		addTrainGreen.setFont(new Font("Courier New", Font.BOLD, 18));
-		addTrainGreen.setBounds(190, 79, 210, 25);
+		addTrainGreen.setBounds(190, 80, 210, 25);
 		frame.getContentPane().add(addTrainGreen);
 		
 		btnTrainList = new JButton("Train List");
@@ -1069,10 +1069,9 @@ public class TrainModelGUI {
 				if(testModeButton.isSelected()){
 					
 					//Print train list
-					System.out.println("***List of Trains***");
-					
+					System.out.println("***ACTIVE TRAINS***");				
 					for(int key : modelList.trainList.keySet()){
-						System.out.println(""+key);
+						System.out.println("Train ID: "+key);
 					}
 					
 				}
@@ -1080,7 +1079,7 @@ public class TrainModelGUI {
 			}
 		});
 		btnTrainList.setFont(new Font("Courier New", Font.PLAIN, 16));
-		btnTrainList.setBounds(405, 64, 135, 23);
+		btnTrainList.setBounds(405, 64, 135, 25);
 		frame.getContentPane().add(btnTrainList);
 
 		testTempButton.setBackground(Color.LIGHT_GRAY);
@@ -1105,7 +1104,7 @@ public class TrainModelGUI {
 			}
 		});
 		deleteTrainButton.setFont(new Font("Courier New", Font.BOLD, 16));
-		deleteTrainButton.setBounds(81, 75, 104, 29);
+		deleteTrainButton.setBounds(81, 80, 104, 25);
 		frame.getContentPane().add(deleteTrainButton);
 		
 		frame.setVisible(true);

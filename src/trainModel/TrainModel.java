@@ -126,6 +126,8 @@ public class TrainModel extends TrainState implements Runnable{
 	
 	/**
 	 * Constructor for testing purposes
+	 * @param line - train line color
+	 * @param id - unique train ID
 	 */
 	public TrainModel(String line, int id){
 
@@ -135,13 +137,13 @@ public class TrainModel extends TrainState implements Runnable{
 	
 		if(trainLine.compareToIgnoreCase("Green") == 0)
 		{
-			nextBlockNum = 152;
-			trackBlock = tm.getBlock(trainLine, nextBlockNum);
+			curBlockNum = 152;
+			trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
 		else
 		{
-			nextBlockNum = 77;
-			trackBlock = tm.getBlock(trainLine, nextBlockNum);
+			curBlockNum = 77;
+			trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
 		
 		trackBlock.trainID = trainID;
@@ -151,6 +153,7 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		currentPos=0;
 		
+		nextBlockNum = trackBlock.nextBlock;
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
@@ -372,6 +375,7 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public void setSignalPickupFailure(boolean sFail){
 		signalFail = sFail;
+		trackBlock = null;
 		trainCon.signal(Signal.SIGNAL_PICKUP_FAILURE);
 	}
 	
@@ -440,9 +444,9 @@ public class TrainModel extends TrainState implements Runnable{
 					
 					//System.out.println("Set Track Block we are leaving....");
 					
-				/*
-				 * Get the next block
-				 */
+					/*
+					 * Get the next block
+				 	*/
 
 					trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
 					
@@ -499,7 +503,7 @@ public class TrainModel extends TrainState implements Runnable{
 				/*
 				 * Pass block info to train controller
 				 */
-				if(trainCon != null){
+				if(trainCon != null && trackBlock != null){
 					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground, trackBlock.infrastructure ,newBlock); //pass the train controller the new block info
 				}
 				
@@ -596,7 +600,7 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				
 				//Tell Train controller to brake before the station
-				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station") ) ){
+				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station"))  &&  trackBlock != null){
 					trackBlock = tm.getBlock(trainLine, curBlockNum); //pull track block one more time before stopping for station
 					trainCon.approachStation();
 				}
@@ -606,7 +610,7 @@ public class TrainModel extends TrainState implements Runnable{
 				/*
 				 *Only allow passengers to enter/exit if the train is stopped at a station and doors are open
 				 */
-				if(trackBlock.infrastructure.contains("station") && !passengersAccepted && velocity == 0 && (rightDoorsOpen || leftDoorsOpen)){
+				if(trackBlock.infrastructure.contains("station") && !passengersAccepted && velocity == 0 && (rightDoorsOpen || leftDoorsOpen)  && trackBlock != null){
 					
 					passengerPassFail = addPassengers(trackBlock.numPass);
 					
