@@ -321,6 +321,9 @@ public class WaysideController
 	//------------------------COMMS FROM CTC OFFICE ---------------------------
 	public synchronized void suggestSpeed(double speed, int train)
 	{
+		TrainInfo t = trains.get(train);
+		if(t != null)
+		{
 		int block = trains.get(train).currentBlock;
 		int tblock = blockToTrackBlock.get(block);
 		
@@ -333,6 +336,7 @@ public class WaysideController
 				trackBlocks[tblock].speed = speed;
 				track.setBlock(trackBlocks[tblock]);
 			}
+		}
 		}
 	}
 	
@@ -559,6 +563,7 @@ public class WaysideController
 	 */
 	public synchronized void setInfrastructure(int trackBlock, char lights)
 	{
+		System.out.println("set inf");
 		String[] info = crossing.get(trackBlock);
 		if(info != null)
 		{
@@ -681,6 +686,7 @@ public class WaysideController
 			if(satisfied) //Result of boolean operations is true
 			{
 				String result = results.get(i);
+				//System.out.println(result);
 				if(result.contains("r")) //set block lights to red
 				{
 					result = result.replace("r","");
