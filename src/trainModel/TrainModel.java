@@ -481,8 +481,9 @@ public class TrainModel extends TrainState implements Runnable{
 					speedSug = trackBlock.speed * 0.44703889;
 					authSug = trackBlock.authority;
 					nextBlockNum = trackBlock.nextBlock; //set the next block equal to the nextBlock in trackBlock
+					
 					currentPos = 0; //reset current position to zero (start of new block)
-					deltaTime = 0; //reset delta time
+
 					endOfBlock = trackBlock.blockLength * .3048; //set the new end of block
 					elevation = trackBlock.elevation;
 					grade = trackBlock.blockGrade;
@@ -520,10 +521,7 @@ public class TrainModel extends TrainState implements Runnable{
 				mass = emptyTrainMass + (personMass * passengerCount); //calculate the mass of the train plus load of passengers
 				
 				normalForce = 9.8 * mass;
-				friction = MU * normalForce *-1;
-				
-				brakingDistance = (velocity * velocity) / (2 * serviceBrakeRate *-1); //calculate braking distance
-				
+				friction = MU * normalForce *-1;				
 	
 				time1 = time2;
 				time2 = System.currentTimeMillis()/1000;
@@ -586,30 +584,36 @@ public class TrainModel extends TrainState implements Runnable{
 						}
 					}//end acc calc
 
-				
+				/*
+				 * calculate velocity
+				 */
 				velocity = velocity + (accRate*deltaTime);	
-				
-				System.out.println("Velocity (in Train Model): "+velocity);
-				
 				resistivePower = friction * velocity;
-				
 				
 				if(velocity<0){
 					velocity =0;
 				}
 				
+				
+				/*
+				 * pass velocity to train controller
+				 */
 				if(trainCon != null){
 					trainCon.setSpeedCurrent(velocity);
 				}
 				
-				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);			
-			
+				/*
+				 * update current position
+				 */
+				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);		
+				
+				brakingDistance = (velocity * velocity) / (2 * serviceBrakeRate *-1); //calculate braking distance
 				distanceLeftInBlock = endOfBlock - currentPos;
 
 				
 				
 				//Tell Train controller to brake before the station
-				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station"))  &&  trackBlock != null){
+				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station"))){
 					trainCon.approachStation();
 				}
 				
