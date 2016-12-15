@@ -269,7 +269,6 @@ public class TrainModel extends TrainState implements Runnable{
 		if(ui != null){
 			ui.sBrake(sBrake);
 		}
-		pause();
 		if(sBrake){
 			setPower(0);
 		}
@@ -277,7 +276,6 @@ public class TrainModel extends TrainState implements Runnable{
 			setPower(power);
 		}
 		accRate = serviceBrakeRate;
-		resume();
 	}
 	
 	
@@ -290,16 +288,13 @@ public class TrainModel extends TrainState implements Runnable{
 		if(ui != null){
 			ui.eBrake(eBrake);
 		}
-		pause();
 		if(eBrake){
 			setPower(0);
 		}
 		else{
 			setPower(power);
 		}
-		setPower(0);
 		accRate = emergencyBrakeRate;
-		resume();
 	}
 	
 	
@@ -613,7 +608,7 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				
 				//Tell Train controller to brake before the station
-				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station"))){
+				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("STATION"))){
 					trainCon.approachStation();
 				}
 				
