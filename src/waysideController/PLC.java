@@ -7,8 +7,8 @@ import java.util.Hashtable;
 
 public class PLC 
 {
-	private static ArrayList<ArrayList<String>> conditions;
-	private static ArrayList<String> results;
+	private ArrayList<ArrayList<String>> conditions;
+	private ArrayList<String> results;
     
 	public PLC()
 	{
@@ -129,8 +129,8 @@ public class PLC
 	{
 		PLC p = new PLC();
 		p.load_plc("C:\\Users\\Alisha\\git\\TTE_Solutions\\bin\\waysideController\\red1.txt");
-		System.out.println(conditions);
-		System.out.println(results);
+		//System.out.println(conditions);
+		//System.out.println(results);
 	}
 }
 
