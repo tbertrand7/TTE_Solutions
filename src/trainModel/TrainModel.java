@@ -416,8 +416,6 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		while(proceed){
 			
-			System.out.println("Next Block (in thread): "+nextBlockNum);
-			
 			while(stop){ //busy wait here while stop is true 
 				try {
 					Thread.sleep(1000);
