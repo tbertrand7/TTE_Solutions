@@ -234,7 +234,6 @@ public class TrainModel extends TrainState implements Runnable{
 		crewCount = 1;
 		passengerCount = 0;
 		temperature = 70;
-		elevation = 0;
 		
 		power = 0.0;
 		resistivePower = 0.0;
