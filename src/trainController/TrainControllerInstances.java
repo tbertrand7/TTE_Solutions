@@ -2,7 +2,7 @@ package trainController;
 
 import java.util.HashMap;
 
-import trainController.TrainController.Side;
+import TTEHome.SystemClock;
 import trainModel.TrainModel;
 import trainModel.TrainModelGUI;
 import trainModel.Trains;
@@ -20,6 +20,8 @@ public class TrainControllerInstances {
 	
 	protected Trains trainmodels;
 	
+	protected SystemClock sysClock;
+	
 	/**
 	 * The next unique instance id to assign to a UI (starts at 0).
 	 * (Don't pay attention to this variable if you're not implementing the TrainController.)
@@ -31,7 +33,9 @@ public class TrainControllerInstances {
 	 */
 	private int nextID;
 	
-	public TrainControllerInstances(Trains trains) {
+	public TrainControllerInstances(SystemClock sys, Trains trains) {
+		
+		sysClock = sys;
 		
 		trainList = new HashMap<Integer, TrainController>();
 		uiList = new HashMap<Integer, TrainControllerUI>();
@@ -161,11 +165,7 @@ public class TrainControllerInstances {
 		
 	}
 	
-private class UpdateThread extends Thread {
-		
-		public UpdateThread() {
-			//nothing
-		}
+	private class UpdateThread extends Thread {
 		
 		/**
 		 * Calls a method after a certain amount of time has elapsed.
@@ -174,12 +174,10 @@ private class UpdateThread extends Thread {
 			
 			//Sleep for specified time (not perfect)
 			try {
-				sleep(2000);
+				sleep(2000*sysClock.clock);
 			} catch (InterruptedException e) {
 				//irrelevant
 			}
-			
-			System.out.println("updating");
 			
 			for (TrainControllerUI ui : uiList.values()) {
 				for (int newid : trainList.keySet()) {

@@ -1,6 +1,7 @@
 package trainModel;
 
 import java.util.ArrayList;
+import TTEHome.SystemClock;
 import java.util.HashMap;
 
 import trainController.TrainController;
@@ -9,28 +10,29 @@ import trainController.TrainController;
 public class Trains {
 	
 	/**
-	 * Maps IDs to their trains (only lists existing trains)
+	 * Maps IDs to their trains 
 	 */
 	protected HashMap<Integer, TrainModel> trainList;
 	
 	/**
-	 * Maps instance IDs to their UIs (only lists existing UIs)
+	 * Maps instance IDs to their UIs 
 	 */
 	protected ArrayList<TrainModelGUI> uiList;
+	
+	public SystemClock sysClock;
 
 	
-	public Trains() {
+	public Trains(SystemClock sysClock) {
 		trainList = new HashMap<Integer, TrainModel>();
 		uiList = new ArrayList<TrainModelGUI>();
 	}
 	
 	public TrainModel addTrain(TrainController tc,int id ,String line){
 		
-		TrainModel tempModel = new TrainModel(this,tc, id, line);
+		TrainModel tempModel = new TrainModel(this,tc, id, line, sysClock);
 		
 		trainList.put(id, tempModel);
 		
-		//TODO: @anna change constructor in TrainController.java
 		return tempModel;
 	}
 	
@@ -47,8 +49,10 @@ public class Trains {
 	
 	
 	public void deleteTrain(int id){
-		
-		trainList.remove(id);
+		if (trainList.containsKey(id)) {
+			trainList.get(id).delete();
+			trainList.remove(id);
+		}
 	}
 	
 	/**

@@ -249,9 +249,9 @@ public class OfficeUI extends JFrame {
 					lblDestInfo.setText("");
 				} else {
 					if (selectedBlock.line.equals("Red"))
-						lblDestInfo.setText(ctcOffice.redLine[selectedBlock.destination].toString());
+						lblDestInfo.setText(ctcOffice.redLine[selectedBlock.destination-1].toString());
 					else
-						lblDestInfo.setText(ctcOffice.greenLine[selectedBlock.destination].toString());
+						lblDestInfo.setText(ctcOffice.greenLine[selectedBlock.destination-1].toString());
 				}
 				lblAuthInfo.setText(selectedBlock.authority + " blocks");
 				if (ctcOffice.getMode() == Mode.MANUAL)
