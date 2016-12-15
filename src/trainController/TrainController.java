@@ -142,7 +142,7 @@ public class TrainController {
 	}
 	
 	/**
-	 * Sets commanded speed and authority, and whether the track is underground.
+	 * Sets commanded speed and authority, the next station, and whether the track is underground.
 	 * @param speed - speed passed from the wayside controller
 	 * @param auth - authority passed from the wayside controller
 	 * @param under - true if underground, false otherwise
@@ -150,6 +150,7 @@ public class TrainController {
 	 */
 	public void passInfo(double speed, double auth, boolean under, String nextstation, boolean newblock) {
 		
+		//Get station name from "infrastructure"
 		if (nextstation != null)
 			if (newblock && nextstation.contains("STATION"))
 				station = nextstation.split(";")[1].trim();
@@ -215,8 +216,7 @@ public class TrainController {
 			if (connectedToModel()) model.setServiceBrake(false);
 			
 		}
-		
-		if (authority == 0 && !stop) { //authority is 0, need to stop
+		else if (authority == 0 && !stop) { //authority is 0, need to stop
 			
 			setStop(true);
 			
@@ -255,13 +255,13 @@ public class TrainController {
 			
 			switch (signaltype) {
 			case ENGINE_FAILURE:
-				message = "ERROR: ENGINE FAILURE\n"; break;
+				message = "ERROR: ENGINE FAILURE"; break;
 			case RAIL_FAILURE:
-				message = "ERROR: RAIL FAILURE\n"; break;
+				message = "ERROR: RAIL FAILURE"; break;
 			case SIGNAL_PICKUP_FAILURE:
-				message = "ERROR: SIGNAL PICKUP FAILURE\n"; break;
+				message = "ERROR: SIGNAL PICKUP FAILURE"; break;
 			case BRAKE_FAILURE:
-				message = "ERROR: BRAKE FAILURE\n"; break;
+				message = "ERROR: BRAKE FAILURE"; break;
 			}
 			
 			if (message != null) ui.message(message);
@@ -282,7 +282,7 @@ public class TrainController {
 	public synchronized void repair() {
 		
 		if (connectedToUI()) {
-			ui.message("Failure has been repaired.\n");
+			ui.message("Failure has been repaired.");
 		}
 		
 		failure = false;
