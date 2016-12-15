@@ -27,6 +27,7 @@ public class CTCOffice
 	private ArrayList<Integer> returnTrains; //Needed for runSchedule, keeps track of trains that reached last station
 	private ScheduledExecutorService exec;
 	private ScheduledFuture<?> schedUpdate;
+	boolean scheduleRunning;
 
 	public TrackBlock[] greenLine, redLine;
 	
@@ -34,11 +35,14 @@ public class CTCOffice
 	{
         try {
         	startTime = System.currentTimeMillis(); //Get time for start of program, used for throughput calculation
+            scheduleRunning = false;
         	sysClock = clk;
         	trainCont = tci;
 			track = new TrackModel();
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
+            greenSchedule = new ScheduleItem[0];
+			redSchedule = new ScheduleItem[0];
             loadTrackData();
             loggedInUser = "";
         } catch (Exception e) {
@@ -335,11 +339,16 @@ public class CTCOffice
 		}
 	}
 
+	/**
+	 * Runs loaded schedule.
+	 * Initially sends all currently dispatched trains to next destination in schedule based on location.
+	 * Then runs thread to check all stations for trains. If train is found, next schedule destination is sent as suggestion
+	 */
     public void runSchedule()
 	{
 		returnTrains = new ArrayList<>();
 
-		//TODO: Implement run schedule
+		//TODO: Test runSchedule logic
 		/* Set initial authorities for schedule */
 		for (int i=0; i < greenLine.length; i++)
 		{
@@ -470,7 +479,19 @@ public class CTCOffice
                 }
 			}
 		}, 0, 1, TimeUnit.SECONDS);
+		scheduleRunning = true;
+		officeUI.logNotification("Schedule Running...");
 	}
+
+    /**
+     * Stops schedule from running
+     */
+	public void stopSchedule()
+    {
+        schedUpdate.cancel(true);
+        scheduleRunning = false;
+        officeUI.logNotification("Schedule Stopped");
+    }
 
 	/**
      * Load in track data
