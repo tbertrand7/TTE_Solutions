@@ -428,8 +428,8 @@ public class TrainModel extends TrainState implements Runnable{
 				}
 			}
 			
+			trackBlock = tm.getBlock(trainLine, curBlockNum);
 			
-			//System.out.println("Top of thread");
 			
 			if(currentPos >= endOfBlock){
 			//end of block reached by train	
