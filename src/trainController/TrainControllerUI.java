@@ -156,7 +156,7 @@ public class TrainControllerUI extends JFrame {
 	 * @param id
 	 */
 	public void addTrainID(int id) {
-		TrainSelect.removeItem(id);
+		TrainSelect.removeItem(id); //just in case
 		TrainSelect.addItem(id);
 	}
 	
@@ -193,7 +193,7 @@ public class TrainControllerUI extends JFrame {
 	 * @param message - message to be displayed
 	 */
 	public void message(String message) {
-		txtMessages.setText(txtMessages.getText() + message);
+		txtMessages.setText(txtMessages.getText() + (txtMessages.getText().isEmpty()?"":"\n") + message);
 	}
 	
 	/**
@@ -298,7 +298,7 @@ public class TrainControllerUI extends JFrame {
 	public void setTemperature(int temp) {
 		if (controller != null) {
 			if (!controller.requestTemperature(temp)) {
-				txtMessages.setText(txtMessages.getText() + "Temperature is not in the allowed range. Request rejected.\n");
+				message("Temperature is not in the allowed range. Request rejected.");
 			}
 		}
 	}
@@ -477,7 +477,14 @@ public class TrainControllerUI extends JFrame {
 		btnSpeedReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if (controller != null) {
-					controller.setSpeedRequest(Double.parseDouble(SpeedReq.getText()));
+					try {
+						double temp = Double.parseDouble(SpeedReq.getText());
+						controller.setSpeedRequest(temp);
+					} catch (NullPointerException nulle) {
+						message("You need to enter a value!");
+					} catch (NumberFormatException nume) {
+						message("You need to enter a valid number.");
+					}
 				}
 			}
 		});
@@ -538,11 +545,11 @@ public class TrainControllerUI extends JFrame {
 							txtRightDoors.setText("Open");
 						} else {
 							tglbtnRightDoors.setSelected(false);
-							txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
+							message("Train is not at a complete stop, you can't open the doors!\n");
 						}
 					} else {
 						tglbtnRightDoors.setSelected(false);
-						txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
+						message("Train is not at a complete stop, you can't open the doors!\n");
 					}
 				} else {
 					if (controller != null) {
@@ -550,11 +557,11 @@ public class TrainControllerUI extends JFrame {
 							txtRightDoors.setText("Closed");
 						} else {
 							tglbtnRightDoors.setSelected(true);
-							txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
+							message("Train is not at a complete stop, you can't open the doors!\n");
 						}
 					} else {
 						tglbtnRightDoors.setSelected(true);
-						txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop.\n");
+						message("Train is not at a complete stop.\n");
 					}
 				}
 			}
@@ -582,11 +589,11 @@ public class TrainControllerUI extends JFrame {
 							txtLeftDoors.setText("Open");
 						} else {
 							tglbtnLeftDoors.setSelected(false);
-							txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
+							message("Train is not at a complete stop, you can't open the doors!\n");
 						}
 					} else {
 						tglbtnLeftDoors.setSelected(false);
-						txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop, you can't open the doors!\n");
+						message("Train is not at a complete stop, you can't open the doors!\n");
 					}
 				} else {
 					if (controller != null) {
@@ -594,11 +601,11 @@ public class TrainControllerUI extends JFrame {
 							txtLeftDoors.setText("Closed");
 						} else {
 							tglbtnLeftDoors.setSelected(true);
-							txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop.\n");
+							message("Train is not at a complete stop.\n");
 						}
 					} else {
 						tglbtnLeftDoors.setSelected(true);
-						txtMessages.setText(txtMessages.getText() + "Train is not at a complete stop.\n");
+						message("Train is not at a complete stop.\n");
 					}
 				}
 			}
@@ -637,7 +644,14 @@ public class TrainControllerUI extends JFrame {
 		btnTempReq = new JButton("Go");
 		btnTempReq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setTemperature(Integer.parseInt(TempReq.getText()));
+				try {
+					int temp = Integer.parseInt(TempReq.getText());
+					setTemperature(temp);
+				} catch (NullPointerException nulle) {
+					message("You need to enter a value!");
+				} catch (NumberFormatException nume) {
+					message("You need to enter a valid number.");
+				}
 			}
 		});
 		btnTempReq.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
@@ -681,7 +695,6 @@ public class TrainControllerUI extends JFrame {
 		txtMessages.setFont(new Font("Arial Unicode MS", Font.PLAIN, 18));
 		txtMessages.setEditable(false);
 		txtMessages.setLineWrap(true);
-		//txtMessages.setBounds(300, 119, 225, 330);
 		
 		JScrollPane jsptxt = new JScrollPane(txtMessages);
 		jsptxt.setBounds(300, 119, 225, 330);
@@ -792,7 +805,7 @@ public class TrainControllerUI extends JFrame {
 							btnPassengerEmergencyBrake.setSelected(false);
 						} else {
 							btnEmergencyBrake.setSelected(false);
-							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+							message("Brake setting is not allowed at the moment.\n");
 						}
 					}
 					
@@ -800,7 +813,7 @@ public class TrainControllerUI extends JFrame {
 					if (controller != null) {
 						if (!controller.setEmergencyBrake(false)) {
 							btnEmergencyBrake.setSelected(true);
-							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+							message("Brake setting is not allowed at the moment.\n");
 						}
 					}
 				}
@@ -815,7 +828,7 @@ public class TrainControllerUI extends JFrame {
 							btnEmergencyBrake.setSelected(false);
 						} else {
 							btnPassengerEmergencyBrake.setSelected(false);
-							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+							message("Brake setting is not allowed at the moment.\n");
 						}
 					}
 					
@@ -823,7 +836,7 @@ public class TrainControllerUI extends JFrame {
 					if (controller != null) {
 						if (!controller.setEmergencyBrake(false)) {
 							btnPassengerEmergencyBrake.setSelected(true);
-							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+							message("Brake setting is not allowed at the moment.\n");
 						}
 					}
 				}
@@ -838,14 +851,14 @@ public class TrainControllerUI extends JFrame {
 							btnPassengerEmergencyBrake.setSelected(false);
 						} else {
 							btnServiceBrake.setSelected(false);
-							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+							message("Brake setting is not allowed at the moment.\n");
 						}
 					}
 				} else {
 					if (controller != null) {
 						if (!controller.setServiceBrake(false)) {
 							btnServiceBrake.setSelected(true);
-							txtMessages.setText(txtMessages.getText() + "Brake setting is not allowed at the moment.\n");
+							message("Brake setting is not allowed at the moment.\n");
 						}
 					}
 				}
