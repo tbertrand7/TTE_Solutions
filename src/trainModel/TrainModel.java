@@ -136,7 +136,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trainID = id;
 		trainLine = line;
 	
-		if(trainLine.compareToIgnoreCase("Green") == 0)
+		if(trainLine.compareToIgnoreCase("GREEN") == 0)
 		{
 			curBlockNum = 152;
 			trackBlock = tm.getBlock(trainLine, curBlockNum);
@@ -201,7 +201,7 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		//curBlockNum = -1; //initialize train to the YARD (-1)
 		
-		if(trainLine.compareToIgnoreCase("Green") == 0)
+		if(trainLine.compareToIgnoreCase("GREEN") == 0)
 		{
 			curBlockNum = 152;
 			trackBlock = tm.getBlock(trainLine, curBlockNum);
@@ -348,6 +348,7 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public void setBrakeFailure(boolean bFail){
 		brakeFail = bFail;
+		serviceBrakeOn = false;
 		trainCon.signal(Signal.BRAKE_FAILURE);
 	}
 	
@@ -406,7 +407,7 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		time2 = System.currentTimeMillis() / 1000; //initialize time2
 		
-		while(proceed){
+		while(proceed && !signalFail){
 			
 			while(stop){ //busy wait here while stop is true 
 				try {
@@ -525,8 +526,14 @@ public class TrainModel extends TrainState implements Runnable{
 					deltaTime =  clockFactor.clock * (time2 - time1);
 				}
 				
-				//set power level to 0 if engine fails
-				if(engineFail) power = 0;
+				/*
+				 * Failure modes
+				 */
+					//set power level to 0 if engine fails
+					if(engineFail) power = 0;	
+					
+					//set track block to null if signal pickup failure
+					if(signalFail) trackBlock = null;
 				
 				
 				
@@ -613,28 +620,30 @@ public class TrainModel extends TrainState implements Runnable{
 				/*
 				 *Only allow passengers to enter/exit if the train is stopped at a station and doors are open
 				 */
-				if(trackBlock.infrastructure.contains("station") && !passengersAccepted && velocity == 0 && (rightDoorsOpen || leftDoorsOpen)  && trackBlock != null){
-					
-					passengerPassFail = addPassengers(trackBlock.numPass);
-					
-					if(passengerPassFail != 0  &&  passengerPassFail != -1000 ){
-						trackBlock.numPass = passengerPassFail; //leave excess passengers at the station
+				if (trackBlock != null){
+					if(trackBlock.infrastructure.contains("STATION") && !passengersAccepted && velocity == 0 && (rightDoorsOpen || leftDoorsOpen)){
+						
+						passengerPassFail = addPassengers(trackBlock.numPass);
+						
+						if(passengerPassFail != 0  &&  passengerPassFail != -1000 ){
+							trackBlock.numPass = passengerPassFail; //leave excess passengers at the station
+						}
+						else if(passengerPassFail != -1000){
+							trackBlock.numPass = 0; //all passengers picked up from the station
+						}
+						/*
+						 * if passengerPassFail == -1000 do nothing, no passengers added/subtracted
+						 */
+						
+						passengersAccepted = true;
+						
+						
+						//random number of passengers get off the train at the station
+						passengersLeaving = rand.nextInt(passengerCount);
+						trackBlock.numPass = trackBlock.numPass + passengersLeaving;
+						tm.setBlock(trackBlock);
+						
 					}
-					else if(passengerPassFail != -1000){
-						trackBlock.numPass = 0; //all passengers picked up from the station
-					}
-					/*
-					 * if passengerPassFail == -1000 do nothing, no passengers added/subtracted
-					 */
-					
-					passengersAccepted = true;
-					
-					
-					//random number of passengers get off the train at the station
-					passengersLeaving = rand.nextInt(passengerCount);
-					trackBlock.numPass = trackBlock.numPass + passengersLeaving;
-					tm.setBlock(trackBlock);
-					
 				}
 								
 				
@@ -648,8 +657,7 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//Sleep for a second
 				try {
-					int i = 1000 / clockFactor.clock;
-					Thread.sleep(i);
+					Thread.sleep(1000 / clockFactor.clock);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}	
