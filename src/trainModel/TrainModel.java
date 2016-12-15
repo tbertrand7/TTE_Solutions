@@ -435,6 +435,12 @@ public class TrainModel extends TrainState implements Runnable{
 			speedLimit = trackBlock.speedLimit;
 			trainLine = trackBlock.line;
 
+			/*
+			 * Pass block info to train controller
+			 */
+			if(trainCon != null && trackBlock != null){
+				trainCon.passInfo(speedSug, authSug, underground, trackBlock.infrastructure ,newBlock); //pass the train controller the new block info
+			}
 			
 			
 			if(currentPos >= endOfBlock){
@@ -488,20 +494,20 @@ public class TrainModel extends TrainState implements Runnable{
 					underground = false;
 				}
 				
-			}//end "Entering New Block" code
-			
-				
-				//calc new V every 1 second (for now)
-	
-				if(trainCon != null){
-					setPower(trainCon.getPower());
-				}
-				
 				/*
 				 * Pass block info to train controller
 				 */
 				if(trainCon != null && trackBlock != null){
 					trainCon.passInfo(speedSug, authSug, underground, trackBlock.infrastructure ,newBlock); //pass the train controller the new block info
+				}
+				
+			}//end "Entering New Block" code
+			
+				
+				//calc new V every 1 second 
+	
+				if(trainCon != null){
+					setPower(trainCon.getPower());
 				}
 				
 				newBlock = false;
