@@ -1,0 +1,9 @@
+IF block 45 OR block 46 OR block 47 OR block 48 THEN red 47
+IF block 43 OR block 44 OR block 49 OR block 50 THEN yellow 47
+IF !block 45 AND !block 46 AND !block 47 AND !block 48 AND !block 43 AND !block 44 AND !block 49 AND !block 50 THEN green 47
+IF block 39 OR block 40 OR block 41 OR block 42 OR block 43 THEN switch 9 0
+IF block 39 OR block 40 OR block 41 OR block 42 OR block 43 THEN switch 10 0
+IF !block 39 AND !block 40 AND !block 41 AND !block 42 AND !block 43 THEN switch 9 1
+IF !block 39 AND !block 40 AND !block 41 AND !block 42 AND !block 43 THEN switch 10 1
+IF block 66 OR block 65 THEN switch 11 1
+IF !block 66 AND !block 65 THEN switch 11 0
