@@ -204,18 +204,18 @@ public class WaysideController
 						trains.put(trackBlocks[i].trainID, train);
 					}
 				}
-				else
+				else //new train in territory
 				{
-					trains.put(trackBlocks[i].trainID, new TrainInfo(trackBlocks[i].blockNumber));
+					trains.put(trackBlocks[i].trainID, new TrainInfo(trackBlocks[i].blockNumber, trackBlocks[i].destination));
 					train = trains.get(trackBlocks[i].trainID);
 				}
 				
 				//SET THE NEXT BLOCK FIELD --> So the train knows where to go
-				if(trackSetup.get(train.currentBlock).switchNum == -1)
+				if(trackSetup.get(train.currentBlock).switchNum == -1) // is a switch block
 				{
 					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), null);
 				}
-				else
+				else // is not a switch block
 				{
 					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), switches.get(trackSetup.get(train.currentBlock).switchNum));
 				}
@@ -225,9 +225,10 @@ public class WaysideController
 				{
 					track.setBlock(trackBlocks[i]);
 				}
-				else //the next block is outside of my wayside's 
+				else //the next block is outside of my wayside's control
 				{
-					trains.remove(trackBlocks[i].trainID);
+					trackBlocks[i].nextBlock = train.currentBlock + 1; //set next block to +1 
+					trains.remove(trackBlocks[i].trainID); //I remove the train because it is no longer in my territory
 				}
 			}
 			
@@ -266,7 +267,7 @@ public class WaysideController
 		{
 			if(current.nextBlock[1] == -1)
 			{
-				return current.nextBlock[0];
+					return current.nextBlock[0];
 			}
 			else
 			{
@@ -387,7 +388,8 @@ public class WaysideController
 		boolean routing = true;
 		int currentBlock = start;
 		int count = 0;
-		
+		if(end != 0)
+		{
 		while(routing && count < 200) //just want to make sure it isn't stuck in while loop forever
 		{
 			BlockPosition bp = trackSetup.get(currentBlock);
@@ -482,8 +484,9 @@ public class WaysideController
 			}
 			count++;
 		}
+		}
 		
-		if(count == 200) //if it hit my check for looping forever, then it is not a valid path
+		if(count == 200 || end == 0) //if it hit my check for looping forever, then it is not a valid path
 		{
 			return null;
 		}
@@ -733,10 +736,11 @@ class TrainInfo
 	public int destination; //destination of train
 	public int direction; //0 = go to next block, 1 = go to previous block
 	
-	public TrainInfo(int currentBlock)
+	public TrainInfo(int currentBlock, int destination)
 	{
 		this.currentBlock = currentBlock;
-		destination = -1;
+		this.destination = destination;
+		System.out.println(destination);
 		direction = 0; 
 	}
 }
