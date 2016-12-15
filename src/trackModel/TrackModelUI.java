@@ -961,6 +961,8 @@ public class TrackModelUI {
 							testGreen.trainID = 1005;
 							testGreen.switchBlock.id = "123";
 							testGreen.switchBlock.position = "123";
+							testGreen.occupied = "StringTest!";
+							testGreen.status = BlockStatus.OCCUPIED;
 							opps.setBlock(testGreen);
 							
 							TrackBlock testRed = new TrackBlock();
@@ -983,6 +985,8 @@ public class TrackModelUI {
 							testRed.trainID = 1005;
 							testRed.switchBlock.id = "123";
 							testRed.switchBlock.position = "123";
+							testRed.occupied = "StringTest!";
+							testRed.status = BlockStatus.OCCUPIED;
 							opps.setBlock(testRed);
 							if(!testRed.equals(opps.getBlock("Red", 1)) && !testGreen.equals(opps.getBlock("Green", 1)))
 								failure = true;
@@ -1137,6 +1141,7 @@ public class TrackModelUI {
 		theBlock.blockGrade = Double.parseDouble(lblNewLabel_1.getText());
 		theBlock.speedLimit = Double.parseDouble(label_1.getText());
 		
+		String oldInfrastructure = theBlock.infrastructure;
 		theBlock.infrastructure = "";
 		
 		if (!checkBox_1.getText().equals("") && !checkBox_1.getText().equals("FALSE"))
@@ -1145,8 +1150,12 @@ public class TrackModelUI {
 			theBlock.infrastructure += "UNDERGROUND;";
 		if (checkBox.isSelected())
 			theBlock.infrastructure += "RAILWAY CROSSING;";
-		if (!comboBox_2.getText().equals("") && !comboBox_2.getText().equals("FALSE")) {
+		if (!comboBox_2.getText().equals("") && !comboBox_2.getText().equals("FALSE") && oldInfrastructure.contains("SWITCH")) {
 			theBlock.infrastructure += "SWITCH;";
+			theBlock.switchBlock.id = comboBox_2.getText();
+		}
+		else if(!theBlock.switchBlock.id.equals(""))
+		{
 			theBlock.switchBlock.id = comboBox_2.getText();
 		}
 		else
