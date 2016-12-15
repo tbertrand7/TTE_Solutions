@@ -148,7 +148,7 @@ public class TrainModel extends TrainState implements Runnable{
 		}
 		
 		trackBlock.trainID = trainID;
-		trackBlock.status = trackBlock.status.OCCUPIED;
+		trackBlock.status = BlockStatus.OCCUPIED;
 		tm.setBlock(trackBlock);
 	
 		
@@ -176,12 +176,7 @@ public class TrainModel extends TrainState implements Runnable{
 		power = 0.0;
 		resistivePower=0.0;
 		velocity = 0.0;		
-		
-		trackBlock.trainID = trainID;
-		trackBlock.status=BlockStatus.OCCUPIED;
-
-		tm.setBlock(trackBlock);
-		
+	
 		
 		start();
 		
@@ -218,7 +213,7 @@ public class TrainModel extends TrainState implements Runnable{
 		}
 		
 		trackBlock.trainID = trainID;
-		trackBlock.status = trackBlock.status.OCCUPIED;
+		trackBlock.status = BlockStatus.OCCUPIED;
 		tm.setBlock(trackBlock);
 		
 		currentPos = 0;
@@ -456,7 +451,6 @@ public class TrainModel extends TrainState implements Runnable{
 					
 					
 					tm.setBlock(trackBlock); //update the block in the database		
-					System.out.println("Train Model just updated the DB");
 					
 					/*
 					 * Get the next block
