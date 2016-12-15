@@ -509,11 +509,11 @@ public class TrainModel extends TrainState implements Runnable{
 				time2 = System.currentTimeMillis()/1000;
 				
 				if(clockFactor == null){
-					deltaTime =  (deltaTime + (time2 - time1) );
+					deltaTime =  (time2 - time1);
 
 				}
 				else{
-					deltaTime =  clockFactor.clock * (deltaTime + (time2 - time1) );
+					deltaTime =  clockFactor.clock * (time2 - time1);
 				}
 				
 				//set power level to 0 if engine fails
