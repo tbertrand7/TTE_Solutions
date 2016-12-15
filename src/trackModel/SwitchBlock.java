@@ -1,5 +1,7 @@
 package trackModel;
-
+//*******************************************************************
+//Simple class that contains information about switch ID & Position
+//*******************************************************************
 public class SwitchBlock {
 	public String position;
 	public String id;

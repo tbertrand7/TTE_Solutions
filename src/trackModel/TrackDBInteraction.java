@@ -17,7 +17,7 @@ public class TrackDBInteraction {
 	Connection conn = null;
 
 	public TrackDBInteraction() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
-		//Connect to the database for the first time!'
+		//Connect to the database for the first time
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		conn = DriverManager.getConnection("jdbc:mysql://107.180.27.178:3306/TTEDB", "TTE", "ttesolutions");
 
@@ -26,6 +26,10 @@ public class TrackDBInteraction {
 		stmt.close();
 	}
 
+	//*************************************************************************
+	//This method will access that database and return one track block object 
+	//This object is determined by the input of line and block number
+	//*************************************************************************
 	public TrackBlock getSection(String line, int block) throws SQLException{
 		TrackBlock tempBlock = new TrackBlock();
 		Statement stmt = conn.createStatement();
@@ -38,6 +42,10 @@ public class TrackDBInteraction {
 		return tempBlock;
 	}
 	
+	//*************************************************************************
+	//This method will access that database and return an array of trackBlocks 
+	//The array is determined by the line and the contents of the index array 
+	//*************************************************************************
 	public TrackBlock[] getBlocks(String line, int [] blocks) throws SQLException{
 		TrackBlock [] track = new TrackBlock[blocks.length];
 		String[] blockNum = new String[blocks.length];
@@ -57,6 +65,10 @@ public class TrackDBInteraction {
 		return track;
 	}
 
+	//*************************************************************************
+	//This method will access that database and return and array of trackBlocks
+	//The array it returns is representative of one of the track lines 
+	//*************************************************************************
 	public TrackBlock[] getLine(String line) throws SQLException{
 		
 		TrackBlock [] track = null;
@@ -77,7 +89,12 @@ public class TrackDBInteraction {
 		return track;
 	}
 
+	//*************************************************************************
+	//This method will access that database and return one track block object 
+	//This object is determined by the input of line and block number
+	//*************************************************************************
 	public boolean setSection(TrackBlock theBlock) throws SQLException{
+
 		boolean sucess = false;
 
 		try{
@@ -95,7 +112,10 @@ public class TrackDBInteraction {
 		return sucess;
 		
 	}
-
+	
+	//*************************************************************************
+	//This method will access that database and break a block from given input
+	//*************************************************************************
 	public boolean breakSection(String line, int block) throws SQLException{
 		
 		Statement stmt = conn.createStatement();
@@ -106,6 +126,9 @@ public class TrackDBInteraction {
 		return sucess;
 	}
 
+	//*************************************************************************
+	//This method will access that database and cut a rail from given input
+	//*************************************************************************
 	public boolean cutSection(String line, int block) throws SQLException {
 		Statement stmt = conn.createStatement();
 		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = '4', Status = '4' where Line = '"+line+"' and BlockNumber = "+block+";");
@@ -115,6 +138,9 @@ public class TrackDBInteraction {
 		return sucess;
 	}
 
+	//*************************************************************************
+	//This method will access that database and break a circuit from given input 
+	//*************************************************************************
 	public boolean breakSectionCircuit(String line, int block) throws SQLException {
 		Statement stmt = conn.createStatement();
 		boolean sucess = stmt.execute("UPDATE TTEDB.RailLines SET Status = '5', Status = '5' where Line = '"+line+"' and BlockNumber = "+block+";");
@@ -124,6 +150,9 @@ public class TrackDBInteraction {
 		return sucess;
 	}
 
+	//*************************************************************************
+	//This method will access that database and reset it to the initial state
+	//*************************************************************************
 	public void resetDB() throws SQLException, IOException {
 		Statement stmt = conn.createStatement();
 
@@ -139,6 +168,10 @@ public class TrackDBInteraction {
 
 	}
 
+	//*************************************************************************
+	//This method is used to populate a trackBlock object from the results of 
+	//a SQL commands execution
+	//*************************************************************************
 	private TrackBlock populateTrackBlock(ResultSet rs) throws SQLException{
 		TrackBlock section = new TrackBlock();
 		while(rs.next()){
@@ -168,6 +201,10 @@ public class TrackDBInteraction {
 		return section;
 	}
 
+	//*************************************************************************
+	//This method is used to populate a trackBlock array from the results of a 
+	//SQL commands execution
+	//*************************************************************************
 	private TrackBlock[] populateTrackLine(ResultSet rs, TrackBlock[] line) throws SQLException{
 		TrackBlock section = new TrackBlock();
 

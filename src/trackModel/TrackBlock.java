@@ -51,6 +51,9 @@ public class TrackBlock {
 		destination =0;
 	}
 
+	//****************************************************************
+	//This method returns a string with information from a trackBlock
+	//****************************************************************
 	public String toString()
 	{
 		String rtnStr = "Block " + blockNumber;
@@ -70,8 +73,9 @@ public class TrackBlock {
 		return rtnStr;
 	}
 	
-	//This is kind of ugly but it is 100% functional
-	//There were issues with using the Object.equals so this was created
+	//*******************************************************************
+	//This method checks two trackBlock objects to see if they are equal
+	//*******************************************************************
 	public boolean equals(TrackBlock temp){
 		
 		return (this.arrowDirection.equals(temp.arrowDirection) && this.authority == temp.authority && this.blockGrade == temp.blockGrade && this.blockLength == temp.blockLength

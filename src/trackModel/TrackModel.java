@@ -9,9 +9,14 @@ import javax.swing.JOptionPane;
 
 public class TrackModel {
 	
+	//Frame and DB Connection for displaying errors and running queries 
 	final JFrame parent = new JFrame();
 	TrackDBInteraction db = null;
 
+	//********************************************************************
+	//Method calls TrackDBInteraction to return an array of blocks
+	//The input array of integers will determine the output of trackBlocks
+	//********************************************************************
 	public TrackBlock[] getBlock(String line, int[] blocks){
 		
 		TrackBlock theBlock [] = null;
@@ -29,7 +34,11 @@ public class TrackModel {
 		
 		return theBlock;
 	}
-	
+
+	//********************************************************************
+	//Method calls TrackDBInteraction to return an array of blocks
+	//The input string of "Red" or "Green" will determine line information
+	//********************************************************************
 	public TrackBlock[] getBlock(String line)
 	{
 		TrackBlock theBlock [] = null;
@@ -47,7 +56,11 @@ public class TrackModel {
 		
 		return theBlock;
 	}
-	
+
+	//********************************************************************
+	//Method calls TrackDBInteraction to return a single trackBlock
+	//The input of line and block number will determine the returned block
+	//********************************************************************
 	public TrackBlock getBlock(String line, int blockNumber)
 	{
 		TrackBlock theBlock = null;
@@ -66,6 +79,10 @@ public class TrackModel {
 		return theBlock;
 	}
 	
+	//********************************************************************
+	//Method calls TrackDBInteraction to set a block in the database
+	//The boolean that is returns validates the data was added correctly
+	//********************************************************************
 	public boolean setBlock(TrackBlock theBlock)
 {
 		
@@ -83,7 +100,10 @@ public class TrackModel {
 		}
 		return result;
 	}
-	
+
+	//********************************************************************
+	//Method calls TrackDBInteraction to break a random track block
+	//********************************************************************
 	public boolean breakRail()
 	{
 
@@ -118,6 +138,9 @@ public class TrackModel {
 		}
 	}
 	
+	//********************************************************************
+	//Method calls TrackDBInteraction to break a determined rail
+	//********************************************************************
 	public boolean breakRail(String line, int block)
 	{
 		boolean sucess=false;
@@ -142,7 +165,9 @@ public class TrackModel {
 		}
 	}
 	
-	
+	//********************************************************************
+	//Method calls TrackDBInteraction to cut a random rail
+	//********************************************************************
 	public boolean cutRail()
 	{
 		
@@ -177,6 +202,9 @@ public class TrackModel {
 		}
 	}
 	
+	//********************************************************************
+	//Method calls TrackDBInteraction to cut a determined rail
+	//********************************************************************
 	public boolean cutRail(String line, int block)
 	{
 		boolean sucess=false;
@@ -200,7 +228,10 @@ public class TrackModel {
 			return false;
 		}
 	}
-
+	
+	//********************************************************************
+	//Method calls TrackDBInteraction to break the circuit randomly
+	//********************************************************************
 	public boolean breakRailCircuit()
 	{
 		String[] lines = { "Red", "Green" };
@@ -234,6 +265,9 @@ public class TrackModel {
 		}
 	}
 	
+	//********************************************************************
+	//Method calls TrackDBInteraction to break the circuit at a set block
+	//********************************************************************
 	public boolean breakRailCircuit(String line, int block)
 	{
 		boolean sucess=false;
@@ -258,6 +292,9 @@ public class TrackModel {
 		}
 	}
 	
+	//********************************************************************
+	//Method calls TrackDBInteraction to reset the DB to the initial state
+	//********************************************************************
 	public boolean resetDB() throws IOException
 	{
 		
