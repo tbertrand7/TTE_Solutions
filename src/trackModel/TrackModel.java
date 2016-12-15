@@ -100,6 +100,28 @@ public class TrackModel {
 		}
 		return result;
 	}
+	
+	//********************************************************************
+	//Method calls TrackDBInteraction to set a block in the database
+	//The boolean that is returns validates the data was added correctly
+	//********************************************************************
+	public boolean setBlockPassive(TrackBlock theBlock)
+{
+		
+		boolean result = false;
+		
+		try {
+			db = new TrackDBInteraction();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			result = db.setSectionPassive(theBlock);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	//********************************************************************
 	//Method calls TrackDBInteraction to break a random track block

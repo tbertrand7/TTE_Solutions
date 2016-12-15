@@ -114,6 +114,30 @@ public class TrackDBInteraction {
 	}
 	
 	//*************************************************************************
+	//This method will access that database and return one track block object 
+	//This object is determined by the input of line and block number
+	//*************************************************************************
+	public boolean setSectionPassive(TrackBlock theBlock) throws SQLException{
+
+		boolean sucess = false;
+
+		try{
+		Statement stmt = conn.createStatement();
+		sucess = stmt.execute("UPDATE TTEDB.RailLines SET Section = '"+theBlock.section+"', BlockLength = "+theBlock.blockLength+", BlockGrade = "+theBlock.blockGrade+", SpeedLimit = "+theBlock.speedLimit+", Infrastructure = '"+theBlock.infrastructure+"', Elevation = "+theBlock.elevation+", CumalativeElevation = "+theBlock.cumualativeElevation+", SwitchBlock = '"+theBlock.switchBlock.id+"', SwitchPosition = "+theBlock.switchBlock.position+", ArrowDirection = '"+theBlock.arrowDirection+"', NumPass = "+theBlock.numPass+", temp = "+theBlock.temp+", status = '"+theBlock.status.ordinal()+"', Occupied = '"+theBlock.occupied+"', Speed = '"+theBlock.speed+"', Authority = '"+theBlock.authority+"', NextBlock = '"+theBlock.nextBlock+"', Destination = '"+theBlock.destination+"' WHERE Line = '"+theBlock.line+"' and BlockNumber = "+theBlock.blockNumber+";");
+		stmt.close();
+		conn.close();
+		
+		}
+		catch(SQLException e){
+			JScrollPane parent = new JScrollPane();
+			JOptionPane.showMessageDialog(parent,"SQL ERROR! Block not updated!\n"+e.getMessage(),"SQL ERROR", JOptionPane.ERROR_MESSAGE);		
+		}
+		
+		return sucess;
+		
+	}
+	
+	//*************************************************************************
 	//This method will access that database and break a block from given input
 	//*************************************************************************
 	public boolean breakSection(String line, int block) throws SQLException{
