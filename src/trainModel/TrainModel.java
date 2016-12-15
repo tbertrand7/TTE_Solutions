@@ -204,20 +204,20 @@ public class TrainModel extends TrainState implements Runnable{
 		if(trainLine.compareToIgnoreCase("GREEN") == 0)
 		{
 			curBlockNum = 152;
-			//trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
 		else
 		{
 			curBlockNum = 77;
-			//trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
-		/*
+		
+		trackBlock = tm.getBlock(trainLine, curBlockNum);
+		
 		trackBlock.trainID = trainID;
 		trackBlock.status = BlockStatus.OCCUPIED;
 		tm.setBlock(trackBlock);
-		*/
+		
 		currentPos = 0;
-		/*
+		
 		nextBlockNum = trackBlock.nextBlock;		
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
@@ -225,7 +225,7 @@ public class TrainModel extends TrainState implements Runnable{
 		speedLimit = trackBlock.speedLimit;	
 		speedSug = trackBlock.speed;
 		authSug = trackBlock.authority;
-		*/
+		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
 		lightsOn = false;		
