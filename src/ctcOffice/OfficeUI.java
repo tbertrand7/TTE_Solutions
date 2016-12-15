@@ -118,13 +118,16 @@ public class OfficeUI extends JFrame {
         ctcOffice.toggleSwitch(selectedBlock);
 	}
 
+	/**
+	 * Checks to make sure entered speed is between 0 and 1000
+	 */
 	private void btnSetSpeedClick()
 	{
 		try 
 		{
 			double newTrainSpeed = Double.parseDouble(txtFieldSpeed.getText());
 			
-			if (newTrainSpeed < 1 || newTrainSpeed > 1000)
+			if (newTrainSpeed < 0 || newTrainSpeed > 1000)
 				throw new NumberFormatException();
 			else
 			{
@@ -138,7 +141,6 @@ public class OfficeUI extends JFrame {
 				ctcOffice.suggestSpeed(newTrainSpeed, selectedBlock.trainID, selectedBlock);
 				logNotification("Speed of " + newTrainSpeed + " mph suggested for Train " + selectedBlock.trainID);
 				txtFieldSpeed.setText("");
-				lblSpeedInfo.setText(newTrainSpeed + " mph");
 			}
 		}
 		catch(NumberFormatException nfe)

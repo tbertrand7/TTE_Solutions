@@ -2,7 +2,6 @@ package ctcOffice;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import javax.swing.table.*;
 
 import TTEHome.SystemClock;
@@ -106,16 +105,26 @@ public class CTCOffice
 		return sysClock.clock;
 	}
 
+	/**
+	 * Suggest speed for train to wayside controller
+	 * @param newTrainSpeed new speed in mph
+	 * @param train id of train for the suggested speed
+	 * @param currBlock current block train is on. Needed for wayside routing
+	 */
 	public void suggestSpeed(double newTrainSpeed, int train, TrackBlock currBlock)
 	{
-		//TODO: suggest speed for a train to wayside controller
 		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
 		WaysideControllerInterface.getInstance().suggestSpeed(newTrainSpeed, train, wayside);
 	}
 
+	/**
+	 * Suggest destination for train to wayside controller
+	 * @param dest new destination for train
+	 * @param train id of train being rerouted
+	 * @param currBlock current block train is on. Needed for wayside routing
+	 */
 	public void suggestDestination(TrackBlock dest, int train, TrackBlock currBlock)
     {
-        //TODO: suggest new destination for a train to wayside controller
 		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
 		currBlock.destination = dest.blockNumber;
 		WaysideControllerInterface.getInstance().suggestAuthority(dest.blockNumber, train, wayside);
@@ -151,7 +160,6 @@ public class CTCOffice
      */
     public void dispatchNewTrain(TrackBlock dest, double speed)
 	{
-		//TODO: integrate with wayside controller
         //Create new train and get ID for wayside
         int newTrainID = trainCont.createTrain(dest.line);
 
@@ -175,8 +183,11 @@ public class CTCOffice
 
 		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
 	}
-	
-	/** Returns if system is in Manual or Auto mode */
+
+	/**
+	 * Returns if system is in Manual or Auto mode
+	 * @return Mode of system
+	 */
 	public Mode getMode()
 	{
 		return mode;
