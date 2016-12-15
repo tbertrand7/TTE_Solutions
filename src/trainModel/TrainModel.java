@@ -657,8 +657,7 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//Sleep for a second
 				try {
-					int i = 1000 / clockFactor.clock;
-					Thread.sleep(i);
+					Thread.sleep(1000 / clockFactor.clock);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}	
