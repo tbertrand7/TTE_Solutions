@@ -242,6 +242,8 @@ public class TrainModel extends TrainState implements Runnable{
 		resistivePower = 0.0;
 		velocity = 0.0;		
 		
+		System.out.println("Next Block (INITIAL VALUE IN CONSTRUCTOR): "+nextBlockNum);
+		
 		start();
 		
 	}
@@ -416,6 +418,8 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		while(proceed){
 			
+			System.out.println("Next Block (in thread): "+nextBlockNum);
+			
 			while(stop){ //busy wait here while stop is true 
 				try {
 					Thread.sleep(1000);
@@ -581,9 +585,7 @@ public class TrainModel extends TrainState implements Runnable{
 				currentPos = currentPos + (velocity * deltaTime) + ( .5 * accRate * deltaTime * deltaTime);			
 			
 				distanceLeftInBlock = endOfBlock - currentPos;
-			
-				//System.out.println("\nCurrent Position = "+currentPos);
-				//System.out.println("Distance left in block = "+distanceLeftInBlock+"\n");
+
 				
 				
 				//Tell Train controller to brake before the station

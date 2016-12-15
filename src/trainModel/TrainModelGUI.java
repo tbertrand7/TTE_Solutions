@@ -96,8 +96,8 @@ public class TrainModelGUI {
 	 */
 	public void displayBlockInfo(int curBlock, int nextBlock, double elevation, String line,double spLimit ,int temp, int crew, int pass){
 		ElevationDisp.setText(Double.toString(elevation) + " ft");
-		CurrBlockDisp.setText(Double.toString(curBlock));
-		NextBlockDisp.setText(Double.toString(nextBlock));
+		CurrBlockDisp.setText(Integer.toString(curBlock));
+		NextBlockDisp.setText(Integer.toString(nextBlock));
 		NextBlockStatusDisp.setText(line);
 		speedLimitDisp.setText(Double.toString(spLimit) + " mph");
 		TempDisp.setText(Integer.toString(temp) + " *F");
@@ -713,6 +713,10 @@ public class TrainModelGUI {
 			NextBlockDisp.setText(Integer.toString(train.nextBlockNum));
 		}
 		
+		
+		/*
+		 * Train line display
+		 */
 		NextBlockStatusDisp = new JTextField();
 		if(train != null){
 			NextBlockStatusDisp.setText(train.trainLine);
