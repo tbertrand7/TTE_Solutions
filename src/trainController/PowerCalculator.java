@@ -64,7 +64,7 @@ public class PowerCalculator extends Thread {
 			while (stop) {
 				controller.setPower(0); //just in case
 				try {
-					sleep(1000*sysClock.clock); //busy waiting if train is temporarily stopped
+					sleep(1000/sysClock.clock); //busy waiting if train is temporarily stopped
 				} catch (InterruptedException e1) {
 					//don't need to do anything
 				}

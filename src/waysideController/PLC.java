@@ -7,8 +7,8 @@ import java.util.Hashtable;
 
 public class PLC 
 {
-	private static ArrayList<ArrayList<String>> conditions;
-	private static ArrayList<String> results;
+	private ArrayList<ArrayList<String>> conditions;
+	private ArrayList<String> results;
     
 	public PLC()
 	{
@@ -79,15 +79,7 @@ public class PLC
 							{
 								throw new Exception("Did not provide switch block number in plc code");
 							}
-							conditions.add("s"+condition[i+1]+","+condition[i+2]); //switch in position 0
-							i += 2;
-							break;
-						case "!switch":
-							if(i+1 > condition.length)
-							{
-								throw new Exception("Did not provide switch block number in plc code");
-							}
-							conditions.add("!s"+condition[i+1]+","+condition[i+2]); //switch is position 1
+							conditions.add("s:"+condition[i+1]+","+condition[i+2]); //switch in position 0
 							i += 2;
 							break;
 						case "AND":
@@ -98,7 +90,6 @@ public class PLC
 					}
 				}
 				temp_conditions.add(conditions);
-				//System.out.println("I AM HERE HELLLLOOOOO");
 				
 				if(line[1].toLowerCase().contains("red"))
 				{
@@ -138,135 +129,8 @@ public class PLC
 	{
 		PLC p = new PLC();
 		p.load_plc("C:\\Users\\Alisha\\git\\TTE_Solutions\\bin\\waysideController\\red1.txt");
-		System.out.println(conditions);
-		System.out.println(results);
-	}
-	
-	public void run_plc(ArrayList<Integer> occupancies, Hashtable<Integer, Integer> switchPositions)
-	{
-		ArrayList<ArrayList<String>> conditions = this.getConditions();
-		ArrayList<String> results = this.getResults();
-		
-		
-		for(int i = 0; i < conditions.size(); i++)
-		{
-			boolean satisfied = false;
-			ArrayList<String> current = conditions.get(i);
-
-			Boolean temp = false, arg1 = false, arg2 = false; 
-			String operator = "";
-			for(int j = 0; j < current.size(); j++)
-			{
-				String s = current.get(j);
-				
-				if(s.contains("!b"))
-				{
-					if(!occupancies.contains(Integer.parseInt(s.replace("!b", ""))))
-						satisfied = true;		
-				}
-				else if(s.contains("!s"))
-				{
-					//if()
-							satisfied = true;
-				}
-				else if(s.contains("b"))
-				{
-					if(occupancies.contains(Integer.parseInt(s.replace("b", ""))))
-							satisfied = true;
-				}
-				else if(s.contains("s"))
-				{
-					if(occupancies.contains(Integer.parseInt(s.replace("b", ""))))
-						satisfied = true;
-				}
-				else
-				{
-					operator = s;
-				}
-					
-				if(j <= 2)
-				{
-					if(j % 3 == 2)
-					{
-						arg2 = temp;
-						//System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
-						switch(operator)
-						{
-							case "AND":
-								if(arg1 && arg2)
-									satisfied = true;
-								else
-									satisfied = false;
-								break;
-							case "OR":
-								if(arg1 || arg2)
-									satisfied = true;
-								else
-									satisfied = false;
-								break;
-						}
-					}
-					if(j % 3 == 0)
-						arg1 = temp;
-				}
-				else
-				{
-					arg1 = satisfied;
-					if(j % 2 == 0)
-					{
-						arg2 = temp;
-						//System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
-						switch(operator)
-						{
-							case "AND":
-								if(arg1 && arg2)
-									satisfied = true;
-								else
-									satisfied = false;
-								break;
-							case "OR":
-								if(arg1 || arg2)
-									satisfied = true;
-								else
-									satisfied = false;
-								break;
-						}
-					}
-				}
-			}
-			
-			if(satisfied)
-			{
-				//System.out.println("CONDITION is SATISFIED");
-				switch(results.get(i))
-				{
-					case "r":
-						//lights.put("red");
-						System.out.println("RESULT: turn lights RED");
-						break;
-					case "y":
-						//lights = "yellow";
-						System.out.println("RESULT: turn lights YELLOW");
-						break;
-					case "g":
-						//lights = "green";
-						System.out.println("RESULT: turn lights GREEN");
-						break;
-					case "!t":
-						//switch_position = false;
-						System.out.println("RESULT: switch is not thrown");
-						break;
-					case "t":
-						//switch_position = true;
-						System.out.println("RESULT: switch is thrown");
-						break;
-				}
-			}
-			else
-				System.out.println("CONDITION is NOT SATISFIED");
-			
-			satisfied = false;
-		}
+		//System.out.println(conditions);
+		//System.out.println(results);
 	}
 }
 

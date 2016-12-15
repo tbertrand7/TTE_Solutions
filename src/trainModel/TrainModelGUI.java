@@ -21,8 +21,6 @@ import javax.swing.JTextPane;
 import java.awt.Canvas;
 import javax.swing.UIManager;
 
-import trackModel.TrackModelUI;
-
 public class TrainModelGUI {
 
 	private JFrame frame;

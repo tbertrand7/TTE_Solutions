@@ -2,6 +2,7 @@ package ctcOffice;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import javax.swing.table.*;
 
 import TTEHome.SystemClock;
@@ -153,6 +154,13 @@ public class CTCOffice
 		//TODO: integrate with wayside controller
         //Create new train and get ID for wayside
         int newTrainID = trainCont.createTrain(dest.line);
+
+        //Wait to ensure train is created in db
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
         //Get starting block from yard for correct line
 		TrackBlock currBlock;
