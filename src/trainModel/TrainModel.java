@@ -408,7 +408,7 @@ public class TrainModel extends TrainState implements Runnable{
 			
 			while(stop){ //busy wait here while stop is true 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(1000 / clockFactor.clock);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -646,7 +646,7 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//Sleep for a second
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(1000 / clockFactor.clock);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}	
