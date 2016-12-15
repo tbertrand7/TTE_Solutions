@@ -223,7 +223,7 @@ public class OfficeUI extends JFrame {
 				if (infr[i].equals("UNDERGROUND"))
 					lblUnderInfo.setText("Yes");
 
-				if (infr[i].equals("SWITCH")) {
+				if (infr[i].contains("SWITCH")) {
 					lblSwitchInfo.setText(selectedBlock.switchBlock.getID());
 					lblSwPosInfo.setText(selectedBlock.switchBlock.getPosition());
 					if (ctcOffice.getMode() == Mode.MANUAL)
