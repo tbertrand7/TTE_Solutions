@@ -959,6 +959,8 @@ public class TrackModelUI {
 							testGreen.speedLimit = 456;
 							testGreen.temp = 72;
 							testGreen.trainID = 1005;
+							testGreen.switchBlock.id = "123";
+							testGreen.switchBlock.position = "123";
 							opps.setBlock(testGreen);
 							
 							TrackBlock testRed = new TrackBlock();
@@ -979,6 +981,8 @@ public class TrackModelUI {
 							testRed.speedLimit = 456;
 							testRed.temp = 72;
 							testRed.trainID = 1005;
+							testRed.switchBlock.id = "123";
+							testRed.switchBlock.position = "123";
 							opps.setBlock(testRed);
 							if(!testRed.equals(opps.getBlock("Red", 1)) && !testGreen.equals(opps.getBlock("Green", 1)))
 								failure = true;
