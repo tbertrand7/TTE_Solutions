@@ -811,8 +811,8 @@ public class OfficeUI extends JFrame {
 
 		lblDestInfo = new JLabel("");
 		lblDestInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblDestInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDestInfo.setBounds(120, 375, 90, 20);
+		lblDestInfo.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDestInfo.setBounds(120, 375, 230, 20);
 		statusPanel.add(lblDestInfo);
 
 		lblAuthInfo = new JLabel("");
