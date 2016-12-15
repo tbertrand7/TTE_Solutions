@@ -199,7 +199,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trainLine = line;
 		clockFactor = sysClock;
 		
-		//curBlockNum = -1; //initialize train to the YARD (-1)
+
 		
 		if(trainLine.compareToIgnoreCase("GREEN") == 0)
 		{
@@ -411,7 +411,7 @@ public class TrainModel extends TrainState implements Runnable{
 			
 			while(stop){ //busy wait here while stop is true 
 				try {
-					Thread.sleep(1000 / clockFactor.clock);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -657,7 +657,7 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//Sleep for a second
 				try {
-					Thread.sleep(1000 / clockFactor.clock);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}	
