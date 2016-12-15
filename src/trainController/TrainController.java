@@ -171,7 +171,7 @@ public class TrainController {
 			
 		}
 		
-		if (speed >= 0) speedCommand = speed;
+		if (speed >= 0 && speed <= speedLimit) speedCommand = speed;
 		inTunnel = under;
 		
 		if (authority == 0 && !stop) { //authority is 0, need to stop
@@ -196,7 +196,7 @@ public class TrainController {
 	 */
 	public synchronized void setSpeedCommand(double speed) {
 		
-		if (speed >= 0) speedCommand = speed;
+		if (speed >= 0 && speed <= speedLimit) speedCommand = speed;
 		
 	}
 	
@@ -628,7 +628,10 @@ public class TrainController {
 	 */
 	public void setSpeedRequest(double speed) {
 		
-		speedRequest = speed * 1609.34 / 3600;
+		if (speed >= 0 && speed <= speedLimit)
+			speedRequest = speed * 1609.34 / 3600;
+		else
+			if (connectedToUI()) ui.message("This speed is not in the allowed range!");
 		
 	}
 	

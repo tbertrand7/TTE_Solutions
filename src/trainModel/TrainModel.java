@@ -160,7 +160,7 @@ public class TrainModel extends TrainState implements Runnable{
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
-		speedLimit = trackBlock.speedLimit;
+		speedLimit = trackBlock.speedLimit *0.44703889;
 		
 		
 		rightDoorsOpen = false;
@@ -222,7 +222,7 @@ public class TrainModel extends TrainState implements Runnable{
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
-		speedLimit = trackBlock.speedLimit;	
+		speedLimit = trackBlock.speedLimit *0.44703889;	
 		speedSug = trackBlock.speed;
 		authSug = trackBlock.authority;
 		
@@ -425,7 +425,7 @@ public class TrainModel extends TrainState implements Runnable{
 			endOfBlock = trackBlock.blockLength * .3048; //set the new end of block
 			elevation = trackBlock.elevation;
 			grade = trackBlock.blockGrade;
-			speedLimit = trackBlock.speedLimit;
+			speedLimit = trackBlock.speedLimit *0.44703889;
 			trainLine = trackBlock.line;
 
 			/*
@@ -478,7 +478,7 @@ public class TrainModel extends TrainState implements Runnable{
 					endOfBlock = trackBlock.blockLength * .3048; //set the new end of block
 					elevation = trackBlock.elevation;
 					grade = trackBlock.blockGrade;
-					speedLimit = trackBlock.speedLimit;
+					speedLimit = trackBlock.speedLimit *0.44703889;
 					trainLine = trackBlock.line;
 					
 				}
@@ -495,6 +495,7 @@ public class TrainModel extends TrainState implements Runnable{
 				 * Pass block info to train controller
 				 */
 				if(trainCon != null && trackBlock != null){
+					trainCon.setSpeedLimit(speedLimit);
 					trainCon.passInfo(speedSug, authSug, underground, trackBlock.infrastructure ,newBlock); //pass the train controller the new block info
 				}
 				
