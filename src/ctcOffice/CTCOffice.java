@@ -2,6 +2,7 @@ package ctcOffice;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 import javax.swing.table.*;
 
 import TTEHome.SystemClock;
@@ -23,6 +24,9 @@ public class CTCOffice
 	private ScheduleItem[] redSchedule, greenSchedule;
 	private String loggedInUser;
 	long startTime;
+	private ArrayList<Integer> returnTrains; //Needed for runSchedule, keeps track of trains that reached last station
+	private ScheduledExecutorService exec;
+	private ScheduledFuture<?> schedUpdate;
 
 	public TrackBlock[] greenLine, redLine;
 	
@@ -333,7 +337,142 @@ public class CTCOffice
 
     public void runSchedule()
 	{
+		returnTrains = new ArrayList<>();
+
 		//TODO: Implement run schedule
+		/* Set initial authorities for schedule */
+		for (int i=0; i < greenLine.length; i++)
+		{
+			//Red Line
+			if (i < redLine.length && redLine[i].trainID > 0)
+			{
+				int currBlock = redLine[i].blockNumber;
+				int train = redLine[i].trainID;
+				for (int j=0; j < redSchedule.length; j++)
+				{
+					//Train is located before first dest on schedule
+					if (j==0 && redSchedule[j].destination.blockNumber > currBlock)
+					{
+						suggestDestination(redSchedule[j].destination, train, redLine[i]);
+						suggestSpeed(redLine[i].speedLimit, train, redLine[i]);
+					}
+					//Train is after last dest on schedule
+					else if (j == redSchedule.length-1 && redSchedule[j].destination.blockNumber < currBlock)
+					{
+						suggestDestination(redSchedule[j].destination, train, redLine[i]);
+						suggestSpeed(redLine[i].speedLimit, train, redLine[i]);
+					}
+					//Train is between destinations on schedule
+					else if (redSchedule[j].destination.blockNumber < currBlock &&
+							redSchedule[j+1].destination.blockNumber > currBlock)
+					{
+						suggestDestination(redSchedule[j+1].destination, train, redLine[i]);
+						suggestSpeed(redLine[i].speedLimit, train, redLine[i]);
+					}
+
+				}
+			}
+
+			//Green Line
+			if (greenLine[i].trainID > 0)
+			{
+				int currBlock = greenLine[i].blockNumber;
+				int train = greenLine[i].trainID;
+				for (int j=0; j < greenSchedule.length; j++)
+				{
+					//Train is located before first dest on schedule
+					if (j==0 && redSchedule[j].destination.blockNumber > currBlock)
+					{
+						suggestDestination(greenSchedule[j].destination, train, greenLine[i]);
+						suggestSpeed(greenLine[i].speedLimit, train, greenLine[i]);
+					}
+					//Train is after last dest on schedule
+					else if (j == greenSchedule.length-1 && greenSchedule[j].destination.blockNumber < currBlock)
+					{
+						suggestDestination(greenSchedule[j].destination, train, greenLine[i]);
+						suggestSpeed(greenLine[i].speedLimit, train, greenLine[i]);
+					}
+					//Train is between destinations on schedule
+					else if (greenSchedule[j].destination.blockNumber < currBlock &&
+							greenSchedule[j+1].destination.blockNumber > currBlock)
+					{
+						suggestDestination(greenSchedule[j+1].destination, train, greenLine[i]);
+						suggestSpeed(greenLine[i].speedLimit, train, greenLine[i]);
+					}
+				}
+			}
+		}
+
+		/* Run thread to check for trains at stations to suggest next authority in schedule */
+		exec = Executors.newSingleThreadScheduledExecutor();
+		schedUpdate = exec.scheduleWithFixedDelay(new Runnable() {
+			@Override
+			public void run() {
+				for (int i=0; i < greenLine.length; i++)
+				{
+					//Red Line
+					if (i < redLine.length && redLine[i].infrastructure.contains("STATION") && redLine[i].trainID > 0)
+					{
+						int train = redLine[i].trainID;
+						for (int j=0; j < redSchedule.length; j++)
+						{
+							//Train is at station
+							if (redSchedule[i].destination.blockNumber == redLine[i].blockNumber)
+							{
+								//Train is at last station
+								if (j == redSchedule.length-1) //Last stop
+								{
+									suggestDestination(redSchedule[j-1].destination, train, redLine[i]);
+									suggestSpeed(redLine[i].speedLimit, train, redLine[i]);
+									returnTrains.add(train);
+								}
+								else
+								{
+									suggestDestination(redSchedule[j+1].destination, train, redLine[i]);
+									suggestSpeed(redLine[i].speedLimit, train, redLine[i]);
+
+									//Train reached first station
+									if (j == 0 && returnTrains.contains(train))
+									{
+										returnTrains.remove(returnTrains.indexOf(train));
+									}
+								}
+							}
+						}
+					}
+					//Green Line
+					if (greenLine[i].infrastructure.contains("STATION") && greenLine[i].trainID > 0)
+					{
+						int train = greenLine[i].trainID;
+						for (int j=0; j < greenSchedule.length; j++)
+						{
+							//Train is at station
+							if (greenSchedule[i].destination.blockNumber == greenLine[i].blockNumber)
+							{
+								//Train is at last station
+								if (j == greenSchedule.length-1) //Last stop
+								{
+									suggestDestination(greenSchedule[j-1].destination, train, greenLine[i]);
+									suggestSpeed(greenLine[i].speedLimit, train, greenLine[i]);
+									returnTrains.add(train);
+								}
+								else
+								{
+									suggestDestination(greenSchedule[j+1].destination, train, greenLine[i]);
+									suggestSpeed(greenLine[i].speedLimit, train, greenLine[i]);
+
+									//Train reached first station
+									if (j == 0 && returnTrains.contains(train))
+									{
+										returnTrains.remove(returnTrains.indexOf(train));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}, 0, 1, TimeUnit.SECONDS);
 	}
 
 	/**
