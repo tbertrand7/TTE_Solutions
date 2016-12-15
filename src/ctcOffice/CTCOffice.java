@@ -339,6 +339,11 @@ public class CTCOffice
 		}
 	}
 
+	/**
+	 * Runs loaded schedule.
+	 * Initially sends all currently dispatched trains to next destination in schedule based on location.
+	 * Then runs thread to check all stations for trains. If train is found, next schedule destination is sent as suggestion
+	 */
     public void runSchedule()
 	{
 		returnTrains = new ArrayList<>();
