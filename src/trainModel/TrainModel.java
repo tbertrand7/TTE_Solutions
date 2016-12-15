@@ -143,6 +143,10 @@ public class TrainModel extends TrainState implements Runnable{
 			nextBlockNum = 77;
 			trackBlock = tm.getBlock(trainLine, nextBlockNum);
 		}
+		
+		trackBlock.trainID = trainID;
+		trackBlock.status = trackBlock.status.OCCUPIED;
+		tm.setBlock(trackBlock);
 	
 		
 		currentPos=0;
@@ -208,6 +212,10 @@ public class TrainModel extends TrainState implements Runnable{
 			curBlockNum = 77;
 			trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
+		
+		trackBlock.trainID = trainID;
+		trackBlock.status = trackBlock.status.OCCUPIED;
+		tm.setBlock(trackBlock);
 		
 		currentPos = 0;
 		
