@@ -348,7 +348,7 @@ public class WaysideController
 		
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrainInfo t = trains.get(train);
-		System.out.println(t.direction);
+		//System.out.println(t.direction);
 		if(t != null) //if I can't find the train then I cannot update it
 		{
 			int currentBlock = t.currentBlock;
@@ -403,7 +403,7 @@ public class WaysideController
 				nextBlock = bp.nextBlock;
 			}
 			
-			System.out.println(nextBlock[0]);
+			//System.out.println(nextBlock[0]);
 			
 			if(currentBlock == end)//if the destination is found
 			{
