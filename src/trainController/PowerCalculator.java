@@ -111,7 +111,8 @@ public class PowerCalculator extends Thread {
 			
 			//Sleep for one second (not perfect - there's a bit of drift)
 			try {
-				sleep(1000 - ((System.currentTimeMillis()*sysClock.clock)-timestart));
+				long waittime = 1000 - ((System.currentTimeMillis()*sysClock.clock)-timestart);
+				if (waittime > 0) sleep(waittime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

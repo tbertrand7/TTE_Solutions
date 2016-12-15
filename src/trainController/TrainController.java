@@ -336,7 +336,7 @@ public class TrainController {
 			if (connectedToModel()) model.setLeftDoorsOpen(true);
 		}
 		
-		WaitThread wt = new WaitThread(doors, 5000/parent.sysClock.clock, 2);
+		WaitThread wt = new WaitThread(doors, 60000/parent.sysClock.clock, 2);
 		wt.start();
 		
 	}
