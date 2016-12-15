@@ -179,7 +179,10 @@ public class TrainController {
 			setStop(true);
 			
 			sBrakeOn = true;
-			if (connectedToUI()) ui.setServiceBrake(true);
+			if (connectedToUI()) {
+				ui.setServiceBrake(true);
+				ui.message("Authority has depleted.");
+			}
 			if (connectedToModel()) model.setServiceBrake(true);
 			
 			power = 0;
@@ -221,7 +224,10 @@ public class TrainController {
 			setStop(true);
 			
 			sBrakeOn = true;
-			if (connectedToUI()) ui.setServiceBrake(true);
+			if (connectedToUI()) {
+				ui.setServiceBrake(true);
+				ui.message("Authority has depleted.");
+			}
 			if (connectedToModel()) model.setServiceBrake(true);
 			
 			power = 0;
