@@ -106,7 +106,7 @@ public class TrackDBInteraction {
 		}
 		catch(SQLException e){
 			JScrollPane parent = new JScrollPane();
-			JOptionPane.showMessageDialog(parent,"SQL ERROR! Block not updated!\n","SQL ERROR", JOptionPane.ERROR_MESSAGE);		
+			JOptionPane.showMessageDialog(parent,"SQL ERROR! Block not updated!\n"+e.getMessage(),"SQL ERROR", JOptionPane.ERROR_MESSAGE);		
 		}
 		
 		return sucess;
