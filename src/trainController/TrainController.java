@@ -159,7 +159,7 @@ public class TrainController {
 			authority -= 1; //decrement authority
 		}
 		
-		if (auth >= 0 && newblock) authority = auth;
+		if (auth >= 0) authority = auth;
 		
 		if (authority > 0 && stop && !failure) { //authority is being changed from 0 to something valid
 			
