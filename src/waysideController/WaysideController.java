@@ -388,7 +388,7 @@ public class WaysideController
 		boolean routing = true;
 		int currentBlock = start;
 		int count = 0;
-		if(end != 0)
+		//if(end != 0)
 		{
 		while(routing && count < 200) //just want to make sure it isn't stuck in while loop forever
 		{
@@ -469,16 +469,33 @@ public class WaysideController
 				}
 				else //switch position 1
 				{
-					String[] split = switchInfo[3].split(",");
-					if(((Integer.parseInt(split[0]) == currentBlock) || (Integer.parseInt(split[1]) == currentBlock)) && ((Integer.parseInt(split[0]) == nextBlock[1]) || (Integer.parseInt(split[1]) == nextBlock[1]))) //switch is connected to current block
+					if(nextBlock[1] == -1)
 					{
-						path.add(currentBlock);
-						currentBlock = nextBlock[1];
+						String[] split = switchInfo[3].split(",");
+						if(((Integer.parseInt(split[0]) == currentBlock) || (Integer.parseInt(split[1]) == currentBlock)) && ((Integer.parseInt(split[0]) == nextBlock[0]) || (Integer.parseInt(split[1]) == nextBlock[0]))) //switch is connected to current block
+						{
+							path.add(currentBlock);
+							currentBlock = nextBlock[0];
+						}
+						else //switch is not connected, safe to stop at switch
+						{
+							path.add(currentBlock);
+							return path;
+						}
 					}
-					else //switch is not connected, safe to stop at switch
+					else
 					{
-						path.add(currentBlock);
-						return path;
+						String[] split = switchInfo[3].split(",");
+						if(((Integer.parseInt(split[0]) == currentBlock) || (Integer.parseInt(split[1]) == currentBlock)) && ((Integer.parseInt(split[0]) == nextBlock[1]) || (Integer.parseInt(split[1]) == nextBlock[1]))) //switch is connected to current block
+						{
+							path.add(currentBlock);
+							currentBlock = nextBlock[0];
+						}
+						else //switch is not connected, safe to stop at switch
+						{
+							path.add(currentBlock);
+							return path;
+						}
 					}
 				}
 			}
