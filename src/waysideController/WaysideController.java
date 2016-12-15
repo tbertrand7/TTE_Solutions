@@ -392,6 +392,7 @@ public class WaysideController
 		while(routing && count < 200) //just want to make sure it isn't stuck in while loop forever
 		{
 			BlockPosition bp = trackSetup.get(currentBlock);
+			
 			int[] nextBlock;
 			if(currentDirection == 1)
 			{
@@ -399,8 +400,10 @@ public class WaysideController
 			}
 			else
 			{
-				nextBlock = bp.previousBlock;
+				nextBlock = bp.nextBlock;
 			}
+			
+			System.out.println(nextBlock[0]);
 			
 			if(currentBlock == end)//if the destination is found
 			{
@@ -718,6 +721,6 @@ class TrainInfo
 	{
 		this.currentBlock = currentBlock;
 		destination = -1;
-		direction = 1; 
+		direction = 0; 
 	}
 }
