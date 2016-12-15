@@ -619,10 +619,10 @@ public class TrainModelGUI {
 		/*
 		 * Label for TrainID
 		 */
-		JLabel trainIDLabel = new JLabel("TRAIN ID:");
+		JLabel trainIDLabel = new JLabel("ID:");
 		trainIDLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		trainIDLabel.setFont(new Font("Courier New", Font.BOLD, 20));
-		trainIDLabel.setBounds(6, 41, 115, 23);
+		trainIDLabel.setBounds(6, 41, 60, 23);
 		frame.getContentPane().add(trainIDLabel);
 		
 		table = new JTable();
@@ -970,7 +970,7 @@ public class TrainModelGUI {
 			}
 		});
 		uiConnectButton.setFont(new Font("Courier New", Font.BOLD, 16));
-		uiConnectButton.setBounds(75, 64, 104, 40);
+		uiConnectButton.setBounds(81, 47, 104, 25);
 		frame.getContentPane().add(uiConnectButton);
 		
 		/*
@@ -1076,9 +1076,7 @@ public class TrainModelGUI {
 					}
 					
 				}
-				
-				
-				
+		
 			}
 		});
 		btnTrainList.setFont(new Font("Courier New", Font.PLAIN, 16));
@@ -1094,6 +1092,21 @@ public class TrainModelGUI {
 		testPassengerButton.setFont(new Font("Courier New", Font.BOLD, 18));
 		testPassengerButton.setBounds(603, 35, 157, 29);
 		frame.getContentPane().add(testPassengerButton);
+		
+		JButton deleteTrainButton = new JButton("Delete");
+		deleteTrainButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(testModeButton.isSelected()){
+					
+				int tempDelete = Integer.parseInt(IDinput.getText());
+				modelList.deleteTrain(tempDelete);
+				
+				}
+			}
+		});
+		deleteTrainButton.setFont(new Font("Courier New", Font.BOLD, 16));
+		deleteTrainButton.setBounds(81, 75, 104, 29);
+		frame.getContentPane().add(deleteTrainButton);
 		
 		frame.setVisible(true);
 
