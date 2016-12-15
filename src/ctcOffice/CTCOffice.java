@@ -2,7 +2,7 @@ package ctcOffice;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import javax.swing.table.*;
 
 import TTEHome.SystemClock;
@@ -24,6 +24,10 @@ public class CTCOffice
 	private ScheduleItem[] redSchedule, greenSchedule;
 	private String loggedInUser;
 	long startTime;
+	private ArrayList<Integer> returnTrains; //Needed for runSchedule, keeps track of trains that reached last station
+	private ScheduledExecutorService exec;
+	private ScheduledFuture<?> schedUpdate;
+	boolean scheduleRunning;
 
 	public TrackBlock[] greenLine, redLine;
 	
@@ -31,11 +35,14 @@ public class CTCOffice
 	{
         try {
         	startTime = System.currentTimeMillis(); //Get time for start of program, used for throughput calculation
+            scheduleRunning = false;
         	sysClock = clk;
         	trainCont = tci;
 			track = new TrackModel();
             greenLine = new TrackBlock[152];
             redLine = new TrackBlock[77];
+            greenSchedule = new ScheduleItem[0];
+			redSchedule = new ScheduleItem[0];
             loadTrackData();
             loggedInUser = "";
         } catch (Exception e) {
@@ -106,16 +113,26 @@ public class CTCOffice
 		return sysClock.clock;
 	}
 
+	/**
+	 * Suggest speed for train to wayside controller
+	 * @param newTrainSpeed new speed in mph
+	 * @param train id of train for the suggested speed
+	 * @param currBlock current block train is on. Needed for wayside routing
+	 */
 	public void suggestSpeed(double newTrainSpeed, int train, TrackBlock currBlock)
 	{
-		//TODO: suggest speed for a train to wayside controller
 		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
 		WaysideControllerInterface.getInstance().suggestSpeed(newTrainSpeed, train, wayside);
 	}
 
+	/**
+	 * Suggest destination for train to wayside controller
+	 * @param dest new destination for train
+	 * @param train id of train being rerouted
+	 * @param currBlock current block train is on. Needed for wayside routing
+	 */
 	public void suggestDestination(TrackBlock dest, int train, TrackBlock currBlock)
     {
-        //TODO: suggest new destination for a train to wayside controller
 		String wayside = routeWaysideSuggestion(currBlock.line, currBlock.blockNumber);
 		currBlock.destination = dest.blockNumber;
 		WaysideControllerInterface.getInstance().suggestAuthority(dest.blockNumber, train, wayside);
@@ -151,7 +168,6 @@ public class CTCOffice
      */
     public void dispatchNewTrain(TrackBlock dest, double speed)
 	{
-		//TODO: integrate with wayside controller
         //Create new train and get ID for wayside
         int newTrainID = trainCont.createTrain(dest.line);
 
@@ -175,8 +191,11 @@ public class CTCOffice
 
 		officeUI.logNotification("Train dispatched from yard to " + dest.toString() + " at " + speed + " mph");
 	}
-	
-	/** Returns if system is in Manual or Auto mode */
+
+	/**
+	 * Returns if system is in Manual or Auto mode
+	 * @return Mode of system
+	 */
 	public Mode getMode()
 	{
 		return mode;
@@ -320,10 +339,159 @@ public class CTCOffice
 		}
 	}
 
+	/**
+	 * Runs loaded schedule.
+	 * Initially sends all currently dispatched trains to next destination in schedule based on location.
+	 * Then runs thread to check all stations for trains. If train is found, next schedule destination is sent as suggestion
+	 */
     public void runSchedule()
 	{
-		//TODO: Implement run schedule
+		returnTrains = new ArrayList<>();
+
+		//TODO: Test runSchedule logic
+		/* Set initial authorities for schedule */
+		for (int i=0; i < greenLine.length; i++)
+		{
+			//Red Line
+			if (i < redLine.length && redLine[i].trainID > 0)
+			{
+				int currBlock = redLine[i].blockNumber;
+				int train = redLine[i].trainID;
+				for (int j=0; j < redSchedule.length; j++)
+				{
+					//Train is located before first dest on schedule
+					if (j==0 && redSchedule[j].destination.blockNumber > currBlock)
+					{
+						suggestDestination(redSchedule[j].destination, train, redLine[i]);
+						suggestSpeed(redLine[i].speedLimit, train, redLine[i]);
+					}
+					//Train is after last dest on schedule
+					else if (j == redSchedule.length-1 && redSchedule[j].destination.blockNumber < currBlock)
+					{
+						suggestDestination(redSchedule[j].destination, train, redLine[i]);
+						suggestSpeed(redLine[i].speedLimit, train, redLine[i]);
+					}
+					//Train is between destinations on schedule
+					else if (redSchedule[j].destination.blockNumber < currBlock &&
+							redSchedule[j+1].destination.blockNumber > currBlock)
+					{
+						suggestDestination(redSchedule[j+1].destination, train, redLine[i]);
+						suggestSpeed(redLine[i].speedLimit, train, redLine[i]);
+					}
+
+				}
+			}
+
+			//Green Line
+			if (greenLine[i].trainID > 0)
+			{
+				int currBlock = greenLine[i].blockNumber;
+				int train = greenLine[i].trainID;
+				for (int j=0; j < greenSchedule.length; j++)
+				{
+					//Train is located before first dest on schedule
+					if (j==0 && redSchedule[j].destination.blockNumber > currBlock)
+					{
+						suggestDestination(greenSchedule[j].destination, train, greenLine[i]);
+						suggestSpeed(greenLine[i].speedLimit, train, greenLine[i]);
+					}
+					//Train is after last dest on schedule
+					else if (j == greenSchedule.length-1 && greenSchedule[j].destination.blockNumber < currBlock)
+					{
+						suggestDestination(greenSchedule[j].destination, train, greenLine[i]);
+						suggestSpeed(greenLine[i].speedLimit, train, greenLine[i]);
+					}
+					//Train is between destinations on schedule
+					else if (greenSchedule[j].destination.blockNumber < currBlock &&
+							greenSchedule[j+1].destination.blockNumber > currBlock)
+					{
+						suggestDestination(greenSchedule[j+1].destination, train, greenLine[i]);
+						suggestSpeed(greenLine[i].speedLimit, train, greenLine[i]);
+					}
+				}
+			}
+		}
+
+		/* Run thread to check for trains at stations to suggest next authority in schedule */
+		exec = Executors.newSingleThreadScheduledExecutor();
+		schedUpdate = exec.scheduleWithFixedDelay(new Runnable() {
+			@Override
+			public void run() {
+			    //Green Line
+			    for (int i=0; i < greenSchedule.length; i++)
+                {
+                    //Get up to date block info
+                    TrackBlock block = greenLine[greenSchedule[i].destination.blockNumber-1];
+                    int train = block.trainID;
+
+                    //Train is at stop
+                    if (train > 0)
+                    {
+                        //Train is at last station
+                        if (i == greenSchedule.length-1) //Last stop
+                        {
+                            suggestDestination(greenSchedule[i-1].destination, train, block);
+                            suggestSpeed(block.speedLimit, train, block);
+                            returnTrains.add(train);
+                        }
+                        else
+                        {
+                            suggestDestination(greenSchedule[i+1].destination, train, block);
+                            suggestSpeed(block.speedLimit, train, block);
+
+                            //Train reached first station
+                            if (i == 0 && returnTrains.contains(train))
+                            {
+                                returnTrains.remove(returnTrains.indexOf(train));
+                            }
+                        }
+                    }
+                }
+                //Red Line
+                for (int i=0; i < redSchedule.length; i++)
+                {
+                    //Get up to date block info
+                    TrackBlock block = redLine[redSchedule[i].destination.blockNumber-1];
+                    int train = block.trainID;
+
+                    //Train is at stop
+                    if (train > 0)
+                    {
+                        //Train is at last station
+                        if (i == redSchedule.length-1) //Last stop
+                        {
+                            suggestDestination(redSchedule[i-1].destination, train, block);
+                            suggestSpeed(block.speedLimit, train, block);
+                            returnTrains.add(train);
+                        }
+                        else
+                        {
+                            suggestDestination(redSchedule[i+1].destination, train, block);
+                            suggestSpeed(block.speedLimit, train, block);
+
+                            //Train reached first station
+                            if (i == 0 && returnTrains.contains(train))
+                            {
+                                returnTrains.remove(returnTrains.indexOf(train));
+                            }
+                        }
+                    }
+                }
+			}
+		}, 0, 1, TimeUnit.SECONDS);
+		scheduleRunning = true;
+		officeUI.logNotification("Schedule Running...");
 	}
+
+    /**
+     * Stops schedule from running
+     */
+	public void stopSchedule()
+    {
+        schedUpdate.cancel(true);
+        scheduleRunning = false;
+        officeUI.logNotification("Schedule Stopped");
+    }
 
 	/**
      * Load in track data

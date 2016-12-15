@@ -30,7 +30,12 @@ public class OfficeLogin
 		ctcOffice.loginSuccess(username);
 	}
 
-	/** Checks for valid username and password */
+	/**
+	 * Checks for valid username and password
+ 	 * @param username username for login
+	 * @param password password for login
+	 * @return true if login info is correct
+	 */
 	public boolean validateLogin(String username, String password)
 	{
 		try {
@@ -41,7 +46,11 @@ public class OfficeLogin
 		}
 	}
 
-	/** Checks if new username already exists */
+	/**
+	 * Checks if new username already exists
+	 * @param username username to check
+	 * @return true if username isn't already in database
+	 */
 	public boolean validateNewUser(String username)
 	{
 		try {
@@ -51,13 +60,24 @@ public class OfficeLogin
 			return false;
 		}
 	}
-	
-	/** Checks if both password fields match */
+
+	/**
+	 * Checks if both password fields match
+	 * @param password password from first field
+	 * @param confirmPassword password from confirm password field
+	 * @return true if both passwords are equal
+	 */
 	public boolean validateNewPassword(String password, String confirmPassword)
 	{
 		return password.equals(confirmPassword);
 	}
 
+	/**
+	 * Creates new user in database
+	 * @param username username to add to db
+	 * @param password password to add to db
+	 * @return true if user is successfully added to db
+	 */
 	public boolean createNewUser(String username, String password)
 	{
 		try {

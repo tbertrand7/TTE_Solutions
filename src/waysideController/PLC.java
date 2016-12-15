@@ -93,15 +93,18 @@ public class PLC
 				
 				if(line[1].toLowerCase().contains("red"))
 				{
-					temp_results.add("r");
+					String[] lightInfo = line[1].trim().split(" ");
+					temp_results.add("r"+lightInfo[1]);
 				}
 				else if(line[1].toLowerCase().contains("yellow"))
 				{
-					temp_results.add("y");
+					String[] lightInfo = line[1].trim().split(" ");
+					temp_results.add("y"+lightInfo[1]);
 				}
 				else if(line[1].toLowerCase().contains("green"))
 				{
-					temp_results.add("g");
+					String[] lightInfo = line[1].trim().split(" ");
+					temp_results.add("g"+lightInfo[1]);
 				}
 				else if(line[1].toLowerCase().contains("switch"))
 				{

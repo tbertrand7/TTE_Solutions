@@ -159,23 +159,24 @@ public class WaysideController
 		//SET WHETHER LINE IS RED OR GREEN
 		this.line = line;
 		//UPDATE INFO
-		//updateLocalTrackInfo();
-		//run_plc(occupied, switches);
+		updateLocalTrackInfo();
+		if(plcPath != null)run_plc(occupied, switches); //startup with updated system and PLC evaluated
+		
 		//start a thread to make sure the track data is kept up to date
 		//runs every .90 seconds real-time
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleAtFixedRate(new Runnable() {
 		  @Override
 		  public void run() {
+			  run_plc(occupied, switches);
 			  updateLocalTrackInfo();
-			  //run_plc(occupied, switches);
 		  }
-		}, 0, 100, TimeUnit.MILLISECONDS);
+		}, 0, 75, TimeUnit.MILLISECONDS);
 	}
 	
 	
 	//------------------------------MAINTAINING UP-TO-DATE TRACK---------------------------------------
-	public void updateLocalTrackInfo()
+	public synchronized void updateLocalTrackInfo()
 	{
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		trackBlocks = track.getBlock(line, blocks); //get the blocks controlled by this wayside
@@ -203,18 +204,18 @@ public class WaysideController
 						trains.put(trackBlocks[i].trainID, train);
 					}
 				}
-				else
+				else //new train in territory
 				{
-					trains.put(trackBlocks[i].trainID, new TrainInfo(trackBlocks[i].blockNumber));
+					trains.put(trackBlocks[i].trainID, new TrainInfo(trackBlocks[i].blockNumber, trackBlocks[i].destination));
 					train = trains.get(trackBlocks[i].trainID);
 				}
 				
 				//SET THE NEXT BLOCK FIELD --> So the train knows where to go
-				if(trackSetup.get(train.currentBlock).switchNum == -1)
+				if(trackSetup.get(train.currentBlock).switchNum == -1) // is a switch block
 				{
 					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), null);
 				}
-				else
+				else // is not a switch block
 				{
 					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), switches.get(trackSetup.get(train.currentBlock).switchNum));
 				}
@@ -224,9 +225,10 @@ public class WaysideController
 				{
 					track.setBlock(trackBlocks[i]);
 				}
-				else
+				else //the next block is outside of my wayside's control
 				{
-					trains.remove(trackBlocks[i].trainID);
+					trackBlocks[i].nextBlock = train.currentBlock + 1; //set next block to +1 
+					trains.remove(trackBlocks[i].trainID); //I remove the train because it is no longer in my territory
 				}
 			}
 			
@@ -239,29 +241,33 @@ public class WaysideController
 	}
 	
 	//change the direction of the train 
-	public void changeDirection(int previous, int current, int direction, int trainID)
+	public synchronized void changeDirection(int previous, int current, int direction, int trainID)
 	{
 		TrainInfo train;
 		int next = findNextBlock(direction, trackSetup.get(current), switches.get(trackSetup.get(current).switchNum));
+		System.out.println(next);
+		System.out.println(current);
 		if(next == previous || next == -2)
 		{
+			System.out.println(current);
 			train = trains.get(trainID);
 			if(train.direction == 1)
 				train.direction = 0;
 			else
 				train.direction = 1;
 			trains.put(trainID, train);
+			//System.out.println(trains.get(trainID).);
 		}
 	}
 	
 	//determines what the next block should be based on the train's direction and the current block information
-	public int findNextBlock(int direction, BlockPosition current, String[] switchInformation)
+	public synchronized int findNextBlock(int direction, BlockPosition current, String[] switchInformation)
 	{
 		if(direction == 0)
 		{
 			if(current.nextBlock[1] == -1)
 			{
-				return current.nextBlock[0];
+					return current.nextBlock[0];
 			}
 			else
 			{
@@ -301,10 +307,9 @@ public class WaysideController
 	 * @param switchNum
 	 * @param position
 	 */
-	public void updateLocalSwitchInfo(int switchNum, String position)
+	public synchronized void updateLocalSwitchInfo(int switchNum, String position)
 	{
 		String[] current = switches.get(switchNum);
-
 		if(!current[0].equals(position)) //switch position changed
 		{
 			current[0] = position; //update position
@@ -316,23 +321,22 @@ public class WaysideController
 	//------------------------COMMS FROM CTC OFFICE ---------------------------
 	public synchronized void suggestSpeed(double speed, int train)
 	{
-		int block = trains.get(train).currentBlock;
-		int tblock = -1;
-		for(int i = 0; i < blocks.length; i++)
+		TrainInfo t = trains.get(train);
+		if(t != null)
 		{
-			if(blocks[i] == block)
-				tblock = i;
-		}
+		int block = trains.get(train).currentBlock;
+		int tblock = blockToTrackBlock.get(block);
 		
 		if(tblock != -1)
 		{
 			trackModel.TrackModel track = new trackModel.TrackModel();
-			trackBlocks[tblock] = track.getBlock(line, tblock);
+			//trackBlocks[tblock] = track.getBlock(line, tblock);
 			if(checkSpeed(speed,trackBlocks[tblock].speedLimit)) //check to make sure speed < speed limit of the block
 			{
 				trackBlocks[tblock].speed = speed;
 				track.setBlock(trackBlocks[tblock]);
 			}
+		}
 		}
 	}
 	
@@ -347,15 +351,14 @@ public class WaysideController
 
 	public synchronized void suggestAuthority(int destination, int train)
 	{
-		//updateLocalTrackInfo(); //make sure info is up to date
-		
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrainInfo t = trains.get(train);
+		
 		if(t != null) //if I can't find the train then I cannot update it
 		{
 			int currentBlock = t.currentBlock;
 			ArrayList<Integer> path = calculateRoute(currentBlock, destination, t.direction); //calculate route of train
-			//System.out.println(path);
+			System.out.println(path);
 			if(path != null)
 			{
 				boolean notBroken = true;
@@ -368,9 +371,8 @@ public class WaysideController
 			
 				if(notBroken)
 				{
-					//trackBlocks[blockToTrackBlock.get(currentBlock)] = track.getBlock(line, blockToTrackBlock.get(currentBlock));
 					trackBlocks[blockToTrackBlock.get(currentBlock)].authority = path.size()-1; //if path is size 1 then it is the current block, authority is zero
-					trackBlocks[blockToTrackBlock.get(currentBlock)].destination = destination;
+					trackBlocks[blockToTrackBlock.get(currentBlock)].destination = destination; //set the destination in the database
 					track.setBlock(trackBlocks[blockToTrackBlock.get(currentBlock)]); //set authority of block
 				}
 			}
@@ -384,25 +386,33 @@ public class WaysideController
 	 * @param currentDirection
 	 * @return ArrayList<Integer> the path
 	 */
-	public ArrayList<Integer> calculateRoute(int start, int end, int currentDirection)
+	public synchronized ArrayList<Integer> calculateRoute(int start, int end, int currentDirection)
 	{
 		ArrayList<Integer> path = new ArrayList<Integer>();
 		boolean routing = true;
 		int currentBlock = start;
 		int count = 0;
-		
+		//if(end != 0)
+		{
 		while(routing && count < 200) //just want to make sure it isn't stuck in while loop forever
 		{
 			BlockPosition bp = trackSetup.get(currentBlock);
+			int change;
+			//System.out.println(currentBlock);
+			
 			int[] nextBlock;
 			if(currentDirection == 1)
 			{
 				nextBlock = bp.previousBlock;
+				change = 0;
 			}
 			else
 			{
-				nextBlock = bp.previousBlock;
+				nextBlock = bp.nextBlock;
+				change = 1;
 			}
+			
+			//System.out.println(nextBlock[0]);
 			
 			if(currentBlock == end)//if the destination is found
 			{
@@ -411,7 +421,7 @@ public class WaysideController
 			}
 			else if(path.size() > 0 && (nextBlock[0] == path.get(path.size()-1) || nextBlock[1] == path.get(path.size()-1))) //change the direction of the train
 			{
-				currentDirection = 0;
+				currentDirection = change;
 			}
 			else if(nextBlock[0] == -2 && currentBlock == end)
 			{
@@ -423,7 +433,7 @@ public class WaysideController
 				path.add(currentBlock);
 				return path; //right now we can't send trains to the yard
 			}
-			else if(bp.switchNum == -1 || nextBlock[0] == -1 || (bp.switchNum != trackSetup.get(nextBlock[0]).switchNum)) //not a switch block
+			else if(bp.switchNum == -1 || nextBlock[0] == -1 || (bp.switchNum != trackSetup.get(nextBlock[0]).switchNum)) //block it is connected to is not a switch block
 			{
 				if(nextBlock[0] == -1) //border block or yard
 				{
@@ -449,12 +459,8 @@ public class WaysideController
 				String[] switchInfo = switches.get(bp.switchNum);
 				if(switchInfo[0].equals("0")) //switch position 0
 				{
-					if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+nextBlock[0])) //switch is connected to current block
-					{
-						path.add(currentBlock);
-						currentBlock = nextBlock[0];
-					}
-					else if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+nextBlock[0]))
+					String[] split = switchInfo[2].split(",");
+					if(((Integer.parseInt(split[0]) == currentBlock) || (Integer.parseInt(split[1]) == currentBlock)) && ((Integer.parseInt(split[0]) == nextBlock[0]) || (Integer.parseInt(split[1]) == nextBlock[0]))) //switch is connected to current block
 					{
 						path.add(currentBlock);
 						currentBlock = nextBlock[0];
@@ -467,27 +473,41 @@ public class WaysideController
 				}
 				else //switch position 1
 				{
-					if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+nextBlock[1])) //switch is connected to current block
+					if(nextBlock[1] == -1)
 					{
-						path.add(currentBlock);
-						currentBlock = nextBlock[1];
+						String[] split = switchInfo[3].split(",");
+						if(((Integer.parseInt(split[0]) == currentBlock) || (Integer.parseInt(split[1]) == currentBlock)) && ((Integer.parseInt(split[0]) == nextBlock[0]) || (Integer.parseInt(split[1]) == nextBlock[0]))) //switch is connected to current block
+						{
+							path.add(currentBlock);
+							currentBlock = nextBlock[0];
+						}
+						else //switch is not connected, safe to stop at switch
+						{
+							path.add(currentBlock);
+							return path;
+						}
 					}
-					else if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+nextBlock[0]))
+					else
 					{
-						path.add(currentBlock);
-						currentBlock = nextBlock[0];
-					}
-					else //switch is not connected, safe to stop at switch
-					{
-						path.add(currentBlock);
-						return path;
+						String[] split = switchInfo[3].split(",");
+						if(((Integer.parseInt(split[0]) == currentBlock) || (Integer.parseInt(split[1]) == currentBlock)) && ((Integer.parseInt(split[0]) == nextBlock[1]) || (Integer.parseInt(split[1]) == nextBlock[1]))) //switch is connected to current block
+						{
+							path.add(currentBlock);
+							currentBlock = nextBlock[0];
+						}
+						else //switch is not connected, safe to stop at switch
+						{
+							path.add(currentBlock);
+							return path;
+						}
 					}
 				}
 			}
 			count++;
 		}
+		}
 		
-		if(count == 200) //if it hit my check for looping forever, then it is not a valid path
+		if(count == 200 || end == 0) //if it hit my check for looping forever, then it is not a valid path
 		{
 			return null;
 		}
@@ -496,8 +516,11 @@ public class WaysideController
 		
 	}
 	
-	//Need to recalculate routes when the switch position changes
-	public void calculateAllRoutes()
+	/**
+	 * Recalculates the routes
+	 * Called when the switch positions change so all waysides have the correct route
+	 */
+	public synchronized void calculateAllRoutes()
 	{
 		for(Integer i: trains.keySet())
 		{
@@ -505,18 +528,27 @@ public class WaysideController
 		}
 	}
 	
-	//------------------------COMMS TO TRACK------------------------------------
-	protected void setSwitch(int switchNumber)
+	//------------------------COMMUNICATIONS TO TRACK------------------------------------
+	/**
+	 * Sets the current switch to the other position
+	 * @param switchNumber
+	 */
+	protected synchronized void setSwitch(int switchNumber)
 	{
 		int switchBlock = Integer.parseInt(switches.get(switchNumber)[1]);
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrackBlock temp = track.getBlock(line, switchBlock);
-		String newPosition = changeSwitchPosition(switchBlock, temp.switchBlock.position);
-		temp.switchBlock.position = newPosition;
+		String newPosition = changeSwitchPosition(temp.switchBlock.position);
+		temp.switchBlock.setPosition(newPosition);
 		track.setBlock(temp);
 	}
 	
-	protected String changeSwitchPosition(int switchNum, String Position)
+	/**
+	 * Inverts the position
+	 * @param Position
+	 * @return
+	 */
+	protected synchronized String changeSwitchPosition(String Position)
 	{
 		if(Position.equals("0"))
 			return "1";
@@ -524,38 +556,182 @@ public class WaysideController
 			return "0";
 	}
 	
-	//set traffic lights, cross bar and its lights
-	public void setInfrastructure(int trackBlock, char lights)
+	/**
+	 * Keeps a local structure up to date with the lights info
+	 * @param trackBlock
+	 * @param lights
+	 */
+	public synchronized void setInfrastructure(int trackBlock, char lights)
 	{
+		System.out.println("set inf");
 		String[] info = crossing.get(trackBlock);
-		if(lights == 'r') //if the lights are red
+		if(info != null)
 		{
-			info[0] = "r";
-			info[1] = "d";
+			if(lights == 'r') //if the lights are red
+			{
+				info[0] = "r";
+				info[1] = "d";
+			}
+			else if(lights == 'y') //if the lights are yellow
+			{
+				info[0] = "y";
+				info[1] = "d";
+			}
+			else //if the lights are green
+			{
+				info[0] = "g";
+				info[1] = "u";
+			}
+			crossing.put(trackBlock, info);
 		}
-		else if(lights == 'y') //if the lights are yellow
-		{
-			info[0] = "y";
-			info[1] = "d";
-		}
-		else //if the lights are green
-		{
-			info[0] = "g";
-			info[1] = "u";
-		}
-		crossing.put(trackBlock, info);
 	}
 	
+	/**
+	 * Running the PLC program
+	 * Inputs are the current block occupancies and switch positions
+	 * If the conditions are satisifed it calls functions within the wayside to update the track
+	 * @param occupancies
+	 * @param switchPositions
+	 */
+	public synchronized void run_plc(ArrayList<Integer> occupancies, Hashtable<Integer, String[]> switchPositions)
+	{
+		ArrayList<ArrayList<String>> conditions = plc.getConditions();
+		ArrayList<String> results = plc.getResults();
+		
+		for(int i = 0; i < conditions.size(); i++)
+		{
+			boolean satisfied = false;
+			ArrayList<String> current = conditions.get(i);
 
+			Boolean temp = false, arg1 = false, arg2 = false; 
+			String operator = "";
+			for(int j = 0; j < current.size(); j++)
+			{
+				String s = current.get(j);
+				
+				if(s.contains("!b"))
+				{
+					if(!occupancies.contains(Integer.parseInt(s.replace("!b", ""))))
+						temp = true;		
+				}
+				else if(s.contains("b"))
+				{
+					if(occupancies.contains(Integer.parseInt(s.replace("b", ""))))
+						temp = true;
+				}
+				else if(s.contains("s"))
+				{
+					String[] con = s.split(":");
+					String[] switchInfo = con[1].split(",");
+					String[] info = switchPositions.get(Integer.parseInt(switchInfo[0]));
+					if(info[0].equals(switchInfo[1]))
+						temp = true;
+				}
+				else
+				{
+					operator = s;
+				}
+					
+				if(j <= 2)
+				{
+					if(j % 3 == 2)
+					{
+						arg2 = temp;
+						//System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
+						switch(operator)
+						{
+							case "AND":
+								if(arg1 && arg2)
+									satisfied = true;
+								else
+									satisfied = false;
+								break;
+							case "OR":
+								if(arg1 || arg2)
+									satisfied = true;
+								else
+									satisfied = false;
+								break;
+						}
+					}
+					if(j % 3 == 0)
+						arg1 = temp;
+				}
+				else
+				{
+					arg1 = satisfied;
+					if(j % 2 == 0)
+					{
+						arg2 = temp;
+						//System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
+						switch(operator)
+						{
+							case "AND":
+								if(arg1 && arg2)
+									satisfied = true;
+								else
+									satisfied = false;
+								break;
+							case "OR":
+								if(arg1 || arg2)
+									satisfied = true;
+								else
+									satisfied = false;
+								break;
+						}
+					}
+				}
+			}
+			
+			if(satisfied) //Result of boolean operations is true
+			{
+				String result = results.get(i);
+				//System.out.println(result);
+				if(result.contains("r")) //set block lights to red
+				{
+					result = result.replace("r","");
+					this.setInfrastructure(Integer.parseInt(result), 'r');
+				}
+				if(result.contains("g")) //set blocks lights to green
+				{
+					result = result.replace("g","");
+					this.setInfrastructure(Integer.parseInt(result), 'g');
+				}
+				if(result.contains("y")) //set block lights to yellow
+				{
+					result = result.replace("y","");
+					this.setInfrastructure(Integer.parseInt(result), 'y');
+				}
+				if(result.contains("s"))
+				{
+					//format of result --> s:<switch number>,<position>
+					String[] con = result.split(":");
+					String[] switchInfo = con[1].split(",");
+					String[] info = switchPositions.get(Integer.parseInt(switchInfo[0]));
+					if(!switchInfo[1].equals(info[0]))
+					{
+						//If switch is not in that position already, flip switch
+						this.setSwitch(Integer.parseInt(switchInfo[0])); 
+					}
+				}
+			}
+			else
+				//System.out.println("CONDITION is NOT SATISFIED");
+			
+			satisfied = false;
+		}
+	}
+	
 	public static void main(String[] args)
 	{
-		String[] blocks = new String[]{"1-16-2-6","2-1-3","3-2-4","4-3-5","5-4-6","6-5-7","7-6-8","8-7-9","9-8-10:77-12","10-9-11-12","11-10-12","12-11-13",
-				"13-12-14","14-13-15","15-14-16-6","16-15:1-17-6","17-16-18","18-17-19","19-18-20","20-19-21","21-20-22","22-21-23","23-22-24","24-23-25",
-				"25-24-26","26-25-27","27-26-28:76-7","28-27-29-7","29-28-30","30-29-31","31-30-32","32-31-33-8","33-32:72-34-8","34-33-35","35-34-.", "72-73-33-8",
-				"73-74-72","74-75-73","75-76-74","76-27-75-7","77-9-y-12"};
+		String[] blocks = new String[]{"1-2-16-6","2-3-1","3-4-2","4-5-3","5-6-4","6-7-5","7-8-6","8-9-7","9-10:77-8-12","10-11-9-12","11-12-10","12-13-11",
+				"13-14-12","14-15-13","15-16-14-6","16-17-15:1-6","17-18-16","18-19-17","19-20-18","20-21-19","21-22-20","22-23-21","23-24-22","24-25-23",
+				"25-26-24","26-27-25","27-28:76-26-7","28-29-27-7","29-30-28","30-31-29","31-32-30","32-33-31-8","33-34-32:72-8","34-35-33","35-.-34", "72-33-73-8",
+				"73-72-74","74-73-75","75-74-76","76-75-27-7","77-y-9-12"};
 		String[] cswitches = new String[]{"6-15:15,16:1,16","12-9:9,10:9,77","7-27:27,28:27,76","8-32:32,33:72,33"};
+		//WC[0] = new WaysideController("Red",blocks,switches, null,null);
 		WaysideController WC = new WaysideController("Red",blocks,cswitches, null,"C:\\Users\\Alisha\\git\\TTE_Solutions\\bin\\waysideController\\red1.txt");
-		System.out.println("Here");
+		WC.changeDirection(1, 16, 0, 1);
 		//WC.run_plc(occupied, switches);
 		//System.out.println(WC.calculateRoute(2, 6, 0));
 		//System.out.println(WC.calculateRoute(1,20, 1));
@@ -583,10 +759,11 @@ class TrainInfo
 	public int destination; //destination of train
 	public int direction; //0 = go to next block, 1 = go to previous block
 	
-	public TrainInfo(int currentBlock)
+	public TrainInfo(int currentBlock, int destination)
 	{
 		this.currentBlock = currentBlock;
-		destination = -1;
-		direction = 1; 
+		this.destination = destination;
+		System.out.println(destination);
+		direction = 0; 
 	}
 }

@@ -31,7 +31,7 @@ public class OfficeUI extends JFrame {
 	private JLabel lblLineInfo, lblSectionInfo, lblBlockInfo, lblStatusInfo;
 	private JLabel lblElevationInfo, lblSpeedLimitInfo, lblGradeInfo, lblLengthInfo;
 	private JLabel lblSwitchInfo, lblUnderInfo, lblCrossingInfo, lblThroughputInfo, lblSwPosInfo, lblStationInfo;
-	private JMenuItem mntmDispatchNewTrain;
+	private JMenuItem mntmDispatchNewTrain, mntmLoadSchedule, mntmRunSchedule, mntmStopSchedule;
 
     private TrackButton selectedBlockBtn = null;
 	private ScheduledExecutorService exec;
@@ -97,8 +97,18 @@ public class OfficeUI extends JFrame {
 
 	private void runScheduleClick()
 	{
-		//TODO: Implement run schedule
 		ctcOffice.runSchedule();
+		mntmLoadSchedule.setEnabled(false);
+		mntmRunSchedule.setEnabled(false);
+		mntmStopSchedule.setEnabled(true);
+	}
+
+	private void stopScheduleClick()
+	{
+		ctcOffice.stopSchedule();
+		mntmLoadSchedule.setEnabled(true);
+		mntmRunSchedule.setEnabled(true);
+		mntmStopSchedule.setEnabled(false);
 	}
 
 	private void btnCloseTrackClick()
@@ -118,13 +128,16 @@ public class OfficeUI extends JFrame {
         ctcOffice.toggleSwitch(selectedBlock);
 	}
 
+	/**
+	 * Checks to make sure entered speed is between 0 and 1000
+	 */
 	private void btnSetSpeedClick()
 	{
 		try 
 		{
 			double newTrainSpeed = Double.parseDouble(txtFieldSpeed.getText());
 			
-			if (newTrainSpeed < 1 || newTrainSpeed > 1000)
+			if (newTrainSpeed < 0 || newTrainSpeed > 1000)
 				throw new NumberFormatException();
 			else
 			{
@@ -138,7 +151,6 @@ public class OfficeUI extends JFrame {
 				ctcOffice.suggestSpeed(newTrainSpeed, selectedBlock.trainID, selectedBlock);
 				logNotification("Speed of " + newTrainSpeed + " mph suggested for Train " + selectedBlock.trainID);
 				txtFieldSpeed.setText("");
-				lblSpeedInfo.setText(newTrainSpeed + " mph");
 			}
 		}
 		catch(NumberFormatException nfe)
@@ -380,7 +392,7 @@ public class OfficeUI extends JFrame {
 		mnSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		menuBar.add(mnSchedule);
 
-		JMenuItem mntmLoadSchedule = new JMenuItem("Load Schedule");
+		mntmLoadSchedule = new JMenuItem("Load Schedule");
 		mntmLoadSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mntmLoadSchedule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -389,7 +401,7 @@ public class OfficeUI extends JFrame {
 		});
 		mnSchedule.add(mntmLoadSchedule);
 
-		JMenuItem mntmRunSchedule = new JMenuItem("Run Schedule");
+		mntmRunSchedule = new JMenuItem("Run Schedule");
 		mntmRunSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		mntmRunSchedule.addActionListener(new ActionListener() {
 			@Override
@@ -398,6 +410,30 @@ public class OfficeUI extends JFrame {
 			}
 		});
 		mnSchedule.add(mntmRunSchedule);
+
+		mntmStopSchedule = new JMenuItem("Stop Schedule");
+		mntmStopSchedule.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		mntmStopSchedule.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				stopScheduleClick();
+			}
+		});
+		mnSchedule.add(mntmStopSchedule);
+
+		//Enable/disable schedule options depending on if ctc is currently running schedlue
+		if (ctcOffice.scheduleRunning)
+		{
+			mntmLoadSchedule.setEnabled(false);
+			mntmRunSchedule.setEnabled(false);
+			mntmStopSchedule.setEnabled(true);
+		}
+		else
+		{
+			mntmLoadSchedule.setEnabled(true);
+			mntmRunSchedule.setEnabled(true);
+			mntmStopSchedule.setEnabled(false);
+		}
 
 		/* Panels */
 		contentPane = new JPanel();
@@ -775,8 +811,8 @@ public class OfficeUI extends JFrame {
 
 		lblDestInfo = new JLabel("");
 		lblDestInfo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblDestInfo.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDestInfo.setBounds(120, 375, 90, 20);
+		lblDestInfo.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDestInfo.setBounds(120, 375, 230, 20);
 		statusPanel.add(lblDestInfo);
 
 		lblAuthInfo = new JLabel("");

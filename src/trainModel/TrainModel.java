@@ -199,18 +199,18 @@ public class TrainModel extends TrainState implements Runnable{
 		trainLine = line;
 		clockFactor = sysClock;
 		
-		//curBlockNum = -1; //initialize train to the YARD (-1)
+
 		
 		if(trainLine.compareToIgnoreCase("GREEN") == 0)
 		{
 			curBlockNum = 152;
-			trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
 		else
 		{
 			curBlockNum = 77;
-			trackBlock = tm.getBlock(trainLine, curBlockNum);
 		}
+		
+		trackBlock = tm.getBlock(trainLine, curBlockNum);
 		
 		trackBlock.trainID = trainID;
 		trackBlock.status = BlockStatus.OCCUPIED;
@@ -411,7 +411,7 @@ public class TrainModel extends TrainState implements Runnable{
 			
 			while(stop){ //busy wait here while stop is true 
 				try {
-					Thread.sleep(1000 / clockFactor.clock);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -643,6 +643,10 @@ public class TrainModel extends TrainState implements Runnable{
 						trackBlock.numPass = trackBlock.numPass + passengersLeaving;
 						tm.setBlock(trackBlock);
 						
+						if(ui!= null){
+							ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature, crewCount, passengerCount);
+						}
+						
 					}
 				}
 								
@@ -657,7 +661,7 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//Sleep for a second
 				try {
-					Thread.sleep(1000 / clockFactor.clock);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}	

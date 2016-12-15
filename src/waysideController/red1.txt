@@ -1,0 +1,8 @@
+IF block 1 OR block 2 OR block 3 OR OR block 4 block 5 OR block 6 OR block 7 OR block 8 OR block 9 OR block 10 OR block 11 OR block 12 THEN switch 12 0
+IF block 77 AND !block 1 AND !block 2 AND !block 3 AND !block 5 AND !block 6 AND !block 7 AND !block 8 AND !block 9 AND !block 10 AND !block 11 AND !block 12 THEN switch 12 1
+IF block 1 OR block 2 OR block 3 OR block 4 AND !block 16 AND !block 17 AND !block 18 AND !block 20 THEN switch 6 1
+IF block 16 OR block 17 OR block 18 OR block 20 THEN switch 6 0
+IF block 28 OR block 29 OR block 30 OR block 31 OR block 32 AND !block 27 AND !block 26 AND !block 25 THEN switch 7 0
+IF block 28 OR block 29 OR block 30 OR block 31 OR block 32 AND block 27 THEN switch 7 1
+IF block 28 OR block 29 OR block 30 OR block 31 OR block 32 THEN switch 8 0
+IF block 28 OR block 29 OR block 30 OR block 31 OR block 32 AND block 33 THEN switch 8 1

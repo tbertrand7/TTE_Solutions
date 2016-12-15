@@ -22,9 +22,11 @@ public class Trains {
 	public SystemClock sysClock;
 
 	
-	public Trains(SystemClock sysClock) {
+	public Trains(SystemClock clock) {
 		trainList = new HashMap<Integer, TrainModel>();
 		uiList = new ArrayList<TrainModelGUI>();
+		
+		sysClock = clock;
 	}
 	
 	public TrainModel addTrain(TrainController tc,int id ,String line){
