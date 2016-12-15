@@ -222,7 +222,9 @@ public class TrainModel extends TrainState implements Runnable{
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
-		speedLimit = trackBlock.speedLimit;		
+		speedLimit = trackBlock.speedLimit;	
+		speedSug = trackBlock.speed;
+		authSug = trackBlock.authority;
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
