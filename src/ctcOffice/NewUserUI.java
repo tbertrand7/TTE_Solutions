@@ -151,9 +151,13 @@ public class NewUserUI extends JFrame {
 			}
 		});
 	}
-	
+
+	/**
+	 * Button clicked to add new user
+	 */
 	private void btnConfirmClick()
 	{
+		//Ensure all fields are filled out
 		if (txtFieldUsername.getText().equals("") || passwordField.getText().equals("") || passwordFieldConfirm.getText().equals(""))
 		{
 			lblErrorMsg.setText(FILL_OUT_FIELDS);
@@ -161,6 +165,7 @@ public class NewUserUI extends JFrame {
 		}
 		else
 		{
+			//Ensure username doesn't exist
 			if (!officeLogin.validateNewUser(txtFieldUsername.getText()))
 			{
 				lblErrorMsg.setText(USERNAME_ALREADY_EXISTS);
@@ -168,6 +173,7 @@ public class NewUserUI extends JFrame {
 			}
 			else
 			{
+				//Ensure password fields match
 				if (!officeLogin.validateNewPassword(passwordField.getText(), passwordFieldConfirm.getText()))
 				{
 					lblErrorMsg.setText(BAD_PASSWORD);
