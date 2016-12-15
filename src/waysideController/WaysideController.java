@@ -246,14 +246,18 @@ public class WaysideController
 	{
 		TrainInfo train;
 		int next = findNextBlock(direction, trackSetup.get(current), switches.get(trackSetup.get(current).switchNum));
+		System.out.println(next);
+		System.out.println(current);
 		if(next == previous || next == -2)
 		{
+			System.out.println(current);
 			train = trains.get(trainID);
 			if(train.direction == 1)
 				train.direction = 0;
 			else
 				train.direction = 1;
 			trains.put(trainID, train);
+			//System.out.println(trains.get(trainID).);
 		}
 	}
 	
@@ -344,11 +348,9 @@ public class WaysideController
 
 	public synchronized void suggestAuthority(int destination, int train)
 	{
-		//updateLocalTrackInfo(); //make sure info is up to date
-		
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrainInfo t = trains.get(train);
-		//System.out.println(t.direction);
+		
 		if(t != null) //if I can't find the train then I cannot update it
 		{
 			int currentBlock = t.currentBlock;
@@ -366,9 +368,8 @@ public class WaysideController
 			
 				if(notBroken)
 				{
-					//trackBlocks[blockToTrackBlock.get(currentBlock)] = track.getBlock(line, blockToTrackBlock.get(currentBlock));
 					trackBlocks[blockToTrackBlock.get(currentBlock)].authority = path.size()-1; //if path is size 1 then it is the current block, authority is zero
-					trackBlocks[blockToTrackBlock.get(currentBlock)].destination = destination;
+					trackBlocks[blockToTrackBlock.get(currentBlock)].destination = destination; //set the destination in the database
 					track.setBlock(trackBlocks[blockToTrackBlock.get(currentBlock)]); //set authority of block
 				}
 			}
@@ -392,15 +393,19 @@ public class WaysideController
 		while(routing && count < 200) //just want to make sure it isn't stuck in while loop forever
 		{
 			BlockPosition bp = trackSetup.get(currentBlock);
+			int change;
+			System.out.println(currentBlock);
 			
 			int[] nextBlock;
 			if(currentDirection == 1)
 			{
 				nextBlock = bp.previousBlock;
+				change = 0;
 			}
 			else
 			{
 				nextBlock = bp.nextBlock;
+				change = 1;
 			}
 			
 			//System.out.println(nextBlock[0]);
@@ -412,7 +417,7 @@ public class WaysideController
 			}
 			else if(path.size() > 0 && (nextBlock[0] == path.get(path.size()-1) || nextBlock[1] == path.get(path.size()-1))) //change the direction of the train
 			{
-				currentDirection = 0;
+				currentDirection = change;
 			}
 			else if(nextBlock[0] == -2 && currentBlock == end)
 			{
@@ -683,13 +688,14 @@ public class WaysideController
 	
 	public static void main(String[] args)
 	{
-		String[] blocks = new String[]{"1-16-2-6","2-1-3","3-2-4","4-3-5","5-4-6","6-5-7","7-6-8","8-7-9","9-8-10:77-12","10-9-11-12","11-10-12","12-11-13",
-				"13-12-14","14-13-15","15-14-16-6","16-15:1-17-6","17-16-18","18-17-19","19-18-20","20-19-21","21-20-22","22-21-23","23-22-24","24-23-25",
-				"25-24-26","26-25-27","27-26-28:76-7","28-27-29-7","29-28-30","30-29-31","31-30-32","32-31-33-8","33-32:72-34-8","34-33-35","35-34-.", "72-73-33-8",
-				"73-74-72","74-75-73","75-76-74","76-27-75-7","77-9-y-12"};
+		String[] blocks = new String[]{"1-2-16-6","2-3-1","3-4-2","4-5-3","5-6-4","6-7-5","7-8-6","8-9-7","9-10:77-8-12","10-11-9-12","11-12-10","12-13-11",
+				"13-14-12","14-15-13","15-16-14-6","16-17-15:1-6","17-18-16","18-19-17","19-20-18","20-21-19","21-22-20","22-23-21","23-24-22","24-25-23",
+				"25-26-24","26-27-25","27-28:76-26-7","28-29-27-7","29-30-28","30-31-29","31-32-30","32-33-31-8","33-34-32:72-8","34-35-33","35-.-34", "72-33-73-8",
+				"73-72-74","74-73-75","75-74-76","76-75-27-7","77-y-9-12"};
 		String[] cswitches = new String[]{"6-15:15,16:1,16","12-9:9,10:9,77","7-27:27,28:27,76","8-32:32,33:72,33"};
+		//WC[0] = new WaysideController("Red",blocks,switches, null,null);
 		WaysideController WC = new WaysideController("Red",blocks,cswitches, null,"C:\\Users\\Alisha\\git\\TTE_Solutions\\bin\\waysideController\\red1.txt");
-		System.out.println("Here");
+		WC.changeDirection(1, 16, 0, 1);
 		//WC.run_plc(occupied, switches);
 		//System.out.println(WC.calculateRoute(2, 6, 0));
 		//System.out.println(WC.calculateRoute(1,20, 1));
