@@ -159,7 +159,8 @@ public class WaysideController
 		//SET WHETHER LINE IS RED OR GREEN
 		this.line = line;
 		//UPDATE INFO
-		//updateLocalTrackInfo();
+		updateLocalTrackInfo();
+		if(plcPath != null)run_plc(occupied, switches);
 		//run_plc(occupied, switches);
 		//start a thread to make sure the track data is kept up to date
 		//runs every .90 seconds real-time
@@ -167,10 +168,10 @@ public class WaysideController
 		exec.scheduleAtFixedRate(new Runnable() {
 		  @Override
 		  public void run() {
+			  run_plc(occupied, switches);
 			  updateLocalTrackInfo();
-			  //run_plc(occupied, switches);
 		  }
-		}, 0, 100, TimeUnit.MILLISECONDS);
+		}, 0, 75, TimeUnit.MILLISECONDS);
 	}
 	
 	
@@ -185,8 +186,10 @@ public class WaysideController
 			//update switch positions
 			if(!trackBlocks[i].switchBlock.id.equals("") && trackBlocks[i].infrastructure.contains("SWITCH"))
 			{
+				//System.out.println("Block that switch is on "+trackBlocks[i].blockNumber);
 				String id = trackBlocks[i].switchBlock.getID().replace("Switch ","");
 				String position = trackBlocks[i].switchBlock.getPosition();
+				//System.out.println("POS:"+position+"ID:"+id);
 				updateLocalSwitchInfo(Integer.parseInt( id ) , position);
 			}
 			
@@ -304,7 +307,6 @@ public class WaysideController
 	public void updateLocalSwitchInfo(int switchNum, String position)
 	{
 		String[] current = switches.get(switchNum);
-
 		if(!current[0].equals(position)) //switch position changed
 		{
 			current[0] = position; //update position
@@ -351,11 +353,11 @@ public class WaysideController
 		
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrainInfo t = trains.get(train);
-		if(t != null) //if I can't find the train then I cannot update it
+		if(t != null && t.destination != -1) //if I can't find the train then I cannot update it
 		{
 			int currentBlock = t.currentBlock;
 			ArrayList<Integer> path = calculateRoute(currentBlock, destination, t.direction); //calculate route of train
-			//System.out.println(path);
+			System.out.println(path);
 			if(path != null)
 			{
 				boolean notBroken = true;
@@ -506,17 +508,20 @@ public class WaysideController
 	}
 	
 	//------------------------COMMS TO TRACK------------------------------------
-	protected void setSwitch(int switchNumber)
+	protected synchronized void setSwitch(int switchNumber)
 	{
 		int switchBlock = Integer.parseInt(switches.get(switchNumber)[1]);
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		TrackBlock temp = track.getBlock(line, switchBlock);
-		String newPosition = changeSwitchPosition(switchBlock, temp.switchBlock.position);
-		temp.switchBlock.position = newPosition;
+		String newPosition = changeSwitchPosition(temp.switchBlock.position);
+		//temp.switchBlock.position = newPosition;
+		temp.switchBlock.setPosition(newPosition);
+		//System.out.println("Setting switch: "+temp.switchBlock.position+"Switch block "+switches.get(switchNumber)[1]);
 		track.setBlock(temp);
+		//System.out.println("Updated "+track.getBlock(line, temp.blockNumber).switchBlock.position);
 	}
 	
-	protected String changeSwitchPosition(int switchNum, String Position)
+	protected synchronized String changeSwitchPosition(String Position)
 	{
 		if(Position.equals("0"))
 			return "1";
@@ -546,7 +551,134 @@ public class WaysideController
 		crossing.put(trackBlock, info);
 	}
 	
+	public synchronized void run_plc(ArrayList<Integer> occupancies, Hashtable<Integer, String[]> switchPositions)
+	{
+		ArrayList<ArrayList<String>> conditions = plc.getConditions();
+		ArrayList<String> results = plc.getResults();
+		
+		for(int i = 0; i < conditions.size(); i++)
+		{
+			boolean satisfied = false;
+			ArrayList<String> current = conditions.get(i);
 
+			Boolean temp = false, arg1 = false, arg2 = false; 
+			String operator = "";
+			for(int j = 0; j < current.size(); j++)
+			{
+				String s = current.get(j);
+				
+				if(s.contains("!b"))
+				{
+					if(!occupancies.contains(Integer.parseInt(s.replace("!b", ""))))
+						temp = true;		
+				}
+				else if(s.contains("b"))
+				{
+					if(occupancies.contains(Integer.parseInt(s.replace("b", ""))))
+						temp = true;
+				}
+				else if(s.contains("s"))
+				{
+					String[] con = s.split(":");
+					String[] switchInfo = con[1].split(",");
+					String[] info = switchPositions.get(Integer.parseInt(switchInfo[0]));
+					if(info[0].equals(switchInfo[1]))
+						temp = true;
+				}
+				else
+				{
+					operator = s;
+				}
+					
+				if(j <= 2)
+				{
+					if(j % 3 == 2)
+					{
+						arg2 = temp;
+						//System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
+						switch(operator)
+						{
+							case "AND":
+								if(arg1 && arg2)
+									satisfied = true;
+								else
+									satisfied = false;
+								break;
+							case "OR":
+								if(arg1 || arg2)
+									satisfied = true;
+								else
+									satisfied = false;
+								break;
+						}
+					}
+					if(j % 3 == 0)
+						arg1 = temp;
+				}
+				else
+				{
+					arg1 = satisfied;
+					if(j % 2 == 0)
+					{
+						arg2 = temp;
+						//System.out.println("ARG1: "+arg1+" ARG2: "+arg2);
+						switch(operator)
+						{
+							case "AND":
+								if(arg1 && arg2)
+									satisfied = true;
+								else
+									satisfied = false;
+								break;
+							case "OR":
+								if(arg1 || arg2)
+									satisfied = true;
+								else
+									satisfied = false;
+								break;
+						}
+					}
+				}
+			}
+			
+			if(satisfied)
+			{
+				//System.out.println("CONDITION is SATISFIED");
+				String result = results.get(i);
+				if(result.contains("r"))
+				{
+					
+				}
+				if(result.contains("g"))
+				{
+					
+				}
+				if(result.contains("y"))
+				{
+					
+				}
+				if(result.contains("s"))
+				{
+					//System.out.println("running the plc results");
+					String[] con = result.split(":");
+					String[] switchInfo = con[1].split(",");
+					String[] info = switchPositions.get(Integer.parseInt(switchInfo[0]));
+					if(!switchInfo[1].equals(info[0]))
+					{
+						//System.out.println("Bleh "+info[0]);
+						//System.out.println("Bleh2 "+switchInfo[1]);
+						//System.out.println("switch the switch"+switchInfo[0]+" "+switchInfo[1]);
+						this.setSwitch(Integer.parseInt(switchInfo[0]));
+					}
+				}
+			}
+			else
+				//System.out.println("CONDITION is NOT SATISFIED");
+			
+			satisfied = false;
+		}
+	}
+	
 	public static void main(String[] args)
 	{
 		String[] blocks = new String[]{"1-16-2-6","2-1-3","3-2-4","4-3-5","5-4-6","6-5-7","7-6-8","8-7-9","9-8-10:77-12","10-9-11-12","11-10-12","12-11-13",
