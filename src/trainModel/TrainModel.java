@@ -454,8 +454,11 @@ public class TrainModel extends TrainState implements Runnable{
 				if(trackBlock != null){
 					
 					trackBlock.status = BlockStatus.UNOCCUPIED; //set the block we are leaving to be unoccupied
-					trackBlock.trainID = -1; //set the train ID -1					
-					tm.setBlock(trackBlock);		
+					trackBlock.trainID = 0; //set the train ID 0 because we're leaving	
+					trackBlock.speed = -1; //set speed to -1
+					trackBlock.authority = -1; // set authority to -1
+					trackBlock.destination = 0; //set destination to 0
+					tm.setBlock(trackBlock); //update the block in the database		
 					
 					
 					/*
