@@ -348,6 +348,7 @@ public class TrainModel extends TrainState implements Runnable{
 	 */
 	public void setBrakeFailure(boolean bFail){
 		brakeFail = bFail;
+		serviceBrakeOn = false;
 		trainCon.signal(Signal.BRAKE_FAILURE);
 	}
 	
@@ -406,7 +407,7 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		time2 = System.currentTimeMillis() / 1000; //initialize time2
 		
-		while(proceed){
+		while(proceed && !signalFail){
 			
 			while(stop){ //busy wait here while stop is true 
 				try {
@@ -525,8 +526,17 @@ public class TrainModel extends TrainState implements Runnable{
 					deltaTime =  clockFactor.clock * (time2 - time1);
 				}
 				
-				//set power level to 0 if engine fails
-				if(engineFail) power = 0;
+				/*
+				 * Failure modes
+				 */
+					//set power level to 0 if engine fails
+					if(engineFail) power = 0;	
+					
+					//disengage service brake is service brake fails
+					if(brakeFail) serviceBrakeOn = false;
+					
+					//set track block to null if signal pickup failure
+					if(signalFail) trackBlock = null;
 				
 				
 				
