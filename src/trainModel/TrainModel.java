@@ -242,8 +242,6 @@ public class TrainModel extends TrainState implements Runnable{
 		resistivePower = 0.0;
 		velocity = 0.0;		
 		
-		System.out.println("Next Block (INITIAL VALUE IN CONSTRUCTOR): "+nextBlockNum);
-		
 		start();
 		
 	}
@@ -429,6 +427,16 @@ public class TrainModel extends TrainState implements Runnable{
 			}
 			
 			trackBlock = tm.getBlock(trainLine, curBlockNum);
+			
+			speedSug = trackBlock.speed * 0.44703889;
+			authSug = trackBlock.authority;
+			nextBlockNum = trackBlock.nextBlock; //set the next block equal to the nextBlock in trackBlock
+			endOfBlock = trackBlock.blockLength * .3048; //set the new end of block
+			elevation = trackBlock.elevation;
+			grade = trackBlock.blockGrade;
+			speedLimit = trackBlock.speedLimit;
+			trainLine = trackBlock.line;
+
 			
 			
 			if(currentPos >= endOfBlock){
