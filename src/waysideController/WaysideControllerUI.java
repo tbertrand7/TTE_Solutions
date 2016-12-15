@@ -226,7 +226,7 @@ public class WaysideControllerUI extends JFrame {
 					{
 						sw = sw.replaceAll("Switch ", "");
 						String[] position = wc.switches.get(Integer.parseInt(sw));
-						Integer connectBlock;
+						
 						if(position[0].equals("1"))
 						{
 							switchPos.setText(position[3]);
@@ -383,6 +383,7 @@ public class WaysideControllerUI extends JFrame {
 		
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				wc.updateLocalTrackInfo();
 				switchPositionChoice.removeAllItems();
 				if(wc.switches.size() == 0)
 				{
