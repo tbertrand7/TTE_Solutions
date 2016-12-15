@@ -1,0 +1,7 @@
+IF block 77 OR block 78 OR block 79 OR block 80 OR block 81 OR block 82 OR block 83 OR block 84 OR block 85 THEN switch 4 1
+IF !block 77 AND !block 78 AND !block 79 AND !block 80 AND !block 81 AND !block 82 AND !block 83 AND !block 84 AND !block 85 THEN switch 4 0
+IF block 77 OR block 78 OR block 79 OR block 80 OR block 81 OR block 82 OR block 83 OR block 84 OR block 85 THEN switch 5 0
+IF !block 77 AND !block 78 AND !block 79 AND !block 80 AND !block 81 AND !block 82 AND !block 83 AND !block 84 AND !block 85 THEN switch 5 1
+
+
+

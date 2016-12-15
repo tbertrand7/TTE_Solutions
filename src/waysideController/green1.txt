@@ -1,0 +1,9 @@
+IF block 18 OR block 19 OR block 20 THEN red 19
+IF block 17 OR block 21 THEN yellow 19
+IF !block 18 AND !block 19 AND !block 20 AND !block 17 AND !block 21 THEN green 19
+IF block 1 AND !block 13 THEN switch 1 0
+IF block 150 AND !block 28 THEN switch 2 1
+IF block 28 AND !block 150 THEN switch 2 0
+IF block 152 AND block 152 THEN switch 0 1
+IF !block 152 AND !block 152 THEN switch 0 0
+IF block 57 AND block 57 THEN switch 3 0
