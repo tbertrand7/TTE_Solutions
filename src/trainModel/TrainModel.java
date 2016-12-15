@@ -643,6 +643,10 @@ public class TrainModel extends TrainState implements Runnable{
 						trackBlock.numPass = trackBlock.numPass + passengersLeaving;
 						tm.setBlock(trackBlock);
 						
+						if(ui!= null){
+							ui.displayBlockInfo(curBlockNum, nextBlockNum, elevation, trainLine, speedLimit, temperature, crewCount, passengerCount);
+						}
+						
 					}
 				}
 								
