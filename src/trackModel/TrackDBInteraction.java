@@ -90,7 +90,7 @@ public class TrackDBInteraction {
 	}
 
 	//*************************************************************************
-	//This method will access that database and return one track block object 
+	//This method will access that database and set on track block object 
 	//This object is determined by the input of line and block number
 	//*************************************************************************
 	public boolean setSection(TrackBlock theBlock) throws SQLException{
@@ -114,8 +114,8 @@ public class TrackDBInteraction {
 	}
 	
 	//*************************************************************************
-	//This method will access that database and return one track block object 
-	//This object is determined by the input of line and block number
+	//This method will access that database and set a track block object
+	//This method will update the DB with all values except the TrainID
 	//*************************************************************************
 	public boolean setSectionPassive(TrackBlock theBlock) throws SQLException{
 
