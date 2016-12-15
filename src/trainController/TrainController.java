@@ -540,6 +540,8 @@ public class TrainController {
 		}
 		pc.tempStop(stop);
 		
+		if (stop) setPower(0);
+		
 	}
 	
 	/**
@@ -668,10 +670,14 @@ public class TrainController {
 		if (!sBrakeOn && !eBrakeOn) { //only assign power if the brakes are not engaged
 			power = pow;
 			
-			if (rightDoorsOpen || leftDoorsOpen) { //if doors are open, close the doors!
+			if (power > 0 && (rightDoorsOpen || leftDoorsOpen)) { //if doors are open, close the doors!
 				rightDoorsOpen = false;
 				leftDoorsOpen = false;
 				if (connectedToUI()) ui.setDoorsDirect(false, false);
+				if (connectedToModel()) {
+					model.setRightDoorsOpen(false);
+					model.setLeftDoorsOpen(false);
+				}
 			}
 		} else
 			power = 0;
