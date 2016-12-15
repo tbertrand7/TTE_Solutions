@@ -54,6 +54,8 @@ public class TrainModel extends TrainState implements Runnable{
 	/**
 	 * Info from trackBlock
 	 */
+	int authSug;
+	double speedSug;
 	double speedLimit;
 	double elevation;
 	double grade; 
@@ -117,7 +119,6 @@ public class TrainModel extends TrainState implements Runnable{
 	/**
 	 * Passengers board/exit variables
 	 */
-
 	int passengerPassFail;
 	int passengersLeaving;
 	boolean passengersAccepted;
@@ -153,14 +154,14 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		currentPos=0;
 		
+		speedSug = trackBlock.speed;
+		authSug = trackBlock.authority;
 		nextBlockNum = trackBlock.nextBlock;
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
 		speedLimit = trackBlock.speedLimit;
 		
-		
-		System.out.println("End of Block = "+endOfBlock);
 		
 		rightDoorsOpen = false;
 		leftDoorsOpen = false;
@@ -432,48 +433,34 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				newBlock = true;
 				
-				//System.out.println("NewBlock just set to True");
-				
 				/*
 				 *Update the block we're leaving 
 				 */		
 				if(trackBlock != null){
+					
 					trackBlock.status = BlockStatus.UNOCCUPIED; //set the block we are leaving to be unoccupied
 					trackBlock.trainID = -1; //set the train ID -1					
 					tm.setBlock(trackBlock);		
 					
-					//System.out.println("Set Track Block we are leaving....");
 					
 					/*
 					 * Get the next block
 				 	*/
-
-					trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 
-					
-					//System.out.println("Just got the new block......");
-					
-					//System.out.println("Track Block Status should equal Unoccupied:     "+trackBlock.status);
-					
-					trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied
-					
-					
-					//System.out.println("Track Block Status should equal occupied:     "+trackBlock.status);
-
-					
+					trackBlock = tm.getBlock(trainLine, nextBlockNum); //get the next trackBlock 				
+					trackBlock.status = BlockStatus.OCCUPIED; //set the block to be occupied					
 					trackBlock.trainID = trainID; //set the train ID to the train ID	
-					
-					// vvvvvvvvv SQL exception being thrown here vvvvvvvv
 					tm.setBlock(trackBlock); //update the Track DB with new trackBlock info	
 					
 					passengersAccepted = false;
-					
-					//System.out.println("Set the new block with new info.");
+
 				
 				/*
 				 * Update position tracking info	
 				 */
 					curBlockNum = nextBlockNum;
-					nextBlockNum = trackBlock.blockNumber + 1; //set the next block equal to the nextBlock in trackBlock
+					speedSug = trackBlock.speed * 0.44703889;
+					authSug = trackBlock.authority;
+					nextBlockNum = trackBlock.nextBlock; //set the next block equal to the nextBlock in trackBlock
 					currentPos = 0; //reset current position to zero (start of new block)
 					deltaTime = 0; //reset delta time
 					endOfBlock = trackBlock.blockLength * .3048; //set the new end of block
@@ -481,6 +468,7 @@ public class TrainModel extends TrainState implements Runnable{
 					grade = trackBlock.blockGrade;
 					speedLimit = trackBlock.speedLimit;
 					trainLine = trackBlock.line;
+					
 				}
 				
 				
@@ -491,7 +479,7 @@ public class TrainModel extends TrainState implements Runnable{
 					underground = false;
 				}
 				
-			}
+			}//end "Entering New Block" code
 			
 				
 				//calc new V every 1 second (for now)
@@ -504,7 +492,7 @@ public class TrainModel extends TrainState implements Runnable{
 				 * Pass block info to train controller
 				 */
 				if(trainCon != null && trackBlock != null){
-					trainCon.passInfo(trackBlock.speed, trackBlock.authority, underground, trackBlock.infrastructure ,newBlock); //pass the train controller the new block info
+					trainCon.passInfo(speedSug, authSug, underground, trackBlock.infrastructure ,newBlock); //pass the train controller the new block info
 				}
 				
 				newBlock = false;
