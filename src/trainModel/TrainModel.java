@@ -136,7 +136,7 @@ public class TrainModel extends TrainState implements Runnable{
 		trainID = id;
 		trainLine = line;
 	
-		if(trainLine.compareToIgnoreCase("Green") == 0)
+		if(trainLine.compareToIgnoreCase("GREEN") == 0)
 		{
 			curBlockNum = 152;
 			trackBlock = tm.getBlock(trainLine, curBlockNum);
@@ -201,7 +201,7 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		//curBlockNum = -1; //initialize train to the YARD (-1)
 		
-		if(trainLine.compareToIgnoreCase("Green") == 0)
+		if(trainLine.compareToIgnoreCase("GREEN") == 0)
 		{
 			curBlockNum = 152;
 			trackBlock = tm.getBlock(trainLine, curBlockNum);
@@ -532,9 +532,6 @@ public class TrainModel extends TrainState implements Runnable{
 					//set power level to 0 if engine fails
 					if(engineFail) power = 0;	
 					
-					//disengage service brake is service brake fails
-					if(brakeFail) serviceBrakeOn = false;
-					
 					//set track block to null if signal pickup failure
 					if(signalFail) trackBlock = null;
 				
@@ -623,28 +620,30 @@ public class TrainModel extends TrainState implements Runnable{
 				/*
 				 *Only allow passengers to enter/exit if the train is stopped at a station and doors are open
 				 */
-				if(trackBlock.infrastructure.contains("station") && !passengersAccepted && velocity == 0 && (rightDoorsOpen || leftDoorsOpen)  && trackBlock != null){
-					
-					passengerPassFail = addPassengers(trackBlock.numPass);
-					
-					if(passengerPassFail != 0  &&  passengerPassFail != -1000 ){
-						trackBlock.numPass = passengerPassFail; //leave excess passengers at the station
+				if (trackBlock != null){
+					if(trackBlock.infrastructure.contains("STATION") && !passengersAccepted && velocity == 0 && (rightDoorsOpen || leftDoorsOpen)){
+						
+						passengerPassFail = addPassengers(trackBlock.numPass);
+						
+						if(passengerPassFail != 0  &&  passengerPassFail != -1000 ){
+							trackBlock.numPass = passengerPassFail; //leave excess passengers at the station
+						}
+						else if(passengerPassFail != -1000){
+							trackBlock.numPass = 0; //all passengers picked up from the station
+						}
+						/*
+						 * if passengerPassFail == -1000 do nothing, no passengers added/subtracted
+						 */
+						
+						passengersAccepted = true;
+						
+						
+						//random number of passengers get off the train at the station
+						passengersLeaving = rand.nextInt(passengerCount);
+						trackBlock.numPass = trackBlock.numPass + passengersLeaving;
+						tm.setBlock(trackBlock);
+						
 					}
-					else if(passengerPassFail != -1000){
-						trackBlock.numPass = 0; //all passengers picked up from the station
-					}
-					/*
-					 * if passengerPassFail == -1000 do nothing, no passengers added/subtracted
-					 */
-					
-					passengersAccepted = true;
-					
-					
-					//random number of passengers get off the train at the station
-					passengersLeaving = rand.nextInt(passengerCount);
-					trackBlock.numPass = trackBlock.numPass + passengersLeaving;
-					tm.setBlock(trackBlock);
-					
 				}
 								
 				
