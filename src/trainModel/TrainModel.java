@@ -693,7 +693,7 @@ public class TrainModel extends TrainState implements Runnable{
 	 * @param powerSetPoint - power input in watts
 	 */
 	public void setPower(double powerSetPoint){
-		//	pause();
+			pause();
 			if(powerSetPoint > maxPower){
 				power = maxPower;
 			}
@@ -706,7 +706,7 @@ public class TrainModel extends TrainState implements Runnable{
 			if(ui != null){
 				ui.displayPower(power);
 			}
-		//	resume();
+			resume();
 		}
 	
 	
