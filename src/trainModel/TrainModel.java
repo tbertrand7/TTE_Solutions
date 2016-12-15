@@ -223,8 +223,7 @@ public class TrainModel extends TrainState implements Runnable{
 		
 		currentPos = 0;
 		
-		nextBlockNum = trackBlock.nextBlock;
-		
+		nextBlockNum = trackBlock.nextBlock;		
 		endOfBlock = trackBlock.blockLength * .3048; //convert to meters
 		elevation = trackBlock.elevation;
 		grade = trackBlock.blockGrade;
