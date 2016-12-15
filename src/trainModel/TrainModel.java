@@ -586,6 +586,9 @@ public class TrainModel extends TrainState implements Runnable{
 
 				
 				velocity = velocity + (accRate*deltaTime);	
+				
+				System.out.println("Velocity (in Train Model): "+velocity);
+				
 				resistivePower = friction * velocity;
 				
 				
