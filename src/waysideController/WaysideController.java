@@ -11,8 +11,8 @@ import trackModel.*;
 public class WaysideController 
 {
 	//GLOBAL VARIABLES:
-	protected PLC plc;
-	protected String line; //needed in order to fetch 
+	protected PLC plc; 
+	protected String line; //needed in order to fetch from track
 	protected int[] blocks; //used for fetching all the blocks from the track model
 	protected trackModel.TrackBlock[] trackBlocks; //all the track blocks from the track model
 	protected Hashtable<Integer,Integer> blockToTrackBlock; //relationship between the track block number and it's index in the track block array
@@ -21,6 +21,7 @@ public class WaysideController
 	protected Hashtable<Integer, TrainInfo> trains; // trains currently in this wayside
 	protected Hashtable<Integer, String> brokenRails; //needed so that calculated routes don't include broken rails, if possible
 	protected Hashtable<Integer, String[]> crossing; //railway crossings on the specified route
+	protected ArrayList<Integer> occupied; //used to pass to plc blocks that are occupied
 	
 	public WaysideController(String line, String[] wBlocks, String[] wSwitches, int[] wCrossings, String plcPath)
 	{
@@ -32,10 +33,12 @@ public class WaysideController
 		brokenRails = new Hashtable<Integer,String>();
 		crossing = new Hashtable<Integer, String[]>();
 		blockToTrackBlock = new Hashtable<Integer, Integer>();
+		occupied = new ArrayList<Integer>();
 		plc = new PLC();
 		
 		//LOAD THE PLC
-		plc.load_plc(plcPath);
+		if(plcPath != null)
+			plc.load_plc(plcPath);
 		
 		//EXTRACT THE TRACK SETUP FROM wBlocks 
 		for(int i = 0; i < wBlocks.length; i++)
@@ -155,19 +158,19 @@ public class WaysideController
 		
 		//SET WHETHER LINE IS RED OR GREEN
 		this.line = line;
-		
 		//UPDATE INFO
-		updateLocalTrackInfo();
-		
+		//updateLocalTrackInfo();
+		//run_plc(occupied, switches);
 		//start a thread to make sure the track data is kept up to date
-		//runs every .75 seconds real-time
+		//runs every .90 seconds real-time
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleAtFixedRate(new Runnable() {
 		  @Override
 		  public void run() {
 			  updateLocalTrackInfo();
+			  //run_plc(occupied, switches);
 		  }
-		}, 0, 75, TimeUnit.MILLISECONDS);
+		}, 0, 100, TimeUnit.MILLISECONDS);
 	}
 	
 	
@@ -176,7 +179,7 @@ public class WaysideController
 	{
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		trackBlocks = track.getBlock(line, blocks); //get the blocks controlled by this wayside
-			
+		occupied.clear();
 		for(int i = 0; i < trackBlocks.length; i++)
 		{
 			//update switch positions
@@ -190,6 +193,7 @@ public class WaysideController
 			//update trains location (block occupancy)
 			if(trackBlocks[i].status == trackModel.TrackBlock.BlockStatus.OCCUPIED)
 			{
+				occupied.add(trackBlocks[i].blockNumber);
 				TrainInfo train = trains.get(trackBlocks[i].trainID);
 				if(train != null)
 				{
@@ -207,12 +211,23 @@ public class WaysideController
 				
 				//SET THE NEXT BLOCK FIELD --> So the train knows where to go
 				if(trackSetup.get(train.currentBlock).switchNum == -1)
+				{
 					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), null);
+				}
 				else
+				{
 					trackBlocks[i].nextBlock = findNextBlock(train.direction, trackSetup.get(train.currentBlock), switches.get(trackSetup.get(train.currentBlock).switchNum));
-				//System.out.println(trackBlocks[i].nextBlock);
-				track.setBlock(trackBlocks[i]);
-				//System.out.println("Next: "+track.getBlock("Red", trackBlocks[i].blockNumber).nextBlock);
+				}
+				
+				//If the next block is not -1 then set the next block
+				if(trackBlocks[i].nextBlock != -1)
+				{
+					track.setBlock(trackBlocks[i]);
+				}
+				else
+				{
+					trains.remove(trackBlocks[i].trainID);
+				}
 			}
 			
 			//update broken rail info
@@ -223,10 +238,25 @@ public class WaysideController
 		}
 	}
 	
+	//change the direction of the train 
+	public void changeDirection(int previous, int current, int direction, int trainID)
+	{
+		TrainInfo train;
+		int next = findNextBlock(direction, trackSetup.get(current), switches.get(trackSetup.get(current).switchNum));
+		if(next == previous || next == -2)
+		{
+			train = trains.get(trainID);
+			if(train.direction == 1)
+				train.direction = 0;
+			else
+				train.direction = 1;
+			trains.put(trainID, train);
+		}
+	}
+	
 	//determines what the next block should be based on the train's direction and the current block information
 	public int findNextBlock(int direction, BlockPosition current, String[] switchInformation)
 	{
-		//System.out.println("Here, finding next Block");
 		if(direction == 0)
 		{
 			if(current.nextBlock[1] == -1)
@@ -265,24 +295,26 @@ public class WaysideController
 		}
 	}
 	
+	/**
+	 * Updates the positions of the switches I have stored locally
+	 * If the switch position has changed then the trains' routes need to be recalculated
+	 * @param switchNum
+	 * @param position
+	 */
 	public void updateLocalSwitchInfo(int switchNum, String position)
 	{
 		String[] current = switches.get(switchNum);
-		/**
-		 * If the switch position changed
-		 * 	-must recalculate the routes for the trains
-		 * */
-		if(!current[0].equals(position))
+
+		if(!current[0].equals(position)) //switch position changed
 		{
-			current[0] = position;
-			switches.remove(switchNum);
+			current[0] = position; //update position
 			switches.put(switchNum, current);
-			calculateAllRoutes();
+			calculateAllRoutes(); //recalculate the routes for the trains
 		}
 	}
 	
 	//------------------------COMMS FROM CTC OFFICE ---------------------------
-	public void suggestSpeed(double speed, int train)
+	public synchronized void suggestSpeed(double speed, int train)
 	{
 		int block = trains.get(train).currentBlock;
 		int tblock = -1;
@@ -295,7 +327,8 @@ public class WaysideController
 		if(tblock != -1)
 		{
 			trackModel.TrackModel track = new trackModel.TrackModel();
-			if(checkSpeed(speed,trackBlocks[tblock].speedLimit))
+			trackBlocks[tblock] = track.getBlock(line, tblock);
+			if(checkSpeed(speed,trackBlocks[tblock].speedLimit)) //check to make sure speed < speed limit of the block
 			{
 				trackBlocks[tblock].speed = speed;
 				track.setBlock(trackBlocks[tblock]);
@@ -312,32 +345,45 @@ public class WaysideController
 			return false;
 	}
 
-	public void suggestAuthority(int destination, int train)
+	public synchronized void suggestAuthority(int destination, int train)
 	{
+		//updateLocalTrackInfo(); //make sure info is up to date
+		
 		trackModel.TrackModel track = new trackModel.TrackModel();
-		//updateLocalTrackInfo();
 		TrainInfo t = trains.get(train);
-		int currentBlock = t.currentBlock;
-		ArrayList<Integer> path = calculateRoute(currentBlock, destination, t.direction);
-		//System.out.println(path);
-		if(path != null)
+		if(t != null) //if I can't find the train then I cannot update it
 		{
-			boolean notBroken = true;
-			for(Integer i: path)
+			int currentBlock = t.currentBlock;
+			ArrayList<Integer> path = calculateRoute(currentBlock, destination, t.direction); //calculate route of train
+			//System.out.println(path);
+			if(path != null)
 			{
-				if(brokenRails.contains(i))
-					notBroken = false;
-			}
+				boolean notBroken = true;
+				for(Integer i: path)
+				{
+					//if the path contains a broken block, it is not safe to travel
+					if(brokenRails.contains(i))
+						notBroken = false;
+				}
 			
-			if(notBroken)
-			{
-				trackBlocks[blockToTrackBlock.get(currentBlock)].authority = path.size()-1; //if path is size 1 then it is the current block
-				System.out.println(trackBlocks[blockToTrackBlock.get(currentBlock)].authority);
-				track.setBlock(trackBlocks[blockToTrackBlock.get(currentBlock)]);
+				if(notBroken)
+				{
+					//trackBlocks[blockToTrackBlock.get(currentBlock)] = track.getBlock(line, blockToTrackBlock.get(currentBlock));
+					trackBlocks[blockToTrackBlock.get(currentBlock)].authority = path.size()-1; //if path is size 1 then it is the current block, authority is zero
+					trackBlocks[blockToTrackBlock.get(currentBlock)].destination = destination;
+					track.setBlock(trackBlocks[blockToTrackBlock.get(currentBlock)]); //set authority of block
+				}
 			}
 		}
 	}
 	
+	/**
+	 * Calculates the route from the start point to the end point based on the current direction
+	 * @param start
+	 * @param end
+	 * @param currentDirection
+	 * @return ArrayList<Integer> the path
+	 */
 	public ArrayList<Integer> calculateRoute(int start, int end, int currentDirection)
 	{
 		ArrayList<Integer> path = new ArrayList<Integer>();
@@ -348,177 +394,106 @@ public class WaysideController
 		while(routing && count < 200) //just want to make sure it isn't stuck in while loop forever
 		{
 			BlockPosition bp = trackSetup.get(currentBlock);
-			if(currentDirection == 1) // the next block the train is going to is the previous block in the track setup
+			int[] nextBlock;
+			if(currentDirection == 1)
 			{
-				if(currentBlock == end)
-				{
-					return path;
-				}
-				else if(path.size() > 0 && (bp.previousBlock[0] == path.get(path.size()-1) || bp.previousBlock[1] == path.get(path.size()-1))) //change the direction
-				{
-					currentDirection = 0;
-				}
-				else if(bp.previousBlock[0] == -2 && currentBlock == end)
+				nextBlock = bp.previousBlock;
+			}
+			else
+			{
+				nextBlock = bp.previousBlock;
+			}
+			
+			if(currentBlock == end)//if the destination is found
+			{
+				path.add(currentBlock);
+				return path;
+			}
+			else if(path.size() > 0 && (nextBlock[0] == path.get(path.size()-1) || nextBlock[1] == path.get(path.size()-1))) //change the direction of the train
+			{
+				currentDirection = 0;
+			}
+			else if(nextBlock[0] == -2 && currentBlock == end)
+			{
+				path.add(currentBlock);
+				return path; //right now we can't send trains to the yard
+			}
+			else if(nextBlock[0] == -2 && currentBlock != end)
+			{
+				path.add(currentBlock);
+				return path; //right now we can't send trains to the yard
+			}
+			else if(bp.switchNum == -1 || nextBlock[0] == -1 || (bp.switchNum != trackSetup.get(nextBlock[0]).switchNum)) //not a switch block
+			{
+				if(nextBlock[0] == -1) //border block or yard
 				{
 					path.add(currentBlock);
-					return path; //right now we can't send trains to the yard
-				}
-				else if(bp.previousBlock[0] == -2 && currentBlock != end)
-				{
 					return path;
 				}
-				else if(bp.switchNum == -1 || bp.previousBlock[0] == -1 || (bp.switchNum != trackSetup.get(bp.previousBlock[0]).switchNum))
+				else
 				{
-					if(bp.previousBlock[0] == -1) //border block or yard
+					if(currentBlock != end)
 					{
 						path.add(currentBlock);
-						return path;
+						currentBlock = nextBlock[0];
 					}
 					else
 					{
-						if(currentBlock != end)
-						{
-							path.add(currentBlock);
-							currentBlock = bp.previousBlock[0];
-						}
-						else
-						{
-							path.add(currentBlock);
-							return path;
-						}
-					}
-				}
-				else //switch block
-				{
-					String[] switchInfo = switches.get(bp.switchNum);
-					if(switchInfo[0].equals("0")) //switch position 0
-					{
-						if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+bp.previousBlock[0])) //switch is connected to current block
-						{
-							path.add(currentBlock);
-							currentBlock = bp.previousBlock[0];
-						}
-						else if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+bp.previousBlock[0]))
-						{
-							path.add(currentBlock);
-							currentBlock = bp.previousBlock[0];
-						}
-						else //switch is not connected, safe to stop at switch
-						{
-							path.add(currentBlock);
-							return path;
-						}
-					}
-					else //switch position 1
-					{
-						if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+bp.previousBlock[1])) //switch is connected to current block
-						{
-							path.add(currentBlock);
-							currentBlock = bp.previousBlock[1];
-						}
-						else if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+bp.previousBlock[0]))
-						{
-							path.add(currentBlock);
-							currentBlock = bp.previousBlock[0];
-						}
-						else //switch is not connected, safe to stop at switch
-						{
-							path.add(currentBlock);
-							return path;
-						}
+						path.add(currentBlock);
+						return path;
 					}
 				}
 			}
-			else //direction = next block
+			else //switch block
 			{
-				if(currentBlock == end)
+				String[] switchInfo = switches.get(bp.switchNum);
+				if(switchInfo[0].equals("0")) //switch position 0
 				{
-					return path;
-				}
-				else if(path.size() > 0 && (bp.nextBlock[0] == path.get(path.size()-1) || bp.nextBlock[1] == path.get(path.size()-1))) //change the direction
-				{
-					currentDirection = 1;
-				}
-				if(bp.nextBlock[0] == -2 && currentBlock == end)
-				{
-					path.add(currentBlock);
-					return path; //right now we can't send trains to the yard
-				}
-				else if(bp.nextBlock[0] == -2 && currentBlock != end)
-				{
-					return path;
-				}
-				else if(bp.switchNum == -1 || bp.nextBlock[0] == -1 || (bp.switchNum != trackSetup.get(bp.nextBlock[0]).switchNum))
-				{
-					if(bp.nextBlock[0] == -1) //border block or yard
+					if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+nextBlock[0])) //switch is connected to current block
+					{
+						path.add(currentBlock);
+						currentBlock = nextBlock[0];
+					}
+					else if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+nextBlock[0]))
+					{
+						path.add(currentBlock);
+						currentBlock = nextBlock[0];
+					}
+					else //switch is not connected, safe to stop at switch
 					{
 						path.add(currentBlock);
 						return path;
 					}
-					else
-					{
-						if(currentBlock != end)
-						{
-							path.add(currentBlock);
-							currentBlock = bp.nextBlock[0];
-						}
-						else
-						{
-							path.add(currentBlock);
-							return path;
-						}
-					}
 				}
-				else //switch block
+				else //switch position 1
 				{
-					String[] switchInfo = switches.get(bp.switchNum);
-					if(switchInfo[0].equals("0")) //switch position 0
+					if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+nextBlock[1])) //switch is connected to current block
 					{
-						if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+bp.nextBlock[0])) //switch is connected to current block
-						{
-							path.add(currentBlock);
-							currentBlock = bp.nextBlock[0];
-						}
-						else if(switchInfo[2].contains(""+currentBlock) && switchInfo[2].contains(""+bp.nextBlock[0]))
-						{
-							path.add(currentBlock);
-							currentBlock = bp.nextBlock[0];
-						}
-						else //switch is not connected, safe to stop at switch
-						{
-							path.add(currentBlock);
-							return path;
-						}
+						path.add(currentBlock);
+						currentBlock = nextBlock[1];
 					}
-					else //switch position 1
+					else if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+nextBlock[0]))
 					{
-						if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+bp.nextBlock[1])) //switch is connected to current block
-						{
-							path.add(currentBlock);
-							currentBlock = bp.nextBlock[1];
-						}
-						else if(switchInfo[3].contains(""+currentBlock) && switchInfo[3].contains(""+bp.nextBlock[0]))
-						{
-							path.add(currentBlock);
-							currentBlock = bp.nextBlock[0];
-						}
-						else //switch is not connected, safe to stop at switch
-						{
-							path.add(currentBlock);
-							return path;
-						}
+						path.add(currentBlock);
+						currentBlock = nextBlock[0];
+					}
+					else //switch is not connected, safe to stop at switch
+					{
+						path.add(currentBlock);
+						return path;
 					}
 				}
 			}
 			count++;
 		}
 		
-		if(count == 200)
+		if(count == 200) //if it hit my check for looping forever, then it is not a valid path
 		{
 			return null;
 		}
 		
 		return path;
+		
 	}
 	
 	//Need to recalculate routes when the switch position changes
@@ -571,16 +546,19 @@ public class WaysideController
 		crossing.put(trackBlock, info);
 	}
 	
+
 	public static void main(String[] args)
 	{
 		String[] blocks = new String[]{"1-16-2-6","2-1-3","3-2-4","4-3-5","5-4-6","6-5-7","7-6-8","8-7-9","9-8-10:77-12","10-9-11-12","11-10-12","12-11-13",
 				"13-12-14","14-13-15","15-14-16-6","16-15:1-17-6","17-16-18","18-17-19","19-18-20","20-19-21","21-20-22","22-21-23","23-22-24","24-23-25",
 				"25-24-26","26-25-27","27-26-28:76-7","28-27-29-7","29-28-30","30-29-31","31-30-32","32-31-33-8","33-32:72-34-8","34-33-35","35-34-.", "72-73-33-8",
 				"73-74-72","74-75-73","75-76-74","76-27-75-7","77-9-y-12"};
-		String[] switches = new String[]{"6-15:15,16:1,16","12-9:9,10:9,77","7-27:27,28:27,76","8-32:32,33:72,33"};
-		WaysideController WC = new WaysideController("Red",blocks,switches, null,"red1.txt");
+		String[] cswitches = new String[]{"6-15:15,16:1,16","12-9:9,10:9,77","7-27:27,28:27,76","8-32:32,33:72,33"};
+		WaysideController WC = new WaysideController("Red",blocks,cswitches, null,"C:\\Users\\Alisha\\git\\TTE_Solutions\\bin\\waysideController\\red1.txt");
+		System.out.println("Here");
+		//WC.run_plc(occupied, switches);
 		//System.out.println(WC.calculateRoute(2, 6, 0));
-		System.out.println(WC.calculateRoute(1,20, 1));
+		//System.out.println(WC.calculateRoute(1,20, 1));
 		
 	}
 }
