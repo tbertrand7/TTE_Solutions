@@ -176,7 +176,7 @@ public class WaysideController
 	
 	
 	//------------------------------MAINTAINING UP-TO-DATE TRACK---------------------------------------
-	public void updateLocalTrackInfo()
+	public synchronized void updateLocalTrackInfo()
 	{
 		trackModel.TrackModel track = new trackModel.TrackModel();
 		trackBlocks = track.getBlock(line, blocks); //get the blocks controlled by this wayside
@@ -242,7 +242,7 @@ public class WaysideController
 	}
 	
 	//change the direction of the train 
-	public void changeDirection(int previous, int current, int direction, int trainID)
+	public synchronized void changeDirection(int previous, int current, int direction, int trainID)
 	{
 		TrainInfo train;
 		int next = findNextBlock(direction, trackSetup.get(current), switches.get(trackSetup.get(current).switchNum));
@@ -258,7 +258,7 @@ public class WaysideController
 	}
 	
 	//determines what the next block should be based on the train's direction and the current block information
-	public int findNextBlock(int direction, BlockPosition current, String[] switchInformation)
+	public synchronized int findNextBlock(int direction, BlockPosition current, String[] switchInformation)
 	{
 		if(direction == 0)
 		{
@@ -304,7 +304,7 @@ public class WaysideController
 	 * @param switchNum
 	 * @param position
 	 */
-	public void updateLocalSwitchInfo(int switchNum, String position)
+	public synchronized void updateLocalSwitchInfo(int switchNum, String position)
 	{
 		String[] current = switches.get(switchNum);
 		if(!current[0].equals(position)) //switch position changed
@@ -319,17 +319,12 @@ public class WaysideController
 	public synchronized void suggestSpeed(double speed, int train)
 	{
 		int block = trains.get(train).currentBlock;
-		int tblock = -1;
-		for(int i = 0; i < blocks.length; i++)
-		{
-			if(blocks[i] == block)
-				tblock = i;
-		}
+		int tblock = blockToTrackBlock.get(block);
 		
 		if(tblock != -1)
 		{
 			trackModel.TrackModel track = new trackModel.TrackModel();
-			trackBlocks[tblock] = track.getBlock(line, tblock);
+			//trackBlocks[tblock] = track.getBlock(line, tblock);
 			if(checkSpeed(speed,trackBlocks[tblock].speedLimit)) //check to make sure speed < speed limit of the block
 			{
 				trackBlocks[tblock].speed = speed;
@@ -387,7 +382,7 @@ public class WaysideController
 	 * @param currentDirection
 	 * @return ArrayList<Integer> the path
 	 */
-	public ArrayList<Integer> calculateRoute(int start, int end, int currentDirection)
+	public synchronized ArrayList<Integer> calculateRoute(int start, int end, int currentDirection)
 	{
 		ArrayList<Integer> path = new ArrayList<Integer>();
 		boolean routing = true;
@@ -500,7 +495,7 @@ public class WaysideController
 	}
 	
 	//Need to recalculate routes when the switch position changes
-	public void calculateAllRoutes()
+	public synchronized void calculateAllRoutes()
 	{
 		for(Integer i: trains.keySet())
 		{
@@ -531,7 +526,7 @@ public class WaysideController
 	}
 	
 	//set traffic lights, cross bar and its lights
-	public void setInfrastructure(int trackBlock, char lights)
+	public synchronized void setInfrastructure(int trackBlock, char lights)
 	{
 		String[] info = crossing.get(trackBlock);
 		if(info != null)
