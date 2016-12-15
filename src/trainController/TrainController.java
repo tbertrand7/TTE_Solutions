@@ -315,7 +315,7 @@ public class TrainController {
 		
 		if (connectedToUI()) ui.announceStation(station);
 		
-		WaitThread wt = new WaitThread(Side.RIGHT, 1000*parent.sysClock.clock, 1); //default to right doors
+		WaitThread wt = new WaitThread(Side.RIGHT, 1000/parent.sysClock.clock, 1); //default to right doors
 		wt.start();
 		
 	}
@@ -336,7 +336,7 @@ public class TrainController {
 			if (connectedToModel()) model.setLeftDoorsOpen(true);
 		}
 		
-		WaitThread wt = new WaitThread(doors, 5000*parent.sysClock.clock, 2);
+		WaitThread wt = new WaitThread(doors, 5000/parent.sysClock.clock, 2);
 		wt.start();
 		
 	}

@@ -174,7 +174,7 @@ public class TrainControllerInstances {
 			
 			//Sleep for specified time (not perfect)
 			try {
-				sleep(2000*sysClock.clock);
+				sleep(2000/sysClock.clock);
 			} catch (InterruptedException e) {
 				//irrelevant
 			}
