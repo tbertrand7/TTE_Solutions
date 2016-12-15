@@ -44,7 +44,8 @@ public class TrainController {
 	/**
 	 * The controller's personal power calculator.
 	 */
-	protected PowerCalculator pc;
+	//protected PowerCalculator pc;
+	protected PowerChecker pc;
 	
 	/**
 	 * Speed commanded by the wayside controller
@@ -133,8 +134,7 @@ public class TrainController {
 		speedRequest = 0;
 		automatic = true;
 		
-		//TODO Create new array of PowerCalculators (for now it's just one)
-		pc = new PowerCalculator(this);
+		pc = new PowerChecker(this, 3);
 		pc.start();
 		
 		setStop(false);
@@ -336,7 +336,7 @@ public class TrainController {
 			if (connectedToModel()) model.setLeftDoorsOpen(true);
 		}
 		
-		WaitThread wt = new WaitThread(doors, 5000/parent.sysClock.clock, 2);
+		WaitThread wt = new WaitThread(doors, 60000/parent.sysClock.clock, 2);
 		wt.start();
 		
 	}
@@ -565,7 +565,6 @@ public class TrainController {
 	 */
 	public void delete() {
 		
-		//TODO Stop all power calculators (just one for now)
 		pc.stopRun();
 		
 		if (connectedToModel()) disconnectFromModel();

@@ -5,6 +5,8 @@ import TTEHome.SystemClock;
 public class PowerCalculator extends Thread {
 	
 	private TrainController controller;
+	private PowerChecker pc;
+	private int myID;
 	
 	private double Pcmd;
 	private final double Kp = 30000;
@@ -23,9 +25,10 @@ public class PowerCalculator extends Thread {
 	
 	private SystemClock sysClock;
 	
-	public PowerCalculator(TrainController tc) {
-		controller = tc;
-		sysClock = controller.parent.sysClock;
+	public PowerCalculator(PowerChecker powcheck, SystemClock sys, int id) {
+		pc = powcheck;
+		sysClock = sys;
+		myID = id;
 		
 		Ek = 0;
 		Ek1 = 0;
@@ -62,7 +65,7 @@ public class PowerCalculator extends Thread {
 		while (proceed) {
 			
 			while (stop) {
-				controller.setPower(0); //just in case
+				pc.setPower(myID, 0); //just in case
 				try {
 					sleep(1000/sysClock.clock); //busy waiting if train is temporarily stopped
 				} catch (InterruptedException e1) {
@@ -76,7 +79,7 @@ public class PowerCalculator extends Thread {
 			
 			if (Uk == -1000 || Uk1 == -1000) {
 				Uk1 = Uk;
-				Vreq = controller.getSpeed(); Vcur = controller.getSpeedCurrent();
+				Vreq = pc.parent.getSpeed(); Vcur = pc.parent.getSpeedCurrent();
 				Ek = Vreq - Vcur;
 				if (Uk == 0) Uk = (T/2)*(Ek + Ek1);
 				else Uk = 0;
@@ -86,7 +89,7 @@ public class PowerCalculator extends Thread {
 			} else {
 				//Calc Ek
 				Ek1 = Ek; //update with old value
-				Vreq = controller.getSpeed(); Vcur = controller.getSpeedCurrent();
+				Vreq = pc.parent.getSpeed(); Vcur = pc.parent.getSpeedCurrent();
 				Ek = Vreq - Vcur;
 				
 				//Calc Uk
@@ -101,23 +104,18 @@ public class PowerCalculator extends Thread {
 				if (Vreq == 0 && Vcur == 0) Pcmd = 0;
 			}
 			
-			controller.setPower(Pcmd);
-			
-			/*System.out.println("POWER---");
-			System.out.println("Vcmd = " + Vreq + "\t\tVcur = "+Vcur);
-			System.out.println("Ek = " + Ek + "\t\tEk1 = "+Ek1);
-			System.out.println("Uk = " + Uk + "\t\tUk1 = "+Uk1);
-			System.out.println("Power out = " + Pcmd + "\n");*/
+			pc.setPower(myID, Pcmd);
 			
 			//Sleep for one second (not perfect - there's a bit of drift)
 			try {
-				sleep(1000 - ((System.currentTimeMillis()*sysClock.clock)-timestart));
+				long waittime = 1000 - ((System.currentTimeMillis()*sysClock.clock)-timestart);
+				if (waittime > 0) sleep(waittime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		controller = null;
+		pc = null;
 	}
 
 }

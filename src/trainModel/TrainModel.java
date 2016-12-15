@@ -450,10 +450,9 @@ public class TrainModel extends TrainState implements Runnable{
 					trackBlock.trainID = 0; //set the train ID 0 because we're leaving	
 					trackBlock.speed = -1; //set speed to -1
 					trackBlock.authority = -1; // set authority to -1
-					trackBlock.destination = 0; //set destination to 0
-					
-					
+					trackBlock.destination = 0; //set destination to 0				
 					tm.setBlock(trackBlock); //update the block in the database		
+					
 					
 					/*
 					 * Get the next block
