@@ -458,8 +458,10 @@ public class TrainModel extends TrainState implements Runnable{
 					trackBlock.speed = -1; //set speed to -1
 					trackBlock.authority = -1; // set authority to -1
 					trackBlock.destination = 0; //set destination to 0
-					tm.setBlock(trackBlock); //update the block in the database		
 					
+					
+					tm.setBlock(trackBlock); //update the block in the database		
+					System.out.println("Train Model just updated the DB");
 					
 					/*
 					 * Get the next block
@@ -608,7 +610,6 @@ public class TrainModel extends TrainState implements Runnable{
 				
 				//Tell Train controller to brake before the station
 				if( (trainCon != null)  &&  (distanceLeftInBlock <= brakingDistance)  &&  (tm.getBlock(trainLine, nextBlockNum).infrastructure.contains("station"))  &&  trackBlock != null){
-					trackBlock = tm.getBlock(trainLine, curBlockNum); //pull track block one more time before stopping for station
 					trainCon.approachStation();
 				}
 				
